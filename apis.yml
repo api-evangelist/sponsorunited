@@ -1,18 +1,73 @@
 aid: sponsorunited
 name: SponsorUnited
-description: 'SponsorUnited is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'SponsorUnited is a sports and entertainment sponsorship intelligence
+  platform, founded in 2018 and headquartered in Stamford, Connecticut. Its B2B SaaS
+  product gives brands, rights holders (teams, leagues, venues and events), agencies
+  and media companies a searchable dataset of marketing partnerships — the company
+  reports 403,000+ brands, 2.2M+ tracked deals and 21.1M+ data points across sports,
+  entertainment, media and talent — used to discover, evaluate, price, negotiate and
+  activate sponsorships. The platform (SponsorUnited 4.0) layers AI features on that
+  dataset, including the Surface AI analyst, a Proposal Evaluator, and SPND
+  (Sponsorship Price of Negotiated Deals), a pricing-transparency product built on
+  verified deal data. SponsorUnited runs a production REST API at
+  api.sponsorunited.com whose OpenAPI 3.0 description is publicly served, but it
+  publishes no developer portal, API reference or partner program around it; access
+  is sold as a paid subscription with custom pricing and no self-serve sign-up.'
 url: https://raw.githubusercontent.com/api-evangelist/sponsorunited/refs/heads/main/apis.yml
+image: https://cdn.prod.website-files.com/69150d2cbcfa91eb0672f267/691cc16ce42d7f8320d6e4d0_SU-logotype-light.svg
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-29'
 modified: '2026-08-29'
 tags:
 - Company
-apis: []
+- Sponsorship
+- Sports
+- Entertainment
+- Marketing
+- Advertising
+- Media
+- Data
+- Analytics
+- Market Intelligence
+- SaaS
+- Partnerships
+apis:
+- name: SponsorUnited API
+  description: 'The production REST API behind the SponsorUnited platform. Its OpenAPI
+    3.0 description is publicly served at https://api.sponsorunited.com/docs and
+    describes 547 operations across 422 paths and 561 schemas, covering brands,
+    properties, leagues, agencies, events, contacts, deals and spend tracking, saved
+    and custom reports, scouting audits, social scraping, news, user and organization
+    management, and the Surface AI assistant. Authentication is a bearer JWT for
+    platform users plus an X-API-Key service key for internal services. SponsorUnited
+    publishes no developer documentation, reference site or sign-up path for this API.'
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Sponsorship
+  - Sports
+  - Marketing
+  - Data
+  - Analytics
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-api-openapi.json
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: Overlay
+    url: overlays/sponsorunited-api-overlay.yaml
+  - type: MCPServer
+    url: mcp/sponsorunited-mcp.yml
+  - type: AgentSkill
+    url: skills/_index.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +75,47 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://www.nasdaqprivatemarket.com/
+  url: https://www.sponsorunited.com/
+- type: Documentation
+  url: https://help.sponsorunited.com/en/
+- type: Support
+  url: https://www.sponsorunited.com/contact
+- type: SignUp
+  url: https://www.sponsorunited.com/request-a-demo
+- type: Login
+  url: https://pro.sponsorunited.com/
+- type: TermsOfService
+  url: https://www.sponsorunited.com/legal/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.sponsorunited.com/legal/privacy
+- type: StatusPage
+  url: https://sponsorunited.statuspage.io/
+- type: TrustCenter
+  url: security/sponsorunited-trust-center.yml
+- type: Compliance
+  url: https://www.sponsorunited.com/security
+- type: Security
+  url: https://www.sponsorunited.com/security
+- type: GitHubOrganization
+  url: https://github.com/SponsorUnited
+- type: ChangeLog
+  url: https://help.sponsorunited.com/en/collections/7168679-data-product-releases
+- type: LLMsTxt
+  url: llms/sponsorunited-llms.txt
+- type: Lifecycle
+  url: lifecycle/sponsorunited-lifecycle.yml
+- type: Conformance
+  url: conformance/sponsorunited-conformance.yml
+- type: DomainSecurity
+  url: security/sponsorunited-domain-security.yml
+- type: Plans
+  url: plans/sponsorunited-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/sponsorunited-rate-limits.yml
+- type: Packages
+  url: packages/sponsorunited-packages.yml
+x-enrichment:
+  date: '2026-08-29'
+  status: enriched
+  artifacts_added: 23
+  pass: local-v1

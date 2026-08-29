@@ -1,0 +1,45 @@
+generated: '2026-08-29'
+method: searched
+source: registry queries against npm, PyPI, RubyGems, crates.io, Packagist, NuGet, and
+  the SponsorUnited GitHub organization
+package_count: 0
+official_count: 0
+packages: []
+note: >-
+  SponsorUnited publishes no client libraries. Every public registry was queried by name
+  and returned zero results, and the company's GitHub organization contains a single
+  public repository (SponsorUnited/.github, a profile-metadata repo, last pushed
+  2024-11-25) with no SDK in it. This is consistent with the rest of the surface: the
+  REST API at api.sponsorunited.com has a publicly served OpenAPI description but no
+  developer portal, no reference documentation and no sign-up path, so there is no
+  audience a first-party SDK would be shipped to.
+searches:
+- registry: npm
+  query: https://registry.npmjs.org/-/v1/search?text=sponsorunited
+  status: 200
+  results: 0
+- registry: PyPI
+  query: https://pypi.org/pypi/sponsorunited/json
+  status: 404
+  results: 0
+- registry: RubyGems
+  query: https://rubygems.org/api/v1/search.json?query=sponsorunited
+  status: 200
+  results: 0
+- registry: crates.io
+  query: https://crates.io/api/v1/crates?q=sponsorunited
+  status: 200
+  results: 0
+- registry: Packagist
+  query: https://packagist.org/search.json?q=sponsorunited
+  status: 200
+  results: 0
+- registry: NuGet
+  query: https://azuresearch-usnc.nuget.org/query?q=sponsorunited
+  status: 200
+  results: 0
+- registry: GitHub
+  query: https://api.github.com/orgs/SponsorUnited/repos
+  status: 200
+  results: 1
+  detail: SponsorUnited/.github — org profile repository, no source, no SDK.

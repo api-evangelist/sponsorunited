@@ -64,5 +64,9 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-SponsorUnited is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+SponsorUnited is a sports and entertainment sponsorship intelligence platform, founded in 2018 and
+headquartered in Stamford, Connecticut. Its B2B SaaS product gives brands, rights holders, agencies and
+media companies a searchable dataset of marketing partnerships, used to discover, evaluate, price and
+activate sponsorships.
+
+- https://www.sponsorunited.com/

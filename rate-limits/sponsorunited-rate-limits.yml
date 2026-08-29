@@ -1,0 +1,29 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/sponsorunited-api-openapi.json
+limit_count: 0
+published_limits: false
+rate_limits: []
+response_headers: []
+exhaustion_status: 429
+note: >-
+  SponsorUnited publishes no rate limits. There is no developer documentation of any kind
+  to state them, and the OpenAPI description declares no RateLimit-*, X-RateLimit-* or
+  Retry-After response header on any of its 547 operations — a full-text search of the
+  spec for "ratelimit" and "retry-after" returns zero matches. An agent therefore has no
+  runtime signal to back off on.
+  The only throttling the contract admits to is an authentication anti-abuse control:
+  two MFA operations declare HTTP 429, described as "Maximum attempts reached". That is a
+  login attempt cap, not an API quota, so it is recorded below as observed behaviour
+  rather than as a published limit.
+observed_throttling:
+- operation: GET /api/auth/pin/send/{mfaOption}
+  operationId: 5c72ebefedf27de4e2552c970a09eeb9
+  status: 429
+  description: Maximum attempts reached
+  scope: per-user MFA PIN issuance
+- operation: POST /api/auth/pin/verify
+  operationId: 5f4adbec6a6eedd8be6332f0b05cabb8
+  status: 429
+  description: Invalid or expired PIN / Maximum attempts reached
+  scope: per-user MFA PIN verification

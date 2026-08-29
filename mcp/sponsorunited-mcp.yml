@@ -1,0 +1,108 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/sponsorunited-api-openapi.json
+status: candidate
+deployment:
+  mode: none
+  auth: unknown
+  verified: probed
+  note: SponsorUnited ships no MCP server. Searched the web, the company's GitHub organization (one public
+    repo, a profile stub) and every npm/PyPI registry, and probed /mcp, /api/mcp and /.well-known/mcp
+    with a JSON-RPC tools/list POST on both api.sponsorunited.com (404 on all three) and pro.sponsorunited.com.
+    The pro host answered 200 to all three, but it answers 200 with the same 42,258-byte HTML shell to
+    every path including nonsense ones — it is a single-page-app catch-all, not an MCP endpoint, and is
+    recorded as a miss. No endpoint is invented here.
+probes:
+- url: https://api.sponsorunited.com/mcp
+  method: POST tools/list
+  status: 404
+- url: https://api.sponsorunited.com/api/mcp
+  method: POST tools/list
+  status: 404
+- url: https://api.sponsorunited.com/.well-known/mcp
+  method: POST tools/list
+  status: 404
+- url: https://pro.sponsorunited.com/mcp
+  method: POST tools/list
+  status: 200
+  result: rejected — SPA catch-all returning HTML for every path
+candidate_tools_note: 'The tools below are a DERIVED candidate set, not a published one. Every entry names
+  a REAL operationId verified present in openapi/sponsorunited-api-openapi.json; its inputSchema would
+  be inherited from that operation''s parameters and requestBody. They are read-oriented on purpose: the
+  API has no idempotency-key mechanism, so exposing its write operations as agent tools would be unsafe.
+  No tool crosswalk artifact is emitted, because a crosswalk binds a PUBLISHED MCP or GraphQL surface
+  to REST operations and SponsorUnited publishes neither — mapping this candidate set back onto the operations
+  it was derived from would be circular.'
+candidate_tools:
+- name: search_entities
+  description: Global search over a Meilisearch-indexed entity (brands, properties, leagues, contacts).
+  category: discovery
+  rest: GET /api/search/{indexed_entity}
+  operationId: 82e1cade2feeb042d7132eb6df8da393
+  inputSchema_source: inherits parameters/requestBody of this operation
+- name: search_entity_by_name
+  description: Search entities by name.
+  category: discovery
+  rest: GET /api/search/entity/{entity}
+  operationId: c1112a58865f6722aed94b0a1a32c80a
+  inputSchema_source: inherits parameters/requestBody of this operation
+- name: resolve_entities_by_id
+  description: Resolve a set of entity IDs to a flat list of records.
+  category: read
+  rest: POST /api/search/{entity}/by-id/list
+  operationId: b878b803278e85324c0e01ac4ccf1f66
+  inputSchema_source: inherits parameters/requestBody of this operation
+- name: list_leagues
+  description: List leagues.
+  category: read
+  rest: GET /api/league
+  operationId: 0c4c4242dae75f46c431035a2afc13ea
+  inputSchema_source: inherits parameters/requestBody of this operation
+- name: get_league
+  description: Get a single league.
+  category: read
+  rest: GET /api/league/{league}
+  operationId: 36bbe02f129adbea6fcbb0feed3cf475
+  inputSchema_source: inherits parameters/requestBody of this operation
+- name: list_league_deals
+  description: List league deals per property with aggregated statistics.
+  category: intelligence
+  rest: GET /api/league/deals
+  operationId: 0345053225041f1a688be78ede2ee6ba
+  inputSchema_source: inherits parameters/requestBody of this operation
+- name: get_brand_deals_by_season
+  description: Get a brand's deals for a given season.
+  category: intelligence
+  rest: POST /api/brand/{id}/properties/{year}
+  operationId: a195f821ab9ad56096e70493cf181f51
+  inputSchema_source: inherits parameters/requestBody of this operation
+- name: list_brand_categories
+  description: Get all brand categories with subcategories.
+  category: reference
+  rest: GET /api/brands/categories
+  operationId: dc4b547df11e479d1c62778cf173bcaa
+  inputSchema_source: inherits parameters/requestBody of this operation
+- name: list_news
+  description: List active curated sponsorship news articles.
+  category: read
+  rest: GET /api/news/active-articles
+  operationId: e4fa099a4fa10fee9854622f2fd726f7
+  inputSchema_source: inherits parameters/requestBody of this operation
+- name: list_partnership_reports
+  description: List partnership reports.
+  category: read
+  rest: GET /api/reports/partnership
+  operationId: 24076faf5891747e250cc430862e5cfa
+  inputSchema_source: inherits parameters/requestBody of this operation
+- name: list_custom_reports
+  description: List custom reports.
+  category: read
+  rest: GET /api/custom-reports
+  operationId: b02ba06dc96b360112a2ceb8147ee2ac
+  inputSchema_source: inherits parameters/requestBody of this operation
+- name: list_agency_services
+  description: List agency service offerings.
+  category: read
+  rest: GET /api/agency-services
+  operationId: 85bce9769d63ca8dad86af3f42cb6150
+  inputSchema_source: inherits parameters/requestBody of this operation

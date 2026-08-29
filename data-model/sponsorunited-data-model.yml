@@ -1,0 +1,1041 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/sponsorunited-api-openapi.json
+note: Derived from the contract's tag structure and the id-reference fields on its 561 component schemas.
+  SponsorUnited publishes no object reference, so no id-prefix scheme or canonical entity documentation
+  could be searched to enrich this — the graph below is what the spec itself asserts, nothing more.
+counts:
+  schemas: 561
+  paths: 422
+  operations: 547
+  tagged_domains: 86
+  domains_with_4_plus_operations: 57
+identifier_scheme:
+  style: integer surrogate keys
+  prefixed_ids: false
+  note: Identifiers are plain integers (id, {id}, after_id cursors are integer-compared). There is no
+    typed or prefixed id scheme, so an identifier is not self-describing — an agent cannot tell a brand
+    id from a property id by looking at it.
+domains:
+- name: Spend tracker
+  operations: 43
+  description: Spend tracker
+  paths:
+  - /api/spend-tracker/accuracy-metrics/league/{leagueId}/season/{seasonId}
+  - /api/spend-tracker/bucket/assets
+  - /api/spend-tracker/change-log/season/{seasonId}
+  - /api/spend-tracker/currency-rates
+  - /api/spend-tracker/deal-bucket-assets
+  - /api/spend-tracker/deal-levels
+- name: User Management
+  operations: 32
+  description: User Management
+  paths:
+  - /api/entities
+  - /api/me
+  - /api/me/access/{entityType}
+  - /api/user
+  - /api/user/events
+  - /api/user/events/download
+- name: Contact
+  operations: 21
+  description: Contact
+  paths:
+  - /api/contacts/bad-email-report
+  - /api/contacts/by-email
+  - /api/contacts/by-school
+  - /api/contacts/email/status/file
+  - /api/contacts/email/status/file/metadata
+  - /api/contacts/email/status/file/{filename}
+- name: News
+  operations: 21
+  description: News
+  paths:
+  - /api/news/active-articles
+  - /api/news/all-articles
+  - /api/news/analyse
+  - /api/news/article
+  - /api/news/article/preview
+  - /api/news/article/{id}
+- name: Organization
+  operations: 21
+  description: Organization
+  paths:
+  - /api/organization
+  - /api/organization/limit-access-types
+  - /api/organization/type
+  - /api/organization/type/{id}
+  - /api/organization/{id}
+  - /api/organization/{organizationId}/contract
+- name: Audits
+  operations: 19
+  description: Audit management endpoints for scouting reports
+  paths:
+  - /api/audit-count/{league_id}
+  - /api/audit/bulk
+  - /api/audit/remove/{audit_id}
+  - /api/audit/{audit_id}/item-value/{item_value_id}/copy
+  - /api/audit/{eventId}/team/{propertyId}/review/{userId}/bulk-clear-keyword-phrase
+  - /api/audit/{event_id}/property/{property_id}/review/{user_id}/bulk-keyword
+- name: League
+  operations: 19
+  description: League
+  paths:
+  - /api/league
+  - /api/league/deals
+  - /api/league/deals/filter-options
+  - /api/league/owners
+  - /api/league/social-scraping-settings
+  - /api/league/statistics
+- name: Property
+  operations: 16
+  description: Property
+  paths:
+  - /api/download
+  - /api/property/{id}/social
+  - /api/property/{id}/social-extra-handles
+  - /api/team
+  - /api/team-exists
+  - /api/team/types
+- name: Brand
+  operations: 15
+  description: Brand
+  paths:
+  - /api/brand/{id}/properties/metadata/{year}
+  - /api/brand/{id}/properties/{year}
+  - /api/company
+  - /api/company/download
+  - /api/company/exists
+  - /api/company/quick-edit/{id}
+- name: Category
+  operations: 14
+  description: Category
+  paths:
+  - /api/brands/categories
+  - /api/category
+  - /api/category/download
+  - /api/category/subcategories
+  - /api/category/subcategories/download
+  - /api/category/subcategories/{subcategoryId}/export/contacts
+- name: Authentication
+  operations: 9
+  description: Authentication
+  paths:
+  - /api/auth/login
+  - /api/auth/logout
+  - /api/auth/passwords/email
+  - /api/auth/passwords/reset
+  - /api/auth/pin/send/{mfaOption}
+  - /api/auth/pin/verify
+- name: Item
+  operations: 9
+  description: Item
+  paths:
+  - /api/item
+  - /api/item/{id}
+  - /api/item/{id}/intent
+  - /api/items-slim
+  - /api/items-slim-with-counts
+  - /api/items/export
+- name: Saved Reports
+  operations: 9
+  description: Saved Reports
+  paths:
+  - /api/saved-report
+  - /api/saved-report-light
+  - /api/saved-report-light/{id}
+  - /api/saved-report-light/{id}/duplicate
+  - /api/saved-report/{id}
+  - /api/saved-report/{id}/duplicate
+- name: Tasks
+  operations: 9
+  description: Tasks
+  paths:
+  - /api/tasks
+  - /api/tasks/
+  - /api/tasks/export/invalid-emails
+  - /api/tasks/export/invalid-social-tasks
+  - /api/tasks/metadata
+  - /api/tasks/{id}
+- name: User Actions
+  operations: 9
+  description: User activity tracking and organization statistics endpoints
+  paths:
+  - /api/track/organization/stats
+  - /api/track/organization/stats/export
+  - /api/track/organization/{organization_id}/stats
+  - /api/track/organization/{organization_id}/stats/category
+  - /api/track/organization/{organization_id}/stats/export
+  - /api/track/organization/{organization_id}/stats/league
+- name: Asset Subgroupings
+  operations: 8
+  description: Asset Subgroupings
+  paths:
+  - /api/asset-subgrouping
+  - /api/asset-subgrouping/
+  - /api/asset-subgrouping/tag/{oldTag}
+  - /api/asset-subgrouping/{id}
+  - /api/asset-subgrouping/{id}/intent
+  - /api/asset-subgrouping/{oldGrouping}/reassign/{newGrouping}
+- name: Custom Reports
+  operations: 8
+  description: Custom Reports
+  paths:
+  - /api/custom-reports
+  - /api/custom-reports/{customReport}/share
+  - /api/custom-reports/{id}
+  - /api/custom-reports/{id}/duplicate
+  - /api/custom-reports/{id}/rename
+- name: Item Platform
+  operations: 8
+  description: Item Platform
+  paths:
+  - /api/item-platform
+  - /api/item-platform/{id}
+  - /api/item-platform/{id}/intent
+  - /api/item-platform/{id}/subplatform
+  - /api/item-platform/{oldId}/reassign/{newId}
+- name: Item Value
+  operations: 8
+  description: Item Value
+  paths:
+  - /api/item-value
+  - /api/item-value/description
+  - /api/item-value/description/clear
+  - /api/item-value/{id}
+  - /api/item-value/{id}/copy
+- name: Notes
+  operations: 8
+  description: Notes management endpoints for various entities
+  paths:
+  - /api/admin/leagues/{leagueId}/scouting-notes/{seasonId}
+  - /api/note/{entity}/{entityId}
+  - /api/note/{id}
+  - /api/notes/{entity}/{entityId}
+  - /api/notes/{leagueId}/internal-scouting
+  - /api/properties/{teamId}/internal-scouting
+- name: Subcategory
+  operations: 8
+  description: Subcategory
+  paths:
+  - /api/subcategory
+  - /api/subcategory/top-rank
+  - /api/subcategory/{id}
+  - /api/subcategory/{id}/intent
+  - /api/subcategory/{oldId}/reassign/{newId}
+- name: Events
+  operations: 7
+  description: Events
+  paths:
+  - /api/event/{event_id}
+  - /api/events
+  - /api/events/property/all
+  - /api/events/team/{team_id}
+  - /api/events/{event_id}
+- name: Item Subplatform
+  operations: 7
+  description: Item Subplatform
+  paths:
+  - /api/item-subplatform
+  - /api/item-subplatform/{id}
+  - /api/item-subplatform/{id}/intent
+  - /api/item-subplatform/{oldId}/reassign/{newId}
+- name: Search
+  operations: 7
+  description: Search
+  paths:
+  - /api/search/entity/{entity}
+  - /api/search/smart/brands/locations
+  - /api/search/smart/brands/locations/download
+  - /api/search/smart/brands/locations/metadata
+  - /api/search/{entity}/by-id/grouped
+  - /api/search/{entity}/by-id/list
+- name: Surface
+  operations: 7
+  description: Surface context and usage endpoints
+  paths:
+  - /api/me/surface/context
+  - /api/me/surface/usage
+  - /api/me/surface/usage/record
+  - /api/me/surface/user-context
+  - /api/organization/{organizationId}/surface/context
+- name: User
+  operations: 7
+  description: User
+  paths:
+  - /api/integration/salesforce/access-token
+  - /api/user/by-email
+  - /api/user/downloadUrl
+  - /api/user/profile/{id}/phone/validate
+  - /api/user/profile/{id}/phone/verify
+  - /api/user/{id}
+- name: Asset Groupings
+  operations: 6
+  description: Asset Groupings
+  paths:
+  - /api/asset-grouping
+  - /api/asset-grouping/{id}
+  - /api/asset-grouping/{old_grouping}/reassign
+- name: Data Ingestion
+  operations: 6
+  description: Data Ingestion
+  paths:
+  - /api/ingestion/jobs
+  - /api/ingestion/jobs/{uuid}
+  - /api/ingestion/jobs/{uuid}/contacts
+  - /api/ingestion/submit
+  - /api/ingestion/tasks/{uuid}
+  - /api/webhooks/ingestion
+- name: Keyword
+  operations: 6
+  description: Keyword
+  paths:
+  - /api/keywords
+  - /api/keywords/position
+  - /api/keywords/{id}
+- name: Market
+  operations: 6
+  description: Market
+  paths:
+  - /api/market
+  - /api/market/aggregated
+  - /api/market/{id}
+- name: Roles & Permissions
+  operations: 6
+  description: Roles & Permissions
+  paths:
+  - /api/permissions/{name}
+  - /api/roles
+  - /api/roles/{id}
+- name: Social Scraping Sessions
+  operations: 6
+  description: Social Scraping Sessions
+  paths:
+  - /api/social-scraping-session/{id}
+  - /api/social-scraping-sessions
+  - /api/social-scraping-sessions/league/{leagueId}/latest/download
+  - /api/social-scraping-sessions/metadata
+  - /api/unmatched-handles/property
+  - /api/unmatched-handles/{type}
+- name: Stats
+  operations: 6
+  description: Stats Performance API endpoints
+  paths:
+  - /api/stats/mappings
+  - /api/stats/mappings-job-status/{propertyId}
+  - /api/stats/mappings/leagues
+  - /api/stats/mappings/sports
+  - /api/stats/mappings/{id}
+  - /api/stats/unmap/{id}
+- name: Agency
+  operations: 5
+  description: Agency
+  paths:
+  - /api/agency
+  - /api/agency/{id}
+  - /api/agency/{id}/representation
+- name: AgencyServices
+  operations: 5
+  description: AgencyServices
+  paths:
+  - /api/agency-services
+  - /api/agency-services/{id}
+- name: AgencyServicesType
+  operations: 5
+  description: AgencyServicesType
+  paths:
+  - /api/agency-services-types
+  - /api/agency-services-types/{type_id}
+- name: Brand Competitors
+  operations: 5
+  description: Brand Competitors
+  paths:
+  - /api/admin/brand-competitors/review-items
+  - /api/admin/brand-competitors/review-items/summary
+  - /api/admin/brand-competitors/review-items/{id}
+  - /api/admin/brand-competitors/review-items/{id}/approve
+  - /api/admin/brand-competitors/review-items/{id}/reject
+- name: Brands Social Scraping
+  operations: 5
+  description: Brands Social Scraping
+  paths:
+  - /api/social-scraping-sessions/brand/{brandId}
+  - /api/social-scraping-sessions/brand/{brandId}/latest/{platform}/{handle}
+  - /api/social-scraping-sessions/brand/{brandId}/session/{brandScrapingSessionId}
+  - /api/social-scraping-sessions/brand/{brandId}/session/{brandScrapingSessionId}/export
+  - /api/social-scraping-sessions/brand/{brandId}/session/{scrapingSessionId}/matched-entity/{matchedEtityId}
+- name: BrandSynonym
+  operations: 5
+  description: BrandSynonym
+  paths:
+  - /api/brand-synonyms
+  - /api/brand-synonyms/{id}
+- name: Internal Sync
+  operations: 5
+  description: Internal Sync
+  paths:
+  - /api/internal/sync/brands
+  - /api/internal/sync/league-assets
+  - /api/internal/sync/properties
+  - /api/internal/sync/property-known-brands
+  - /api/internal/sync/venues
+- name: Location
+  operations: 5
+  description: Location management and smart search endpoints
+  paths:
+  - /api/locations
+  - /api/locations/{id}
+  - /api/locations/{location_id}
+- name: Market Grouping
+  operations: 5
+  description: Market Grouping
+  paths:
+  - /api/market/grouping
+  - /api/market/grouping/types
+  - /api/market/grouping/{id}
+- name: Partnership Reports
+  operations: 5
+  description: Partnership Reports
+  paths:
+  - /api/reports/partnership
+  - /api/reports/partnership/{id}
+- name: Product
+  operations: 5
+  description: Product
+  paths:
+  - /api/product
+  - /api/product/{product_id}
+- name: RoleOrientation
+  operations: 5
+  description: Role orientation management endpoints
+  paths:
+  - /api/role-orientation
+  - /api/role-orientation/{id}
+- name: Vortex
+  operations: 5
+  description: Service-to-service endpoints for the Vortex mobile app. Authenticated via X-API-Key header.
+  paths:
+  - /api/vortex/audit/bulk
+  - /api/vortex/events
+  - /api/vortex/upload-image-from-url
+  - /api/vortex/user-event-notes
+  - /api/vortex/user-event-uploads
+- name: Admin Surface Context
+  operations: 4
+  description: Administrator-set Surface context for users and organizations
+  paths:
+  - /api/organization/{organizationId}/surface/admin-context
+  - /api/user/{userId}/surface/admin-context
+- name: Audit Review
+  operations: 4
+  description: Audit Review
+  paths:
+  - /api/audit/{eventId}/team/{propertyId}/review/{userId}/bulk-clone
+  - /api/audit/{eventId}/team/{propertyId}/review/{userId}/bulk-delete
+  - /api/audit/{eventId}/team/{propertyId}/review/{userId}/bulk-reject
+  - /api/audit/{eventId}/team/{propertyId}/review/{userId}/bulk-update
+- name: Campaign
+  operations: 4
+  description: Campaign
+  paths:
+  - /api/campaign
+  - /api/campaign/draft
+  - /api/campaign/{id}/meta
+- name: FileUploads
+  operations: 4
+  description: FileUploads
+  paths:
+  - /api/files
+  - /api/files/{id}
+- name: Images
+  operations: 4
+  description: Images
+  paths:
+  - /api/crop-image
+  - /api/download-image
+  - /api/logos
+  - /api/upload-image-from-url
+- name: Infographics
+  operations: 4
+  description: Infographics
+  paths:
+  - /api/infographics
+  - /api/infographics/{id}
+- name: LeagueItems
+  operations: 4
+  description: LeagueItems
+  paths:
+  - /api/league-items/item/{id}
+  - /api/league-items/item/{id}/update-leagues
+  - /api/league-items/league
+  - /api/league-items/league/{id}/update-items
+- name: Report Sharing
+  operations: 4
+  description: Report sharing tracking endpoints
+  paths:
+  - /api/report-sharing/recipients
+  - /api/report-sharing/reports
+  - /api/report-sharing/representatives
+  - /api/report-sharing/saved-reports
+- name: ScoutingYoutubeLink
+  operations: 4
+  description: ScoutingYoutubeLink
+  paths:
+  - /api/user/{user_id}/event/{event_id}/property/{property_id}/youtube-links
+  - /api/user/{user_id}/event/{event_id}/property/{property_id}/youtube-links/{youtube_link_id}
+- name: UserEventUploads
+  operations: 4
+  description: UserEventUploads
+  paths:
+  - /api/user/{user_id}/event/{event_id}/property/{property_id}/uploads
+  - /api/user/{user_id}/event/{event_id}/property/{property_id}/uploads/{id}
+- name: User Custom Reports
+  operations: 4
+  description: User Custom Reports
+  paths:
+  - /api/custom-reports/{id}/mark-viewed
+  - /api/user/custom-reports/{id}
+  - /api/user/custom-reports/{id}/duplicate
+  - /api/user/custom-reports/{id}/rename
+most_referenced_entities:
+- entity: season
+  referencing_fields: 44
+- entity: property
+  referencing_fields: 28
+- entity: brand
+  referencing_fields: 23
+- entity: user
+  referencing_fields: 23
+- entity: league
+  referencing_fields: 21
+- entity: team
+  referencing_fields: 12
+- entity: item
+  referencing_fields: 10
+- entity: bucket
+  referencing_fields: 8
+- entity: entity
+  referencing_fields: 7
+- entity: drop
+  referencing_fields: 7
+- entity: company
+  referencing_fields: 6
+- entity: item_subplatform
+  referencing_fields: 6
+- entity: asset
+  referencing_fields: 6
+- entity: image
+  referencing_fields: 6
+- entity: sport
+  referencing_fields: 6
+- entity: owner
+  referencing_fields: 6
+- entity: event
+  referencing_fields: 5
+- entity: person_profile
+  referencing_fields: 5
+- entity: report_file
+  referencing_fields: 5
+- entity: after
+  referencing_fields: 5
+- entity: session
+  referencing_fields: 5
+- entity: curated_news
+  referencing_fields: 5
+- entity: subcategory
+  referencing_fields: 5
+- entity: recipient
+  referencing_fields: 5
+- entity: genre
+  referencing_fields: 4
+- entity: division
+  referencing_fields: 4
+- entity: city
+  referencing_fields: 4
+- entity: contract_status
+  referencing_fields: 4
+- entity: person_profile_job_role
+  referencing_fields: 4
+- entity: ingestion_task
+  referencing_fields: 4
+relationships:
+- from: LeagueAssetEntity
+  field: league_id
+  to: league
+  kind: belongs_to
+- from: LeagueAssetEntity
+  field: item_id
+  to: item
+  kind: belongs_to
+- from: PropertySyncEntity
+  field: league_id
+  to: league
+  kind: belongs_to
+- from: PropertyKnownBrandEntity
+  field: team_id
+  to: team
+  kind: belongs_to
+- from: PropertyKnownBrandEntity
+  field: item_id
+  to: item
+  kind: belongs_to
+- from: PropertyKnownBrandEntity
+  field: company_id
+  to: company
+  kind: belongs_to
+- from: AgencyServiceCreateRequest
+  field: service_type_id
+  to: service_type
+  kind: belongs_to
+- from: AgencyServiceUpdateRequest
+  field: service_type_id
+  to: service_type
+  kind: belongs_to
+- from: AssetStoreUpdateRequest
+  field: item_platform_id
+  to: item_platform
+  kind: belongs_to
+- from: AssetStoreUpdateRequest
+  field: item_subplatform_id
+  to: item_subplatform
+  kind: belongs_to
+- from: AssetStoreUpdateRequest
+  field: item_grouping_id
+  to: item_grouping
+  kind: belongs_to
+- from: AssetSubgroupingStoreRequest
+  field: asset_grouping_id
+  to: asset_grouping
+  kind: belongs_to
+- from: AssetSubgroupingUpdateRequest
+  field: asset_grouping_id
+  to: asset_grouping
+  kind: belongs_to
+- from: UpdateEmptyAudioRequest
+  field: audio_id
+  to: audio
+  kind: belongs_to
+- from: UpdateEmptyAudioRequest
+  field: item_subplatform_id
+  to: item_subplatform
+  kind: belongs_to
+- from: UpdateEmptyAudioRequest
+  field: property_id
+  to: property
+  kind: belongs_to
+- from: AuditBulkReassignBrandRequest
+  field: brand_id
+  to: brand
+  kind: belongs_to
+- from: AuditCopyRequest
+  field: new_brand_id
+  to: new_brand
+  kind: belongs_to
+- from: AuditCopyRequest
+  field: item_id
+  to: item
+  kind: belongs_to
+- from: SaveUserEventRequest
+  field: item_id
+  to: item
+  kind: belongs_to
+- from: SaveUserEventRequest
+  field: user_id
+  to: user
+  kind: belongs_to
+- from: UpdateUserEventsRequest
+  field: brand_id
+  to: brand
+  kind: belongs_to
+- from: UpdateUserEventsRequest
+  field: eventId
+  to: event
+  kind: belongs_to
+- from: UpdateUserEventsRequest
+  field: teamId
+  to: team
+  kind: belongs_to
+- from: AuditReviewBulkCloneRequest
+  field: asset_id
+  to: asset
+  kind: belongs_to
+- from: AuditReviewBulkUpdateRequest
+  field: asset_id
+  to: asset
+  kind: belongs_to
+- from: ApproveBrandCompetitorReviewItemRequest
+  field: resolution_brand_id
+  to: resolution_brand
+  kind: belongs_to
+- from: ContactCreateSaleRequest
+  field: sale_list_id
+  to: sale_list
+  kind: belongs_to
+- from: ContactDeleteSaleRequest
+  field: sale_list_id
+  to: sale_list
+  kind: belongs_to
+- from: StoreContactRequest
+  field: contact_status_id
+  to: contact_status
+  kind: belongs_to
+- from: UpdateContactRequest
+  field: contact_status_id
+  to: contact_status
+  kind: belongs_to
+- from: PhantombusterEmployeeSearchWebhookRequest
+  field: agentId
+  to: agent
+  kind: belongs_to
+- from: PhantombusterEmployeeSearchWebhookRequest
+  field: containerId
+  to: container
+  kind: belongs_to
+- from: ReportBadEmailRequest
+  field: person_profile_id
+  to: person_profile
+  kind: belongs_to
+- from: ReportBadEmailRequest
+  field: entity_id
+  to: entity
+  kind: belongs_to
+- from: NewsSubmissionsRequest
+  field: reporter_id
+  to: reporter
+  kind: belongs_to
+- from: StoreNewsAssetRequest
+  field: item_id
+  to: item
+  kind: belongs_to
+- from: UpdateNewsAssetRequest
+  field: item_id
+  to: item
+  kind: belongs_to
+- from: CustomReportStoreRequest
+  field: report_file_id
+  to: report_file
+  kind: belongs_to
+- from: IngestionWebhookRequest
+  field: event_id
+  to: event
+  kind: belongs_to
+- from: IngestionWebhookRequest
+  field: correlation_id
+  to: correlation
+  kind: belongs_to
+- from: IngestionWebhookRequest
+  field: request_id
+  to: request
+  kind: belongs_to
+- from: IngestionWebhookRequest
+  field: task_id
+  to: task
+  kind: belongs_to
+- from: CropImageRequest
+  field: item_image_id
+  to: item_image
+  kind: belongs_to
+- from: SaveSalesforceRequest
+  field: client_id
+  to: client
+  kind: belongs_to
+- from: BrandsSyncRequest
+  field: after_id
+  to: after
+  kind: belongs_to
+- from: LeagueAssetsSyncRequest
+  field: after_id
+  to: after
+  kind: belongs_to
+- from: PropertiesSyncRequest
+  field: after_id
+  to: after
+  kind: belongs_to
+- from: PropertyKnownBrandsSyncRequest
+  field: after_id
+  to: after
+  kind: belongs_to
+- from: VenuesSyncRequest
+  field: after_id
+  to: after
+  kind: belongs_to
+- from: ItemValueUpdateRequest
+  field: item_id
+  to: item
+  kind: belongs_to
+- from: ItemValueUpdateRequest
+  field: audit_id
+  to: audit
+  kind: belongs_to
+- from: StoreKeywordRequest
+  field: image_id
+  to: image
+  kind: belongs_to
+- from: UpdateKeywordRequest
+  field: image_id
+  to: image
+  kind: belongs_to
+- from: LeagueStoreRequest
+  field: sport_id
+  to: sport
+  kind: belongs_to
+- from: LeagueStoreRequest
+  field: owner_id
+  to: owner
+  kind: belongs_to
+- from: LeagueStoreRequest
+  field: genre_id
+  to: genre
+  kind: belongs_to
+- from: LeagueStoreRequest
+  field: subgenre_id
+  to: subgenre
+  kind: belongs_to
+- from: LeagueUpdateRequest
+  field: sport_id
+  to: sport
+  kind: belongs_to
+- from: LeagueUpdateRequest
+  field: owner_id
+  to: owner
+  kind: belongs_to
+- from: LeagueUpdateRequest
+  field: genre_id
+  to: genre
+  kind: belongs_to
+- from: LeagueUpdateRequest
+  field: subgenre_id
+  to: subgenre
+  kind: belongs_to
+- from: LeagueDealsFilterOptionsRequest
+  field: platform_id
+  to: platform
+  kind: belongs_to
+- from: LeagueDealsFilterOptionsRequest
+  field: subplatform_id
+  to: subplatform
+  kind: belongs_to
+- from: LeagueDealsFilterOptionsRequest
+  field: item_id
+  to: item
+  kind: belongs_to
+- from: LeagueDealsFilterOptionsRequest
+  field: division_id
+  to: division
+  kind: belongs_to
+- from: LeagueLatestScoutingDatesFilterOptionsRequest
+  field: division_id
+  to: division
+  kind: belongs_to
+- from: LeagueLatestScoutingDatesIndexRequest
+  field: division_id
+  to: division
+  kind: belongs_to
+- from: LocationStoreRequest
+  field: city_id
+  to: city
+  kind: belongs_to
+- from: LocationStoreRequest
+  field: entity_id
+  to: entity
+  kind: belongs_to
+- from: LocationUpdateRequest
+  field: city_id
+  to: city
+  kind: belongs_to
+- from: ManageMarketCategoryForCountryRequest
+  field: level_id
+  to: level
+  kind: belongs_to
+- from: MarketStoreUpdateRequest
+  field: market_category_id
+  to: market_category
+  kind: belongs_to
+- from: MarketStoreUpdateRequest
+  field: market_grouping_id
+  to: market_grouping
+  kind: belongs_to
+- from: MintTokenRequest
+  field: user_id
+  to: user
+  kind: belongs_to
+- from: OrganizationUpdateContractRequest
+  field: account_manager_id
+  to: account_manager
+  kind: belongs_to
+- from: OrganizationUpdateContractRequest
+  field: sales_user_id
+  to: sales_user
+  kind: belongs_to
+- from: OrganizationUpdateContractRequest
+  field: contract_payment_type_id
+  to: contract_payment_type
+  kind: belongs_to
+- from: OrganizationUpdateContractRequest
+  field: contract_status_id
+  to: contract_status
+  kind: belongs_to
+- from: OrganizationUpdateContractRequest
+  field: default_user_subscription_plan_id
+  to: default_user_subscription_plan
+  kind: belongs_to
+- from: OrganizationUpdateContractRequest
+  field: subscription_plan_id
+  to: subscription_plan
+  kind: belongs_to
+- from: OrganizationUpdateContractRequest
+  field: salesforce_id
+  to: salesforce
+  kind: belongs_to
+- from: OrganizationUpdateRequest
+  field: organization_type_id
+  to: organization_type
+  kind: belongs_to
+- from: OrganizationUpdateRequest
+  field: product_id
+  to: product
+  kind: belongs_to
+- from: OrganizationUpdateRequest
+  field: contract_status_id
+  to: contract_status
+  kind: belongs_to
+- from: OrganizationUpdateRequest
+  field: representative_id
+  to: representative
+  kind: belongs_to
+- from: OrganizationUpdateRequest
+  field: organization_limit_access_type_id
+  to: organization_limit_access_type
+  kind: belongs_to
+- from: PartnershipReportWriteRequest
+  field: report_file_id
+  to: report_file
+  kind: belongs_to
+- from: ReportSharingRecipientsRequest
+  field: report_id
+  to: report
+  kind: belongs_to
+- from: ReportSharingReportsRequest
+  field: user_id
+  to: user
+  kind: belongs_to
+- from: RepresentationUpdateRequest
+  field: controlled_property_id
+  to: controlled_property
+  kind: belongs_to
+- from: RepresentationUpdateRequest
+  field: season_id
+  to: season
+  kind: belongs_to
+- from: ScoutingGroupsStoreRequest
+  field: owner_id
+  to: owner
+  kind: belongs_to
+- from: SearchIndexedRequest
+  field: team_type_id
+  to: team_type
+  kind: belongs_to
+- from: SearchIndexedRequest
+  field: excluded_id
+  to: excluded
+  kind: belongs_to
+- from: BrightdataPostsDeliveryRequest
+  field: session_id
+  to: session
+  kind: belongs_to
+- from: BrightdataPostsDeliveryRequest
+  field: gap_id
+  to: gap
+  kind: belongs_to
+- from: CurrencyExchangeRateIndexRequest
+  field: season_id
+  to: season
+  kind: belongs_to
+- from: CurrencyExchangeRateUpdateRequest
+  field: season_id
+  to: season
+  kind: belongs_to
+- from: DealBucketAssetsGetDealAssetsByBucketsRequest
+  field: brand_id
+  to: brand
+  kind: belongs_to
+- from: DealBucketAssetsGetDealAssetsByBucketsRequest
+  field: property_id
+  to: property
+  kind: belongs_to
+- from: DealBucketAssetsGetDealAssetsByBucketsRequest
+  field: season_id
+  to: season
+  kind: belongs_to
+- from: DealLevelsUpdateRequest
+  field: brand_id
+  to: brand
+  kind: belongs_to
+- from: DealLevelsUpdateRequest
+  field: property_id
+  to: property
+  kind: belongs_to
+- from: DealLevelsUpdateRequest
+  field: season_id
+  to: season
+  kind: belongs_to
+- from: DealTypesCreateUpdateRequest
+  field: brand_id
+  to: brand
+  kind: belongs_to
+- from: DealTypesCreateUpdateRequest
+  field: property_id
+  to: property
+  kind: belongs_to
+- from: DealTypesCreateUpdateRequest
+  field: season_id
+  to: season
+  kind: belongs_to
+- from: DealTypesDeleteRequest
+  field: brand_id
+  to: brand
+  kind: belongs_to
+- from: DealTypesDeleteRequest
+  field: property_id
+  to: property
+  kind: belongs_to
+- from: DealTypesDeleteRequest
+  field: season_id
+  to: season
+  kind: belongs_to
+- from: AccuracySelectionIndexRequest
+  field: season_id
+  to: season
+  kind: belongs_to
+- from: AccuracySelectionIndexRequest
+  field: league_id
+  to: league
+  kind: belongs_to
+- from: AccuracySelectionUpdateRequest
+  field: season_id
+  to: season
+  kind: belongs_to
+- from: AccuracySelectionUpdateRequest
+  field: league_id
+  to: league
+  kind: belongs_to
+- from: SaveCustomAssetBucketForDealRequest
+  field: property_id
+  to: property
+  kind: belongs_to
+- from: SaveCustomAssetBucketForDealRequest
+  field: brand_id
+  to: brand
+  kind: belongs_to
+- from: SaveCustomAssetBucketForDealRequest
+  field: season_id
+  to: season
+  kind: belongs_to
+- from: SaveCustomAssetBucketForDealRequest
+  field: asset_id
+  to: asset
+  kind: belongs_to
+- from: SaveCustomAssetBucketForDealRequest
+  field: original_bucket_id
+  to: original_bucket
+  kind: belongs_to

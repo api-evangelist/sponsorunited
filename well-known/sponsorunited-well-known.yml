@@ -1,0 +1,71 @@
+generated: '2026-08-29'
+method: probed
+source: live GET of /.well-known/* on every SponsorUnited host
+note: >-
+  Every /.well-known/ path probed on the hosts SponsorUnited itself operates returned 404.
+  The single 200 in this file is Intercom's security.txt on the vendor-hosted help center
+  (Canonical: https://app.intercom.com/.well-known/security.txt) — it is Intercom's document,
+  not SponsorUnited's, so no WellKnown or SecurityTxt pointer is emitted in apis.yml.
+  pro.sponsorunited.com is excluded from the documents list below because it is a
+  single-page-app catch-all: every path, including every /.well-known/ path, returns an
+  identical 42,258-byte HTML shell with HTTP 200. Those are not documents.
+hosts:
+- host: www.sponsorunited.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: api.sponsorunited.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: help.sponsorunited.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: sponsorunited-help-intercom-security.txt
+    third_party: true
+    owner: Intercom
+    note: Vendor document served by the Intercom-hosted help center; canonical to
+      app.intercom.com. Not credited to SponsorUnited.
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: pro.sponsorunited.com
+  documents: []
+  note: SPA catch-all — every path returns HTTP 200 with the same HTML shell. All
+    probes treated as misses.

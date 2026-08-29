@@ -1,0 +1,51 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/sponsorunited-api-openapi.json
+asyncapi_published: false
+outbound_webhooks: false
+customer_subscribable: false
+note: >-
+  SponsorUnited publishes no AsyncAPI document and offers its customers NO event surface.
+  This artifact exists to record a distinction the raw counts would otherwise get wrong:
+  the contract does contain five operations tagged or named "webhook", but every one of
+  them is an INBOUND RECEIVER — an endpoint SponsorUnited exposes so that a third-party
+  vendor or its own ingestion pipeline can POST a completion callback back to it. None of
+  them lets a consumer subscribe to anything, there is no subscription-management
+  operation anywhere in the contract, and there is no event catalog, delivery guarantee,
+  retry policy or signature scheme published.
+  Because of that, NO `Webhooks` pointer is emitted in apis.yml. The `webhooks_advertised`
+  check asks whether the provider offers webhooks to its consumers, and SponsorUnited does
+  not — crediting it for receiving vendor callbacks would misrepresent the API. An
+  integrator wanting to know when a deal or brand record changes has to poll.
+inbound_receivers:
+- operation: POST /api/webhooks/phantombuster/employee-search
+  operationId: 4b2ec455c53b650fb41ef1624e09ee23
+  summary: Handle PhantomBuster employee search completion webhook
+  source_system: PhantomBuster
+  request_schema: PhantombusterEmployeeSearchWebhookRequest
+- operation: POST /api/webhooks/phantombuster/on-demand-employee-search
+  operationId: 2bd6564486756b0447fb1ec917becb54
+  summary: Handle PhantomBuster on-demand employee search completion webhook
+  source_system: PhantomBuster
+- operation: POST /api/webhooks/brightdata/posts-ready
+  operationId: 83172fa9ca4f092ade656999041ed287
+  summary: Handle BrightData direct post delivery webhook
+  source_system: BrightData
+  note: BrightData POSTs the raw post collection as a JSON array; session and gap ids are
+    encoded in the URL query parameters.
+- operation: POST /api/webhooks/ingestion
+  operationId: 96c82d5fba07d678cc8472a8feb2dd90
+  summary: Handle Data Ingestion webhook callback
+  source_system: SponsorUnited data-ingestion pipeline
+  request_schema: IngestionWebhookRequest
+  correlation: Carries event_id (uuid), correlation_id, request_id, task_id, type, status.
+- operation: POST /api/webhooks/transcription
+  operationId: 71a8e5d7c2178ab12352a85ca897fa72
+  summary: Handle the data-ingestion transcription completion webhook
+  source_system: SponsorUnited data-ingestion pipeline
+  request_schema: TranscriptionWebhookRequest
+observation: >-
+  The inbound receivers are the only place in the whole contract where correlation
+  identifiers appear (event_id, correlation_id, request_id, task_id). SponsorUnited's own
+  internal services get tracing metadata that its API consumers do not — no request-id or
+  correlation header is declared on any of the 547 consumer-facing operations.

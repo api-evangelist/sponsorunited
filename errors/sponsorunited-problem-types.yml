@@ -1,0 +1,89 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/sponsorunited-api-openapi.json
+format: proprietary
+rfc9457: false
+note: >-
+  The API does not use RFC 9457 problem+json — no operation declares an
+  application/problem+json response and the string "problem+json" does not appear in the
+  spec. Errors are plain application/json. There is no single error envelope either: the
+  contract mixes at least three shapes, which is the most consequential thing an agent
+  needs to know here, because it cannot parse failures with one code path.
+  No error reference documentation exists to enrich these titles — SponsorUnited publishes
+  no developer docs — so every entry below is derived from the contract itself.
+envelopes:
+- name: ErrorResource
+  shape: '{ "error": string }'
+  usage: The declared component schema, referenced by 25 operations; used for 403/404/422/500.
+- name: message
+  shape: '{ "message": string }'
+  usage: Inline schema on many 403/404 responses (e.g. "Custom report not found").
+- name: message+errors
+  shape: '{ "message": string, "errors": object }'
+  usage: Laravel validation envelope on 422; "errors" maps field name to an array of messages.
+- name: error+message
+  shape: '{ "error": string, "message": string }'
+  usage: Inline schema on some 422/500 responses.
+problem_types:
+- status: 400
+  title: Bad Request
+  occurrences: 26
+  meaning: Malformed request, or an operation that could not be completed (e.g. "Failed
+    to delete", "Failed to delete audit").
+  remediation: Correct the request body or path parameters; not retryable unchanged.
+- status: 401
+  title: Unauthenticated
+  occurrences: 222
+  meaning: Missing, expired or invalid bearer JWT; or, on X-API-Key operations, "Missing
+    or invalid API key".
+  remediation: Re-authenticate via POST /api/auth/login (plus MFA) and retry with a fresh
+    token. The most common failure in the contract by a wide margin.
+- status: 403
+  title: Forbidden
+  occurrences: 109
+  meaning: Authenticated but not permitted. Frequently permission-scoped and specific —
+    "missing edit news permission", "user is not the owner of this report".
+  remediation: Not retryable. The caller's role or record ownership must change; see
+    Roles & Permissions operations.
+- status: 404
+  title: Not Found
+  occurrences: 122
+  meaning: Addressed entity does not exist — "User not found", "Article not found",
+    "Report not found", "Brand not found", "Organization not found".
+  remediation: Not retryable. Re-resolve the identifier.
+- status: 409
+  title: Conflict
+  occurrences: 2
+  meaning: State conflict — "A scrape is already in progress for this entity"; "This
+    contact is not awaiting a choice".
+  remediation: Poll for the in-flight operation to finish rather than re-issuing.
+- status: 422
+  title: Validation error
+  occurrences: 118
+  meaning: Request understood but semantically invalid. Also carries state-machine
+    refusals such as "Transition not allowed from the current status".
+  remediation: Read the "errors" map for per-field detail. Not retryable unchanged.
+- status: 429
+  title: Too Many Requests
+  occurrences: 2
+  meaning: Authentication anti-abuse only — MFA PIN send/verify, "Maximum attempts
+    reached". Not a general API quota.
+  remediation: Restart the login flow. No Retry-After header is declared.
+- status: 500
+  title: Server error
+  occurrences: 27
+  meaning: Unhandled server fault.
+  remediation: Retryable with backoff, but see conventions/ — the API offers no
+    idempotency key, so retrying a non-idempotent write risks duplication.
+- status: 502
+  title: Upstream failure
+  occurrences: 3
+  meaning: A third-party dependency failed — "Social platforms API error", "VanceAI
+    enhancement failed".
+  remediation: Retryable with backoff.
+- status: 503
+  title: Service Unavailable
+  occurrences: 3
+  meaning: A dependency is down — "Authentication gateway unavailable", "Search service
+    is temporarily unavailable".
+  remediation: Retryable with backoff.

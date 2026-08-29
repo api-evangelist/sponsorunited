@@ -1,0 +1,30 @@
+generated: '2026-08-29'
+method: searched
+source: https://www.sponsorunited.com/llms.txt
+plan_count: 0
+plans: []
+pricing_published: false
+free_tier: false
+free_trial: false
+self_serve_signup: false
+sales_gate:
+  entry_point: https://www.sponsorunited.com/request-a-demo
+  http_status: 200
+  model: Paid subscription with custom pricing, quoted through a sales conversation.
+note: >-
+  SponsorUnited publishes no pricing whatsoever — this is stated by the company itself,
+  not inferred. Its own llms.txt reads: "SponsorUnited does not offer a free plan, public
+  pricing, or a free trial. All access is through a paid subscription with custom pricing."
+  https://www.sponsorunited.com/pricing returns 404 and no pricing page appears anywhere in
+  the sitemap. The only commercial entry point is a demo request form. Access to the API
+  specifically has no published commercial terms at all: no plan, no rate card, and no
+  order path distinct from a platform subscription.
+evidence:
+- url: https://www.sponsorunited.com/llms.txt
+  status: 200
+  quote: SponsorUnited does not offer a free plan, public pricing, or a free trial. All
+    access is through a paid subscription with custom pricing.
+- url: https://www.sponsorunited.com/pricing
+  status: 404
+- url: https://www.sponsorunited.com/request-a-demo
+  status: 200

@@ -1,0 +1,66 @@
+generated: '2026-08-29'
+method: searched
+source: https://www.sponsorunited.com/legal/service-level-agreement
+versioning:
+  scheme: unversioned paths
+  current_version: v1
+  policy_published: false
+  note: info.version is "v1" but no path carries a version segment and no versioning
+    policy is published.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >-
+    No deprecation policy, no Sunset or Deprecation response headers, and no announced
+    notice period. Deprecation is communicated only inside the OpenAPI description
+    itself: four operations carry deprecated: true and name their replacement in prose.
+    Because there is no developer portal or changelog, a consumer's only way to learn an
+    operation is going away is to re-read the spec.
+  deprecated_operations:
+  - operation: POST /api/search/smart/brands/locations
+    operationId: 6f77cd0dc54389927b6029003009d583
+    replacement: Reporting API /brands/locations
+  - operation: POST /api/search/smart/brands/locations/metadata
+    operationId: 0da01e381072ea7386ed981e13045004
+    replacement: Reporting API POST /brands/locations/metadata
+  - operation: POST /api/search/smart/brands/locations/download
+    operationId: 24c1066d5edffa9b62deef7672933b23
+    replacement: Reporting API POST /brands/locations/download
+  - operation: GET /api/notes/{leagueId}/internal-scouting
+    operationId: df19c4cb21646bf53cdb231a7b5d5207
+    replacement: GET /api/properties/{teamId}/internal-scouting
+status_page:
+  url: https://sponsorunited.statuspage.io/
+  provider: Atlassian Statuspage
+  http_status: 200
+  state_at_probe: All Systems Operational
+sla:
+  published: true
+  url: https://www.sponsorunited.com/legal/service-level-agreement
+  http_status: 200
+  target_uptime: 99.0%
+  measurement: Monthly, excluding Excused Downtime; not cumulative across months.
+  scheduled_maintenance_cap: Not more than 15 hours per rolling three calendar months,
+    5 hours in any calendar month, 3 hours in any one week.
+  remedy: >-
+    Missing the target in a single month is expressly not a breach. Only after three
+    consecutive months below target may the customer serve a Performance Notice, giving
+    SponsorUnited 30 days to cure; service credits and termination are the sole and
+    exclusive remedy.
+  scope: The SU Platform at pro.sponsorunited.com. The SLA does not name the API as a
+    separately covered service.
+  support:
+    contact: clientservices@sponsorunited.com
+    entity: SponsorUnited, Inc., 2299 Summer Street #1081, Stamford, CT 06905, USA
+changelog:
+  url: https://help.sponsorunited.com/en/collections/7168679-data-product-releases
+  http_status: 200
+  entries: 2
+  dated: false
+  note: >-
+    The closest thing to a changelog is a help-center collection titled "Data & Product
+    Releases" holding two undated articles (an SPND launch announcement and a navigation
+    guide for SponsorUnited 4.0). It is a product-announcement page, not an API changelog
+    — no API change has ever been announced publicly.

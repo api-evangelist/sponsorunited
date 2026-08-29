@@ -1,0 +1,50 @@
+generated: '2026-08-29'
+method: searched
+source: https://www.sponsorunited.com/security
+trust_center:
+  url: https://trust.sponsorunited.com/
+  platform: Vanta
+  http_status: 200
+  machine_readable: false
+  note: The trust center is a Vanta-hosted single-page app; its certification list is
+    rendered client-side and no anonymous API returns it (api.vanta.com returns 401).
+    Certifications below were therefore read from the provider's own security page,
+    which states them in prose.
+security_page:
+  url: https://www.sponsorunited.com/security
+  http_status: 200
+certifications:
+- name: SOC 2 Type II
+  status: attested
+  evidence: '"SponsorUnited maintains a SOC 2 Type II attestation" — https://www.sponsorunited.com/security'
+  report_availability: Report available via the trust center / on request.
+- name: GDPR
+  status: compliance certification claimed
+  evidence: '"and a GDPR compliance certification" — https://www.sponsorunited.com/security'
+program:
+  penetration_testing:
+    cadence: annual
+    partner: Rhymetec
+    scope: All product and cloud infrastructure in scope; source code provided to testers.
+    reports: Summary penetration test reports available upon request.
+  vulnerability_scanning:
+  - Static analysis (SAST) on pull requests and ongoing
+  - Malicious dependency scanning
+  - Periodic network vulnerability scanning
+  - Software composition analysis (SCA)
+  - Dynamic analysis (DAST) of running applications
+  - External attack surface management (EASM)
+  data_protection:
+    at_rest: All datastores with customer data and S3 buckets encrypted at rest; sensitive
+      collections and tables additionally use row-level encryption.
+    note: The published page repeats the at-rest paragraph verbatim under "Data in transit"
+      and "Secret management", so no distinct in-transit or secret-management control is
+      actually stated. Recorded as published, not as three separate controls.
+vulnerability_disclosure:
+  published: false
+  note: No SponsorUnited-operated /.well-known/security.txt, no security@ address, no bug
+    bounty and no responsible-disclosure page were found. The only security.txt reachable
+    on a SponsorUnited hostname is Intercom's, served on the vendor-hosted help center
+    (help.sponsorunited.com) and canonical to app.intercom.com — it is Intercom's document,
+    not SponsorUnited's, and is not credited here.
+  general_contact: info@sponsorunited.com

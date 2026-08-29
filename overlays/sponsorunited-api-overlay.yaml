@@ -1,0 +1,66 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the SponsorUnited API
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-29'
+  method: generated
+  source: openapi/sponsorunited-api-openapi.json
+  note: >-
+    Captures API Evangelist's enhancements to the harvested contract without mutating it.
+    The original is preserved verbatim at openapi/_original/. Every action below adds
+    metadata the published spec omits — a servers block, contact/licence/description in
+    info, and machine-readable notes on the operations whose behaviour a consumer cannot
+    otherwise infer. Nothing here invents API behaviour.
+actions:
+- target: $.info
+  description: The published spec carries only title and version. Add the host, the
+    provenance of this description, and the operating company.
+  update:
+    description: >-
+      Production REST API behind the SponsorUnited sponsorship intelligence platform.
+      This description is served publicly at https://api.sponsorunited.com/docs.
+      SponsorUnited publishes no developer portal, API reference, getting-started guide or
+      sign-up path for this API; the contract is the only public documentation of it.
+    contact:
+      name: SponsorUnited, Inc.
+      url: https://www.sponsorunited.com/contact
+      email: info@sponsorunited.com
+    termsOfService: https://www.sponsorunited.com/legal/terms-of-service
+- target: $
+  description: The published spec declares no servers block. Add the host it is served
+    from and which it describes.
+  update:
+    servers:
+    - url: https://api.sponsorunited.com
+      description: Production. Confirmed by fetching this description from
+        https://api.sponsorunited.com/docs; all paths are rooted at /api.
+- target: $.paths['/api/follows'].delete
+  description: Flag the documented idempotency so a client can retry this delete safely.
+  update:
+    x-idempotent: true
+    x-idempotency-basis: Declared in the operation description — entries that were never
+      followed are silently ignored.
+- target: $.paths['/api/vortex/user-event-notes'].post
+  description: Flag the documented idempotency.
+  update:
+    x-idempotent: true
+    x-idempotency-basis: Declared in the operation description.
+- target: $.paths['/api/vortex/user-event-uploads'].post
+  description: Flag the documented idempotency.
+  update:
+    x-idempotent: true
+    x-idempotency-basis: Declared in the operation description.
+- target: $.paths['/api/user/{id}/restore'].post
+  description: Mark this as the reversal path for user deletion; no retention window is
+    published, so none is asserted.
+  update:
+    x-reversal-of: DELETE /api/user/{id}
+    x-reversal-window: null
+    x-reversal-window-source: null
+- target: $.paths['/api/news/article/{id}/restore'].put
+  description: Mark this as the reversal path for declining a news article.
+  update:
+    x-reversal-of: PUT /api/news/article/{id}/decline
+    x-reversal-window: null
+    x-reversal-window-source: null

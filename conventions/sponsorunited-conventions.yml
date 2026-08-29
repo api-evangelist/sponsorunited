@@ -1,0 +1,139 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/sponsorunited-api-openapi.json
+note: >-
+  Derived entirely from the contract. SponsorUnited publishes no developer documentation,
+  so nothing here could be upgraded from a docs page — there is no docs page.
+auth_style:
+  primary: Bearer JWT in the Authorization header (securityScheme bearerAuth).
+  secondary: X-API-Key header (securityScheme apiKeyAuth), described in the spec as a
+    "Service API key for external services (ai-api, chat-api)".
+  oauth2: false
+  scopes: none
+  note: 527 of 547 operations declare security. Because there is no OAuth2 flow there is
+    no scope surface, so no scopes/ artifact is emitted.
+  mfa: Login is a two-step flow — POST /api/auth/login, then GET /api/auth/pin/send/{mfaOption}
+    and POST /api/auth/pin/verify.
+  see: authentication/sponsorunited-authentication.yml
+pagination:
+  styles:
+  - style: page-number
+    params:
+      page: Page number (integer, default 1)
+      per_page: Items per page (integer, default 10)
+    response_fields:
+    - data
+    - current_page
+    - last_page
+    - per_page
+    - total
+    - first_page_url
+    - last_page_url
+    - next_page_url
+    - prev_page_url
+    note: The Laravel length-aware paginator envelope. next_page_url is nullable and is
+      the reliable "more pages" signal.
+  - style: cursor
+    params:
+      after_id: 'Cursor: return records with id greater than this value. Omit for the
+        first page.'
+    note: Used on a minority of list operations; monotonic integer id cursor.
+  consistency: mixed — page/per_page dominates, after_id appears on a handful of
+    endpoints, and some list operations declare neither.
+sorting:
+  params:
+    order_by: Field to order by (enum varies per operation)
+    order_direction: asc | desc
+    order: used on some operations instead of order_direction
+field_selection:
+  sparse_fields: partial
+  note: No general sparse-fieldset or expansion syntax. A `slim` boolean query parameter
+    on some operations returns a reduced representation (e.g. "Fetch slimmed down Agency
+    data").
+versioning:
+  scheme: none-in-path
+  current: v1 (info.version)
+  note: The spec declares version "v1" but paths are not versioned — they are all
+    /api/..., not /api/v1/.... There is no published versioning or deprecation policy, so
+    a consumer has no announced contract for how breaking changes arrive.
+  see: lifecycle/sponsorunited-lifecycle.yml
+error_envelope:
+  rfc9457: false
+  shapes:
+  - '{ "error": string }'
+  - '{ "message": string }'
+  - '{ "message": string, "errors": object }'
+  - '{ "error": string, "message": string }'
+  note: Four envelopes in one contract; a client cannot parse errors with a single path.
+  see: errors/sponsorunited-problem-types.yml
+request_id_tracing:
+  supported: false
+  note: No X-Request-Id / correlation header is declared on any request or response. A
+    full-text search of the spec for "request-id" returns zero matches.
+rate_limit_signaling:
+  supported: false
+  headers: []
+  note: No RateLimit-*, X-RateLimit-* or Retry-After header is declared anywhere. 429
+    appears on two MFA operations only.
+  see: rate-limits/sponsorunited-rate-limits.yml
+idempotency:
+  mechanism: none
+  idempotency_key_header: false
+  grade: declared-semantic-only
+  note: >-
+    There is NO idempotency-key facility. The spec contains three references to
+    idempotency and all three are prose statements that a particular operation happens to
+    be idempotent by design, not a replay-safe mechanism the caller can invoke:
+    DELETE /api/follows ("Entries that were never followed are silently ignored
+    (idempotent)"), POST /api/vortex/user-event-notes ("Idempotent.") and
+    POST /api/vortex/user-event-uploads ("Idempotent."). That is 3 of 547 operations.
+    Every other write — including all resource creation — offers the caller no way to make
+    a retry safe. Combined with the absence of Retry-After, an agent that retries a failed
+    POST here can and will duplicate records. No `Idempotency` pointer is emitted in
+    apis.yml, because the provider does not offer an idempotency facility and claiming one
+    would misrepresent the API.
+  idempotent_operations:
+  - operationId: 69ef442f3509964dd78fead1e3ec3a2e
+    operation: DELETE /api/follows
+    basis: Documented — unfollowing an entity that was never followed is silently ignored.
+  - operationId: 7688f9a0f9fc94c86a6f3aec6bb465c7
+    operation: POST /api/vortex/user-event-notes
+    basis: Documented — "Idempotent. Authenticated via X-API-Key."
+  - operationId: 64882b86eec7c644fd28067f5e650665
+    operation: POST /api/vortex/user-event-uploads
+    basis: Documented — "Idempotent. Authenticated via X-API-Key."
+dry_run_mode:
+  supported: false
+  note: No preview/simulate/validate-only parameter is declared on any write operation.
+reversibility:
+  grade: documented
+  has_write_surface: true
+  note: >-
+    The API has a large write surface — 547 operations including creates, updates and
+    deletes across users, brands, properties, reports, audits and news. Two explicit
+    reversal operations exist and are the only ones in the contract. NEITHER states a
+    window, and there is no documentation anywhere that states one, so this grades
+    `documented` (a reversal path exists) and not `verified` (a path plus a stated
+    window). No window is asserted here because none is published — inventing one could
+    cost a user data.
+  reversal_paths:
+  - action: Delete a user
+    reversal: POST /api/user/{id}/restore
+    operationId: 392df502a617d3cb0bf5ca193553dc86
+    summary: Restore deleted user
+    window: null
+    window_source: null
+    note: Implies user deletion is a soft delete, but the retention period before the
+      record becomes unrecoverable is not stated in the contract or anywhere else public.
+  - action: Decline a news article
+    reversal: PUT /api/news/article/{id}/restore
+    operationId: 70198b0ef22aa7c8bbfd9ea52ea615c8
+    summary: Restore a declined news article
+    window: null
+    window_source: null
+  irreversible:
+    note: >-
+      Every other DELETE in the contract — agencies, assets, asset groupings and
+      subgroupings, agency services, custom reports, saved reports, notes, contacts,
+      tasks and more — declares no corresponding restore operation. An agent must treat
+      those as permanent.

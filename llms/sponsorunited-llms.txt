@@ -1,0 +1,49 @@
+# SponsorUnited
+
+> SponsorUnited is the leading global sports and entertainment sponsorship intelligence platform. Founded in 2018 and headquartered in Stamford, CT, it is a B2B SaaS product that empowers brands, rights holders (teams, leagues, venues, events), agencies, and media companies to discover, evaluate, negotiate, and activate marketing partnerships using data and AI.
+
+The platform is described as an "AI-native operating system for sponsorship" and is often referenced as "the Bloomberg Terminal for marketing partnerships." SponsorUnited does not offer a free plan, public pricing, or a free trial. All access is through a paid subscription with custom pricing.
+
+Key data scale (as of 2026):
+- 403,000+ brands tracked
+- 2.2M+ sponsorship deals tracked
+- 21.1M+ data points across sports, entertainment, media, and talent
+- $30B+ in verified deal data (used for SPND pricing models)
+- Operates in 25+ countries
+
+Credentials: SOC 2 Type II certified, GDPR compliant, Inc. 5000 honoree three consecutive years (2022–2024), Series A funding ($35M) from Spectrum Equity in November 2022.
+
+## Core Platform
+
+- [Platform Overview](https://www.sponsorunited.com/platform): Full description of the SponsorUnited platform (v4.0), including AI features, data infrastructure, and the Living Intelligence Network
+- [SPND — Sponsorship Price of Negotiated Deals](https://www.sponsorunited.com/products/spnd): First-of-its-kind pricing transparency product built on $30B+ in verified deal data; covers NFL, NBA, NHL, MLB, MLS, College Sports, F1, WNBA, NWSL
+- [Surface (AI Analyst)](https://www.sponsorunited.com/platform): Integrated AI assistant trained on SponsorUnited's full data set; answers sponsorship questions and surfaces insights without manual digging
+- [Proposal Evaluator](https://www.sponsorunited.com/platform): AI tool that analyzes uploaded sponsorship proposals for audience fit, competitive landscape, asset/pricing benchmarks, and negotiation guidance
+
+## Solutions by Audience
+
+- [Brands](https://www.sponsorunited.com/solutions/brands): Discover white space, benchmark pricing, validate spend, and evaluate properties with AI-driven insights
+- [Rights Holders](https://www.sponsorunited.com/solutions/rights-holders): Find brand partners, craft data-backed pitches, price inventory, and close deals faster
+- [Agencies](https://www.sponsorunited.com/solutions/agencies): Uncover brand opportunities, evaluate properties, and validate client strategies with actionable sponsorship data
+- [Media Companies](https://www.sponsorunited.com/solutions/media): Identify advertisers, benchmark pricing and deal structures, and position inventory with confidence
+- [Educators](https://www.sponsorunited.com/solutions/educators): Real-world sponsorship data and tools for higher education programs in sports marketing and media
+
+## Company
+
+- [About SponsorUnited](https://www.sponsorunited.com/about): Company history, mission, team culture, leadership, and founding story; founded by Bob Lynch (CEO), first customer was the San Francisco 49ers in January 2018
+- [Contact](https://www.sponsorunited.com/contact): Demo requests and general inquiries; email info@sponsorunited.com
+- [Careers](https://www.sponsorunited.com/careers): Open roles at a fully remote company spanning 50+ countries
+
+## Research & Reports
+
+- [Reports](https://www.sponsorunited.com/reports): Gated research reports covering annual marketing partnership trends, league-specific data (NFL, NBA, NHL, MLB, MLS, WNBA, NWSL, F1, College, NIL), and category deep dives
+- [Insights](https://www.sponsorunited.com/insights): Shorter-form data breakdowns and category analyses; includes league reports such as the NFL Marketing Partnerships Report 2025
+- [Inside the Deal](https://www.sponsorunited.com/inside-the-deal): Customer story series featuring real sponsorship partnerships powered by SponsorUnited data
+- [Sponsorship 101](https://www.sponsorunited.com/sponsorship-101): Educational content on sponsorship strategy, audience analysis, and marketing partnerships
+
+## Optional
+
+- [Help Center](https://help.sponsorunited.com): Product documentation, integration guides, AI feature policies, platform updates, and account management
+- [Security](https://www.sponsorunited.com/security): SOC 2 Type II certification details and GDPR compliance information
+- [Privacy Policy](https://www.sponsorunited.com/privacy-rights): Data privacy rights and terms
+- [Terms of Service](https://www.sponsorunited.com/terms-of-service): Platform terms

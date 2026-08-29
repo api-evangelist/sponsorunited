@@ -1,0 +1,31 @@
+# SponsorUnited Help Center
+
+> SponsorUnited Help Center
+
+## Integrations
+
+- [Install Salesforce Integration](http://help.sponsorunited.com/en/articles/10509452-install-salesforce-integration.md)
+
+## Product Policies
+
+- [AI Privacy Policy | Proposal Evaluator](http://help.sponsorunited.com/en/articles/13521507-ai-privacy-policy-proposal-evaluator.md): How SponsorUnited Uses Your Uploaded Proposals
+
+## Account Management
+
+- [Password Reset](http://help.sponsorunited.com/en/articles/7216727-password-reset.md): You can change or reset your password for security reasons or if you forget it.
+- [General Troubleshooting](http://help.sponsorunited.com/en/articles/8219317-general-troubleshooting.md): When you experience problems with the SponsorUnited platform, follow these basic troubleshooting steps in an attempt to resolve the issue.
+- [Multi-Factor Authentication \(MFA\) Guide](http://help.sponsorunited.com/en/articles/9437704-multi-factor-authentication-mfa-guide.md): Multi-Factor authentication helps safeguard access to your SponsorUnited user account.
+
+## FAQ
+
+- [Account Management FAQ](http://help.sponsorunited.com/en/articles/8568674-account-management-faq.md)
+- [How AI Is Used in the SponsorUnited Platform](http://help.sponsorunited.com/en/articles/13676963-how-ai-is-used-in-the-sponsorunited-platform.md): SponsorUnited uses AI to power specific tools and data processes across the platform, helping users work faster, uncover insights, and evaluate opportunities more efficiently.
+- [General SPND Questions](http://help.sponsorunited.com/en/articles/10166311-general-spnd-questions.md)
+- [SPND Methodology](http://help.sponsorunited.com/en/articles/10166338-spnd-methodology.md)
+- [SPND Access](http://help.sponsorunited.com/en/articles/10166349-spnd-access.md)
+- [SPND Benefits & Usage](http://help.sponsorunited.com/en/articles/10166390-spnd-benefits-usage.md)
+
+## Data & Product Releases
+
+- [Introducing SPND](http://help.sponsorunited.com/en/articles/10193101-introducing-spnd.md): SponsorUnited’s New Technology Solution, SPND, Brings Unprecedented Pricing Transparency to the $100 Billion Sports Sponsorship Industry
+- [Where Did Things Move? A Guide to the New Navigation](http://help.sponsorunited.com/en/articles/13416977-where-did-things-move-a-guide-to-the-new-navigation.md): A quick reference to help you find reports and tools after recent navigation updates for SponsorUnited 4.0. Use this guide to see where familiar items moved and what’s new.

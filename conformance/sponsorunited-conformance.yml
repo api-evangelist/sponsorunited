@@ -1,0 +1,62 @@
+generated: '2026-08-29'
+method: searched
+source: https://www.sponsorunited.com/security + openapi/sponsorunited-api-openapi.json
+standards:
+- id: openapi
+  conforms: true
+  version: 3.0.0
+  evidence: Publicly served OpenAPI 3.0.0 at https://api.sponsorunited.com/docs — 422
+    paths, 547 operations, 561 component schemas, all operations carrying unique
+    operationIds and tags.
+- id: soc2
+  conforms: true
+  evidence: '"SponsorUnited maintains a SOC 2 Type II attestation" —
+    https://www.sponsorunited.com/security; also surfaced on the Vanta trust center at
+    https://trust.sponsorunited.com/'
+- id: gdpr
+  conforms: true
+  evidence: '"and a GDPR compliance certification" — https://www.sponsorunited.com/security'
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme in the contract; authentication is bearer JWT plus
+    an X-API-Key service key.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on every SponsorUnited host.
+- id: rfc9457
+  conforms: false
+  evidence: No application/problem+json response anywhere in the contract; four
+    proprietary error envelopes instead.
+- id: rfc8594
+  conforms: false
+  evidence: No Sunset or Deprecation response headers declared.
+- id: rfc9116
+  conforms: false
+  evidence: No SponsorUnited-operated /.well-known/security.txt. The only one reachable
+    on a SponsorUnited hostname is Intercom's, on the vendor-hosted help center.
+- id: pagination
+  conforms: true
+  evidence: Two consistent published styles — Laravel page/per_page envelope
+    (current_page/last_page/total/next_page_url) and an after_id integer cursor.
+- id: idempotency
+  conforms: false
+  evidence: No idempotency-key mechanism; three of 547 operations are described in prose
+    as idempotent by design. See conventions/sponsorunited-conventions.yml.
+domain_standard:
+  applicable: false
+  searched:
+  - openrtb
+  - iab-tech-lab-adcom
+  - vast
+  - scim
+  - odata
+  - activitypub
+  - oai-pmh
+  note: >-
+    Sponsorship intelligence has no established machine-readable interchange standard, and
+    the contract declares none. The adjacent advertising standards (OpenRTB, VAST, AdCOM)
+    govern programmatic ad transaction and creative delivery, which is a different market
+    from sponsorship deal intelligence — SponsorUnited neither claims nor implements them,
+    and none of their identifiers, message types or endpoint shapes appear in the spec.
+    This is a reward-only check with nothing to reward and nothing to penalise: the market
+    has no standard, so no conformance is invented to fill the slot.

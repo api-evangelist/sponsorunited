@@ -1,0 +1,24 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/sponsorunited-api-openapi.json
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/sponsorunited-api-openapi.json
+- name: apiKeyAuth
+  type: apiKey
+  in: header
+  parameter: X-API-Key
+  description: 'Service API key for external services (ai-api, chat-api). Generate with: php
+    artisan su:api-token:generate'
+  sources:
+  - openapi/sponsorunited-api-openapi.json
