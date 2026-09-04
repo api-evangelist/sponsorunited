@@ -14,6 +14,20 @@ description: 'SponsorUnited is a sports and entertainment sponsorship intelligen
   publishes no developer portal, API reference or partner program around it; access
   is sold as a paid subscription with custom pricing and no self-serve sign-up.'
 url: https://raw.githubusercontent.com/api-evangelist/sponsorunited/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: approval
+  trial: false
+  try_now: false
+  public: false
+  label: Requires approval
+  confidence: low
+  source:
+  - plans
+  - authentication
+  - security
+  generated: '2026-09-03'
+  method: derived
 image: https://cdn.prod.website-files.com/69150d2cbcfa91eb0672f267/691cc16ce42d7f8320d6e4d0_SU-logotype-light.svg
 x-type: company
 x-source: harvest:secondary-market
@@ -77,8 +91,9 @@ apis:
     url: data-model/sponsorunited-data-model.yml
   - type: Overlay
     url: overlays/sponsorunited-api-overlay.yaml
-  - type: MCPServer
+  - type: X-MCPServerCandidate
     url: mcp/sponsorunited-mcp.yml
+    note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
   - type: AgentSkill
     url: skills/_index.yml
 maintainers:
