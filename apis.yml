@@ -61,26 +61,16 @@ tags_raw:
 - SaaS
 - Partnerships
 apis:
-- name: SponsorUnited API
-  description: 'The production REST API behind the SponsorUnited platform. Its OpenAPI
-    3.0 description is publicly served at https://api.sponsorunited.com/docs and
-    describes 547 operations across 422 paths and 561 schemas, covering brands,
-    properties, leagues, agencies, events, contacts, deals and spend tracking, saved
-    and custom reports, scouting audits, social scraping, news, user and organization
-    management, and the Surface AI assistant. Authentication is a bearer JWT for
-    platform users plus an X-API-Key service key for internal services. SponsorUnited
-    publishes no developer documentation, reference site or sign-up path for this API.'
+- aid: sponsorunited:sponsorunited-admin-surface-context-api
+  name: SponsorUnited Admin Surface Context API
+  description: Administrator-set Surface context for users and organizations
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
-  - Sponsorship
-  - Sports
-  - Marketing
-  - Data
-  - Analytics
+  - Admin Surface Context
   properties:
   - type: OpenAPI
-    url: openapi/sponsorunited-api-openapi.json
+    url: openapi/sponsorunited-admin-surface-context-api-openapi.yml
   - type: Authentication
     url: authentication/sponsorunited-authentication.yml
   - type: ErrorCatalog
@@ -89,19 +79,1719 @@ apis:
     url: conventions/sponsorunited-conventions.yml
   - type: DataModel
     url: data-model/sponsorunited-data-model.yml
-  - type: Overlay
-    url: overlays/sponsorunited-api-overlay.yaml
   - type: X-MCPServerCandidate
     url: mcp/sponsorunited-mcp.yml
-    note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
-  - type: AgentSkill
-    url: skills/_index.yml
+- aid: sponsorunited:sponsorunited-agency-api
+  name: SponsorUnited Agency API
+  description: Agency
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Agency
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-agency-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-agencyservices-api
+  name: SponsorUnited Agency Services API
+  description: AgencyServices
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - AgencyServices
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-agencyservices-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-agencyservicestype-api
+  name: SponsorUnited Agency Services Type API
+  description: AgencyServicesType
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - AgencyServicesType
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-agencyservicestype-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-ai-chatbot-api
+  name: SponsorUnited AI Chatbot API
+  description: AI Chatbot
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - AI Chatbot
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-ai-chatbot-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-asset-groupings-api
+  name: SponsorUnited Asset Groupings API
+  description: Asset Groupings
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Asset Groupings
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-asset-groupings-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-asset-subgroupings-api
+  name: SponsorUnited Asset Subgroupings API
+  description: Asset Subgroupings
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Asset Subgroupings
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-asset-subgroupings-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-attendance-api
+  name: SponsorUnited Attendance API
+  description: Attendance
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Attendance
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-attendance-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-audio-download-links-api
+  name: SponsorUnited Audio Download Links API
+  description: Audio Download Links
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Audio Download Links
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-audio-download-links-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-audit-review-api
+  name: SponsorUnited Audit Review API
+  description: Audit Review
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Audit Review
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-audit-review-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-audits-api
+  name: SponsorUnited Audits API
+  description: Audit management endpoints for scouting reports
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Audits
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-audits-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-auditsynonyms-api
+  name: SponsorUnited Audit Synonyms API
+  description: AuditSynonyms
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - AuditSynonyms
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-auditsynonyms-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-authentication-api
+  name: SponsorUnited Authentication API
+  description: Authentication
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-authentication-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-brand-api
+  name: SponsorUnited Brand API
+  description: Brand
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Brand
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-brand-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-brand-clip-timings-api
+  name: SponsorUnited Brand Clip Timings API
+  description: Brand Clip Timings
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Brand Clip Timings
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-brand-clip-timings-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-brand-competitors-api
+  name: SponsorUnited Brand Competitors API
+  description: Brand Competitors
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Brand Competitors
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-brand-competitors-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-brands-social-scraping-api
+  name: SponsorUnited Brands Social Scraping API
+  description: Brands Social Scraping
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Brands Social Scraping
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-brands-social-scraping-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-brandsynonym-api
+  name: SponsorUnited Brand Synonym API
+  description: BrandSynonym
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - BrandSynonym
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-brandsynonym-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-campaign-api
+  name: SponsorUnited Campaign API
+  description: Campaign
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Campaign
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-campaign-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-category-api
+  name: SponsorUnited Category API
+  description: Category
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Category
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-category-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-contact-api
+  name: SponsorUnited Contact API
+  description: Contact
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Contact
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-contact-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-cookies-api
+  name: SponsorUnited Cookies API
+  description: Cookies
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Cookies
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-cookies-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-custom-reports-api
+  name: SponsorUnited Custom Reports API
+  description: Custom Reports
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Custom Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-custom-reports-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-data-ingestion-api
+  name: SponsorUnited Data Ingestion API
+  description: Data Ingestion
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Data Ingestion
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-data-ingestion-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-events-api
+  name: SponsorUnited Events API
+  description: Events
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-events-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-facebook-api
+  name: SponsorUnited Facebook API
+  description: Facebook
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Facebook
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-facebook-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-feedback-api
+  name: SponsorUnited Feedback API
+  description: Feedback
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Feedback
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-feedback-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-fileuploads-api
+  name: SponsorUnited File Uploads API
+  description: FileUploads
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - FileUploads
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-fileuploads-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-follows-api
+  name: SponsorUnited Follows API
+  description: Follows
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Follows
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-follows-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-hubspot-api
+  name: SponsorUnited Hubspot API
+  description: Hubspot
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Hubspot
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-hubspot-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-hubspot-segments-api
+  name: SponsorUnited Hubspot segments API
+  description: Hubspot segments
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Hubspot segments
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-hubspot-segments-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-image-enhancer-api
+  name: SponsorUnited Image Enhancer API
+  description: Image Enhancer
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Image Enhancer
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-image-enhancer-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-images-api
+  name: SponsorUnited Images API
+  description: Images
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Images
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-images-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-infographics-api
+  name: SponsorUnited Infographics API
+  description: Infographics
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Infographics
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-infographics-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-intercom-api
+  name: SponsorUnited Intercom API
+  description: Intercom
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Intercom
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-intercom-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-internal-sync-api
+  name: SponsorUnited Internal Sync API
+  description: Internal Sync
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Internal Sync
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-internal-sync-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-item-api
+  name: SponsorUnited Item API
+  description: Item
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Item
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-item-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-item-image-api
+  name: SponsorUnited Item Image API
+  description: Item Image
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Item Image
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-item-image-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-item-platform-api
+  name: SponsorUnited Item Platform API
+  description: Item Platform
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Item Platform
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-item-platform-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-item-subplatform-api
+  name: SponsorUnited Item Subplatform API
+  description: Item Subplatform
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Item Subplatform
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-item-subplatform-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-item-value-api
+  name: SponsorUnited Item Value API
+  description: Item Value
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Item Value
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-item-value-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-item-video-api
+  name: SponsorUnited Item Video API
+  description: Item Video
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Item Video
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-item-video-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-keyword-api
+  name: SponsorUnited Keyword API
+  description: Keyword
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Keyword
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-keyword-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-language-api
+  name: SponsorUnited Language API
+  description: language
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - language
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-language-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-league-api
+  name: SponsorUnited League API
+  description: League
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - League
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-league-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-leagueitems-api
+  name: SponsorUnited League Items API
+  description: LeagueItems
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - LeagueItems
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-leagueitems-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-linkedin-api
+  name: SponsorUnited Linked In API
+  description: LinkedIn
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - LinkedIn
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-linkedin-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-location-api
+  name: SponsorUnited Location API
+  description: Location management and smart search endpoints
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Location
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-location-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-logorecognition-api
+  name: SponsorUnited Logo Recognition API
+  description: Logo recognition and brand detection endpoints
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - LogoRecognition
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-logorecognition-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-market-api
+  name: SponsorUnited Market API
+  description: Market
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Market
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-market-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-market-grouping-api
+  name: SponsorUnited Market Grouping API
+  description: Market Grouping
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Market Grouping
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-market-grouping-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-mobile-auth-api
+  name: SponsorUnited Mobile Auth API
+  description: Mobile Auth
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Mobile Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-mobile-auth-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-news-api
+  name: SponsorUnited News API
+  description: News
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - News
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-news-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-notes-api
+  name: SponsorUnited Notes API
+  description: Notes management endpoints for various entities
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Notes
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-notes-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-organization-api
+  name: SponsorUnited Organization API
+  description: Organization
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Organization
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-organization-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-partnership-reports-api
+  name: SponsorUnited Partnership Reports API
+  description: Partnership Reports
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Partnership Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-partnership-reports-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-product-api
+  name: SponsorUnited Product API
+  description: Product
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Product
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-product-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-product-type-api
+  name: SponsorUnited Product Type API
+  description: Product Type
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Product Type
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-product-type-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-property-api
+  name: SponsorUnited Property API
+  description: Property
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Property
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-property-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-report-sharing-api
+  name: SponsorUnited Report Sharing API
+  description: Report sharing tracking endpoints
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Report Sharing
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-report-sharing-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-representation-api
+  name: SponsorUnited Representation API
+  description: Representation
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Representation
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-representation-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-roleorientation-api
+  name: SponsorUnited Role Orientation API
+  description: Role orientation management endpoints
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - RoleOrientation
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-roleorientation-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-roles-permissions-api
+  name: SponsorUnited Roles & Permissions API
+  description: Roles & Permissions
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Roles & Permissions
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-roles-permissions-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-saved-reports-api
+  name: SponsorUnited Saved Reports API
+  description: Saved Reports
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Saved Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-saved-reports-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-scouting-groups-api
+  name: SponsorUnited Scouting Groups API
+  description: Scouting Groups
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Scouting Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-scouting-groups-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-scoutingyoutubelink-api
+  name: SponsorUnited Scouting Youtube Link API
+  description: ScoutingYoutubeLink
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - ScoutingYoutubeLink
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-scoutingyoutubelink-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-search-api
+  name: SponsorUnited Search API
+  description: Search
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-search-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-social-scraping-sessions-api
+  name: SponsorUnited Social Scraping Sessions API
+  description: Social Scraping Sessions
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Social Scraping Sessions
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-social-scraping-sessions-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-spend-tracker-api
+  name: SponsorUnited Spend tracker API
+  description: Spend tracker
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Spend tracker
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-spend-tracker-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-stats-api
+  name: SponsorUnited Stats API
+  description: Stats Performance API endpoints
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Stats
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-stats-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-subcategory-api
+  name: SponsorUnited Subcategory API
+  description: Subcategory
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Subcategory
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-subcategory-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-subscription-api
+  name: SponsorUnited Subscription API
+  description: Subscription
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Subscription
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-subscription-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-surface-api
+  name: SponsorUnited Surface API
+  description: Surface context and usage endpoints
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Surface
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-surface-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-tags-api
+  name: SponsorUnited Tags API
+  description: Tags
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-tags-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-tasks-api
+  name: SponsorUnited Tasks API
+  description: Tasks
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-tasks-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-transcription-api
+  name: SponsorUnited Transcription API
+  description: Transcription
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Transcription
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-transcription-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-user-actions-api
+  name: SponsorUnited User Actions API
+  description: User activity tracking and organization statistics endpoints
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - User Actions
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-user-actions-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-user-api
+  name: SponsorUnited User API
+  description: User
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - User
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-user-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-user-authentication-api
+  name: SponsorUnited User Authentication API
+  description: User Authentication
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - User Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-user-authentication-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-user-custom-reports-api
+  name: SponsorUnited User Custom Reports API
+  description: User Custom Reports
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - User Custom Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-user-custom-reports-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-user-management-api
+  name: SponsorUnited User Management API
+  description: User Management
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - User Management
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-user-management-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-usereventuploads-api
+  name: SponsorUnited User Event Uploads API
+  description: UserEventUploads
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - UserEventUploads
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-usereventuploads-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-users-api
+  name: SponsorUnited Users API
+  description: Users
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-users-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-vortex-api
+  name: SponsorUnited Vortex API
+  description: >-
+    Service-to-service endpoints for the Vortex mobile app. Authenticated via X-API-Key header.
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Vortex
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-vortex-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-webhooks-api
+  name: SponsorUnited Webhooks API
+  description: Webhooks
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-webhooks-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-youtube-brand-assets-api
+  name: SponsorUnited YouTube Brand Assets API
+  description: YouTube Brand Assets
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - YouTube Brand Assets
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-youtube-brand-assets-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/sponsorunited-api-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
 - type: Website
   url: https://www.sponsorunited.com/
 - type: Documentation
