@@ -601,26 +601,6 @@ apis:
     url: data-model/sponsorunited-data-model.yml
   - type: X-MCPServerCandidate
     url: mcp/sponsorunited-mcp.yml
-- aid: sponsorunited:sponsorunited-fileuploads-api
-  name: SponsorUnited File Uploads API
-  description: FileUploads
-  humanURL: https://www.sponsorunited.com/platform
-  baseURL: https://api.sponsorunited.com
-  tags:
-  - FileUploads
-  properties:
-  - type: OpenAPI
-    url: openapi/sponsorunited-fileuploads-api-openapi.yml
-  - type: Authentication
-    url: authentication/sponsorunited-authentication.yml
-  - type: ErrorCatalog
-    url: errors/sponsorunited-problem-types.yml
-  - type: Conventions
-    url: conventions/sponsorunited-conventions.yml
-  - type: DataModel
-    url: data-model/sponsorunited-data-model.yml
-  - type: X-MCPServerCandidate
-    url: mcp/sponsorunited-mcp.yml
 - aid: sponsorunited:sponsorunited-follows-api
   name: SponsorUnited Follows API
   description: Follows
@@ -971,26 +951,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/sponsorunited-leagueitems-api-openapi.yml
-  - type: Authentication
-    url: authentication/sponsorunited-authentication.yml
-  - type: ErrorCatalog
-    url: errors/sponsorunited-problem-types.yml
-  - type: Conventions
-    url: conventions/sponsorunited-conventions.yml
-  - type: DataModel
-    url: data-model/sponsorunited-data-model.yml
-  - type: X-MCPServerCandidate
-    url: mcp/sponsorunited-mcp.yml
-- aid: sponsorunited:sponsorunited-linkedin-api
-  name: SponsorUnited Linked In API
-  description: LinkedIn
-  humanURL: https://www.sponsorunited.com/platform
-  baseURL: https://api.sponsorunited.com
-  tags:
-  - LinkedIn
-  properties:
-  - type: OpenAPI
-    url: openapi/sponsorunited-linkedin-api-openapi.yml
   - type: Authentication
     url: authentication/sponsorunited-authentication.yml
   - type: ErrorCatalog
@@ -1772,6 +1732,46 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/sponsorunited-youtube-brand-assets-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-file-uploads-api
+  name: SponsorUnited File Uploads API
+  description: FileUploads
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - File Uploads
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-file-uploads-api-openapi.yml
+  - type: Authentication
+    url: authentication/sponsorunited-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sponsorunited-problem-types.yml
+  - type: Conventions
+    url: conventions/sponsorunited-conventions.yml
+  - type: DataModel
+    url: data-model/sponsorunited-data-model.yml
+  - type: X-MCPServerCandidate
+    url: mcp/sponsorunited-mcp.yml
+- aid: sponsorunited:sponsorunited-linked-in-api
+  name: SponsorUnited Linked In API
+  description: LinkedIn
+  humanURL: https://www.sponsorunited.com/platform
+  baseURL: https://api.sponsorunited.com
+  tags:
+  - Linked In
+  properties:
+  - type: OpenAPI
+    url: openapi/sponsorunited-linked-in-api-openapi.yml
   - type: Authentication
     url: authentication/sponsorunited-authentication.yml
   - type: ErrorCatalog
