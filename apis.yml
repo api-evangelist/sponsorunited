@@ -107,6 +107,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - Agency Services
+  tags_raw:
   - AgencyServices
   properties:
   - type: OpenAPI
@@ -267,6 +269,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - Audit
+  tags_raw:
   - Audits
   properties:
   - type: OpenAPI
@@ -327,6 +331,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - Brands
+  tags_raw:
   - Brand
   properties:
   - type: OpenAPI
@@ -547,6 +553,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -627,6 +635,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - HubSpot
+  tags_raw:
   - Hubspot
   properties:
   - type: OpenAPI
@@ -687,6 +697,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - Image
+  tags_raw:
   - Images
   properties:
   - type: OpenAPI
@@ -907,6 +919,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - Language
+  tags_raw:
   - language
   properties:
   - type: OpenAPI
@@ -1007,6 +1021,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - Markets
+  tags_raw:
   - Market
   properties:
   - type: OpenAPI
@@ -1507,6 +1523,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - Task
+  tags_raw:
   - Tasks
   properties:
   - type: OpenAPI
@@ -1667,6 +1685,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
@@ -1708,6 +1728,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
@@ -1768,6 +1790,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - LinkedIn
+  tags_raw:
   - Linked In
   properties:
   - type: OpenAPI
