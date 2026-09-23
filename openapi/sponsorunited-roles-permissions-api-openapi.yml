@@ -1,0 +1,280 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Roles & Permissions API
+  version: v1
+  description: Roles & Permissions
+tags:
+- name: Roles & Permissions
+  description: Roles & Permissions
+paths:
+  /api/permissions/{name}:
+    get:
+      tags:
+      - Roles & Permissions
+      summary: Get permission by name
+      description: Retrieves a specific permission by its slug name, including display name and description
+      operationId: ffb1e2cd414e0f89f1a548525c7fb7b9
+      parameters:
+      - name: name
+        in: path
+        description: Name of the permission in slug format.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionShowResource'
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Roles & Permissions
+      summary: Update permission
+      description: Updates the display name and/or description of a permission identified by its slug name
+      operationId: bdeadb094c4c3b0ec8851d065e6d390e
+      parameters:
+      - name: name
+        in: path
+        description: Name of the permission in slug format.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PermissionUpdateRequest'
+      responses:
+        '200':
+          description: No content when succesfully updating record.
+      security:
+      - bearerAuth: []
+  /api/roles:
+    get:
+      tags:
+      - Roles & Permissions
+      summary: List all roles
+      description: Returns all roles with their permissions, filtered by the current user's role level
+      operationId: 77e3636d8592997ce9d6d27b50857a69
+      responses:
+        '200':
+          description: All Roles with their permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleIndexResource'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Roles & Permissions
+      summary: Create a new role
+      description: Creates a new role with specified permissions and role level
+      operationId: 4a563842fbfcad237f63da43065fca3d
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreRoleRequest'
+      responses:
+        '201':
+          description: A new role with its permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleStoreUpdateResource'
+      security:
+      - bearerAuth: []
+  /api/roles/{id}:
+    put:
+      tags:
+      - Roles & Permissions
+      summary: Update a role
+      description: Updates a role's display name, description, permissions, and role level
+      operationId: 786d6990093a8eb3a56931f19a827e43
+      parameters:
+      - name: id
+        in: path
+        description: Id of Role to update
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoleRequest'
+      responses:
+        '200':
+          description: The updated role with its permissions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleStoreUpdateResource'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Roles & Permissions
+      summary: Delete a role
+      description: Deletes a role and its associated permissions. Fails if users are currently assigned to the role
+      operationId: 8285c46981c60ad600aa4077307aec04
+      parameters:
+      - name: id
+        in: path
+        description: Id of Role to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty response when role has been deleted successfully.
+          content:
+            application/json:
+              schema: {}
+              example: '[]'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    Permission:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    PermissionShowResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    UpdateRoleRequest:
+      properties:
+        display_name:
+          type: string
+        description:
+          type: string
+        permissions:
+          type: string
+          example: 1,2,3
+        allow:
+          description: When present and true, it will attach one or more permissions to the role.
+          type: boolean
+      type: object
+    PermissionUpdateRequest:
+      properties:
+        display_name:
+          type: string
+        description:
+          type: string
+      type: object
+    RoleStoreUpdateResource:
+      properties:
+        role:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/Role'
+          - properties:
+              permissions:
+                $ref: '#/components/schemas/PermissionsGroupedByLabel'
+            type: object
+        all_permissions:
+          $ref: '#/components/schemas/PermissionsGroupedByLabel'
+      type: object
+    Role:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    StoreRoleRequest:
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        permissions:
+          type: string
+          example: 1,2,3
+        role_level:
+          type: integer
+          example: 40
+      type: object
+    RoleIndexResource:
+      properties:
+        roles:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/Role'
+            - properties:
+                permissions:
+                  $ref: '#/components/schemas/PermissionsGroupedByLabel'
+              type: object
+        all_permissions:
+          $ref: '#/components/schemas/PermissionsGroupedByLabel'
+      type: object
+    PermissionsGroupedByLabel:
+      properties:
+        Label Name:
+          description: The name of the label under which several permissions are grouped.
+          type: array
+          items:
+            $ref: '#/components/schemas/Permission'
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

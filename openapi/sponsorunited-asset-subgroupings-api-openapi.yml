@@ -1,0 +1,291 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Asset Subgroupings API
+  version: v1
+  description: Asset Subgroupings
+tags:
+- name: Asset Subgroupings
+  description: Asset Subgroupings
+paths:
+  /api/asset-subgrouping/:
+    get:
+      tags:
+      - Asset Subgroupings
+      summary: List all asset subgroupings
+      description: Returns all asset subgroupings with their parent groupings ordered by media order
+      operationId: ab50fb3a5295ae73d825ecb7c7543008
+      responses:
+        '200':
+          description: List of asset subgroupings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetSubgroupingIndexResource'
+      security:
+      - bearerAuth: []
+  /api/asset-subgrouping:
+    post:
+      tags:
+      - Asset Subgroupings
+      summary: Create asset subgrouping
+      description: Creates a new asset subgrouping under a specified grouping
+      operationId: 10e2ffa916cfeaf6e4d8360511b64908
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetSubgroupingStoreRequest'
+      responses:
+        '200':
+          description: The new asset subgrouping.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetSubgroupingResource'
+      security:
+      - bearerAuth: []
+  /api/asset-subgrouping/{id}:
+    get:
+      tags:
+      - Asset Subgroupings
+      summary: Get asset subgrouping
+      description: Returns a specific asset subgrouping with its parent grouping
+      operationId: 5298a5dfd5179098c87173ff85b91f0e
+      parameters:
+      - name: id
+        in: path
+        description: The id of the asset grouping to update.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The updated asset grouping.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetSubgroupingResource'
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Asset Subgroupings
+      summary: Update asset subgrouping
+      description: Updates the name, grouping association, and icon of an existing subgrouping
+      operationId: 02261538464d9b2e00ca4513c83ec0db
+      parameters:
+      - name: id
+        in: path
+        description: The id of the asset grouping to update.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetSubgroupingUpdateRequest'
+      responses:
+        '200':
+          description: The updated asset grouping.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetSubgroupingResource'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Asset Subgroupings
+      summary: Delete asset subgrouping
+      description: Removes an asset subgrouping from the system
+      operationId: 4918ef38b51abd58cec25b79dcc6f41d
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty on success.
+      security:
+      - bearerAuth: []
+  /api/asset-subgrouping/{id}/intent:
+    get:
+      tags:
+      - Asset Subgroupings
+      summary: Get subgrouping intent data
+      description: Returns usage metrics for a subgrouping including item counts and audit references
+      operationId: 40322c27f64945cb564c31f36ddb9557
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Asset subgrouping intent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetSubgroupingIntentResource'
+      security:
+      - bearerAuth: []
+  /api/asset-subgrouping/{oldGrouping}/reassign/{newGrouping}:
+    put:
+      tags:
+      - Asset Subgroupings
+      summary: Reassign asset subgrouping
+      description: Moves all items from one subgrouping to another
+      operationId: f0158fb0e40bb7841ed8dbcf14e761ed
+      parameters:
+      - name: oldGrouping
+        in: path
+        description: The id of the old subgrouping
+        required: true
+        schema:
+          type: integer
+      - name: newGrouping
+        in: path
+        description: The id of the new subgrouping
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The reassign was successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetSubgroupingIntentResource'
+      security:
+      - bearerAuth: []
+  /api/asset-subgrouping/tag/{oldTag}:
+    put:
+      tags:
+      - Asset Subgroupings
+      summary: Update subgrouping tag
+      description: Renames a tag across all subgroupings that have it
+      operationId: 8d5112c31deb47ed1eea83a8e5e290af
+      parameters:
+      - name: oldTag
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetSubgroupingTagRequest'
+      responses:
+        '200':
+          description: The update tag was changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetSubgroupingIndexResource'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    AssetSubgroupingIndexResource:
+      properties:
+        groupings:
+          type: object
+          example:
+          - tag1
+          - tag2
+          - tag3
+        subgroupings:
+          $ref: '#/components/schemas/AssetSubgroupingResource'
+      type: object
+    AssetSubgroupingStoreRequest:
+      properties:
+        name:
+          type: string
+        asset_grouping_id:
+          type: integer
+        media_order:
+          type: numeric
+        icon:
+          type: string
+      type: object
+    AssetSubgroupingIntentResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        icon:
+          type: string
+        tag:
+          type: string
+        media_order:
+          type: integer
+        items_count:
+          type: integer
+        item_values_count:
+          type: integer
+        audits_count:
+          type: integer
+      type: object
+    AssetSubgroupingUpdateRequest:
+      properties:
+        name:
+          type: string
+        asset_grouping_id:
+          type: integer
+        icon:
+          type: string
+      type: object
+    AssetSubgroupingTagRequest:
+      properties:
+        new_tag:
+          type: string
+      type: object
+    AssetSubgroupingResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        icon:
+          type: string
+        tag:
+          type: string
+        media_order:
+          type: integer
+        grouping:
+          $ref: '#/components/schemas/AssetGroupingResource'
+      type: object
+    AssetGroupingResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        icon:
+          type: string
+        media_order:
+          type: integer
+        subgroupings_count:
+          type: integer
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

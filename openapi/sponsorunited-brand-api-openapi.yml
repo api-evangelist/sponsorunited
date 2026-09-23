@@ -1,0 +1,1008 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Brand API
+  version: v1
+  description: Brand
+tags:
+- name: Brand
+  description: Brand
+paths:
+  /api/company:
+    get:
+      tags:
+      - Brand
+      summary: List brands
+      description: Returns a paginated list of brands with optional filtering by categories, subcategories, markets, and name. Supports sorting and includes revenue counts when requested
+      operationId: 3e0bffb951b3f31f83aadc004638122b
+      parameters:
+      - name: CompanyIndexRequest
+        in: query
+        schema:
+          $ref: '#/components/schemas/CompanyIndexRequest'
+      responses:
+        '200':
+          description: A list of companies with some relations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyIndexResource'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Brand
+      summary: Create a new brand
+      description: Creates a new brand with the provided data. Auto-approves if user has the appropriate permission
+      operationId: faf1545d2af89079ca55c4f9ed6ea302
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - name
+              - logo
+              - category_id
+              - subcategory_id
+              - website
+              - locations
+              properties:
+                name:
+                  description: Brand name
+                  type: string
+                logo:
+                  description: Logo image URL or ID
+                  type: string
+                category_id:
+                  description: Category ID
+                  type: integer
+                subcategory_id:
+                  description: Subcategory ID
+                  type: integer
+                corporate_phone:
+                  type:
+                  - string
+                  - 'null'
+                website:
+                  description: Brand website URL
+                  type: string
+                linkedin:
+                  description: LinkedIn URL
+                  type:
+                  - string
+                  - 'null'
+                locations:
+                  type: array
+                  items:
+                    type: object
+                youtube:
+                  type:
+                  - string
+                  - 'null'
+                twitter:
+                  type:
+                  - string
+                  - 'null'
+                facebook:
+                  type:
+                  - string
+                  - 'null'
+                instagram:
+                  type:
+                  - string
+                  - 'null'
+                twitch:
+                  type:
+                  - string
+                  - 'null'
+                tiktok:
+                  type:
+                  - string
+                  - 'null'
+                synopsis:
+                  type:
+                  - string
+                  - 'null'
+                markets:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: object
+                organizations:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: integer
+                agencies:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: object
+                brands:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: object
+                parent_company_id:
+                  type:
+                  - integer
+                  - 'null'
+              type: object
+      responses:
+        '200':
+          description: Brand created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '422':
+          description: Validation error or duplicate entry
+      security:
+      - bearerAuth: []
+  /api/company/download:
+    get:
+      tags:
+      - Brand
+      summary: Export brands to CSV
+      description: Exports a list of brands matching the filter criteria as a downloadable CSV file. Supports the same filters as the list endpoint
+      operationId: b199230656befd10721e0df2d25bbd64
+      responses:
+        '200':
+          description: A response with brands
+      security:
+      - bearerAuth: []
+  /api/company/{id}:
+    get:
+      tags:
+      - Brand
+      summary: Get brand details
+      description: Returns detailed information about a specific brand including agencies, contacts, markets, organizations, social handles, financial data (single entry for the most recent fiscal year, with revenue tier), the list of available revenue tiers (financial_data_available_revenue_tiers), and related data
+      operationId: 29b0f8f11c5e74b0c7a9f94f223c0abc
+      parameters:
+      - name: id
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+      - name: with_audits
+        in: query
+        description: Include audit counts
+        required: false
+        schema:
+          type: boolean
+      - name: with_revenues_count
+        in: query
+        description: Include revenue counts
+        required: false
+        schema:
+          type: boolean
+      - name: with_has_spend_tracker_data
+        in: query
+        description: Include spend tracker data availability flag
+        required: false
+        schema:
+          type: boolean
+      - name: with_trashed
+        in: query
+        description: Include soft-deleted brands
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Brand details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResource'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Brand not found
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Brand
+      summary: Update a brand
+      description: Updates an existing brand with the provided data including social handles, markets, organizations, and agencies
+      operationId: dba5691bd7818c368accfd785048ea90
+      parameters:
+      - name: id
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - name
+              - logo
+              - category_id
+              - subcategory_id
+              - website
+              - locations
+              properties:
+                name:
+                  type: string
+                logo:
+                  type: string
+                category_id:
+                  type: integer
+                subcategory_id:
+                  type: integer
+                corporate_phone:
+                  type:
+                  - string
+                  - 'null'
+                website:
+                  type: string
+                linkedin:
+                  type:
+                  - string
+                  - 'null'
+                locations:
+                  type: array
+                  items:
+                    type: object
+                youtube:
+                  type:
+                  - string
+                  - 'null'
+                twitter:
+                  type:
+                  - string
+                  - 'null'
+                facebook:
+                  type:
+                  - string
+                  - 'null'
+                instagram:
+                  type:
+                  - string
+                  - 'null'
+                twitch:
+                  type:
+                  - string
+                  - 'null'
+                tiktok:
+                  type:
+                  - string
+                  - 'null'
+                synopsis:
+                  type:
+                  - string
+                  - 'null'
+                markets:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: object
+                organizations:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: integer
+                agencies:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: object
+                brands:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: object
+                parent_company_id:
+                  type:
+                  - integer
+                  - 'null'
+                primary_profile:
+                  type:
+                  - object
+                  - 'null'
+                secondary_profiles:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: object
+                financial_data:
+                  description: 'Manual correction of the brand''s financial data, upserted by fiscal year and marked as a MANUAL estimate. A brand keeps a single manual row: sending a different fiscal year re-dates the brand''s current financial data and any other manual rows (leftovers of previous fiscal-year edits) are removed, so the edit is what subsequent reads return. The revenue tier is not editable — it is derived on the backend from the revenue being saved (estimated figure for public companies, midpoint of the min/max range for private ones) and cleared when the revenue is cleared. Omit the key entirely when there is nothing to change'
+                  required:
+                  - most_recent_fiscal_year
+                  properties:
+                    most_recent_fiscal_year:
+                      type: integer
+                      example: 2025
+                    revenue_range_low_usd:
+                      description: Lower bound of the revenue range in USD; the revenue is edited as this pair for public and private companies alike. Must be sent together with revenue_range_high_usd; both null clears the range
+                      type:
+                      - number
+                      - 'null'
+                      example: 1900000000
+                    revenue_range_high_usd:
+                      description: Upper bound of the revenue range in USD. Must be greater than or equal to revenue_range_low_usd; for public companies the bounds must be equal (the single reported figure)
+                      type:
+                      - number
+                      - 'null'
+                      example: 2400000000
+                    is_public:
+                      description: Public/private toggle. Switching to private is rejected while a ticker is set. Public companies store their single revenue figure as equal range bounds; private companies may carry a real spread
+                      type: boolean
+                    ticker:
+                      description: Stock ticker symbol; only editable for public companies
+                      type:
+                      - string
+                      - 'null'
+                      maxLength: 10
+                      example: KO
+                  type: object
+              type: object
+      responses:
+        '200':
+          description: Brand updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResource'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Brand not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Brand
+      summary: Delete a brand
+      description: Soft deletes a brand and cleans up associated data including contacts, social handles, and profile links. Prevents deletion of parent brands that have child brands. Requires delete administration companies permission
+      operationId: a073402836212623826fbe1e5a591454
+      parameters:
+      - name: id
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty on success.
+        '200':
+          description: Cannot remove Brand
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+  /api/company/{id}/approved:
+    put:
+      tags:
+      - Brand
+      summary: Approve a brand
+      description: Approves a brand by setting its approved status. Requires approve company permission
+      operationId: d30b29c4f2531b7c2171e1a34a768789
+      parameters:
+      - name: id
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                approved:
+                  description: Approval status
+                  type: boolean
+              type: object
+      responses:
+        '200':
+          description: Brand approved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Brand not found
+      security:
+      - bearerAuth: []
+  /api/company/{id}/social-handles:
+    put:
+      tags:
+      - Brand
+      summary: Add social handle to brand
+      description: Assigns an unmatched social handle to a brand and triggers a rescan
+      operationId: a970398ff43ab364470641b8118cc660
+      parameters:
+      - name: id
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - handle
+              - type
+              properties:
+                handle:
+                  description: Social media handle
+                  type: string
+                type:
+                  description: Social platform type (twitter, facebook, instagram, tiktok)
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: Social handle added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResource'
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+        '500':
+          description: Failed to add social handle
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+  /api/company/{id}/social-handles/multiple:
+    put:
+      tags:
+      - Brand
+      summary: Add multiple social handles to brand
+      description: Assigns multiple unmatched social handles to a brand
+      operationId: b64f45988c333b73cc71385e3a099eeb
+      parameters:
+      - name: id
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - handles
+              - type
+              properties:
+                handles:
+                  description: Array of social media handles
+                  type: array
+                  items:
+                    type: string
+                type:
+                  description: Social platform type
+                  type: string
+                  enum:
+                  - twitter
+                  - facebook
+                  - instagram
+                  - tiktok
+              type: object
+      responses:
+        '200':
+          description: Social handles added successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Social handles added successfully
+                type: object
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+        '500':
+          description: Failed to add social handles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+  /api/company/quick-edit/{id}:
+    put:
+      tags:
+      - Brand
+      summary: Quick edit a brand
+      description: Performs a quick update on a brand with limited fields (category, subcategory, parent company, markets)
+      operationId: f5debdcf80b4e606bdc3320e60005fae
+      parameters:
+      - name: id
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - category_id
+              - subcategory_id
+              properties:
+                category_id:
+                  description: Category ID
+                  type: integer
+                subcategory_id:
+                  description: Subcategory ID
+                  type: integer
+                parent_company_id:
+                  description: Parent company ID
+                  type:
+                  - integer
+                  - 'null'
+                markets:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: object
+              type: object
+      responses:
+        '200':
+          description: Brand updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResource'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Brand not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/company/exists:
+    get:
+      tags:
+      - Brand
+      summary: Check if brand exists
+      description: Checks if a brand with the given name already exists in the database
+      operationId: e178f5a55a7e826c62dfa6e9d154e71f
+      parameters:
+      - name: name
+        in: query
+        description: Brand name to check
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Count of brands with the given name
+          content:
+            application/json:
+              schema:
+                type: integer
+              example: 0
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/company/{old_id}/reassign/{new_id}:
+    put:
+      tags:
+      - Brand
+      summary: Reassign brand data
+      description: Reassigns all data (audits, contacts, locations, etc.) from one brand to another. Adds the old brand's name as a synonym for the new brand
+      operationId: c2802e6e6b434a4ab6f91d92259e5736
+      parameters:
+      - name: old_id
+        in: path
+        description: Source brand ID to reassign from
+        required: true
+        schema:
+          type: integer
+      - name: new_id
+        in: path
+        description: Target brand ID to reassign to
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Reassignment successful, returns intent measurement data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    created_at:
+                      type: string
+                      format: date-time
+                    updated_at:
+                      type: string
+                      format: date-time
+                    audits_count:
+                      type: integer
+                  type: object
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Brand not found
+        '500':
+          description: Operation not permitted or query failure
+      security:
+      - bearerAuth: []
+  /api/brand/{id}/properties/{year}:
+    post:
+      tags:
+      - Brand
+      summary: Get brand deals by season
+      description: Returns paginated brand deals for a specific season with filtering options. Supports CSV download
+      operationId: a195f821ab9ad56096e70493cf181f51
+      parameters:
+      - name: id
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+      - name: year
+        in: path
+        description: Season year. The segment may be omitted, in which case the current year is used
+        required: true
+        schema:
+          type: string
+      - name: per_page
+        in: query
+        description: Number of results per page
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Page number
+        required: false
+        schema:
+          type: integer
+      - name: download
+        in: query
+        description: Download as CSV
+        required: false
+        schema:
+          type: boolean
+      - name: with_brands
+        in: query
+        description: Include child brands
+        required: false
+        schema:
+          type: boolean
+      - name: property_type
+        in: query
+        description: Filter by property type IDs (comma-separated)
+        required: false
+        schema:
+          type: string
+      - name: market
+        in: query
+        description: Filter by market IDs (comma-separated)
+        required: false
+        schema:
+          type: string
+      - name: item_type
+        in: query
+        description: 'Filter by asset types (comma-separated: sponsor, digital, tv, radio, vendor, other)'
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: Sort field
+        required: false
+        schema:
+          type: string
+          enum:
+          - property
+          - property_type
+          - market
+          - total_assets_count
+          - deal_revenues
+      - name: order_direction
+        in: query
+        description: Sort direction
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: Brand deals data with metadata
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/brand/{id}/properties/metadata/{year}:
+    post:
+      tags:
+      - Brand
+      summary: Get brand deals metadata
+      description: Returns metadata for brand deals filtering including available properties, property types, markets, item types, and spend range
+      operationId: 81ad3bfcad5cac9e389f292c5e33ef20
+      parameters:
+      - name: id
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+      - name: year
+        in: path
+        description: Season year. The segment may be omitted, in which case the current year is used
+        required: true
+        schema:
+          type: string
+      - name: with_brands
+        in: query
+        description: Include child brands
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Filter metadata
+          content:
+            application/json:
+              schema:
+                properties:
+                  properties:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        text:
+                          type: string
+                      type: object
+                  property_types:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        text:
+                          type: string
+                      type: object
+                  markets:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        text:
+                          type: string
+                      type: object
+                  item_types:
+                    type: array
+                    items:
+                      properties:
+                        name:
+                          type: string
+                        text:
+                          type: string
+                      type: object
+                  spend_range:
+                    properties:
+                      min:
+                        type: integer
+                      max:
+                        type: integer
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/company/{id}/exclude-from-transcribe:
+    put:
+      tags:
+      - Brand
+      summary: Exclude brand from transcribe
+      description: Sets the exclude_from_transcribe flag for a brand
+      operationId: adfac58a5a03047c729a5f88a48f7c7b
+      parameters:
+      - name: id
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                exclude:
+                  description: Whether to exclude from transcribe
+                  type: boolean
+              type: object
+      responses:
+        '200':
+          description: Brand updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Brand not found
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    Company:
+      properties:
+        id:
+          type: integer
+        parent_company_id:
+          type: integer
+        subcategory_id:
+          type: integer
+        categories_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        exclude_from_social_scan:
+          type: boolean
+        exclude_from_transcribe:
+          type: boolean
+        feed_url:
+          type: string
+        statistics:
+          type: string
+        no_of_employees:
+          type: string
+        priority_markets:
+          type: string
+        parent_company:
+          type: string
+        ad_agency:
+          type: string
+        existing:
+          type: string
+        owned_by:
+          type: string
+        approved:
+          type: boolean
+        approved_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    CompanyResource:
+      description: Brand details with related data (agencies, organizations, primary/secondary profiles)
+      type: object
+    CompanyIndexRequest:
+      properties:
+        order_by:
+          type: string
+        order:
+          type: string
+        only_unapproved:
+          type: boolean
+        name:
+          type: string
+        categories:
+          type: string
+          example: 1,2,3
+        subcategories:
+          type: string
+          example: 1,2,3
+        markets:
+          type: string
+          example: 1,2,3
+      type: object
+    CompanyIndexResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/Company'
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

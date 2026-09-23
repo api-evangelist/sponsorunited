@@ -1,0 +1,172 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited League Items API
+  version: v1
+  description: LeagueItems
+tags:
+- name: LeagueItems
+  description: LeagueItems
+paths:
+  /api/league-items/item/{id}:
+    get:
+      tags:
+      - LeagueItems
+      summary: Get leagues for item
+      description: Returns all leagues associated with a specific item/asset
+      operationId: a3980526f765b7e9ea63477bd49503b4
+      parameters:
+      - name: id
+        in: path
+        description: The id of the Item for which to fetch leagues.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The leagues for the given Item.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueItemForItemResource'
+      security:
+      - bearerAuth: []
+  /api/league-items/league:
+    get:
+      tags:
+      - LeagueItems
+      summary: Get items for league
+      description: Returns all items/assets associated with a specific league
+      operationId: 07380ac867349e354cd33302608be077
+      parameters:
+      - name: league
+        in: query
+        description: The id of the League for which to fetch items.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The items for the given League.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueItemForLeagueResource'
+      security:
+      - bearerAuth: []
+  /api/league-items/item/{id}/update-leagues:
+    put:
+      tags:
+      - LeagueItems
+      summary: Update item leagues
+      description: Updates the league associations for a specific item/asset
+      operationId: 24dd6cb793b6573dabd20ecbb46e539e
+      parameters:
+      - name: id
+        in: path
+        description: The id of the Item for which to update leagues.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueItemsUpdateItemLeaguesRequest'
+      responses:
+        '200':
+          description: The items for the given League.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueItemForItemResource'
+      security:
+      - bearerAuth: []
+  /api/league-items/league/{id}/update-items:
+    put:
+      tags:
+      - LeagueItems
+      summary: Update league items
+      description: Updates the item/asset associations for a specific league
+      operationId: a0a8da5418c493bd0c9581883a3b9bd5
+      parameters:
+      - name: id
+        in: path
+        description: The id of the League for which to update items.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueItemsUpdateLeagueItemsRequest'
+      responses:
+        '200':
+          description: The items for the given League.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueItemForLeagueResource'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    LeagueItemForLeagueResource:
+      type: array
+      items:
+        properties:
+          item_id:
+            type: integer
+          is_key_asset:
+            type: integer
+        type: object
+    LeagueItemsUpdateLeagueItemsRequest:
+      properties:
+        items:
+          type: array
+          items:
+            properties:
+              item_id:
+                type: integer
+              is_key_asset:
+                type: integer
+            type: object
+        search:
+          type: string
+      type: object
+    LeagueItemForItemResource:
+      type: array
+      items:
+        properties:
+          league_id:
+            type: integer
+          is_key_asset:
+            type: integer
+        type: object
+    LeagueItemsUpdateItemLeaguesRequest:
+      properties:
+        leagues:
+          type: array
+          items:
+            properties:
+              league_id:
+                type: integer
+              is_key_asset:
+                type: integer
+            type: object
+        search:
+          type: string
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

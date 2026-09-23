@@ -1,0 +1,397 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Brands Social Scraping API
+  version: v1
+  description: Brands Social Scraping
+tags:
+- name: Brands Social Scraping
+  description: Brands Social Scraping
+paths:
+  /api/social-scraping-sessions/brand/{brandId}:
+    get:
+      tags:
+      - Brands Social Scraping
+      summary: Get the social scraping sessions for a given brand
+      operationId: 40acc3bffc296a02eaa3e3ec5c192579
+      parameters:
+      - name: brandId
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: platforms
+        in: query
+        description: Platforms
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - twitter
+            - instagram
+            - facebook
+            - tiktok
+      - name: page_number
+        in: query
+        description: Page number
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandSocialScrapingSessionsResource'
+      security:
+      - bearerAuth: []
+  /api/social-scraping-sessions/brand/{brandId}/session/{brandScrapingSessionId}:
+    get:
+      tags:
+      - Brands Social Scraping
+      summary: Get the social scraping session properties for a given brand
+      operationId: 87515f2028d4b950852fc27d9c0ff37d
+      parameters:
+      - name: brandId
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: brandScrapingSessionId
+        in: path
+        description: Brand scraping session ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandSocialScrapingSessionPropertiesResource'
+      security:
+      - bearerAuth: []
+  /api/social-scraping-sessions/brand/{brandId}/latest/{platform}/{handle}:
+    get:
+      tags:
+      - Brands Social Scraping
+      summary: Get the latest social scraping session for a given brand
+      operationId: 6301657bd4e4adf96ec75471aa78a72b
+      parameters:
+      - name: brandId
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: platform
+        in: path
+        description: Platform
+        required: true
+        schema:
+          type: string
+          enum:
+          - twitter
+          - instagram
+          - facebook
+          - tiktok
+      - name: handle
+        in: path
+        description: Handle
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandLatestSocialScrapingSessionResource'
+      security:
+      - bearerAuth: []
+  /api/social-scraping-sessions/brand/{brandId}/session/{scrapingSessionId}/matched-entity/{matchedEtityId}:
+    delete:
+      tags:
+      - Brands Social Scraping
+      summary: Delete the matched entity from the posts of a social scraping session for a…
+      operationId: 7dffac202e45aa05cbe52b8f3bb25020
+      parameters:
+      - name: brandId
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: brandScrapingSessionId
+        in: path
+        description: Brand scraping session ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: matchedEntityId
+        in: path
+        description: Matched property ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '204':
+          description: Empty on successful operation
+      security:
+      - bearerAuth: []
+  /api/social-scraping-sessions/brand/{brandId}/session/{brandScrapingSessionId}/export:
+    get:
+      tags:
+      - Brands Social Scraping
+      summary: Export the social scraping session properties for a given brand
+      operationId: 5dff488f5bfccba6970ed64979d13b2e
+      parameters:
+      - name: brandId
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: brandScrapingSessionId
+        in: path
+        description: Brand scraping session ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: A csv file with data of properties for the given entity id and scraping session.
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    BrandLatestSocialScrapingSessionResource:
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        brand_id:
+          type: integer
+        platform:
+          type: string
+        handle:
+          type: string
+        before:
+          type: string
+        after:
+          type: string
+        status:
+          type: string
+        error:
+          type: string
+      type: object
+    Company:
+      properties:
+        id:
+          type: integer
+        parent_company_id:
+          type: integer
+        subcategory_id:
+          type: integer
+        categories_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        exclude_from_social_scan:
+          type: boolean
+        exclude_from_transcribe:
+          type: boolean
+        feed_url:
+          type: string
+        statistics:
+          type: string
+        no_of_employees:
+          type: string
+        priority_markets:
+          type: string
+        parent_company:
+          type: string
+        ad_agency:
+          type: string
+        existing:
+          type: string
+        owned_by:
+          type: string
+        approved:
+          type: boolean
+        approved_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    BrandSocialScrapingSessionsResource:
+      properties:
+        metadata:
+          properties:
+            total:
+              type: integer
+            currentPageNumber:
+              type: integer
+            nextPageNumber:
+              type: integer
+          type: object
+        data:
+          type: array
+          items:
+            properties:
+              session_id:
+                type: integer
+              brand_id:
+                type: integer
+              platform:
+                type: string
+              handle:
+                type: string
+              after:
+                type: string
+                format: date-time
+              before:
+                type: string
+                format: date-time
+              status:
+                type: string
+              matched_entities_count:
+                type: integer
+              posts_count:
+                type: integer
+              user:
+                type: object
+              reviewer:
+                type: object
+              brand:
+                $ref: '#/components/schemas/Company'
+              unmatched_handles:
+                type: array
+                items:
+                  properties:
+                    _id:
+                      type: integer
+                    unmatchedHandle:
+                      type: string
+                    entityName:
+                      type: string
+                  type: object
+              socialMediaValues:
+                type: array
+                items:
+                  properties:
+                    ? ''
+                    : type: string
+                  type: object
+            type: object
+      type: object
+    BrandSocialScrapingSessionPropertiesResource:
+      properties:
+        id:
+          type: integer
+        ulid:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        logo_id:
+          type: integer
+        logo:
+          type: string
+        league_id:
+          type: string
+        league:
+          type: string
+        is_continuous:
+          type: boolean
+        posts_count:
+          type: integer
+        posts:
+          type: array
+          items:
+            properties:
+              _id:
+                type: string
+              entityType:
+                type: string
+              entityId:
+                type: integer
+              platform:
+                type: string
+              postId:
+                type: string
+              created_at:
+                type: string
+              text:
+                type: string
+              socialScrapingSessionId:
+                type: integer
+              matchedEntities:
+                type: array
+                items:
+                  type: integer
+              stats:
+                type: object
+            type: object
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

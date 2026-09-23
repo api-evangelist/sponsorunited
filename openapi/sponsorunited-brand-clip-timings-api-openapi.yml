@@ -1,0 +1,114 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Brand Clip Timings API
+  version: v1
+  description: Brand Clip Timings
+tags:
+- name: Brand Clip Timings
+  description: Brand Clip Timings
+paths:
+  /api/brand/clip/timings:
+    get:
+      tags:
+      - Brand Clip Timings
+      summary: Get brand clip timings
+      description: Retrieves brand clip timings for a scouting YouTube link. Can be queried by either user_event_id or scouting_youtube_link_id. At least one parameter must be provided.
+      operationId: bfa0671b2a21c2163c55d0654b90204d
+      parameters:
+      - name: user_event_id
+        in: query
+        description: User event ID to retrieve brand clip timings for. Returns the most recent link if multiple exist.
+        required: false
+        schema:
+          type: integer
+          example: 123
+      - name: scouting_youtube_link_id
+        in: query
+        description: Scouting YouTube link ID to retrieve brand clip timings for
+        required: false
+        schema:
+          type: integer
+          example: 456
+      responses:
+        '200':
+          description: Brand clip timings retrieved successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BrandClipTimingResource'
+                type: object
+        '404':
+          description: Scouting YouTube link not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    BrandClipTimingResource:
+      properties:
+        start:
+          description: 'Start timestamp in the video (format: HH:MM:SS.MS)'
+          type: string
+          example: '00:00:06.640'
+        end:
+          description: 'End timestamp in the video (format: HH:MM:SS.MS)'
+          type: string
+          example: '00:00:17.160'
+        text:
+          description: Transcribed or related text for the clip section
+          type: string
+          example: you don't miss any of our great football content this season. This episode is presented by Uber Eats. When football
+        asset:
+          description: Asset description
+          type: string
+          example: 'Pre/Post Game Naming Rights: Show Presented by'
+        brand:
+          description: Brand name
+          type: string
+          example: Uber Eats
+        asset_id:
+          description: Asset ID
+          type: integer
+          example: 296
+        brand_id:
+          description: Brand ID
+          type: integer
+          example: 8851
+      type: object
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

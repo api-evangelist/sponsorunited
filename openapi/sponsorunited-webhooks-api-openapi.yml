@@ -1,0 +1,199 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Webhooks API
+  version: v1
+  description: Webhooks
+tags:
+- name: Webhooks
+  description: Webhooks
+paths:
+  /api/webhooks/phantombuster/employee-search:
+    post:
+      tags:
+      - Webhooks
+      description: Handle PhantomBuster employee search completion webhook
+      operationId: 4b2ec455c53b650fb41ef1624e09ee23
+      parameters:
+      - name: token
+        in: query
+        description: 'Security token: hash(''sha256'', secret + agentId)'
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhantombusterEmployeeSearchWebhookRequest'
+      responses:
+        '200':
+          description: Webhook received successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Webhook received
+                type: object
+        '403':
+          description: Forbidden - Invalid token
+      summary: 4b2ec455c53b650fb41ef1624e09ee23
+      x-summary-source: derived
+  /api/webhooks/phantombuster/on-demand-employee-search:
+    post:
+      tags:
+      - Webhooks
+      description: Handle PhantomBuster on-demand employee search completion webhook
+      operationId: 2bd6564486756b0447fb1ec917becb54
+      parameters:
+      - name: token
+        in: query
+        description: 'Security token: hash(''sha256'', secret + agentId)'
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhantombusterEmployeeSearchWebhookRequest'
+      responses:
+        '200':
+          description: Webhook received successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Webhook received
+                type: object
+        '403':
+          description: Forbidden - Invalid token
+      summary: 2bd6564486756b0447fb1ec917becb54
+      x-summary-source: derived
+  /api/webhooks/brightdata/posts-ready:
+    post:
+      tags:
+      - Webhooks
+      description: Handle BrightData direct post delivery webhook. BrightData POSTs the raw post collection as a JSON array. Session and gap IDs are encoded in the URL query params.
+      operationId: 83172fa9ca4f092ade656999041ed287
+      parameters:
+      - $ref: '#/components/schemas/BrightdataPostsDeliveryRequest/properties/session_id'
+      - $ref: '#/components/schemas/BrightdataPostsDeliveryRequest/properties/gap_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+      responses:
+        '200':
+          description: Webhook received successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Webhook acknowledged
+                type: object
+        '403':
+          description: Forbidden - Invalid token
+        '422':
+          description: Validation error - Missing or invalid session_id / gap_id
+        '500':
+          description: Internal processing error - BrightData should retry delivery
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Internal processing error.
+                type: object
+      summary: 83172fa9ca4f092ade656999041ed287
+      x-summary-source: derived
+components:
+  schemas:
+    BrightdataPostsDeliveryRequest:
+      required:
+      - session_id
+      - gap_id
+      properties:
+        session_id:
+          description: Scraping session ID (query param)
+          type: integer
+          example: 42
+        gap_id:
+          description: Scraping gap ID (query param)
+          type: integer
+          example: 7
+      type: object
+    PhantombusterEmployeeSearchWebhookRequest:
+      required:
+      - agentId
+      - containerId
+      - exitCode
+      properties:
+        agentId:
+          description: PhantomBuster agent ID
+          type: string
+          example: '5027055349780535'
+        agentName:
+          description: PhantomBuster agent name
+          type: string
+          example: LinkedIn Employee Search
+        containerId:
+          description: PhantomBuster container ID
+          type: string
+          example: '3358014727012763'
+        script:
+          description: Script filename
+          type: string
+          example: script.js
+        scriptOrg:
+          description: Script organization
+          type: string
+          example: phantombuster
+        branch:
+          description: Script branch
+          type: string
+          example: main
+        launchDuration:
+          description: Launch duration in milliseconds
+          type: integer
+          example: 121
+        runDuration:
+          description: Run duration in milliseconds
+          type: integer
+          example: 1850
+        resultObject:
+          description: Result data from the scraping
+          type: object
+        exitMessage:
+          description: Exit message
+          type: string
+          example: finished
+        exitCode:
+          description: Exit code (0 = success)
+          type: integer
+          example: 0
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

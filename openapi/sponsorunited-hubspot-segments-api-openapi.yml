@@ -1,0 +1,123 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Hubspot segments API
+  version: v1
+  description: Hubspot segments
+tags:
+- name: Hubspot segments
+  description: Hubspot segments
+paths:
+  /api/hubspot/segments/{id}/contacts:
+    get:
+      tags:
+      - Hubspot segments
+      summary: Get contacts from a HubSpot segment
+      description: Proxies HubSpot API to return contact emails for the given segment (list) ID. Requires authentication.
+      operationId: 3e730210d6400fc956b388b75ebfdb1d
+      parameters:
+      - name: id
+        in: path
+        description: HubSpot list (segment) ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Contact emails in the segment
+          content:
+            application/json:
+              schema:
+                required:
+                - success
+                - data
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: string
+                      example: user@example.com
+                type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: HubSpot API error or segment ID not set
+      security:
+      - bearerAuth: []
+  /api/hubspot/segments:
+    get:
+      tags:
+      - Hubspot segments
+      summary: List HubSpot segments
+      description: Proxies HubSpot API to return contact segments (lists). Requires authentication.
+      operationId: 8976180bbcff4bb490dc16e320633fa6
+      parameters:
+      - name: offset
+        in: query
+        description: Pagination offset
+        required: false
+        schema:
+          type: integer
+          default: 0
+      - name: count
+        in: query
+        description: Number of segments to return (max 500)
+        required: false
+        schema:
+          type: integer
+          default: 500
+      - name: query
+        in: query
+        description: Filter segments by list name (HubSpot searches by list name)
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: HubSpot segments (id, name) with pagination
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/HubspotSegmentResource'
+                  total:
+                    type: integer
+                  offset:
+                    type: integer
+                  hasMore:
+                    type: boolean
+                type: object
+        '401':
+          description: Unauthorized
+        '500':
+          description: HubSpot API error
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    HubspotSegmentResource:
+      properties:
+        id:
+          description: HubSpot list/segment ID
+          type: string
+        name:
+          description: Segment name
+          type: string
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

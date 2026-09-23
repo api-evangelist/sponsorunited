@@ -1,0 +1,210 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Item Subplatform API
+  version: v1
+  description: Item Subplatform
+tags:
+- name: Item Subplatform
+  description: Item Subplatform
+paths:
+  /api/item-subplatform:
+    get:
+      tags:
+      - Item Subplatform
+      summary: List all item subplatforms
+      description: Returns a list of item subplatforms with optional filtering
+      operationId: 455fc558b27ed533dc0094001f656ea5
+      parameters:
+      - name: subplatform_id
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: team_id
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: season
+        in: query
+        description: Season year the counts are requested for. When given, each team's assets are counted against the league it belonged to in that season instead of its current league.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: List of subplatforms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    items_count:
+                      type: integer
+                  type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Item Subplatform
+      summary: Create a new subplatform
+      description: Creates a new subplatform under a specified platform
+      operationId: 629695bf670aa07bedae5c34a6b5feb5
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                item_platform_id:
+                  type: integer
+                name:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: Subplatform created
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/item-subplatform/{id}:
+    get:
+      tags:
+      - Item Subplatform
+      summary: Get a subplatform by ID
+      description: Returns details of a specific item subplatform
+      operationId: ef3631a90a8ddf80d08cc0c70f9b70e5
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Subplatform details
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Item Subplatform
+      summary: Update a subplatform
+      description: Updates the name and platform association of an existing subplatform
+      operationId: f43133abb49f7fe78b7587eae103b6b9
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                item_platform_id:
+                  type: integer
+                name:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: Subplatform updated
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Item Subplatform
+      summary: Delete a subplatform
+      description: Removes an item subplatform from the system
+      operationId: 8ab226ade6f19de06f013a7752566766
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Subplatform deleted
+        '400':
+          description: Failed to delete
+        '404':
+          description: Subplatform not found
+      security:
+      - bearerAuth: []
+  /api/item-subplatform/{id}/intent:
+    get:
+      tags:
+      - Item Subplatform
+      summary: Get subplatform intent data
+      description: Returns usage metrics for a subplatform including audits, items, and item values counts
+      operationId: 1dc1f8bdb6337b2ed8b33fe4b8107d26
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Subplatform intent data
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/item-subplatform/{oldId}/reassign/{newId}:
+    put:
+      tags:
+      - Item Subplatform
+      summary: Reassign items to another subplatform
+      description: Reassigns all items from one subplatform to another
+      operationId: 8cd9a58fd31c89021dfb2c2cc1bc09f0
+      parameters:
+      - name: oldId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: newId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Reassignment successful, returns old subplatform intent data
+        '404':
+          description: Subplatform not found
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

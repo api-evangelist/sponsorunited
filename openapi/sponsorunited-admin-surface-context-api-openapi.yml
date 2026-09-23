@@ -1,0 +1,207 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Admin Surface Context API
+  version: v1
+  description: Administrator-set Surface context for users and organizations
+tags:
+- name: Admin Surface Context
+  description: Administrator-set Surface context for users and organizations
+paths:
+  /api/user/{userId}/surface/admin-context:
+    get:
+      tags:
+      - Admin Surface Context
+      summary: Get a user's administrator-set Surface context
+      description: Returns the administrator-set Surface context for the given user. Separate from the user's own context, which is never returned here. Requires the edit-users permission.
+      operationId: e9df1a6f4ce6e021b4f3ff72262a5a67
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Administrator-set user context
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      context:
+                        type:
+                        - string
+                        - 'null'
+                        example: Long-time client contact. Prefers NBA/MLS comps.
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Missing the edit-users permission
+        '404':
+          description: User not found
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Admin Surface Context
+      summary: Update a user's administrator-set Surface context
+      description: Upserts the administrator-set Surface context for the given user, preserving formatting verbatim. Leaves the user's own context untouched. Requires the edit-users permission.
+      operationId: 09be3d68eb05cce7eaf3d639adb3ec00
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUserSurfaceContextUpdateRequest'
+      responses:
+        '200':
+          description: Administrator-set user context updated
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      context:
+                        type:
+                        - string
+                        - 'null'
+                        example: Long-time client contact. Prefers NBA/MLS comps.
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Missing the edit-users permission
+        '404':
+          description: User not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/organization/{organizationId}/surface/admin-context:
+    get:
+      tags:
+      - Admin Surface Context
+      summary: Get an organization's administrator-set Surface context
+      description: Returns the administrator-set Surface context for the given organization. Separate from the organization's own context, which is never returned here. Requires the edit-organization permission.
+      operationId: 52df41e9cf877a06a1d0a91e3517e2d0
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Administrator-set organization context
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      context:
+                        type:
+                        - string
+                        - 'null'
+                        example: Enterprise account, renewal Q3.
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Missing the edit-organization permission
+        '404':
+          description: Organization not found
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Admin Surface Context
+      summary: Update an organization's administrator-set Surface context
+      description: Upserts the administrator-set Surface context for the given organization, preserving formatting verbatim. Leaves the organization's own context untouched. Requires the edit-organization permission.
+      operationId: 57494f69be64682492a50cc084a7996f
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminOrganizationSurfaceContextUpdateRequest'
+      responses:
+        '200':
+          description: Administrator-set organization context updated
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      context:
+                        type:
+                        - string
+                        - 'null'
+                        example: Enterprise account, renewal Q3.
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Missing the edit-organization permission
+        '404':
+          description: Organization not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    AdminUserSurfaceContextUpdateRequest:
+      required:
+      - context
+      properties:
+        context:
+          description: Freeform administrator-set context for the target user, injected into Surface LLM prompts alongside the user's own context. Formatting (markdown / line breaks) is preserved verbatim. Send null or an empty string to clear it.
+          type:
+          - string
+          - 'null'
+          maxLength: 20000
+      type: object
+    AdminOrganizationSurfaceContextUpdateRequest:
+      required:
+      - context
+      properties:
+        context:
+          description: Freeform administrator-set context for the target organization, injected into Surface LLM prompts for every member alongside the organization's own context. Formatting (markdown / line breaks) is preserved verbatim. Send null or an empty string to clear it.
+          type:
+          - string
+          - 'null'
+          maxLength: 20000
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

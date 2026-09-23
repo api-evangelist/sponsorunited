@@ -1,0 +1,112 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Linked In API
+  version: v1
+  description: LinkedIn
+tags:
+- name: Linked In
+  description: LinkedIn
+paths:
+  /api/linkedin-profile-url/check:
+    get:
+      tags:
+      - Linked In
+      summary: Check if a LinkedIn profile URL is linked to any contacts
+      description: Validates whether a given LinkedIn profile URL is already associated with existing contacts in the system to help prevent duplicate entries
+      operationId: 75903c105d2415609f98aaa769991c2a
+      parameters:
+      - name: profile_url
+        in: query
+        description: The LinkedIn profile URL to check
+        required: true
+        schema:
+          type: string
+          format: uri
+      responses:
+        '200':
+          description: LinkedIn profile URL check result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactInformationCheckResource'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                required:
+                - error
+                properties:
+                  error:
+                    type: string
+                    example: The profile url field is required.
+                type: object
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ContactInformationCheckResource:
+      oneOf:
+      - required:
+        - message
+        properties:
+          message:
+            type: string
+            example: The given email is not linked to any contacts.
+        type: object
+      - required:
+        - person_profile_ids
+        - count
+        - message
+        - duplicates
+        properties:
+          person_profile_ids:
+            type: array
+            items:
+              type: integer
+          count:
+            type: integer
+            example: 2
+          message:
+            type: string
+            example: The given email is already linked to other contacts.
+          duplicates:
+            type: array
+            items:
+              required:
+              - person_profile_id
+              - name
+              - contactable_type
+              - contactable_id
+              properties:
+                person_profile_id:
+                  type: integer
+                  example: 123
+                name:
+                  type: string
+                  example: Jane Doe
+                contactable_type:
+                  type: string
+                  example: brand
+                contactable_id:
+                  type: integer
+                  example: 45
+                contactable_ulid:
+                  type:
+                  - string
+                  - 'null'
+                  example: 01HXYZ1234567890
+              type: object
+        type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

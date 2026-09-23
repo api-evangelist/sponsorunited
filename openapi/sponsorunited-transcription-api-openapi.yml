@@ -1,0 +1,88 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Transcription API
+  version: v1
+  description: Transcription
+tags:
+- name: Transcription
+  description: Transcription
+paths:
+  /api/webhooks/transcription:
+    post:
+      tags:
+      - Transcription
+      summary: Handle the data-ingestion transcription completion webhook
+      operationId: 71a8e5d7c2178ab12352a85ca897fa72
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranscriptionWebhookRequest'
+      responses:
+        '200':
+          description: Webhook received
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Webhook received
+                type: object
+        '422':
+          description: Validation error
+      security:
+      - apiKey: []
+components:
+  schemas:
+    TranscriptionWebhookRequest:
+      required:
+      - request_id
+      - task_id
+      - status
+      properties:
+        event_id:
+          type: string
+          format: uuid
+        correlation_id:
+          description: Echoed audio id used for tracing
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        request_id:
+          type: string
+        task_id:
+          type: string
+        type:
+          type: string
+          example: transcription
+        status:
+          type: string
+          enum:
+          - transcribe-in-progress
+          - transcribe-job-creation-failed
+          - matching-in-progress
+          - transcribe-matching-failed
+          - matching-finished
+        timestamp:
+          type: string
+          format: date-time
+        result:
+          type: object
+        error:
+          type: object
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

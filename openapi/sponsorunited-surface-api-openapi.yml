@@ -1,0 +1,515 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Surface API
+  version: v1
+  description: Surface context and usage endpoints
+tags:
+- name: Surface
+  description: Surface context and usage endpoints
+paths:
+  /api/me/surface/context:
+    get:
+      tags:
+      - Surface
+      summary: Get authenticated user's Surface context
+      description: Returns the authenticated user's organization, job role, role orientation, person profile, roles, and representatives for Surface prompt resolution.
+      operationId: 698f1e9a17edaf0f846902ced2ef565d
+      responses:
+        '200':
+          description: Surface context
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      organization_id:
+                        type:
+                        - integer
+                        - 'null'
+                        example: 123
+                      job_role:
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          name:
+                            type: string
+                            example: Marketing
+                        type:
+                        - object
+                        - 'null'
+                      role_orientation:
+                        properties:
+                          id:
+                            type: integer
+                            example: 2
+                          name:
+                            type: string
+                            example: buy_side
+                        type:
+                        - object
+                        - 'null'
+                      is_external:
+                        type: boolean
+                        example: false
+                      person_profile:
+                        properties:
+                          info:
+                            type:
+                            - string
+                            - 'null'
+                            example: Experienced marketer
+                          job_title:
+                            type:
+                            - string
+                            - 'null'
+                            example: VP of Marketing
+                          location:
+                            type:
+                            - string
+                            - 'null'
+                            example: New York, NY
+                          person_profile_job_role:
+                            properties:
+                              id:
+                                type: integer
+                                example: 1
+                              name:
+                                type: string
+                                example: Marketing
+                            type:
+                            - object
+                            - 'null'
+                        type:
+                        - object
+                        - 'null'
+                      organization:
+                        properties:
+                          id:
+                            type: integer
+                            example: 123
+                          name:
+                            type: string
+                            example: Acme Corp
+                          organization_type:
+                            properties:
+                              id:
+                                type: integer
+                                example: 1
+                              name:
+                                type: string
+                                example: Brand
+                            type:
+                            - object
+                            - 'null'
+                        type:
+                        - object
+                        - 'null'
+                      roles:
+                        type: array
+                        items:
+                          properties:
+                            display_name:
+                              type: string
+                              example: Scout
+                          type: object
+                      representative:
+                        properties:
+                          id:
+                            type: integer
+                            example: 10
+                          type:
+                            type: string
+                            example: brand
+                          name:
+                            type:
+                            - string
+                            - 'null'
+                            example: Nike
+                          category_id:
+                            type:
+                            - integer
+                            - 'null'
+                            example: 5
+                          category_name:
+                            type:
+                            - string
+                            - 'null'
+                            example: Apparel
+                          subcategory_id:
+                            type:
+                            - integer
+                            - 'null'
+                            example: 12
+                          league_id:
+                            type:
+                            - integer
+                            - 'null'
+                          league_name:
+                            type:
+                            - string
+                            - 'null'
+                        type:
+                        - object
+                        - 'null'
+                      representatives:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                              example: 10
+                            type:
+                              type: string
+                              example: brand
+                            name:
+                              type:
+                              - string
+                              - 'null'
+                              example: Nike
+                            is_main:
+                              type: boolean
+                              example: true
+                            category_id:
+                              type:
+                              - integer
+                              - 'null'
+                              example: 5
+                            category_name:
+                              type:
+                              - string
+                              - 'null'
+                              example: Apparel
+                            subcategory_id:
+                              type:
+                              - integer
+                              - 'null'
+                              example: 12
+                            league_id:
+                              type:
+                              - integer
+                              - 'null'
+                            league_name:
+                              type:
+                              - string
+                              - 'null'
+                          type: object
+                      organization_surface_context:
+                        type:
+                        - string
+                        - 'null'
+                        example: We prioritize NBA and MLS partnerships.
+                      user_surface_context:
+                        type:
+                        - string
+                        - 'null'
+                        example: I focus on NBA sponsorship deals.
+                      admin_organization_surface_context:
+                        type:
+                        - string
+                        - 'null'
+                        example: Enterprise account, renewal Q3.
+                      admin_user_surface_context:
+                        type:
+                        - string
+                        - 'null'
+                        example: Long-time client contact. Prefers NBA/MLS comps.
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/me/surface/usage/record:
+    post:
+      tags:
+      - Surface
+      summary: Record a Surface prompt usage and check limit
+      description: Called by chat-api before processing each prompt. Records the prompt submission and returns whether the user is allowed to continue based on their organization's Surface monthly limit.
+      operationId: cf3ed601eaa2b22f2fe4af9d6e357fa0
+      responses:
+        '200':
+          description: Usage recorded and limit check result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurfaceUsageRecordResource'
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/me/surface/usage:
+    get:
+      tags:
+      - Surface
+      summary: Get current Surface usage status
+      description: Returns the authenticated user's current Surface prompt usage status including limit, used count, remaining count, and threshold warning state.
+      operationId: 397f563e396f624f71835c69257ad7cb
+      responses:
+        '200':
+          description: Current usage status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurfaceUsageResource'
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/me/surface/user-context:
+    get:
+      tags:
+      - Surface
+      summary: Get the authenticated user's Surface user context
+      description: 'Returns the authenticated user''s own freeform Surface user context. Owner-only: the value is always scoped to the authenticated user server-side.'
+      operationId: 1e3827335eb4adf1cafa2fc05eff5b55
+      responses:
+        '200':
+          description: User context
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      context:
+                        type:
+                        - string
+                        - 'null'
+                        example: I focus on NBA sponsorship deals.
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Surface
+      summary: Update the authenticated user's Surface user context
+      description: 'Upserts the authenticated user''s own freeform Surface user context, preserving formatting verbatim. Owner-only: the value is always scoped to the authenticated user server-side.'
+      operationId: 56d8da641d7ffcdfcbe63d8524aae715
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SurfaceUserContextUpdateRequest'
+      responses:
+        '200':
+          description: User context updated
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      context:
+                        type:
+                        - string
+                        - 'null'
+                        example: I focus on NBA sponsorship deals.
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/organization/{organizationId}/surface/context:
+    get:
+      tags:
+      - Surface
+      summary: Get an organization's Surface context
+      description: Returns the organization's freeform Surface context. Readable by any member of the organization; access is enforced server-side.
+      operationId: be005d21bbb7248dd352429fc6cc4af7
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Organization context
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      context:
+                        type:
+                        - string
+                        - 'null'
+                        example: We prioritize NBA and MLS partnerships.
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Not a member of the organization
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Surface
+      summary: Update an organization's Surface context
+      description: Upserts the organization's freeform Surface context, preserving formatting verbatim. Restricted to an account-administrator of that organization; access is enforced server-side.
+      operationId: 898ee6c813a7eb13e587f19fedd71296
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationSurfaceContextUpdateRequest'
+      responses:
+        '200':
+          description: Organization context updated
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    properties:
+                      context:
+                        type:
+                        - string
+                        - 'null'
+                        example: We prioritize NBA and MLS partnerships.
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Not an account-administrator of the organization
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    SurfaceUsageRecordResource:
+      properties:
+        allowed:
+          description: Whether the user is allowed to submit the prompt
+          type: boolean
+          example: true
+        usage:
+          properties:
+            limit:
+              description: Monthly prompt limit (0 = unlimited)
+              type: integer
+              example: 500
+            used:
+              description: Prompts used this month
+              type: integer
+              example: 47
+            remaining:
+              description: Prompts remaining this month
+              type: integer
+              example: 453
+            limit_type:
+              description: Whether limit applies per user or per organization
+              type: string
+              enum:
+              - user
+              - organization
+              example: user
+            reset_date:
+              description: First day of next month when usage resets
+              type: string
+              format: date
+              example: '2026-05-01'
+            threshold_warning:
+              description: Non-null only on first crossing of 75% or 100% threshold
+              type:
+              - string
+              - 'null'
+              enum:
+              - '75'
+              - '100'
+              example: null
+          type: object
+      type: object
+    SurfaceUsageResource:
+      properties:
+        usage:
+          properties:
+            limit:
+              description: Monthly prompt limit (0 = unlimited)
+              type: integer
+              example: 500
+            used:
+              description: Prompts used this month
+              type: integer
+              example: 47
+            remaining:
+              description: Prompts remaining this month
+              type: integer
+              example: 453
+            limit_type:
+              description: Whether limit applies per user or per organization
+              type: string
+              enum:
+              - user
+              - organization
+              example: user
+            reset_date:
+              description: First day of next month when usage resets
+              type: string
+              format: date
+              example: '2026-05-01'
+            threshold_warning:
+              description: Non-null only on first crossing of 75% or 100% threshold
+              type:
+              - string
+              - 'null'
+              enum:
+              - '75'
+              - '100'
+              example: null
+          type: object
+      type: object
+    OrganizationSurfaceContextUpdateRequest:
+      required:
+      - context
+      properties:
+        context:
+          description: Freeform organization context injected into Surface LLM prompts for every member of the org. Formatting (markdown / line breaks) is preserved verbatim. Send null or an empty string to clear it.
+          type:
+          - string
+          - 'null'
+          maxLength: 20000
+      type: object
+    SurfaceUserContextUpdateRequest:
+      required:
+      - context
+      properties:
+        context:
+          description: Freeform user context injected into Surface LLM prompts. Formatting (markdown / line breaks) is preserved verbatim. Send null or an empty string to clear it.
+          type:
+          - string
+          - 'null'
+          maxLength: 20000
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

@@ -1,0 +1,204 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Asset Groupings API
+  version: v1
+  description: Asset Groupings
+tags:
+- name: Asset Groupings
+  description: Asset Groupings
+paths:
+  /api/asset-grouping:
+    get:
+      tags:
+      - Asset Groupings
+      summary: List all asset groupings
+      description: Returns a paginated list of asset groupings with their subgroupings
+      operationId: f08b79a015056c8d4bd68063aa05cb8e
+      parameters:
+      - name: AssetGroupingIndexRequest
+        in: query
+        schema:
+          $ref: '#/components/schemas/AssetGroupingIndexRequest'
+      responses:
+        '200':
+          description: List of asset groupings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetGroupingIndexResource'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Asset Groupings
+      summary: Create asset grouping
+      description: Creates a new asset grouping with optional media order
+      operationId: 1390482d2e687fc2fd012794a51c7769
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetGroupingRequest'
+      responses:
+        '200':
+          description: The new asset grouping.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetGroupingResource'
+      security:
+      - bearerAuth: []
+  /api/asset-grouping/{id}:
+    get:
+      tags:
+      - Asset Groupings
+      summary: Get asset grouping
+      description: Returns a specific asset grouping with its subgroupings
+      operationId: 5b2f6ebcc14c9db79b7eead42722a3d3
+      parameters:
+      - name: id
+        in: path
+        description: The id of the asset grouping to update.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The updated asset grouping.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetGroupingResource'
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Asset Groupings
+      summary: Update asset grouping
+      description: Updates the name, icon, and media order of an existing asset grouping
+      operationId: 8c2481c0f8bd2c903fe90e204089a587
+      parameters:
+      - name: id
+        in: path
+        description: The id of the asset grouping to update.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetGroupingRequest'
+      responses:
+        '200':
+          description: The updated item grouping.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetGroupingResource'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Asset Groupings
+      summary: Delete asset grouping
+      description: Removes an asset grouping and its associated subgroupings
+      operationId: fca80b6282fcf00122c60f4b336f308b
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty on success.
+      security:
+      - bearerAuth: []
+  /api/asset-grouping/{old_grouping}/reassign:
+    put:
+      tags:
+      - Asset Groupings
+      summary: Reassign asset grouping
+      description: Moves all items from one asset grouping to another
+      operationId: 1838061788f7a8e5f4af39b182b6fc75
+      parameters:
+      - name: old_grouping
+        in: path
+        description: The id of the old grouping
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetGroupingReassignRequest'
+      responses:
+        '200':
+          description: The reassign was successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetGroupingResource'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    AssetGroupingRequest:
+      properties:
+        name:
+          type: string
+        icon:
+          type: string
+        media_order:
+          type: integer
+      type: object
+    AssetGroupingIndexRequest:
+      properties:
+        name:
+          type: string
+        page:
+          type: integer
+          example: 1
+        per_page:
+          type: integer
+          example: 25
+      type: object
+    AssetGroupingReassignRequest:
+      properties:
+        new_grouping:
+          type: integer
+          example: 1
+      type: object
+    AssetGroupingResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        icon:
+          type: string
+        media_order:
+          type: integer
+        subgroupings_count:
+          type: integer
+      type: object
+    AssetGroupingIndexResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/AssetGroupingResource'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

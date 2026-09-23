@@ -1,0 +1,308 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Notes API
+  version: v1
+  description: Notes management endpoints for various entities
+tags:
+- name: Notes
+  description: Notes management endpoints for various entities
+paths:
+  /api/note/{entity}/{entityId}:
+    post:
+      tags:
+      - Notes
+      summary: Create a note
+      description: Creates a new note for a specific entity (user_event, sale, team, custom_droplet_league_asset, image). Notes on the image entity require the upload-image permission.
+      operationId: e44423737cc22476bf5437f7f4c19ce6
+      parameters:
+      - name: entity
+        in: path
+        description: Entity type
+        required: true
+        schema:
+          type: string
+          enum:
+          - user_event
+          - sale
+          - team
+          - custom_droplet_league_asset
+          - image
+      - name: entityId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - content
+              properties:
+                content:
+                  description: Note content
+                  type: string
+                sale_list_id:
+                  description: Optional sale list ID
+                  type: integer
+              type: object
+      responses:
+        '204':
+          description: Note created successfully
+        '401':
+          description: Unauthenticated
+        '500':
+          description: Cannot create notable instance
+      security:
+      - bearerAuth: []
+  /api/note/{id}:
+    put:
+      tags:
+      - Notes
+      summary: Update a note
+      description: Updates the content of an existing note
+      operationId: 0eb96723a8876e210dee3250cc7e95a6
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                content:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: Updated note
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Note not found
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Notes
+      summary: Delete a note
+      description: Deletes an existing note
+      operationId: 712d33105a83d0a166bc76e6f55903d4
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Note deleted successfully
+        '400':
+          description: Cannot delete note
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Note not found
+      security:
+      - bearerAuth: []
+  /api/notes/{entity}/{entityId}:
+    get:
+      tags:
+      - Notes
+      summary: List notes for an entity
+      description: Returns all notes for a specific entity with user and sale list information
+      operationId: 115e8fe6e267111684c2ac99a817b5fe
+      parameters:
+      - name: entity
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: entityId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: sale_list_id
+        in: query
+        description: Filter by sale list
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: List of notes
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+  /api/notes/{leagueId}/internal-scouting:
+    get:
+      tags:
+      - Notes
+      summary: '[Deprecated] Get internal scouting notes for a league'
+      description: Deprecated. Use GET /api/properties/{teamId}/internal-scouting. Returns internal scouting notes and owner information for a specific league
+      operationId: df19c4cb21646bf53cdb231a7b5d5207
+      parameters:
+      - name: leagueId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: season
+        in: query
+        description: Season id (defaults to current season)
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Internal scouting notes
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: League not found
+      deprecated: true
+      security:
+      - bearerAuth: []
+  /api/properties/{teamId}/internal-scouting:
+    get:
+      tags:
+      - Notes
+      summary: Get internal scouting notes for a property
+      description: 'Returns the internal scouting popup payload for a property in a single round trip: the league name, per-season platforms scouted, social scan review cadence, the league owner and assistants, the scouting window derived from the season dates, the season scouting notes (frequency/duration, spend, athletes scouted and the names of the leagues whose athletes are scouted, additional notes), the last non-social scouting audit date, the property''s customer organization(s), and the count of customer organizations across the rest of the league.'
+      operationId: 5e31c049d5f36405dc31ede7805ccf9e
+      parameters:
+      - name: teamId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: season
+        in: query
+        description: Season id belonging to the property's league (defaults to current season)
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Internal scouting notes
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Property not found, or the requested season does not belong to the property's league
+      security:
+      - bearerAuth: []
+  /api/admin/leagues/{leagueId}/scouting-notes/{seasonId}:
+    get:
+      tags:
+      - Notes
+      summary: Get the internal scouting notes for a league season
+      description: Returns the stored season-scoped internal scouting notes for a (league, season) pair, so the Admin Edit League form can rehydrate the fields it wrote. A league and season that exist but have no saved notes yet return a 200 with null fields rather than a 404, so the form renders empty inputs.
+      operationId: 7c0efd745c87c1750e36d439659bda0c
+      parameters:
+      - name: leagueId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: seasonId
+        in: path
+        description: Season id (seasons.id) belonging to the league
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The stored scouting note, or null fields when none has been saved
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: League or season not found
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Notes
+      summary: Upsert internal scouting notes for a league season
+      description: Creates or updates the season-scoped internal scouting notes for a (league, season) pair. Fields are validated independently and partial updates are allowed; omitted fields are left untouched.
+      operationId: 0909d73e17461df9d85a4c04f6668bff
+      parameters:
+      - name: leagueId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: seasonId
+        in: path
+        description: Season id (seasons.id) belonging to the league
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              properties:
+                frequency_duration:
+                  type:
+                  - boolean
+                  - 'null'
+                spend:
+                  type:
+                  - boolean
+                  - 'null'
+                athletes_scouted:
+                  type:
+                  - boolean
+                  - 'null'
+                athletes_scouted_league_ids:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: integer
+                additional_notes:
+                  type:
+                  - string
+                  - 'null'
+              type: object
+      responses:
+        '200':
+          description: The saved scouting note
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: League or season not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

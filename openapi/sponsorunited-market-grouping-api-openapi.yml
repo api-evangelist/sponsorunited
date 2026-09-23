@@ -1,0 +1,261 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Market Grouping API
+  version: v1
+  description: Market Grouping
+tags:
+- name: Market Grouping
+  description: Market Grouping
+paths:
+  /api/market/grouping/{id}:
+    get:
+      tags:
+      - Market Grouping
+      summary: Get a market grouping by ID
+      description: Returns a single market grouping with its configuration
+      operationId: 74a99712b4795dd5ecf862506b275890
+      parameters:
+      - name: id
+        in: path
+        description: ID of the market grouping
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Market grouping details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketGroupingManagementResource'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Market grouping not found
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Market Grouping
+      summary: Update a market grouping
+      description: Updates an existing market grouping with new territory support configuration
+      operationId: 89ede57c518924f57c153f0cf37f1930
+      parameters:
+      - name: id
+        in: path
+        description: ID of the market grouping to update
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManageMarketCategoryForCountryRequest'
+      responses:
+        '200':
+          description: Market grouping updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketGroupingManagementResource'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Market grouping not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Market Grouping
+      summary: Delete a market grouping
+      description: Deletes an editable market grouping and all associated markets
+      operationId: 0124464183b08a6a02beee5fa1a76019
+      parameters:
+      - name: id
+        in: path
+        description: ID of the market grouping to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Market grouping deleted successfully
+        '400':
+          description: Market grouping is not editable
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Market grouping not found
+      security:
+      - bearerAuth: []
+  /api/market/grouping:
+    post:
+      tags:
+      - Market Grouping
+      summary: Create a new market grouping
+      description: Creates a new market grouping with territory support configuration
+      operationId: 24771a930066066c112c95f0160fa8e9
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManageMarketCategoryForCountryRequest'
+      responses:
+        '200':
+          description: Market grouping created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketGroupingManagementResource'
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/market/grouping/types:
+    get:
+      tags:
+      - Market Grouping
+      summary: Get market grouping types
+      description: Returns all generic market groupings grouped by their level/type
+      operationId: 3106d52fa9d903d1e666c2c66fbcda14
+      responses:
+        '200':
+          description: List of market grouping types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    type:
+                      type: string
+                    market_groupings:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/MarketGroupingManagementResource'
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ManageMarketCategoryForCountryRequest:
+      required:
+      - level
+      - level_id
+      - supports
+      properties:
+        id:
+          description: ID for update operations
+          type: integer
+        name:
+          description: Name of the market grouping
+          type: string
+        level:
+          description: Territory level (country, continent, generic)
+          type: string
+          example: country
+        level_id:
+          description: ID of the territory at the specified level
+          type: integer
+        supports:
+          description: Configuration for supported territory types
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              enabled:
+                type: boolean
+            type: object
+      type: object
+    MarketGroupingManagementResource:
+      properties:
+        id:
+          description: Market grouping ID
+          type: integer
+        level:
+          description: Territory level (country, continent, generic)
+          type: string
+        level_id:
+          description: ID of the territory (country or continent)
+          type: integer
+        name:
+          description: Market grouping name
+          type: string
+        slug:
+          description: Market grouping slug
+          type: string
+        editable:
+          description: Whether the market grouping is editable
+          type: boolean
+        supports:
+          description: Array of supported territory types
+          type: array
+          items:
+            properties:
+              id:
+                description: Territory type ID
+                type: integer
+              type:
+                description: Territory type (city, county, state, country, continent)
+                type: string
+              name:
+                description: Territory type name
+                type: string
+              enabled:
+                description: Whether this territory type is enabled
+                type: boolean
+              multi:
+                description: Whether multiple selections are allowed
+                type: boolean
+            type: object
+        state_alias:
+          description: State alias (only for country level)
+          type:
+          - string
+          - 'null'
+        state_count:
+          description: Number of states (only for country level)
+          type:
+          - integer
+          - 'null'
+        county_count:
+          description: Number of counties (only for country level)
+          type:
+          - integer
+          - 'null'
+        city_count:
+          description: Number of cities (only for country level)
+          type:
+          - integer
+          - 'null'
+        created_at:
+          description: Creation timestamp
+          type: string
+          format: date-time
+        updated_at:
+          description: Last update timestamp
+          type: string
+          format: date-time
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

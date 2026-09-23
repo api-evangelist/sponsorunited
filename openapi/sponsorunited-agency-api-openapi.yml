@@ -1,0 +1,433 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Agency API
+  version: v1
+  description: Agency
+tags:
+- name: Agency
+  description: Agency
+paths:
+  /api/agency:
+    post:
+      tags:
+      - Agency
+      summary: Create a new agency
+      description: Creates a new agency with the provided details including name, contact information, social media handles, and optional brand/property associations
+      operationId: 1387e8e891a95fcc75a59818ab8ed345
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgencyStoreRequest'
+      responses:
+        '200':
+          description: The new Agency.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgencyShowStoreUpdateResource'
+      security:
+      - bearerAuth: []
+  /api/agency/{id}:
+    get:
+      tags:
+      - Agency
+      summary: Get agency details
+      description: Retrieves detailed information about a specific agency including its companies, properties, organizations, social handles, and service groups. Use the slim parameter for reduced data
+      operationId: 8f592b30c702d786206f4af44f62656d
+      parameters:
+      - name: id
+        in: path
+        description: The id of the Agency to fetch.
+        required: true
+        schema:
+          type: string
+      - name: slim
+        in: query
+        description: Fetch slimmed down Agency data.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: An agency with the given id.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/AgencyLightResource'
+                - $ref: '#/components/schemas/AgencyShowStoreUpdateResource'
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Agency
+      summary: Update an agency
+      description: Updates an existing agency's information including profile details, social handles, company/property associations, and organization memberships
+      operationId: 2ada65983d8b161abd1b6df83fdd09ca
+      parameters:
+      - name: id
+        in: path
+        description: The id of the Agency to update.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgencyUpdateRequest'
+      responses:
+        '200':
+          description: The updated Agency.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgencyShowStoreUpdateResource'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Agency
+      summary: Delete an agency
+      description: Soft deletes an agency and cleans up associated data including contacts, social handles, and profile links. Requires delete administration agencies permission
+      operationId: 444a655b9280f1ef01ed3e6da2710f55
+      parameters:
+      - name: id
+        in: path
+        description: Agency ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty on success.
+        '200':
+          description: Cannot remove Agency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+  /api/agency/{id}/representation:
+    get:
+      tags:
+      - Agency
+      summary: Get agency representation
+      description: Retrieves an agency's representation data including its associated properties and companies with their logos. Includes soft-deleted agencies
+      operationId: 924e90a51d9fe2c213d2ef0ee6048db2
+      parameters:
+      - name: id
+        in: path
+        description: The id of the Agency for which to fetch representation.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An agency with the given id and its representation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgencyShowStoreUpdateResource'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    OrganizationSlim:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: integer
+          example: agency
+        logo:
+          type: string
+      type: object
+    AgencyShowStoreUpdateResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Agency'
+      - properties:
+          organizations:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrganizationSlim'
+        type: object
+      - properties:
+          companies:
+            type: array
+            items:
+              $ref: '#/components/schemas/CompanySlim'
+        type: object
+      - properties:
+          properties:
+            type: array
+            items:
+              $ref: '#/components/schemas/PropertySlim'
+        type: object
+    AgencyLightResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        logo:
+          type: string
+      type: object
+    Agency:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        logo:
+          type: string
+        no_of_employees:
+          type: integer
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        feed_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    PropertySlim:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        is_aor:
+          type: integer
+        services:
+          type: string
+      type: object
+    AgencyUpdateRequest:
+      required:
+      - name
+      type: object
+      allOf:
+      - properties:
+          name:
+            type: string
+          synopsis:
+            type: string
+          logo:
+            type: string
+          no_of_employees:
+            type: integer
+          corporate_phone:
+            type: string
+          website:
+            type: string
+          linkedin:
+            type: string
+          linkedin_employees:
+            type: string
+          facebook:
+            type: string
+          twitter:
+            type: string
+          instagram:
+            type: string
+          twitch:
+            type: string
+          tiktok:
+            type: string
+          youtube:
+            type: string
+          feed_url:
+            type: string
+        type: object
+      - properties:
+          organizations:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                type:
+                  type: integer
+                  example: agency
+                logo:
+                  type: string
+              type: object
+        type: object
+      - properties:
+          companies:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                is_aor:
+                  type: integer
+                services:
+                  type: string
+              type: object
+        type: object
+      - properties:
+          properties:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                is_aor:
+                  type: integer
+                services:
+                  type: string
+              type: object
+        type: object
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
+      type: object
+    CompanySlim:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        is_aor:
+          type: integer
+        services:
+          type: string
+      type: object
+    AgencyStoreRequest:
+      required:
+      - name
+      type: object
+      allOf:
+      - properties:
+          name:
+            type: string
+          synopsis:
+            type: string
+          logo:
+            type: string
+          no_of_employees:
+            type: integer
+          corporate_phone:
+            type: string
+          website:
+            type: string
+          linkedin:
+            type: string
+          linkedin_employees:
+            type: string
+          facebook:
+            type: string
+          twitter:
+            type: string
+          instagram:
+            type: string
+          twitch:
+            type: string
+          tiktok:
+            type: string
+          youtube:
+            type: string
+          feed_url:
+            type: string
+        type: object
+      - properties:
+          organizations:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                type:
+                  type: integer
+                  example: agency
+                logo:
+                  type: string
+              type: object
+        type: object
+      - properties:
+          companies:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                is_aor:
+                  type: integer
+                services:
+                  type: string
+              type: object
+        type: object
+      - properties:
+          properties:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                is_aor:
+                  type: integer
+                services:
+                  type: string
+              type: object
+        type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

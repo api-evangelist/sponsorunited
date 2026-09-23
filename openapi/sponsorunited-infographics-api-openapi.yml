@@ -1,0 +1,225 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Infographics API
+  version: v1
+  description: Infographics
+tags:
+- name: Infographics
+  description: Infographics
+paths:
+  /api/infographics:
+    get:
+      tags:
+      - Infographics
+      summary: List all infographics
+      description: Returns infographics with optional filtering by category, subcategory, agency, league, tag, and publication date
+      operationId: 550d8d43223800bdd568a27fc4d2e025
+      responses:
+        '200':
+          description: Infographics list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfographicsCollection'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Infographics
+      summary: Create infographic
+      description: Creates a new infographic with associated tags, brands, properties, and agencies
+      operationId: 69c4f07b12f460aae37dfc0a8c9c7b6e
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InfographicsStoreRequest'
+      responses:
+        '200':
+          description: Infographic object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfographicsResource'
+      security:
+      - bearerAuth: []
+  /api/infographics/{id}:
+    put:
+      tags:
+      - Infographics
+      summary: Update infographic
+      description: Updates an existing infographic's details and associations
+      operationId: d022993c17802629d923ad54a0119061
+      parameters:
+      - name: id
+        in: path
+        description: ID of infographic
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InfographicsUpdateRequest'
+      responses:
+        '200':
+          description: Infographic object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfographicsResource'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Infographics
+      summary: Delete infographic
+      description: Removes an infographic from the system
+      operationId: 39377116805b93dd376aa7545fb852a0
+      parameters:
+      - name: id
+        in: path
+        description: ID of a infographic
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty response when the infographic has been deleted successfully.
+          content:
+            application/json:
+              schema: {}
+              example: '[]'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    InfographicsUpdateRequest:
+      required:
+      - title
+      - original_url
+      - resized_url
+      - thumbnail_url
+      - published_at
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        original_url:
+          type: string
+        resized_url:
+          type: string
+        thumbnail_url:
+          type: string
+        published_at:
+          type: string
+        tags:
+          type: object
+        brands:
+          type: string
+          example: 1,2,3
+        properties:
+          type: string
+          example: 1,2,3
+        agencies:
+          type: string
+          example: 1,2,3
+      type: object
+    InfographicsCollection:
+      description: List of infographics.
+      type: array
+      items:
+        $ref: '#/components/schemas/InfographicsResource'
+    InfographicsResource:
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        original_url:
+          type: string
+        resized_url:
+          type: string
+        thumbnail_url:
+          type: string
+        published_at:
+          type: integer
+        tags:
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+          type: object
+        brands:
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+          type: object
+        properties:
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+          type: object
+        agencies:
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+          type: object
+      type: object
+    InfographicsStoreRequest:
+      required:
+      - title
+      - original_url
+      - resized_url
+      - thumbnail_url
+      - published_at
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        original_url:
+          type: string
+        resized_url:
+          type: string
+        thumbnail_url:
+          type: string
+        published_at:
+          type: string
+        tags:
+          type: object
+        brands:
+          type: string
+          example: 1,2,3
+        properties:
+          type: string
+          example: 1,2,3
+        agencies:
+          type: string
+          example: 1,2,3
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

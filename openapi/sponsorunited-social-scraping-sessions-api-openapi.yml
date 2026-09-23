@@ -1,0 +1,618 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Social Scraping Sessions API
+  version: v1
+  description: Social Scraping Sessions
+tags:
+- name: Social Scraping Sessions
+  description: Social Scraping Sessions
+paths:
+  /api/unmatched-handles/{type}:
+    get:
+      tags:
+      - Social Scraping Sessions
+      summary: List matched suggestions for brand unmatched handles
+      description: Aggregates unmatched handles across the given scraping sessions and returns fuzzy-match brand suggestions for the given platform/source.
+      operationId: 9a8a07bdffc544680cb891496521fbac
+      parameters:
+      - name: type
+        in: path
+        description: Social platform / source.
+        required: true
+        schema:
+          type: string
+          example: instagram
+      - name: social_scraping_session
+        in: query
+        description: Comma-separated scraping session IDs.
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: matching_threshold
+        in: query
+        description: Minimum fuzzy-match score (0-100) for a suggestion to be returned.
+        required: true
+        schema:
+          type: integer
+          example: 70
+      - name: matching_max_count
+        in: query
+        description: Maximum number of suggestions per handle.
+        required: true
+        schema:
+          type: integer
+          example: 5
+      responses:
+        '200':
+          description: Unmatched handles with brand match suggestions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    name:
+                      type: string
+                      example: cocacola
+                    entity_name:
+                      type:
+                      - string
+                      - 'null'
+                      example: Coca-Cola
+                    social_media_values:
+                      type:
+                      - string
+                      - 'null'
+                      example: cocacola,coke
+                  type: object
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error (missing social_scraping_session, matching_threshold or matching_max_count).
+      security:
+      - bearerAuth: []
+  /api/unmatched-handles/property:
+    get:
+      tags:
+      - Social Scraping Sessions
+      summary: List matched suggestions for property unmatched handles
+      description: Aggregates unmatched handles across the given scraping sessions and returns fuzzy-match property suggestions.
+      operationId: 573c306d117d36e7f6c0728c8b310203
+      parameters:
+      - name: social_scraping_session
+        in: query
+        description: Comma-separated scraping session IDs.
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: matching_threshold
+        in: query
+        description: Minimum fuzzy-match score (0-100) for a suggestion to be returned.
+        required: true
+        schema:
+          type: integer
+          example: 70
+      - name: matching_max_count
+        in: query
+        description: Maximum number of suggestions per handle.
+        required: true
+        schema:
+          type: integer
+          example: 5
+      responses:
+        '200':
+          description: Unmatched handles with property match suggestions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    name:
+                      type: string
+                      example: lakers
+                    entity_name:
+                      type:
+                      - string
+                      - 'null'
+                      example: Los Angeles Lakers
+                    social_media_values:
+                      type:
+                      - string
+                      - 'null'
+                      example: lakers
+                  type: object
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error (missing social_scraping_session, matching_threshold or matching_max_count).
+      security:
+      - bearerAuth: []
+  /api/social-scraping-sessions:
+    get:
+      tags:
+      - Social Scraping Sessions
+      summary: List league social scraping sessions
+      description: Paginated listing of league social scraping sessions for a season, with brand/item counts and review status. Supports grouped rows and CSV download.
+      operationId: f617ecb88fca2271399be8bdfc587b8e
+      parameters:
+      - name: season
+        in: query
+        description: Season year.
+        required: true
+        schema:
+          type: integer
+          example: 2024
+      - name: review_status
+        in: query
+        description: Review status filter.
+        required: true
+        schema:
+          type: string
+          enum:
+          - pending
+          - reviewed
+      - name: grouped
+        in: query
+        description: Group sessions by handle/type/user. When true, each row carries social_scraping_session_ids and the has_unmatched_handles / has_rejected_companies flags.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: include_empty
+        in: query
+        description: Include sessions whose audits have no items.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: download
+        in: query
+        description: When true, returns a CSV stream (text/csv) instead of JSON.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: league_id
+        in: query
+        description: Comma-separated league IDs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: division_id
+        in: query
+        description: Comma-separated division IDs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: team_id
+        in: query
+        description: Comma-separated team IDs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: user_id
+        in: query
+        description: Comma-separated scanner user IDs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: reviewer
+        in: query
+        description: Comma-separated reviewer user IDs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: type
+        in: query
+        description: Comma-separated social platforms.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - twitter
+            - facebook
+            - instagram
+            - tiktok
+            - youtube
+            - twitch
+      - name: platform_handle
+        in: query
+        description: Comma-separated platform handles, each formatted as type@handle.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            example: twitter@lakers
+      - name: status_value
+        in: query
+        description: Comma-separated user_event status values.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: scouting_markets
+        in: query
+        description: Comma-separated scouting market IDs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: order_by
+        in: query
+        description: Sort column.
+        required: false
+        schema:
+          type: string
+          enum:
+          - division_name
+          - followers_count
+          - team_name
+          - user_name
+          - reviewer_name
+          - start
+          - end
+          - brands_count
+          - items_count
+          - handle
+      - name: order_direction
+        in: query
+        description: Sort direction.
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: order
+        in: query
+        description: Deprecated alias of order_direction; still accepted and normalized to order_direction. Prefer order_direction.
+        required: false
+        deprecated: true
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: page
+        in: query
+        description: Page number (1-based).
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+          example: 1
+      - name: per_page
+        in: query
+        description: Page size (max 200).
+        required: false
+        schema:
+          type: integer
+          default: 10
+          maximum: 200
+          example: 10
+      - name: infinite_scroll
+        in: query
+        description: When true, returns simple pagination (next_page_url/prev_page_url, no total/last_page) for infinite scroll. Default false keeps length-aware pagination with total.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Paginated sessions. With infinite_scroll=true the payload uses simple pagination (next_page_url/prev_page_url, no total/last_page). download=true returns a text/csv stream.
+          content:
+            application/json:
+              schema:
+                properties:
+                  current_page:
+                    type: integer
+                    example: 1
+                  per_page:
+                    type: integer
+                    example: 10
+                  total:
+                    description: Only present with length-aware pagination; omitted when infinite_scroll=true.
+                    type:
+                    - integer
+                    - 'null'
+                    example: 128
+                  next_page_url:
+                    description: URL of the next page; present when infinite_scroll=true.
+                    type:
+                    - string
+                    - 'null'
+                  prev_page_url:
+                    description: URL of the previous page.
+                    type:
+                    - string
+                    - 'null'
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                          example: 98765
+                        type:
+                          type: string
+                          example: instagram
+                        handle:
+                          type: string
+                          example: lakers
+                        team_id:
+                          type: integer
+                          example: 321
+                        user_id:
+                          type:
+                          - integer
+                          - 'null'
+                          example: 42
+                        brands_count:
+                          type: integer
+                          example: 14
+                        items_count:
+                          type: integer
+                          example: 37
+                        statuses:
+                          description: GROUP_CONCAT of distinct user_event statuses.
+                          type:
+                          - string
+                          - 'null'
+                          example: 1,2
+                        start_date:
+                          type:
+                          - string
+                          - 'null'
+                          example: '2024-08-01 00:00:00'
+                        end_date:
+                          type:
+                          - string
+                          - 'null'
+                          example: '2024-08-31 23:59:59'
+                        scan_group:
+                          type: string
+                          example: '98765'
+                        social_scraping_session_ids:
+                          description: 'Only present when grouped=true: comma-separated session ids in the group.'
+                          type:
+                          - string
+                          - 'null'
+                          example: 98765,98766
+                        has_unmatched_handles:
+                          description: 'Only present when grouped=true: group has at least one unmatched handle for its platform.'
+                          type: boolean
+                          example: true
+                        has_rejected_companies:
+                          description: 'Only present when grouped=true: group has at least one rejected company.'
+                          type: boolean
+                          example: false
+                        total_followers:
+                          description: Only present when league_id is provided.
+                          type:
+                          - integer
+                          - 'null'
+                          example: 1500000
+                        platform_followers:
+                          description: Only present when league_id is provided.
+                          type:
+                          - integer
+                          - 'null'
+                          example: 900000
+                        latest_reviewed_at:
+                          description: Only present when review_status=reviewed.
+                          type:
+                          - string
+                          - 'null'
+                          example: '2024-09-02 10:15:00'
+                      type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error (missing season or review_status).
+      security:
+      - bearerAuth: []
+  /api/social-scraping-sessions/metadata:
+    get:
+      tags:
+      - Social Scraping Sessions
+      summary: Get metadata for social scraping session filters
+      description: Returns filter metadata (divisions, teams, users, reviewers, platform handles) for the given season and review status. Exactly one of league_id or team_id must be provided.
+      operationId: 1503975946cff04fc828c91fa78c13ea
+      parameters:
+      - name: season
+        in: query
+        description: Season year
+        required: true
+        schema:
+          type: integer
+      - name: review_status
+        in: query
+        description: Review status filter
+        required: true
+        schema:
+          type: string
+      - name: league_id
+        in: query
+        description: League ID. Exactly one of league_id or team_id is required; they are mutually exclusive.
+        required: false
+        schema:
+          type: integer
+      - name: team_id
+        in: query
+        description: Team ID. Exactly one of league_id or team_id is required; they are mutually exclusive.
+        required: false
+        schema:
+          type: integer
+      - name: include_empty
+        in: query
+        description: Whether to include sessions with no items
+        required: false
+        schema:
+          type: boolean
+      - name: scouting_markets
+        in: query
+        description: Comma-separated list of scouting market IDs
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      responses:
+        '200':
+          description: 'Metadata for the given filters. For league_id: includes divisions, teams, users, reviewers, and platformHandles. For team_id: includes users, reviewers, and platformHandles.'
+          content:
+            application/json:
+              schema:
+                properties:
+                  divisions:
+                    type: array
+                    items:
+                      type: object
+                  teams:
+                    type: array
+                    items:
+                      type: object
+                  users:
+                    type: array
+                    items:
+                      type: object
+                  reviewers:
+                    type: array
+                    items:
+                      type: object
+                  platformHandles:
+                    type: array
+                    items:
+                      type: object
+                type: object
+        '422':
+          description: Validation failure. Returned when neither or both of league_id/team_id are provided, or when season/review_status are missing.
+      security:
+      - bearerAuth: []
+  /api/social-scraping-session/{id}:
+    get:
+      tags:
+      - Social Scraping Sessions
+      summary: Get a single social scraping session
+      description: Returns one social scraping session with its team, scanner, reviews, and season events (including audits and item counts). Returns null when no session matches the id.
+      operationId: 0417d333767f17f71ea890853caa2d00
+      parameters:
+      - name: id
+        in: path
+        description: Social scraping session id.
+        required: true
+        schema:
+          type: integer
+          example: 98765
+      responses:
+        '200':
+          description: The session, or null when not found.
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    example: 98765
+                  type:
+                    type: string
+                    example: instagram
+                  handle:
+                    type: string
+                    example: lakers
+                  team_id:
+                    type:
+                    - integer
+                    - 'null'
+                    example: 321
+                  user_id:
+                    type:
+                    - integer
+                    - 'null'
+                    example: 42
+                  team:
+                    type:
+                    - object
+                    - 'null'
+                  reviews:
+                    type: array
+                    items:
+                      type: object
+                  user:
+                    type:
+                    - object
+                    - 'null'
+                  events:
+                    type: array
+                    items:
+                      type: object
+                type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/social-scraping-sessions/league/{leagueId}/latest/download:
+    get:
+      tags:
+      - Social Scraping Sessions
+      summary: Download latest league social scans
+      description: Downloads a CSV file of the latest social scraping sessions for a specific league and platform
+      operationId: a4020e700c894c877101ee48d63d226e
+      parameters:
+      - name: leagueId
+        in: path
+        description: League ID
+        required: true
+        schema:
+          type: integer
+      - name: platform
+        in: query
+        description: Platform
+        required: true
+        schema:
+          type: string
+          enum:
+          - twitter
+          - facebook
+          - instagram
+          - tiktok
+      responses:
+        '200':
+          description: Success
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

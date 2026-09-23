@@ -1,0 +1,60 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Item Video API
+  version: v1
+  description: Item Video
+tags:
+- name: Item Video
+  description: Item Video
+paths:
+  /api/item-video/{id}:
+    delete:
+      tags:
+      - Item Video
+      summary: Delete item video
+      description: Removes a video associated with an item
+      operationId: 6a79fbb3cab6f6c5a5ba52e17967011f
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty response when deleted successfully.
+        '400':
+          description: Response with error.
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                    example: Could not find creative to delete
+                type: object
+        '404':
+          description: Response with error.
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                    example: Could not find creative to delete
+                type: object
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

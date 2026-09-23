@@ -1,0 +1,512 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Stats API
+  version: v1
+  description: Stats Performance API endpoints
+tags:
+- name: Stats
+  description: Stats Performance API endpoints
+paths:
+  /api/stats/mappings:
+    get:
+      tags:
+      - Stats
+      summary: Get available SU/STATS mapping entries
+      description: Returns a list of stats perform mappings that can be filtered by property ID, sport, league ID, league abbreviation and/or team name
+      operationId: getStatsMappings
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatsMappingsGetRequest'
+      responses:
+        '200':
+          description: List of stats perform mappings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StatsMappingDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+                type: object
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: The given data was invalid.
+                  errors:
+                    type: object
+                    example:
+                      sport:
+                      - The sport field must be a string.
+                type: object
+      security:
+      - bearerAuth: []
+  /api/stats/mappings/sports:
+    get:
+      tags:
+      - Stats
+      summary: Get available sports from Stats Perform
+      description: Returns a list of sports available from the Stats Perform API, optionally filtered by API type
+      operationId: getStatsSports
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatsMappingsSportsRequest'
+      responses:
+        '200':
+          description: List of stats perform mappings with the sports fields filled
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StatsMappingDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+                type: object
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: The given data was invalid.
+                  errors:
+                    type: object
+                    example:
+                      api:
+                      - The api field must be a string.
+                type: object
+      security:
+      - bearerAuth: []
+  /api/stats/mappings/leagues:
+    get:
+      tags:
+      - Stats
+      summary: Get available leagues from Stats Perform
+      description: Returns a list of leagues available from the Stats Perform API, optionally filtered by sport and API type
+      operationId: getStatsLeagues
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatsMappingsLeaguesRequest'
+      responses:
+        '200':
+          description: List of stats perform mappings with the sport and league fields filled
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StatsMappingDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+                type: object
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: The given data was invalid.
+                  errors:
+                    type: object
+                    example:
+                      sport:
+                      - The sport field must be a string.
+                type: object
+      security:
+      - bearerAuth: []
+  /api/stats/mappings/{id}:
+    put:
+      tags:
+      - Stats
+      summary: Update a stats perform mapping
+      description: Updates a stats perform mapping by associating it with a SponsorUnited team/property
+      operationId: updateStatsMapping
+      parameters:
+      - name: id
+        in: path
+        description: The mapping ID to update
+        required: true
+        schema:
+          type: integer
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatsMappingUpdateRequest'
+      responses:
+        '200':
+          description: Updated stats perform mapping
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsMappingDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+                type: object
+        '404':
+          description: Mapping not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: No query results for model [App\Models\StatsPerformMapping].
+                type: object
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: The given data was invalid.
+                  errors:
+                    type: object
+                    example:
+                      su_team_id:
+                      - The su team id field is required.
+                type: object
+      security:
+      - bearerAuth: []
+  /api/stats/unmap/{id}:
+    put:
+      tags:
+      - Stats
+      summary: Unmap a stats perform mapping
+      description: Sets the su_team_id to null for the specified Stats Perform mapping, effectively unmapping it from a SponsorUnited team/property.
+      operationId: unmapStatsMapping
+      parameters:
+      - name: id
+        in: path
+        description: The mapping ID to unmap
+        required: true
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: Unmapped mapping
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsMappingDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+                type: object
+        '404':
+          description: Mapping not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: No query results for model [App\Models\StatsPerformMapping].
+                type: object
+      security:
+      - bearerAuth: []
+  /api/stats/mappings-job-status/{propertyId}:
+    get:
+      tags:
+      - Stats
+      summary: Get job status for a property
+      description: Returns the status of Stats Perform import jobs for a specific property (su_team_id). This includes counts of queued, executing, finished, and failed jobs.
+      operationId: getStatsPerformJobStatus
+      parameters:
+      - name: propertyId
+        in: path
+        description: The SponsorUnited property/team ID
+        required: true
+        schema:
+          type: integer
+          example: 123
+      responses:
+        '200':
+          description: Job status summary for the property
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsPerformJobStatusDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+                type: object
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    StatsMappingsLeaguesRequest:
+      title: Stats Mappings Leagues Request
+      description: Request schema for filtering stats perform leagues by sport and api type
+      properties:
+        sport:
+          description: Filter mappings by sport type
+          type:
+          - string
+          - 'null'
+          example: basketball
+        api:
+          description: Filter mappings by StatsPerform API type
+          type:
+          - string
+          - 'null'
+          enum:
+          - stats_api
+          - sdapi
+          example: stats_api
+      type: object
+    StatsMappingsGetRequest:
+      title: Stats Mappings Get Request
+      description: Request schema for filtering stats perform mappings
+      properties:
+        property_id:
+          description: Filter mappings by property id (suTeamId) mapped with StatsPerform
+          type:
+          - integer
+          - 'null'
+          example: '123'
+        sport:
+          description: Filter mappings by sport type
+          type:
+          - string
+          - 'null'
+          example: basketball
+        league_id:
+          description: Filter mappings by league id
+          type:
+          - string
+          - 'null'
+          example: 2343h343h23
+        league_abbreviation:
+          description: Filter mappings by league abbreviation
+          type:
+          - string
+          - 'null'
+          example: nba
+        league_name:
+          description: Filter mappings by league name (partial match)
+          type:
+          - string
+          - 'null'
+          example: nba
+        team_name:
+          description: Filter mappings by team name (partial match)
+          type:
+          - string
+          - 'null'
+          example: Lakers
+        api:
+          description: Filter mappings by StatsPerform API type
+          type:
+          - string
+          - 'null'
+          enum:
+          - stats_api
+          - sdapi
+          example: stats_api
+      type: object
+    StatsMappingUpdateRequest:
+      title: Stats Mapping Update Request
+      description: Request schema for updating a stats perform mapping
+      required:
+      - su_team_id
+      properties:
+        su_team_id:
+          description: SponsorUnited team/property ID to map to
+          type: integer
+          example: 456
+      type: object
+    StatsMappingsSportsRequest:
+      title: Stats Mappings Sports Request
+      description: Request schema for filtering stats perform requests by api type
+      properties:
+        api:
+          description: Filter mappings by StatsPerform API type
+          type:
+          - string
+          - 'null'
+          enum:
+          - stats_api
+          - sdapi
+          example: stats_api
+      type: object
+    StatsPerformJobStatusDto:
+      title: Stats Perform Job Status DTO
+      description: Data Transfer Object representing the status of Stats Perform import jobs for a property
+      properties:
+        queuedCount:
+          description: Number of jobs waiting in queue
+          type: integer
+          example: 5
+        executingCount:
+          description: Number of jobs currently executing
+          type: integer
+          example: 1
+        finishedCount:
+          description: Number of successfully completed jobs
+          type: integer
+          example: 24
+        failedCount:
+          description: Number of failed jobs
+          type: integer
+          example: 0
+        retryingCount:
+          description: Number of jobs being retried
+          type: integer
+          example: 0
+        totalCount:
+          description: Total number of jobs
+          type: integer
+          example: 30
+        hasActiveJobs:
+          description: Whether there are any active (queued, executing, or retrying) jobs
+          type: boolean
+          example: true
+        lastUpdated:
+          description: Timestamp of the most recently updated job
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2025-12-07T10:30:00Z'
+        oldestActiveJob:
+          description: Timestamp of the oldest active job
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2025-12-07T10:25:00Z'
+      type: object
+    StatsMappingDto:
+      title: Stats Mapping DTO
+      description: Data Transfer Object representing a stats perform mapping entry
+      properties:
+        id:
+          description: Unique identifier for the mapping
+          type: integer
+          example: 1
+        statsSport:
+          description: Name of the sport in Stats Perform system
+          type: string
+          example: basketball
+        statsSportId:
+          description: Numeric ID of the sport in Stats Perform system
+          type: integer
+          example: 2
+        statsLeagueAbbreviation:
+          description: League abbreviation in Stats Perform system
+          type:
+          - string
+          - 'null'
+          example: nba
+        statsLeagueName:
+          description: League name in Stats Perform system
+          type:
+          - string
+          - 'null'
+          example: National Basketball Association
+        statsTeamId:
+          description: Team identifier in Stats Perform system
+          type:
+          - string
+          - 'null'
+          example: sr:competitor:3417
+        statsTeamName:
+          description: Team name in Stats Perform system
+          type:
+          - string
+          - 'null'
+          example: Los Angeles Lakers
+        suTeamId:
+          description: SponsorUnited team/property ID
+          type:
+          - integer
+          - 'null'
+          example: 456
+        suTeamName:
+          description: SponsorUnited team/property name
+          type:
+          - string
+          - 'null'
+          example: Los Angeles Lakers
+        statsApi:
+          description: Stats Perform API source identifier
+          type: string
+          example: SDAPI
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

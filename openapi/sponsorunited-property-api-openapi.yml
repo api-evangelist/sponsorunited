@@ -1,0 +1,1602 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Property API
+  version: v1
+  description: Property
+tags:
+- name: Property
+  description: Property
+paths:
+  /api/property/{id}/social:
+    get:
+      tags:
+      - Property
+      operationId: 8636b25bd2e3e0d823d1574071b2941a
+      parameters:
+      - name: id
+        in: path
+        description: The id of the Property to fetch social handles for.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Social handles for the property with the given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyShowSocialResource'
+      security:
+      - bearerAuth: []
+      summary: 8636b25bd2e3e0d823d1574071b2941a
+      x-summary-source: derived
+    put:
+      tags:
+      - Property
+      operationId: c6ddc1a1090419ee64cef5ec440988c1
+      parameters:
+      - name: id
+        in: path
+        description: The id of the Property to update socials for.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A property with the given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyResource'
+      security:
+      - bearerAuth: []
+      summary: C6ddc1a1090419ee64cef5ec440988c1
+      x-summary-source: derived
+  /api/property/{id}/social-extra-handles:
+    put:
+      tags:
+      - Property
+      operationId: 9ed544373cd3b61746fb1aa400a3bb53
+      parameters:
+      - name: id
+        in: path
+        description: The id of the Property to add social extra handles to.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A property with the given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyResource'
+      security:
+      - bearerAuth: []
+      summary: 9ed544373cd3b61746fb1aa400a3bb53
+      x-summary-source: derived
+  /api/team:
+    get:
+      tags:
+      - Property
+      summary: List properties
+      description: Returns a paginated list of non-deleted properties. Supports filtering by name, league, genre, subgenre, division and market, plus ordering. When download=true, streams the list as a CSV file instead of JSON
+      operationId: 8552dd0225e6b98cfd20200cff987939
+      parameters:
+      - name: name
+        in: query
+        description: Filter by property name (partial match).
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: Column to order by.
+        schema:
+          type: string
+          enum:
+          - name
+          - parent
+          - league
+          - genre
+          - subgenre
+          - division
+          - market
+          - created_at
+      - name: order
+        in: query
+        description: Order direction.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: market_id
+        in: query
+        description: JSON-encoded array of market ids to filter by (primary markets).
+        schema:
+          type: string
+          example: '[1,2,3]'
+      - name: league_id
+        in: query
+        description: JSON-encoded array of league ids to filter by.
+        schema:
+          type: string
+          example: '[1,2,3]'
+      - name: division_id
+        in: query
+        description: JSON-encoded array of division ids to filter by.
+        schema:
+          type: string
+          example: '[1,2,3]'
+      - name: genre_id
+        in: query
+        description: JSON-encoded array of genre ids to filter by.
+        schema:
+          type: string
+          example: '[1,2,3]'
+      - name: subgenre_id
+        in: query
+        description: JSON-encoded array of subgenre ids to filter by.
+        schema:
+          type: string
+          example: '[1,2,3]'
+      - name: page
+        in: query
+        description: Page number.
+        schema:
+          type: integer
+      - name: per_page
+        in: query
+        description: Results per page (default 25).
+        schema:
+          type: integer
+          default: 25
+      - name: download
+        in: query
+        description: When true, streams the full list as a CSV file instead of returning JSON.
+        schema:
+          type: boolean
+      - name: with_has_spend_tracker_data
+        in: query
+        description: Include a has_spend_tracker_data flag on each property.
+        schema:
+          type: boolean
+      - name: season_id
+        in: query
+        description: Season id used when evaluating spend-tracker data.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Paginated list of properties as JSON, or a CSV file stream when download=true.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Property'
+                  current_page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  total:
+                    type: integer
+                  last_page:
+                    type: integer
+                  promotion_relegation_enabled:
+                    type: boolean
+                type: object
+            text/csv:
+              schema:
+                type: string
+                format: binary
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Property
+      summary: Create a property
+      description: Creates a new property (team/venue), uploads logo/cover images, creates property-seasons, syncs markets, organizations, agencies, locations, hashtags and rejected brands, sets social handles, and dispatches a LinkedIn scrape job. Requires create administration property permission
+      operationId: 6b4e1174a273f5efad722dcf5f1b87a0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - name
+              - sport_id
+              - league_id
+              properties:
+                name:
+                  description: Unique property name.
+                  type: string
+                sport_id:
+                  type: integer
+                league_id:
+                  type: integer
+                type_id:
+                  description: Property type. capacity is required when this is a venue.
+                  type: integer
+                parent_id:
+                  type:
+                  - integer
+                  - 'null'
+                division_id:
+                  type: integer
+                capacity:
+                  description: Required when type_id is a venue.
+                  type:
+                  - integer
+                  - 'null'
+                alias:
+                  type:
+                  - string
+                  - 'null'
+                logo:
+                  description: S3 key of the logo image.
+                  type:
+                  - string
+                  - 'null'
+                cover:
+                  description: S3 key of the cover image.
+                  type:
+                  - string
+                  - 'null'
+                synopsis:
+                  type: string
+                email:
+                  type:
+                  - string
+                  - 'null'
+                  format: email
+                inactive:
+                  type: boolean
+                exclude_from_social_scan:
+                  type: boolean
+                website_url:
+                  type:
+                  - string
+                  - 'null'
+                markets:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                      pivot:
+                        properties:
+                          class:
+                            type: string
+                        type: object
+                    type: object
+                organizations:
+                  type: array
+                  items:
+                    type: integer
+                agencies:
+                  type: array
+                  items:
+                    type: object
+                hashtags:
+                  type: array
+                  items:
+                    type: object
+                rejected_brands:
+                  type: array
+                  items:
+                    type: object
+                locations:
+                  type: array
+                  items:
+                    properties:
+                      location_id:
+                        type: integer
+                      label_id:
+                        type: integer
+                    type: object
+                twitter_handle:
+                  type:
+                  - string
+                  - 'null'
+                facebook_handle:
+                  type:
+                  - string
+                  - 'null'
+                instagram_handle:
+                  type:
+                  - string
+                  - 'null'
+                tiktok_handle:
+                  type:
+                  - string
+                  - 'null'
+                youtube_handle:
+                  type:
+                  - string
+                  - 'null'
+                twitch_handle:
+                  type:
+                  - string
+                  - 'null'
+              type: object
+      responses:
+        '200':
+          description: The created property.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Property'
+        '400':
+          description: Failed to store the property.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+  /api/download:
+    get:
+      tags:
+      - Property
+      summary: Download properties list
+      description: Exports all properties as a CSV file including name, genre, sub-genre, association, division, primary market, inactive status, location status, creation date, and latest audit date
+      operationId: download
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+  /api/team/{id}:
+    get:
+      tags:
+      - Property
+      summary: Get property details
+      description: Retrieves detailed information about a specific property including league, markets, organizations, social handles, agencies, and attendance data. Use the slim parameter for reduced data
+      operationId: 71327544c30baa9706be0707cfeb2459
+      parameters:
+      - name: id
+        in: path
+        description: The id of the Property to fetch.
+        required: true
+        schema:
+          type: string
+      - name: slim
+        in: query
+        description: Fetch slimmed down Property data.
+        schema:
+          type: boolean
+      - name: with_revenues_count
+        in: query
+        description: Include counts of revenue deals and predicted deal revenues.
+        schema:
+          type: boolean
+      - name: with_has_spend_tracker_data
+        in: query
+        description: Include a has_spend_tracker_data flag on the property.
+        schema:
+          type: boolean
+      - name: season_id
+        in: query
+        description: Season id used when evaluating promotion/relegation and spend-tracker data.
+        schema:
+          type: integer
+      - name: is_spend_tracker_admin
+        in: query
+        description: Flag indicating the requester is a spend-tracker admin.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: A property with the given id.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/PropertyLightResource'
+                - $ref: '#/components/schemas/PropertyResource'
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Property
+      summary: Update a property
+      description: Updates a property, validating that primary markets share the same category, syncing markets, organizations, agencies, locations, hashtags, children and primary/secondary profiles, and handling league changes (including spend-moved messaging). Requires update administration property permission
+      operationId: 34f1b0b7bcf7e6fa7bb79ef52c432cef
+      parameters:
+      - name: id
+        in: path
+        description: The id of the property to update.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - name
+              properties:
+                name:
+                  description: Unique property name (ignoring the current property).
+                  type: string
+                parent_id:
+                  type:
+                  - integer
+                  - 'null'
+                children:
+                  type: array
+                  items:
+                    type: integer
+                type_id:
+                  type: integer
+                sport_id:
+                  type: integer
+                genre_id:
+                  type: integer
+                subgenre_id:
+                  type: integer
+                league_id:
+                  type: integer
+                league_seasons_scope:
+                  description: LeagueSeasonsScope enum value.
+                  type: string
+                division_id:
+                  type:
+                  - integer
+                  - 'null'
+                capacity:
+                  description: Required when type_id is a venue.
+                  type:
+                  - integer
+                  - 'null'
+                alias:
+                  type:
+                  - string
+                  - 'null'
+                logo:
+                  description: S3 key of the logo image.
+                  type:
+                  - string
+                  - 'null'
+                cover:
+                  description: S3 key of the cover image.
+                  type:
+                  - string
+                  - 'null'
+                synopsis:
+                  type: string
+                email:
+                  type:
+                  - string
+                  - 'null'
+                  format: email
+                inactive:
+                  type: boolean
+                markets:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                      pivot:
+                        properties:
+                          class:
+                            type: string
+                        type: object
+                    type: object
+                organizations:
+                  type: array
+                  items:
+                    type: integer
+                agencies:
+                  type: array
+                  items:
+                    type: object
+                property_attendances:
+                  type: array
+                  items:
+                    type: object
+                locations:
+                  type: array
+                  items:
+                    properties:
+                      location_id:
+                        type: integer
+                      label_id:
+                        type: integer
+                    type: object
+                primary_profile:
+                  description: Mutually exclusive with secondary_profiles.
+                  properties:
+                    id:
+                      type: integer
+                    type:
+                      type: string
+                  type:
+                  - object
+                  - 'null'
+                secondary_profiles:
+                  description: Mutually exclusive with primary_profile.
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                      type:
+                        type: string
+                    type: object
+              type: object
+      responses:
+        '200':
+          description: The updated property. Includes a message field when spend data was moved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyResource'
+        '422':
+          description: Primary markets are not in the same category.
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                    example: Primary markets should be in the same category.
+                type: object
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Property
+      summary: Delete a property
+      description: Soft deletes a property and cleans up associated data including contacts, social handles, profile links, and revenues. Prevents deletion of properties with existing audits. Requires delete administration properties permission
+      operationId: f43d1ce16fdadfe79ca89a68976ff1ab
+      parameters:
+      - name: id
+        in: path
+        description: Property ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty on success.
+        '200':
+          description: Cannot remove Property
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+  /api/team/{id}/social-scans:
+    get:
+      tags:
+      - Property
+      summary: Get property social scans
+      description: Returns social scraping session data for the property's social handles across Twitter, Facebook, Instagram and TikTok. Use the slim parameter for reduced data
+      operationId: 6c74458730512e181795e5a0857db108
+      parameters:
+      - name: id
+        in: path
+        description: The id of the property.
+        required: true
+        schema:
+          type: integer
+      - name: slim
+        in: query
+        description: Return reduced social scan data.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Social scraping session data for the property's handles.
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+      - bearerAuth: []
+  /api/team/{id}/related-counts:
+    get:
+      tags:
+      - Property
+      summary: Get property related counts
+      description: 'Returns the property id together with counts of its related records: contacts, curated news, hashtags, locations, home/away/user events and audits'
+      operationId: 7db00c8f95501f664a15c7ff14600bbd
+      parameters:
+      - name: id
+        in: path
+        description: The id of the property.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The property with its related record counts.
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                  contacts_count:
+                    type: integer
+                  curated_news_count:
+                    type: integer
+                  hashtags_count:
+                    type: integer
+                  locations_count:
+                    type: integer
+                  hometeam_events_count:
+                    type: integer
+                  awayteam_events_count:
+                    type: integer
+                  user_events_count:
+                    type: integer
+                  audits_count:
+                    type: integer
+                type: object
+      security:
+      - bearerAuth: []
+  /api/team/{id}/social-feed/{source}:
+    get:
+      tags:
+      - Property
+      summary: Get property social feed
+      description: Fetches the filtered social feed for the given platform and handle within a published date range. Facebook requests are rate-limit checked. Returns an error object when the platform request fails
+      operationId: 50e7f8791f701651a3ab4aa1ddde4a90
+      parameters:
+      - name: id
+        in: path
+        description: The id of the property.
+        required: true
+        schema:
+          type: integer
+      - name: source
+        in: path
+        description: Social platform source (e.g. twitter, facebook, instagram, tiktok).
+        required: true
+        schema:
+          type: string
+      - name: handle
+        in: query
+        description: Social handle to fetch the feed for.
+        required: true
+        schema:
+          type: string
+      - name: published_after
+        in: query
+        description: Only include posts published on or after this date. Must be before or equal to published_before.
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: published_before
+        in: query
+        description: Only include posts published on or before this date. Must be after or equal to published_after.
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: The filtered social feed data, or an error object when the platform request fails.
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+      - bearerAuth: []
+  /api/team/{team_id}/scrape-social-feed/{source}:
+    get:
+      tags:
+      - Property
+      summary: Scrape property social feed
+      description: Triggers a social feed scrape for the property on the given platform and handle. Returns the scraper service result.
+      operationId: 4c31ff339a9cb71b0d7a4a00d6e45b65
+      parameters:
+      - name: team_id
+        in: path
+        description: The id of the property.
+        required: true
+        schema:
+          type: integer
+      - name: source
+        in: path
+        description: Social platform source (e.g. twitter, facebook, instagram, tiktok).
+        required: true
+        schema:
+          type: string
+      - name: handle
+        in: query
+        description: Social handle to scrape.
+        required: true
+        schema:
+          type: string
+      - name: socialScrapingSessionId
+        in: query
+        description: Existing social scraping session id to attach the scrape to.
+        schema:
+          type: number
+      - name: published_after
+        in: query
+        description: Only include posts published on or after this date.
+        schema:
+          type: string
+      - name: published_before
+        in: query
+        description: Only include posts published on or before this date.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The scraper service result.
+          content:
+            application/json:
+              schema:
+                type: object
+      security:
+      - bearerAuth: []
+  /api/team-exists:
+    get:
+      tags:
+      - Property
+      summary: Check whether a property name exists
+      description: Returns the number of non-deleted properties whose name matches the given name (case-insensitive). A value greater than 0 means the name already exists
+      operationId: e509c08783ce47ff06f3e4dff279eaa8
+      parameters:
+      - name: name
+        in: query
+        description: Property name to check.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Count of properties with the given name.
+          content:
+            application/json:
+              schema:
+                type: integer
+              example: 0
+      security:
+      - bearerAuth: []
+  /api/team/types:
+    get:
+      tags:
+      - Property
+      summary: List property types
+      description: Returns all available property (team) types
+      operationId: 05b12663fc8cb255160d1b18b180a367
+      responses:
+        '200':
+          description: List of property types.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                  type: object
+      security:
+      - bearerAuth: []
+  /api/team/{old_id}/reassign/{new_id}:
+    put:
+      tags:
+      - Property
+      summary: Reassign a property's related records
+      description: Moves audits, contacts, curated news, locations, hashtags, events and agency links from the old property to the new property within a single transaction
+      operationId: fb14bb76b43f3368f34d1a6e6c9f537d
+      parameters:
+      - name: old_id
+        in: path
+        description: The id of the source property to reassign from.
+        required: true
+        schema:
+          type: integer
+      - name: new_id
+        in: path
+        description: The id of the destination property to reassign to.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Reassignment completed.
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: reassign completed
+                type: object
+        '404':
+          description: One of the properties was not found.
+        '500':
+          description: Reassignment failed and the transaction was rolled back.
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    Note:
+      properties:
+        id:
+          type: integer
+        notable_id:
+          type: integer
+        notable_type:
+          type: string
+        user_id:
+          type: integer
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    PropertyShowSocialResource:
+      properties:
+        website_url:
+          type: string
+        exclude_from_social_scan:
+          type: boolean
+        inactive:
+          type: boolean
+        rejected_brands:
+          type: array
+          items:
+            $ref: '#/components/schemas/Company'
+        hashtags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamHashtag'
+        linkedin_url:
+          type: string
+        youtube_url:
+          type: string
+        facebook_url:
+          type: string
+        twitter_url:
+          type: string
+        instagram_url:
+          type: string
+        twitch_url:
+          type: string
+        tiktok_url:
+          type: string
+        twitter_handle:
+          $ref: '#/components/schemas/TeamTwitterHandle'
+        twitter_handles:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/TeamTwitterHandle'
+            - properties:
+                followers_count:
+                  type: integer
+              type: object
+        twitter_extra_handles:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamTwitterHandle'
+        facebook_handle:
+          $ref: '#/components/schemas/TeamFacebookHandle'
+        facebook_handles:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/TeamFacebookHandle'
+            - properties:
+                followers_count:
+                  type: integer
+              type: object
+        facebook_extra_handles:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamFacebookHandle'
+        instagram_handle:
+          $ref: '#/components/schemas/TeamInstagramHandle'
+        instagram_handles:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/TeamInstagramHandle'
+            - properties:
+                followers_count:
+                  type: integer
+              type: object
+        instagram_extra_handles:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamInstagramHandle'
+        tiktok_handle:
+          $ref: '#/components/schemas/TeamTiktokHandle'
+        tiktok_handles:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/TeamTiktokHandle'
+            - properties:
+                followers_count:
+                  type: integer
+              type: object
+        tiktok_extra_handles:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamTiktokHandle'
+        twitch_handle:
+          $ref: '#/components/schemas/TeamTwitchHandle'
+        twitch_handles:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/TeamTwitchHandle'
+            - properties:
+                followers_count:
+                  type: integer
+              type: object
+        twitch_extra_handles:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamTwitchHandle'
+        youtube_handle:
+          $ref: '#/components/schemas/TeamYoutubeHandle'
+        youtube_handles:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/TeamYoutubeHandle'
+            - properties:
+                followers_count:
+                  type: integer
+              type: object
+        youtube_extra_handles:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamYoutubeHandle'
+      type: object
+    Market:
+      properties:
+        id:
+          type: integer
+        country_id:
+          type: integer
+        region_id:
+          type: integer
+        subregion_id:
+          type: integer
+        name:
+          type: string
+        market_category_id:
+          type: integer
+        market_grouping_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    Company:
+      properties:
+        id:
+          type: integer
+        parent_company_id:
+          type: integer
+        subcategory_id:
+          type: integer
+        categories_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        exclude_from_social_scan:
+          type: boolean
+        exclude_from_transcribe:
+          type: boolean
+        feed_url:
+          type: string
+        statistics:
+          type: string
+        no_of_employees:
+          type: string
+        priority_markets:
+          type: string
+        parent_company:
+          type: string
+        ad_agency:
+          type: string
+        existing:
+          type: string
+        owned_by:
+          type: string
+        approved:
+          type: boolean
+        approved_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    Subgenere:
+      properties:
+        id:
+          type: integer
+        genre_id:
+          type: integer
+        name:
+          type: string
+        zilliz_id:
+          type:
+          - integer
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    OrganizationSlim:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: integer
+          example: agency
+        logo:
+          type: string
+      type: object
+    PropertyLightResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        logo:
+          type: string
+        league_id:
+          type: integer
+        sport_id:
+          type: integer
+        instagram_url:
+          type: string
+        linkedin_url:
+          type: string
+        facebook_url:
+          type: string
+        twitter_url:
+          type: string
+        league:
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            logo_url:
+              type: string
+            is_continuous:
+              type: integer
+            subgenre_id:
+              type: integer
+            subgenre:
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                genre:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                  type: object
+              type: object
+          type: object
+        main_markets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Market'
+        inactive:
+          type: boolean
+      type: object
+    League:
+      properties:
+        id:
+          type: integer
+        uuid:
+          type: string
+        genere_id:
+          type: integer
+        subgenere_id:
+          type: integer
+        label_id:
+          type: integer
+        type:
+          type: string
+        is_continuous:
+          type: integer
+        sport_id:
+          type: integer
+        owner_id:
+          type: integer
+        scouting_priority:
+          type: integer
+        platforms_scouted:
+          type: integer
+        times_scouted_per_year:
+          type: integer
+        name:
+          type: string
+        short_name:
+          type: string
+        currency:
+          type: string
+        governing_body:
+          type: string
+        grouping:
+          type: string
+        website_url:
+          type: string
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    TeamYoutubeHandle:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        is_main:
+          type: integer
+        followers_scraping_enabled:
+          type: integer
+      type: object
+    PropertyResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Property'
+      - properties:
+          parent:
+            $ref: '#/components/schemas/Property'
+          children:
+            type: array
+            items:
+              $ref: '#/components/schemas/Property'
+          sport:
+            $ref: '#/components/schemas/Sport'
+          league:
+            type: object
+            allOf:
+            - $ref: '#/components/schemas/League'
+            - properties:
+                subgenere:
+                  type: object
+                  allOf:
+                  - $ref: '#/components/schemas/Subgenere'
+                  - properties:
+                      genere:
+                        $ref: '#/components/schemas/Genre'
+                    type: object
+              type: object
+          genere:
+            $ref: '#/components/schemas/Genre'
+          markets:
+            type: array
+            items:
+              $ref: '#/components/schemas/Market'
+          main_markets:
+            type: array
+            items:
+              $ref: '#/components/schemas/Market'
+          organizations:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrganizationSlim'
+          rejected_brands:
+            type: array
+            items:
+              $ref: '#/components/schemas/Company'
+          hashtags:
+            type: array
+            items:
+              $ref: '#/components/schemas/TeamHashtag'
+          twitter_handle:
+            $ref: '#/components/schemas/TeamTwitterHandle'
+          twitter_extra_handles:
+            type: array
+            items:
+              $ref: '#/components/schemas/TeamTwitterHandle'
+          facebook_handle:
+            $ref: '#/components/schemas/TeamFacebookHandle'
+          facebook_extra_handles:
+            type: array
+            items:
+              $ref: '#/components/schemas/TeamFacebookHandle'
+          instagram_handle:
+            $ref: '#/components/schemas/TeamInstagramHandle'
+          instagram_extra_handles:
+            type: array
+            items:
+              $ref: '#/components/schemas/TeamInstagramHandle'
+          tiktok_handle:
+            $ref: '#/components/schemas/TeamTiktokHandle'
+          tiktok_extra_handles:
+            type: array
+            items:
+              $ref: '#/components/schemas/TeamTiktokHandle'
+          twitch_handle:
+            $ref: '#/components/schemas/TeamTwitchHandle'
+          twitch_extra_handles:
+            type: array
+            items:
+              $ref: '#/components/schemas/TeamTwitchHandle'
+          youtube_handle:
+            $ref: '#/components/schemas/TeamYoutubeHandle'
+          youtube_extra_handles:
+            type: array
+            items:
+              $ref: '#/components/schemas/TeamYoutubeHandle'
+          agencies:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                is_aor:
+                  type: integer
+                services:
+                  type: string
+              type: object
+          birthplace:
+            description: Present only for individual properties (`type_id = 8`). One key per `location_labels.slug`; locations labeled `birthplace`.
+            type: array
+            items:
+              $ref: '#/components/schemas/LocationResource'
+          current_city:
+            description: Present only for individual properties. Locations labeled `current_city`.
+            type: array
+            items:
+              $ref: '#/components/schemas/LocationResource'
+          key_location:
+            description: Present only for individual properties. Locations labeled `key_location`.
+            type: array
+            items:
+              $ref: '#/components/schemas/LocationResource'
+          college:
+            description: Present only for individual properties. Locations labeled `college`.
+            type: array
+            items:
+              $ref: '#/components/schemas/LocationResource'
+        type: object
+    Genre:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_column:
+          type: string
+        display_order:
+          type: string
+        zilliz_id:
+          type:
+          - integer
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    TeamFacebookHandle:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        is_main:
+          type: integer
+        followers_scraping_enabled:
+          type: integer
+      type: object
+    Property:
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        type_id:
+          type: integer
+        uuid:
+          type: integer
+        division_id:
+          type: integer
+        sport_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        alias:
+          type: string
+        logo:
+          type: string
+        cover:
+          type: string
+        is_continuous:
+          type: integer
+        league_level_property:
+          type: integer
+        no_of_employees:
+          type: integer
+        email:
+          type: string
+        website_url:
+          type: string
+        linkedin_url:
+          type: string
+        linkedin_id_url:
+          type: string
+        facebook_url:
+          type: string
+        twitter_url:
+          type: string
+        instagram_url:
+          type: string
+        twitch_url:
+          type: string
+        tiktok_url:
+          type: string
+        youtube_url:
+          type: string
+        exclude_from_social_scan:
+          type: integer
+        inactive:
+          type: integer
+        market:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        geolocation:
+          type: string
+        corporate_phone:
+          type: string
+        linkedin_employees:
+          type: string
+        targeted_prospects_feed_url:
+          type: string
+        top_sponsorship_headlines_feed_url:
+          type: string
+        headlines_feed_url:
+          type: string
+        capacity:
+          type: string
+        venue_uuid:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    TeamHashtag:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+      type: object
+    LocationLabelResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+      type: object
+    TeamInstagramHandle:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        is_main:
+          type: integer
+        followers_scraping_enabled:
+          type: integer
+      type: object
+    TeamTwitterHandle:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        is_main:
+          type: integer
+        followers_scraping_enabled:
+          type: integer
+      type: object
+    Sport:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    LocationResource:
+      properties:
+        id:
+          type: integer
+        is_us_hq:
+          description: Omitted from the response when the owning property is an individual (athlete / influencer).
+          type:
+          - boolean
+          - 'null'
+        street:
+          type: string
+        city_id:
+          type: integer
+        zip:
+          type: string
+        phone:
+          type: string
+        label:
+          oneOf:
+          - $ref: '#/components/schemas/LocationLabelResource'
+          description: Present only when this location is serialized in the context of an individual property; resolved from the `location_properties.label_id` pivot.
+      type: object
+    TeamTwitchHandle:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        is_main:
+          type: integer
+        followers_scraping_enabled:
+          type: integer
+      type: object
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
+      type: object
+    TeamTiktokHandle:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        uid:
+          type: string
+        is_main:
+          type: integer
+        followers_scraping_enabled:
+          type: integer
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

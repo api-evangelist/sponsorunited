@@ -1,0 +1,84 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Cookies API
+  version: v1
+  description: Cookies
+tags:
+- name: Cookies
+  description: Cookies
+paths:
+  /api/user-social-cookies:
+    post:
+      tags:
+      - Cookies
+      summary: Update user cookies
+      description: Update Facebook and LinkedIn cookies for the authenticated user
+      operationId: userCookies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                user_facebook_cookie:
+                  type: array
+                  items:
+                    properties:
+                      user_id:
+                        type: integer
+                      user_cookie:
+                        type: string
+                      session_cookie:
+                        type: string
+                    type: object
+                user_linkedin_cookie:
+                  properties:
+                    user_id:
+                      type: integer
+                    cookie:
+                      type: string
+                    user_agent:
+                      type: string
+                    is_sales_navigator:
+                      type: boolean
+                  type: object
+              type: object
+      responses:
+        '200':
+          description: Cookies updated successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Cookies updated successfully
+                type: object
+        '401':
+          description: Unauthorized - User not authenticated
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: User not authenticated
+                type: object
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

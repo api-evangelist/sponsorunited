@@ -1,0 +1,64 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Mobile Auth API
+  version: v1
+  description: Mobile Auth
+tags:
+- name: Mobile Auth
+  description: Mobile Auth
+paths:
+  /api/mobile-auth/token:
+    post:
+      tags:
+      - Mobile Auth
+      summary: Mint a long-lived JWT token for the Vortex mobile app
+      operationId: 17e4b6f67811a1fd3f8aecf2d3c41e99
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MintTokenRequest'
+      responses:
+        '201':
+          description: Token minted successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  token:
+                    type: string
+                  expires_in:
+                    description: Token lifetime in seconds
+                    type: integer
+                type: object
+        '404':
+          description: User not found
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+      security:
+      - apiKey: []
+components:
+  schemas:
+    MintTokenRequest:
+      required:
+      - user_id
+      properties:
+        user_id:
+          type: integer
+          example: 1
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

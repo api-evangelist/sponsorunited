@@ -1,0 +1,412 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Item Value API
+  version: v1
+  description: Item Value
+tags:
+- name: Item Value
+  description: Item Value
+paths:
+  /api/item-value:
+    get:
+      tags:
+      - Item Value
+      summary: List all item values
+      description: Returns a paginated list of item values
+      operationId: a1cacd09e11415c7d071297063d0d033
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        required: false
+        schema:
+          type: integer
+          default: 1
+      - name: per_page
+        in: query
+        description: Number of items per page (max 100)
+        required: false
+        schema:
+          type: integer
+          default: 25
+      responses:
+        '200':
+          description: Paginated list of item values
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemValueUpdateResource'
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Item Value
+      summary: Create a new item value
+      description: Creates a new item value record
+      operationId: cf00877fb308e11f8e5e06d5528a9c98
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                item_id:
+                  type: integer
+                audit_id:
+                  type: integer
+                description:
+                  type:
+                  - string
+                  - 'null'
+                frequency:
+                  type:
+                  - integer
+                  - 'null'
+                value:
+                  type:
+                  - number
+                  - 'null'
+              type: object
+      responses:
+        '200':
+          description: Item value created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemValueUpdateResource'
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/item-value/{id}:
+    get:
+      tags:
+      - Item Value
+      summary: Get an item value by ID
+      description: Returns a single item value
+      operationId: 58822892c581bd792b554f045016a9d8
+      parameters:
+      - name: id
+        in: path
+        description: ID of the item value
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Item value details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemValueUpdateResource'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Item value not found
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Item Value
+      summary: Update an item value
+      description: Updates an item value with new item association, description, frequency, value, images, and videos
+      operationId: a58e5a20a8120585dee5b6055d84b66b
+      parameters:
+      - name: id
+        in: path
+        description: ID of the entity that will be changed
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemValueUpdateRequest'
+      responses:
+        '200':
+          description: Item Value that was changed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemValueUpdateResource'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Item Value
+      summary: Delete item value(s)
+      description: Deletes one or more item values and their associated media (images, videos, audios)
+      operationId: 84ccaee2daa18b7f563efeaf2732536e
+      parameters:
+      - name: id
+        in: path
+        description: ID of the item value to delete
+        required: true
+        schema:
+          type: integer
+      - name: item_value[]
+        in: query
+        description: Array of item value IDs to delete (optional, overrides path ID)
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      responses:
+        '204':
+          description: Item value(s) deleted successfully
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+      security:
+      - bearerAuth: []
+  /api/item-value/description:
+    put:
+      tags:
+      - Item Value
+      summary: Update description for multiple item values
+      description: Updates the description field for multiple item values at once
+      operationId: 75c4c328b800b6d8a2d6adbe0c5e5320
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - id
+              - description
+              properties:
+                id:
+                  type: array
+                  items:
+                    type: integer
+                description:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: Number of updated records
+          content:
+            application/json:
+              schema:
+                type: integer
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/item-value/description/clear:
+    put:
+      tags:
+      - Item Value
+      summary: Clear description for multiple item values
+      description: Clears (sets to null) the description field for multiple item values
+      operationId: ebd52f3c4edbce7a4e08a8eba4db162f
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - id
+              properties:
+                id:
+                  type: array
+                  items:
+                    type: integer
+              type: object
+      responses:
+        '200':
+          description: Number of updated records
+          content:
+            application/json:
+              schema:
+                type: integer
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/item-value/{id}/copy:
+    post:
+      tags:
+      - Item Value
+      summary: Copy an item value to another item
+      description: Creates a copy of an item value and associates it with a different item
+      operationId: 29b24c7a62af9f15f6fb440756aff3e2
+      parameters:
+      - name: id
+        in: path
+        description: ID of the item value to copy
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - item_id
+              properties:
+                item_id:
+                  description: Target item ID
+                  type: integer
+              type: object
+      responses:
+        '200':
+          description: Copied item value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemValueUpdateResource'
+        '400':
+          description: Item value not found
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ItemVideo:
+      properties:
+        id:
+          type: integer
+        video_id:
+          type: integer
+        item_value_id:
+          type: integer
+        rank:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    ItemAudio:
+      properties:
+        id:
+          type: integer
+        audio_id:
+          type: integer
+        item_value_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    ItemValueUpdateResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ItemValue'
+      - properties:
+          item_images:
+            type: array
+            items:
+              $ref: '#/components/schemas/ItemImage'
+        type: object
+      - properties:
+          item_videos:
+            type: array
+            items:
+              $ref: '#/components/schemas/ItemVideo'
+        type: object
+      - properties:
+          item_audios:
+            type: array
+            items:
+              $ref: '#/components/schemas/ItemAudio'
+        type: object
+    ItemValueUpdateRequest:
+      properties:
+        item_id:
+          type: string
+        audit_id:
+          type: string
+        description:
+          type: string
+        frequency:
+          type: string
+        value:
+          type: string
+        item_images:
+          type: string
+        item_videos:
+          type: string
+      type: object
+    ItemImage:
+      properties:
+        id:
+          type: integer
+        image_id:
+          type: integer
+        item_value_id:
+          type: integer
+        rank:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    ItemValue:
+      properties:
+        id:
+          type: integer
+        item_id:
+          type: integer
+        audit_id:
+          type: integer
+        value:
+          type: integer
+        social_media_type:
+          type: integer
+        social_media_value:
+          type: string
+        frequency:
+          type: integer
+        description:
+          type: string
+        retained_at:
+          type: string
+          format: date-time
+        issued_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

@@ -1,0 +1,888 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited User API
+  version: v1
+  description: User
+tags:
+- name: User
+  description: User
+paths:
+  /api/integration/salesforce/access-token:
+    post:
+      tags:
+      - User
+      operationId: f9e23006d272a3c9bd73317396ea0cf0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesforceAccessTokenRequest'
+      responses:
+        '200':
+          description: Get salesforce access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesforceAccessTokenResource'
+      security:
+      - bearerAuth: []
+      summary: F9e23006d272a3c9bd73317396ea0cf0
+      x-summary-source: derived
+  /api/user/{id}:
+    put:
+      tags:
+      - User
+      summary: Update a user
+      description: Updates a user's profile information, roles, and organization details. Syncs changes to Intercom and Meilisearch
+      operationId: ec1a3effa21ec04f5b2bd8865806a89a
+      parameters:
+      - name: id
+        in: path
+        description: Id of a user
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: The updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResource'
+      security:
+      - bearerAuth: []
+  /api/user/{id}/profile:
+    put:
+      tags:
+      - User
+      summary: Update user profile
+      description: Updates a user's personal profile information including name, avatar, job details, and contact preferences
+      operationId: b24fa748295efa27b8b9c706ae54b0d8
+      parameters:
+      - name: id
+        in: path
+        description: Id of a user
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileUpdateRequest'
+      responses:
+        '200':
+          description: The updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResource'
+      security:
+      - bearerAuth: []
+  /api/user/profile/{id}/phone/validate:
+    post:
+      tags:
+      - User
+      summary: Validate and send phone verification PIN
+      description: Validates a phone number format using Twilio and sends a verification PIN via SMS for MFA setup
+      operationId: 0e48f7966790f7ab8a78f032a889162b
+      parameters:
+      - name: id
+        in: path
+        description: Id of a user
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateUserPhoneNumberRequest'
+      responses:
+        '200':
+          description: The updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResource'
+      security:
+      - bearerAuth: []
+  /api/user/profile/{id}/phone/verify:
+    post:
+      tags:
+      - User
+      summary: Verify phone number PIN
+      description: Verifies the PIN sent via SMS or email to complete phone number or email validation for user profile updates
+      operationId: ef9cc65df5368525b3def92de7d39c73
+      parameters:
+      - name: id
+        in: path
+        description: Id of a user
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyUserPhoneNumberRequest'
+      responses:
+        '200':
+          description: The updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResource'
+      security:
+      - bearerAuth: []
+  /api/user/by-email:
+    get:
+      tags:
+      - User
+      summary: Get user by email
+      description: Retrieves a user by their email address. Includes soft-deleted users in the search
+      operationId: fbfdd986024cbb953166810bf850d816
+      parameters:
+      - name: email
+        in: query
+        description: Email of user to fetch.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A user with the given email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLightResource'
+      security:
+      - bearerAuth: []
+  /api/user/downloadUrl:
+    post:
+      tags:
+      - User
+      operationId: cd6c5128b0c1f4bd290f90b35c721e55
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDownloadFileRequest'
+            example:
+              command: TasksExportInvalidLinkedin
+      responses:
+        '200':
+          description: Get url for download file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDownloadFileResource'
+        '422':
+          description: Validation error
+        '503':
+          description: Service unavailable
+      security:
+      - bearerAuth: []
+      summary: Cd6c5128b0c1f4bd290f90b35c721e55
+      x-summary-source: derived
+components:
+  schemas:
+    UserSetting:
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+        payload:
+          type: object
+      type: object
+    SalesforceAccessTokenRequest:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      type: object
+    PersonProfile:
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        avatar_id:
+          type:
+          - integer
+          - 'null'
+        person_profile_job_role_id:
+          type:
+          - integer
+          - 'null'
+        market_id:
+          type:
+          - integer
+          - 'null'
+        name:
+          type: string
+        job_title:
+          type:
+          - string
+          - 'null'
+        location:
+          type:
+          - string
+          - 'null'
+        school:
+          type:
+          - string
+          - 'null'
+        info:
+          type:
+          - string
+          - 'null'
+        suggested:
+          type:
+          - integer
+          - 'null'
+        previous_suggested:
+          type:
+          - integer
+          - 'null'
+        approved:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    Company:
+      properties:
+        id:
+          type: integer
+        parent_company_id:
+          type: integer
+        subcategory_id:
+          type: integer
+        categories_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        exclude_from_social_scan:
+          type: boolean
+        exclude_from_transcribe:
+          type: boolean
+        feed_url:
+          type: string
+        statistics:
+          type: string
+        no_of_employees:
+          type: string
+        priority_markets:
+          type: string
+        parent_company:
+          type: string
+        ad_agency:
+          type: string
+        existing:
+          type: string
+        owned_by:
+          type: string
+        approved:
+          type: boolean
+        approved_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UserDownloadFileRequest:
+      required:
+      - command
+      properties:
+        command:
+          description: 'Export command: TasksExportInvalidLinkedin, TasksExportInvalidSocial, or TasksExportInvalidEmails'
+          type: string
+          enum:
+          - TasksExportInvalidLinkedin
+          - TasksExportInvalidSocial
+          - TasksExportInvalidEmails
+        payload:
+          description: Optional payload (e.g. filters)
+          type: object
+      type: object
+    UserProfileResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - properties:
+          roles:
+            type: array
+            items:
+              $ref: '#/components/schemas/Role'
+          organizations:
+            type: array
+            items:
+              $ref: '#/components/schemas/Organization'
+          person_profile:
+            $ref: '#/components/schemas/PersonProfile'
+          user_permissions:
+            type: array
+            items: {}
+        type: object
+    VerifyUserPhoneNumberRequest:
+      required:
+      - pin
+      - e164_phone_number
+      properties:
+        pin:
+          type: string
+        e164_phone_number:
+          type: string
+      type: object
+    Role:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    UserResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - properties:
+          roles:
+            type: array
+            items:
+              $ref: '#/components/schemas/Role'
+          teams:
+            type: array
+            items:
+              $ref: '#/components/schemas/Property'
+          agencies:
+            type: array
+            items:
+              $ref: '#/components/schemas/Agency'
+          brands:
+            type: array
+            items:
+              $ref: '#/components/schemas/Company'
+          organization:
+            type: array
+            items:
+              $ref: '#/components/schemas/Organization'
+          person_profile:
+            type: object
+            allOf:
+            - $ref: '#/components/schemas/PersonProfile'
+            - properties:
+                contact_details:
+                  $ref: '#/components/schemas/PersonProfileContactDetail'
+                social_details:
+                  $ref: '#/components/schemas/PersonProfileSocialDetail'
+              type: object
+          user_permissions:
+            type: array
+            items: {}
+          role_orientation:
+            oneOf:
+            - $ref: '#/components/schemas/RoleOrientationResource'
+        type: object
+    SalesforceAccessTokenResource:
+      properties:
+        access_token:
+          type: string
+      type: object
+    UserUpdateRequest:
+      required:
+      - name
+      - email
+      - role
+      properties:
+        name:
+          type: string
+        avatar:
+          type: string
+        email:
+          type: string
+        role:
+          type: integer
+        person_profile_job_role_id:
+          type: integer
+        job_title:
+          type: string
+        linkedin_url:
+          type: string
+        facebook_url:
+          type: string
+        twitter_url:
+          type: string
+        instagram_url:
+          type: string
+        organization:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        is_external:
+          type: boolean
+        force_new_password:
+          type: boolean
+        role_orientation_id:
+          description: Role orientation ID (1=sell_side, 2=buy_side, 3=student)
+          type: integer
+      type: object
+    UserLightResource:
+      properties:
+        user:
+          type: object
+          allOf:
+          - properties:
+              id:
+                type: integer
+              name:
+                type: string
+              email:
+                type: string
+              roles:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+              is_external:
+                type: boolean
+              force_new_password:
+                type: integer
+              verified:
+                type: integer
+              settings:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSetting'
+            type: object
+      type: object
+    PersonProfileContactDetail:
+      properties:
+        id:
+          type: integer
+        person_profile_id:
+          type: integer
+        primary_email:
+          type: string
+        secondary_email:
+          type: string
+        previous_primary_email_status:
+          type: string
+        previous_primary_email_status_updated_at:
+          type: string
+          format: date-time
+        primary_email_status:
+          type: string
+        primary_email_status_updated_at:
+          type: string
+          format: date-time
+        manual_primary_email_status:
+          type: string
+        manual_primary_email_status_updated_at:
+          type: string
+          format: date-time
+        mail_code:
+          type: string
+        phone:
+          type: string
+        phone_country:
+          type: string
+        phone_number:
+          type: string
+        phone_extension:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    Property:
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        type_id:
+          type: integer
+        uuid:
+          type: integer
+        division_id:
+          type: integer
+        sport_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        alias:
+          type: string
+        logo:
+          type: string
+        cover:
+          type: string
+        is_continuous:
+          type: integer
+        league_level_property:
+          type: integer
+        no_of_employees:
+          type: integer
+        email:
+          type: string
+        website_url:
+          type: string
+        linkedin_url:
+          type: string
+        linkedin_id_url:
+          type: string
+        facebook_url:
+          type: string
+        twitter_url:
+          type: string
+        instagram_url:
+          type: string
+        twitch_url:
+          type: string
+        tiktok_url:
+          type: string
+        youtube_url:
+          type: string
+        exclude_from_social_scan:
+          type: integer
+        inactive:
+          type: integer
+        market:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        geolocation:
+          type: string
+        corporate_phone:
+          type: string
+        linkedin_employees:
+          type: string
+        targeted_prospects_feed_url:
+          type: string
+        top_sponsorship_headlines_feed_url:
+          type: string
+        headlines_feed_url:
+          type: string
+        capacity:
+          type: string
+        venue_uuid:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    Agency:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        logo:
+          type: string
+        no_of_employees:
+          type: integer
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        feed_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    User:
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        currency:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+        last_active_at:
+          type: string
+          format: date-time
+        is_external:
+          type: boolean
+        verified:
+          type: integer
+        genuine:
+          type: integer
+        hubspot_id:
+          type: integer
+        hubspot_synced_on:
+          type: string
+          format: date-time
+        force_new_password:
+          type: integer
+        credentials_sent_at:
+          type: string
+          format: date-time
+      type: object
+    ValidateUserPhoneNumberRequest:
+      required:
+      - phone_country
+      - phone_number
+      properties:
+        phone_country:
+          type: string
+        phone_number:
+          type: string
+      type: object
+    RoleOrientationResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: sell_side
+      type: object
+    Organization:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        logo:
+          type: string
+        mfa_enabled:
+          type: integer
+        intercom_company_id:
+          type: string
+        intercom_company_company_id:
+          type: string
+        contract_status_id:
+          type: integer
+        contract_payment_type_id:
+          type: integer
+        contract_monthly_spend:
+          type: integer
+        contract_file_url:
+          type: string
+        contract_onboarding_date:
+          type: string
+          format: date-time
+        contract_start_date:
+          type: string
+          format: date-time
+        contract_end_date:
+          type: string
+          format: date-time
+        contract_auto_renew:
+          type: integer
+        product_id:
+          type: integer
+        sales_user_id:
+          type: integer
+        salesforce_id:
+          type: string
+        account_manager_id:
+          type: integer
+        default_user_subscription_plan_id:
+          type: string
+        default_user_subscription_product_name:
+          type: string
+        default_user_subscription_cancel_date:
+          type: string
+          format: date-time
+        user_email_domain:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UserProfileUpdateRequest:
+      required:
+      - name
+      - email
+      - id
+      properties:
+        name:
+          type: string
+        avatar:
+          type: string
+        email:
+          type: email
+        phone:
+          type: string
+        work_phone:
+          type: string
+        email_status:
+          type: string
+        email_status_updated:
+          type: boolean
+        manual_email_status:
+          type: string
+        manual_email_status_updated_at:
+          type: string
+          format: date-time
+        linkedin:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        id:
+          type: integer
+      type: object
+    PersonProfileSocialDetail:
+      properties:
+        id:
+          type: integer
+        person_profile_id:
+          type: integer
+        linkedin_profile_url:
+          type: string
+        facebook_profile_url:
+          type: string
+        twitter_profile_url:
+          type: string
+        instagram_profile_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UserDownloadFileResource:
+      properties:
+        status:
+          type: string
+        url:
+          type: string
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

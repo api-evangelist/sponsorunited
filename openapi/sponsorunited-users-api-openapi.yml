@@ -1,0 +1,69 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Users API
+  version: v1
+  description: Users
+tags:
+- name: Users
+  description: Users
+paths:
+  /api/users/search:
+    get:
+      tags:
+      - Users
+      summary: Search users by name
+      description: Search for a specific user by name. Usually used on typeaheads.
+      operationId: 870e0c5e700bcc087b5ca3cfe0049939
+      parameters:
+      - name: UserSearchRequest
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/UserSearchRequest'
+      responses:
+        '200':
+          description: An array with simple items.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSearchResource'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    GenericEntity:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
+    UserSearchResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/GenericEntity'
+    UserSearchRequest:
+      required:
+      - search
+      properties:
+        search:
+          type: string
+        is_external:
+          type: boolean
+        organization:
+          type: string
+        with_deleted:
+          type: boolean
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

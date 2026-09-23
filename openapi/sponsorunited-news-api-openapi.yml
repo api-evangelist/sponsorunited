@@ -1,0 +1,1874 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited News API
+  version: v1
+  description: News
+tags:
+- name: News
+  description: News
+paths:
+  /api/news/active-articles:
+    get:
+      tags:
+      - News
+      summary: List active news articles
+      description: Returns a paginated list of active curated news with optional filtering by tags, brands, properties, agencies, and markets
+      operationId: e4fa099a4fa10fee9854622f2fd726f7
+      parameters:
+      - name: ActiveCuratedNewsRequest
+        in: query
+        schema:
+          $ref: '#/components/schemas/ActiveCuratedNewsRequest'
+      responses:
+        '200':
+          description: A paginated list of active curated news.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActiveCuratedNewsResource'
+      security:
+      - bearerAuth: []
+  /api/news/all-articles:
+    get:
+      tags:
+      - News
+      summary: List all curated news articles
+      description: Returns a paginated list of all curated news articles with optional filtering by company, agency, team, category, subcategory, league, news tag, reporter, and date range. Requires view news permission.
+      operationId: getAllCuratedNews
+      parameters:
+      - name: perPage
+        in: query
+        description: Items per page
+        schema:
+          type: integer
+      - name: company
+        in: query
+        description: Comma-separated company IDs
+        schema:
+          type: string
+      - name: agency
+        in: query
+        description: Comma-separated agency IDs
+        schema:
+          type: string
+      - name: team
+        in: query
+        description: Comma-separated team IDs
+        schema:
+          type: string
+      - name: category
+        in: query
+        description: Comma-separated category IDs
+        schema:
+          type: string
+      - name: subcategory
+        in: query
+        description: Comma-separated subcategory IDs
+        schema:
+          type: string
+      - name: league
+        in: query
+        description: Comma-separated league IDs
+        schema:
+          type: string
+      - name: newsTag
+        in: query
+        description: Comma-separated news tag IDs
+        schema:
+          type: string
+      - name: reporter
+        in: query
+        description: Comma-separated reporter user IDs
+        schema:
+          type: string
+      - name: publishedAfter
+        in: query
+        description: Filter articles published after this date
+        schema:
+          type: string
+          format: date-time
+      - name: publishedBefore
+        in: query
+        description: Filter articles published before this date
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Paginated list of curated news articles
+          content:
+            application/json:
+              schema:
+                properties:
+                  current_page:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CuratedNews'
+                  first_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  from:
+                    type:
+                    - integer
+                    - 'null'
+                  last_page:
+                    type: integer
+                  last_page_url:
+                    type: string
+                  next_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  path:
+                    type: string
+                  per_page:
+                    type: integer
+                  prev_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  to:
+                    type:
+                    - integer
+                    - 'null'
+                  total:
+                    type: integer
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden — missing view news permission
+      security:
+      - bearerAuth: []
+  /api/news/export/all-articles:
+    get:
+      tags:
+      - News
+      summary: Export curated news articles
+      description: Downloads curated news articles as a file export with optional filtering by company, agency, team, category, subcategory, league, news tag, reporter, and date range.
+      operationId: exportCuratedNews
+      parameters:
+      - name: company
+        in: query
+        description: Comma-separated company IDs
+        schema:
+          type: string
+      - name: agency
+        in: query
+        description: Comma-separated agency IDs
+        schema:
+          type: string
+      - name: team
+        in: query
+        description: Comma-separated team IDs
+        schema:
+          type: string
+      - name: category
+        in: query
+        description: Comma-separated category IDs
+        schema:
+          type: string
+      - name: subcategory
+        in: query
+        description: Comma-separated subcategory IDs
+        schema:
+          type: string
+      - name: league
+        in: query
+        description: Comma-separated league IDs
+        schema:
+          type: string
+      - name: newsTag
+        in: query
+        description: Comma-separated news tag IDs
+        schema:
+          type: string
+      - name: reporter
+        in: query
+        description: Comma-separated reporter user IDs
+        schema:
+          type: string
+      - name: publishedAfter
+        in: query
+        description: Filter articles published after this date
+        schema:
+          type: string
+          format: date-time
+      - name: publishedBefore
+        in: query
+        description: Filter articles published before this date
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: File download of exported news articles
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/news/my-articles:
+    get:
+      tags:
+      - News
+      summary: List current user's curated news articles
+      description: Returns a paginated list of curated news articles created by the authenticated user, with optional filtering by company, agency, team, category, subcategory, league, news tag, and date range.
+      operationId: getOwnCuratedNews
+      parameters:
+      - name: perPage
+        in: query
+        description: Items per page
+        schema:
+          type: integer
+      - name: company
+        in: query
+        description: Comma-separated company IDs
+        schema:
+          type: string
+      - name: agency
+        in: query
+        description: Comma-separated agency IDs
+        schema:
+          type: string
+      - name: team
+        in: query
+        description: Comma-separated team IDs
+        schema:
+          type: string
+      - name: category
+        in: query
+        description: Comma-separated category IDs
+        schema:
+          type: string
+      - name: subcategory
+        in: query
+        description: Comma-separated subcategory IDs
+        schema:
+          type: string
+      - name: league
+        in: query
+        description: Comma-separated league IDs
+        schema:
+          type: string
+      - name: newsTag
+        in: query
+        description: Comma-separated news tag IDs
+        schema:
+          type: string
+      - name: publishedAfter
+        in: query
+        description: Filter articles published after this date
+        schema:
+          type: string
+          format: date-time
+      - name: publishedBefore
+        in: query
+        description: Filter articles published before this date
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Paginated list of the authenticated user's curated news articles
+          content:
+            application/json:
+              schema:
+                properties:
+                  current_page:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CuratedNews'
+                  first_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  from:
+                    type:
+                    - integer
+                    - 'null'
+                  last_page:
+                    type: integer
+                  last_page_url:
+                    type: string
+                  next_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  path:
+                    type: string
+                  per_page:
+                    type: integer
+                  prev_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  to:
+                    type:
+                    - integer
+                    - 'null'
+                  total:
+                    type: integer
+                type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/news/submissions:
+    get:
+      tags:
+      - News
+      summary: List the global news submissions queue (all submitters)
+      description: Returns submissions from every reporter by default. Pass reporter_id to scope to one submitter. Requires the view-news permission.
+      operationId: 0fb580a718c731e722abe30c5b1ebcdf
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+      - name: per_page
+        in: query
+        schema:
+          type: integer
+      - name: status
+        in: query
+        description: Comma-separated list of statuses (e.g. pending,analysed,published,unpublished,declined). Passing 'declined' includes soft-deleted (recoverable) declined articles.
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        schema:
+          type: string
+          enum:
+          - created_at
+          - updated_at
+          - published_at
+          - title
+          - status
+          - url
+      - name: order_direction
+        in: query
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: reporter_id
+        in: query
+        description: Optional. Scope the queue to a single submitter's submissions.
+        schema:
+          type: integer
+      - name: from
+        in: query
+        description: Filter submissions created on or after this date (Y-m-d)
+        schema:
+          type: string
+          format: date
+      - name: to
+        in: query
+        description: Filter submissions created on or before this date (Y-m-d, inclusive)
+        schema:
+          type: string
+          format: date
+      - name: title
+        in: query
+        description: Filter by article title (case-insensitive substring). Combined with `url`, both must match (AND).
+        schema:
+          type: string
+      - name: url
+        in: query
+        description: Filter by article URL (case-insensitive substring). Combined with `title`, both must match (AND).
+        schema:
+          type: string
+      responses:
+        '403':
+          description: Forbidden — missing view news permission
+        '200':
+          description: Simple paginator JSON; `data` items are NewsSubmissionResource rows.
+          content:
+            application/json:
+              schema:
+                properties:
+                  current_page:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NewsSubmissionResource'
+                  first_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  from:
+                    type:
+                    - integer
+                    - 'null'
+                  next_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  path:
+                    type: string
+                  per_page:
+                    type: integer
+                  prev_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  to:
+                    type:
+                    - integer
+                    - 'null'
+                type: object
+      security:
+      - bearerAuth: []
+  /api/news/submissions/{id}:
+    get:
+      tags:
+      - News
+      summary: Get one news submission by id (global — any submitter)
+      description: Returns any submission's detail so coordinators can open articles submitted by any user. Requires the view-news permission.
+      operationId: 64e24c71ec4f499e6a74144a4c68dbeb
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Single submission row.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: '#/components/schemas/NewsSubmissionResource'
+                type: object
+        '403':
+          description: Forbidden — missing view news permission
+        '404':
+          description: Not found
+      security:
+      - bearerAuth: []
+  /api/news/article:
+    post:
+      tags:
+      - News
+      summary: Create a curated news article
+      description: Creates a new curated news article with associated companies, agencies, teams, and tags. Requires news administration permission.
+      operationId: createCuratedNews
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - url
+              - title
+              - description
+              properties:
+                url:
+                  description: 'Article URL. Must be unique among usable articles: a URL left behind by a failed article is accepted (that article is purged), while one belonging to a declined article is rejected until it is restored or deleted.'
+                  type: string
+                  format: url
+                title:
+                  description: Article title
+                  type: string
+                description:
+                  description: Article description
+                  type: string
+                image:
+                  description: Image URL for the article
+                  type: string
+                published_at:
+                  description: Publication date (defaults to now)
+                  type: string
+                  format: date-time
+                is_sponsorship:
+                  type: boolean
+                companies:
+                  description: Array of company objects to associate
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                    type: object
+                agencies:
+                  description: Array of agency objects to associate
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                    type: object
+                teams:
+                  description: Array of team/property objects to associate
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                    type: object
+                tags:
+                  description: Array of news tag IDs
+                  type: array
+                  items:
+                    type: integer
+              type: object
+      responses:
+        '200':
+          description: Article created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CuratedNews'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden — missing news administration permission
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/news/article/{id}:
+    put:
+      tags:
+      - News
+      summary: Update a curated news article
+      description: Updates an existing curated news article. If a new URL is provided and differs from the current one, the article metadata is re-fetched from the URL. Requires edit news permission.
+      operationId: updateCuratedNews
+      parameters:
+      - name: id
+        in: path
+        description: Curated news article identifier
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              properties:
+                url:
+                  description: New article URL (must be unique if changed)
+                  type: string
+                  format: url
+                title:
+                  description: Article title
+                  type: string
+                description:
+                  description: Article description
+                  type: string
+                image:
+                  description: Image URL for the article
+                  type: string
+                published_at:
+                  description: Publication date
+                  type: string
+                  format: date-time
+                is_active:
+                  description: Whether the article is active
+                  type: boolean
+                companies:
+                  description: Array of company objects to sync
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                    type: object
+                agencies:
+                  description: Array of agency objects to sync
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                    type: object
+                teams:
+                  description: Array of team/property objects to sync
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                    type: object
+                tags:
+                  description: Array of news tag IDs to sync
+                  type: array
+                  items:
+                    type: integer
+              type: object
+      responses:
+        '200':
+          description: Article updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CuratedNews'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden — missing edit news permission
+        '404':
+          description: Article not found
+        '422':
+          description: Validation error (e.g. duplicate URL)
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - News
+      summary: Delete a curated news article
+      description: Permanently deletes a curated news article. Requires edit news permission or reporter ownership.
+      operationId: deleteCuratedNews
+      parameters:
+      - name: id
+        in: path
+        description: Curated news article identifier
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Article deleted successfully; response body is the article snapshot before deletion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CuratedNews'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden — missing edit news permission and not article reporter
+        '404':
+          description: Article not found
+      security:
+      - bearerAuth: []
+  /api/news/analyse:
+    post:
+      tags:
+      - News
+      summary: Bulk submit news article URLs for analysis
+      description: Accepts an array of news article URLs, creates CuratedNews records in pending status, syncs brand/property/agency relationships, and dispatches each to the data-ingestion service for content extraction. Re-submitting a URL whose article previously failed returns it to pending and dispatches a fresh analysis; a URL already in the queue is reported as already_exists without dispatching anything.
+      operationId: 3b3d00be711cb398df132e0a2134086e
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyseCuratedNewsRequest'
+      responses:
+        '201':
+          description: URLs submitted for analysis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyseCuratedNewsResultsResource'
+        '422':
+          description: Validation error
+        '403':
+          description: Forbidden (missing news administration permission)
+      security:
+      - bearerAuth: []
+  /api/news/article/{id}/publish:
+    put:
+      tags:
+      - News
+      summary: Publish a news article
+      description: 'Publishes an article (was ''approve''): status becomes published, it is made active and appears on linked brand/property profiles. Allowed from analysed or unpublished. Only the reporter who submitted the article can publish it.'
+      operationId: 23adff9f97c3a94e4aaffc552029477b
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Article published successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsSubmissionResource'
+        '403':
+          description: Forbidden — missing view-news permission
+        '404':
+          description: Article not found
+        '422':
+          description: Transition not allowed from the current status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+  /api/news/article/{id}/unpublish:
+    put:
+      tags:
+      - News
+      summary: Unpublish a news article
+      description: Removes a published article from brand/property profiles and returns it to an editable draft (status unpublished), while keeping it in the queue and preserving its brand/property links so it can be republished. Allowed from published. Only the reporter who submitted the article can unpublish it.
+      operationId: 12f229dfd29e8f99d1a3c0113f89df3c
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Article unpublished successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsSubmissionResource'
+        '403':
+          description: Forbidden — missing view-news permission
+        '404':
+          description: Article not found
+        '422':
+          description: Transition not allowed from the current status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+  /api/news/article/{id}/decline:
+    put:
+      tags:
+      - News
+      summary: Decline a news article
+      description: 'Declines an article (was ''reject''): a recoverable soft-delete that removes it from the active queue. It remains in the Declined list and can be restored. Allowed from analysed, unpublished or published. Only the reporter who submitted the article can decline it.'
+      operationId: 59fcc0bd30941e64cc924cb74494492b
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Article declined successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsSubmissionResource'
+        '403':
+          description: Forbidden — missing view-news permission
+        '404':
+          description: Article not found
+        '422':
+          description: Transition not allowed from the current status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+  /api/news/article/{id}/restore:
+    put:
+      tags:
+      - News
+      summary: Restore a declined news article
+      description: Restores a declined (soft-deleted) article back to an editable, in-queue state (status analysed). Allowed from declined. Only the reporter who submitted the article can restore it.
+      operationId: 70198b0ef22aa7c8bbfd9ea52ea615c8
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Article restored successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsSubmissionResource'
+        '403':
+          description: Forbidden — missing view-news permission
+        '404':
+          description: Article not found
+        '422':
+          description: Transition not allowed from the current status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+  /api/news/article/preview:
+    get:
+      tags:
+      - News
+      summary: Preview news article
+      description: Returns preview information for a news article URL including title, description, and image
+      operationId: 9aace22b4f6a3d27111fb4cfbcdf7a20
+      parameters:
+      - name: url
+        in: path
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Preview news article.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CuratedNewsArticlePreviewResource'
+      security:
+      - bearerAuth: []
+  /api/news/article/{id}/assets:
+    get:
+      tags:
+      - News
+      summary: List extracted assets for a curated news article
+      operationId: listNewsAssets
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Asset rows ordered by match_status then confidence desc
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NewsAssetResource'
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden — missing view news permission
+        '404':
+          description: Article not found
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - News
+      summary: Manually add an asset to a curated news article (Quick Add)
+      operationId: storeNewsAsset
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreNewsAssetRequest'
+      responses:
+        '201':
+          description: Asset row created (source=manual, match_status=confirmed)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsAssetResource'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden — missing edit news permission
+        '404':
+          description: Article not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/news/article/{id}/assets/{assetId}:
+    delete:
+      tags:
+      - News
+      summary: Dismiss a news asset row (soft — sets match_status=dismissed)
+      description: Soft-deletes via status change so subsequent re-imports won't resurrect the row (see NewsAssetImportService::PROTECTED_STATUSES).
+      operationId: dismissNewsAsset
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Asset dismissed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsAssetResource'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden — missing edit news permission
+        '404':
+          description: Article or asset not found
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - News
+      summary: Update a news asset row (pick a different item_id, flip to confirmed)
+      operationId: updateNewsAsset
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: assetId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNewsAssetRequest'
+      responses:
+        '200':
+          description: Asset row updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsAssetResource'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden — missing edit news permission
+        '404':
+          description: Article or asset not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/news/submissions/{id}/contacts/add:
+    post:
+      tags:
+      - News
+      summary: Add the extracted contacts a reviewer selected
+      description: Routes each selected row on whether its matched contact still resolves to a live platform contact. Matched rows are updated in place — the article quote is prepended to their notes and nothing else is touched. Every selected id is answered individually, so a partial failure stays visible.
+      operationId: addNewsContacts
+      parameters:
+      - name: id
+        in: path
+        description: Curated news article id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddNewsContactsRequest'
+      responses:
+        '200':
+          description: Per-row outcome.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsContactAddResultsResource'
+        '403':
+          description: Forbidden — missing edit news permission
+        '404':
+          description: Article not found
+        '422':
+          description: Empty selection, or an id that belongs to another article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+  /api/news/submissions/{id}/contacts/{newsContactId}/resolve:
+    post:
+      tags:
+      - News
+      summary: Create a contact from the LinkedIn profile a reviewer chose
+      description: For a row the sourcing agent left as needs_review. The scrape is queued on the same paced batch a confident match uses, because it spends a real account's cookie, so the answer arrives on the article page rather than in this response.
+      operationId: resolveNewsContact
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: newsContactId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResolveNewsContactRequest'
+      responses:
+        '202':
+          description: The row's outcome.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsContactAddResultsResource'
+        '403':
+          description: Forbidden — missing edit news permission
+        '404':
+          description: Article or extracted contact not found
+        '409':
+          description: This contact is not awaiting a choice
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+        '422':
+          description: Not a LinkedIn member profile URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    NewsAssetResource:
+      properties:
+        id:
+          description: 'Serialises a {@see NewsAsset} row for the Article Analysis view''s
+
+            assets table.  Hydrates the `item` payload (canonical catalog row,
+
+            incl. platform/subplatform ids) when set and always emits
+
+            `match_candidates` (as `[]` when no top-K available).'
+          type: integer
+        curated_news_id:
+          type: integer
+        suggested_name:
+          type: string
+        confidence:
+          type: number
+          format: float
+        match_status:
+          type: string
+          enum:
+          - pending
+          - auto_match
+          - needs_review
+          - no_match
+          - confirmed
+          - dismissed
+        source:
+          type: string
+          enum:
+          - extracted
+          - manual
+        context:
+          type:
+          - string
+          - 'null'
+        match_candidates:
+          type: array
+          items:
+            type: object
+        item:
+          properties:
+            id:
+              type: integer
+            name:
+              type:
+              - string
+              - 'null'
+            description:
+              type:
+              - string
+              - 'null'
+            item_platform_id:
+              type: integer
+            item_subplatform_id:
+              type: integer
+          type:
+          - object
+          - 'null'
+        created_by:
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+          type:
+          - object
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    NewsExtractionAdd:
+      description: Outcome of adding this extracted person to the platform. Contacts only — a quote becomes a note on a contact, never a contact of its own. `not_added` is the only selectable state; `needs_review` means the sourcing agent found profiles but could not choose between them.
+      properties:
+        status:
+          type: string
+          enum:
+          - not_added
+          - processing
+          - needs_review
+          - created
+          - updated
+          - failed
+        added_at:
+          description: When the reviewer clicked Add contacts selected.
+          type:
+          - string
+          - 'null'
+          format: date-time
+        contact_id:
+          description: The platform contact this row produced.
+          type:
+          - integer
+          - 'null'
+        error:
+          description: Readable failure reason when status is failed.
+          type:
+          - string
+          - 'null'
+        linkedin_url:
+          description: 'The profile in play for this row: the one it was created from when status is created, or the one last tried when status is processing or failed. With `candidates` still populated, a failed row can offer the same pick again instead of re-running the search.'
+          type:
+          - string
+          - 'null'
+        candidates:
+          description: Profiles the agent found but could not choose between. Present when status is needs_review; the reviewer picks one and posts it to the resolve endpoint.
+          type: array
+          items:
+            properties:
+              slug:
+                type: string
+              linkedin_url:
+                type: string
+              title:
+                type: string
+              snippet:
+                type: string
+              position:
+                type: integer
+            type: object
+      type: object
+    PersonProfile:
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        avatar_id:
+          type:
+          - integer
+          - 'null'
+        person_profile_job_role_id:
+          type:
+          - integer
+          - 'null'
+        market_id:
+          type:
+          - integer
+          - 'null'
+        name:
+          type: string
+        job_title:
+          type:
+          - string
+          - 'null'
+        location:
+          type:
+          - string
+          - 'null'
+        school:
+          type:
+          - string
+          - 'null'
+        info:
+          type:
+          - string
+          - 'null'
+        suggested:
+          type:
+          - integer
+          - 'null'
+        previous_suggested:
+          type:
+          - integer
+          - 'null'
+        approved:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    AddNewsContactsRequest:
+      required:
+      - news_contact_ids
+      properties:
+        news_contact_ids:
+          description: Ids of the extracted contacts the reviewer selected. Every id must belong to this article.
+          type: array
+          items:
+            type: integer
+            example: 4711
+          minItems: 1
+      type: object
+    ActiveCuratedNewsRequest:
+      properties:
+        news_tag:
+          type: string
+        brand:
+          description: Comma separated brand ids.
+          type: string
+        property:
+          description: Comma separated property ids.
+          type: string
+        agency:
+          description: Comma separated agency ids.
+          type: string
+        sub_brands:
+          type: boolean
+        with_image:
+          type: string
+        page:
+          type: integer
+        per_page:
+          type: string
+      type: object
+    NewsExtractionMatch:
+      description: Entity-mapping resolver verdict for one extracted person (OP-966/967/968).
+      properties:
+        status:
+          type: string
+          enum:
+          - pending
+          - auto_match
+          - needs_review
+          - no_match
+        confidence:
+          type:
+          - number
+          - 'null'
+          format: float
+        resolved_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        person_profile_id:
+          type:
+          - integer
+          - 'null'
+        contact_id:
+          type:
+          - integer
+          - 'null'
+        contactable_type:
+          description: Morph alias of the resolved entity; pairs with contactable_id to open the Administration Contacts context.
+          type:
+          - string
+          - 'null'
+          enum:
+          - agency
+          - brand
+          - property
+        contactable_id:
+          type:
+          - integer
+          - 'null'
+        entity_name:
+          description: Name of the resolved agency / brand / property.
+          type:
+          - string
+          - 'null'
+        candidates:
+          description: Resolver top-K candidates; empty when the row was never resolved.
+          type: array
+          items:
+            type: object
+      type: object
+    AnalyseCuratedNewsResource:
+      properties:
+        url:
+          type: string
+        status:
+          description: '`success` = newly queued for analysis; `already_exists` = the article was already in the queue (the submitter is attached as a reporter, nothing re-dispatched); `failed` = could not be processed.'
+          type: string
+          enum:
+          - success
+          - already_exists
+          - failed
+        is_new:
+          description: True only when this submission created and queued a new article. False for `already_exists` and `failed`.
+          type: boolean
+        curated_news:
+          properties:
+            id:
+              type: integer
+            url:
+              type: string
+            status:
+              type: string
+            reporter_id:
+              type: integer
+            ingestion_request_id:
+              type:
+              - string
+              - 'null'
+            created_at:
+              type: string
+              format: date-time
+          type:
+          - object
+          - 'null'
+        error:
+          type:
+          - string
+          - 'null'
+      type: object
+    UpdateNewsAssetRequest:
+      properties:
+        item_id:
+          description: FK to items; must reference an existing catalog row.
+          type:
+          - integer
+          - 'null'
+          example: 481
+        match_status:
+          description: Reviewer-driven state transitions (needs_review = unconfirm).
+          type: string
+          enum:
+          - confirmed
+          - dismissed
+          - needs_review
+          example: confirmed
+        context:
+          description: Editable free-text note. Send null or an empty string to clear it; omit to leave it unchanged.
+          type:
+          - string
+          - 'null'
+          example: Mentioned in paragraph 3 as the title sponsor.
+      type: object
+    NewsTags:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
+    CuratedNews:
+      properties:
+        id:
+          type: integer
+        url:
+          type: string
+        is_active:
+          type: integer
+        reporter_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        content_markdown:
+          type: string
+        ingestion_request_id:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+        published_at:
+          type: string
+          format: date-time
+      type: object
+    AnalyseCuratedNewsRequest:
+      required:
+      - urls
+      properties:
+        urls:
+          type: array
+          items:
+            type: string
+            format: url
+            maxLength: 2048
+            example: https://example.com/article
+          minItems: 1
+        companies:
+          type: array
+          items:
+            type: integer
+            example: 1
+        agencies:
+          type: array
+          items:
+            type: integer
+            example: 1
+        teams:
+          type: array
+          items:
+            type: integer
+            example: 1
+        extract_entities:
+          description: When true (default), entity extraction (brand/property/agency) runs in parallel with contact extraction.
+          type: boolean
+          example: true
+        extract_contacts:
+          description: When true (default), contact extraction runs after markdown conversion completes.
+          type: boolean
+          example: true
+        extract_assets:
+          description: When true (default), asset extraction runs after markdown conversion completes, in parallel with contact extraction.
+          type: boolean
+          example: true
+      type: object
+    StoreNewsAssetRequest:
+      required:
+      - item_id
+      properties:
+        item_id:
+          description: FK to items; must reference an existing catalog row. Searchable via GET /api/search/asset.
+          type: integer
+          example: 481
+        context:
+          description: Optional free-text note persisted on the asset row.
+          type:
+          - string
+          - 'null'
+          example: Mentioned in paragraph 3 as the title sponsor.
+      type: object
+    NewsContactAddResultsResource:
+      properties:
+        results:
+          type: array
+          items:
+            properties:
+              news_contact_id:
+                description: 'Per-row outcome of an "Add contacts selected" request.
+
+
+                  Always one entry per selected id, in the order the rows were read, so a partial
+
+                  failure is visible rather than swallowed by a single overall status.'
+                type: integer
+                example: 4711
+              status:
+                description: A row the reviewer selected that did not end up added is `failed`, with the reason in `message`. The stored add_status is retryable, so re-selecting it tries again.
+                type: string
+                enum:
+                - created
+                - updated
+                - processing
+                - needs_review
+                - already_added
+                - forbidden
+                - failed
+              contact_id:
+                description: The platform contact this row resolved to.
+                type:
+                - integer
+                - 'null'
+              message:
+                description: Readable reason, present on forbidden and failed.
+                type:
+                - string
+                - 'null'
+            type: object
+      type: object
+    NewsSubmissionResource:
+      properties:
+        id:
+          type: integer
+        url:
+          type: string
+        title:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        image:
+          description: Thumbnail URL
+          type:
+          - string
+          - 'null'
+        status:
+          type: string
+          enum:
+          - pending
+          - analysed
+          - published
+          - unpublished
+          - declined
+          - failed
+        error_message:
+          description: Failure reason for a failed submission, sourced from the failed data-ingestion task; null unless status is failed.
+          type:
+          - string
+          - 'null'
+        is_active:
+          type:
+          - boolean
+          - 'null'
+        reporter_id:
+          type: integer
+        submitted_by:
+          description: The user who submitted the article (sourced from reporter_id). Present when the reporter relation is loaded.
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+          type:
+          - object
+          - 'null'
+        content_markdown:
+          type:
+          - string
+          - 'null'
+        ingestion_request_id:
+          type:
+          - string
+          - 'null'
+        logo_id:
+          type:
+          - integer
+          - 'null'
+        published_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        created_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        updated_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        companies:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              approved:
+                type: boolean
+            type: object
+        properties:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              league_id:
+                type: integer
+            type: object
+        agencies:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+            type: object
+        tags:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+            type: object
+        extracted_contacts:
+          description: People extracted from the article, ordered by extraction confidence DESC. Present only on the show endpoint.
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              title:
+                type:
+                - string
+                - 'null'
+              company:
+                type:
+                - string
+                - 'null'
+              role_context:
+                type:
+                - string
+                - 'null'
+              confidence:
+                type: number
+                format: float
+              match:
+                $ref: '#/components/schemas/NewsExtractionMatch'
+              current:
+                $ref: '#/components/schemas/NewsExtractionMatchedContact'
+              add:
+                $ref: '#/components/schemas/NewsExtractionAdd'
+            type: object
+        extracted_quotes:
+          description: Quotes extracted from the article, ordered by extraction confidence DESC. Present only on the show endpoint.
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              title:
+                type:
+                - string
+                - 'null'
+              company:
+                type:
+                - string
+                - 'null'
+              context:
+                type:
+                - string
+                - 'null'
+              confidence:
+                type: number
+                format: float
+              quote_text:
+                type: string
+              quote_type:
+                type: string
+              match:
+                $ref: '#/components/schemas/NewsExtractionMatch'
+              current:
+                $ref: '#/components/schemas/NewsExtractionMatchedContact'
+            type: object
+        extracted_assets:
+          description: Assets extracted from the article (dismissed rows excluded), ordered by extraction confidence DESC. Present only on the show endpoint.
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              suggested_name:
+                type: string
+              confidence:
+                type: number
+                format: float
+              match_status:
+                type: string
+                enum:
+                - pending
+                - auto_match
+                - needs_review
+                - no_match
+                - confirmed
+              source:
+                type: string
+                enum:
+                - extracted
+                - manual
+              context:
+                type:
+                - string
+                - 'null'
+              item:
+                description: Canonical catalog row when the asset has been resolved (auto_match/confirmed).
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type:
+                    - string
+                    - 'null'
+                  description:
+                    type:
+                    - string
+                    - 'null'
+                  item_platform_id:
+                    type: integer
+                  item_subplatform_id:
+                    type: integer
+                type:
+                - object
+                - 'null'
+            type: object
+      type: object
+    NewsExtractionMatchedContact:
+      description: Present-day platform values of the matched contact, for side-by-side comparison against the extracted ones. Null when the extraction resolved to no contact.
+      properties:
+        id:
+          type: integer
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        position:
+          type:
+          - string
+          - 'null'
+        linkedin:
+          type:
+          - string
+          - 'null'
+      type:
+      - object
+      - 'null'
+    AnalyseCuratedNewsResultsResource:
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalyseCuratedNewsResource'
+      type: object
+    ResolveNewsContactRequest:
+      required:
+      - linkedin_url
+      properties:
+        linkedin_url:
+          description: The chosen LinkedIn member profile, usually one of the row's sourced candidates.
+          type: string
+          example: https://www.linkedin.com/in/casey-wasserman
+      type: object
+    CuratedNewsArticlePreviewResource:
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+      type: object
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
+      type: object
+    ActiveCuratedNewsResource:
+      type: array
+      items:
+        allOf:
+        - $ref: '#/components/schemas/CuratedNews'
+        - properties:
+            companies:
+              type: array
+              items:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  subcategory_id:
+                    type: integer
+                  approved:
+                    type: boolean
+                type: object
+          type: object
+        - properties:
+            teams:
+              type: array
+              items:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  league_id:
+                    type: integer
+                type: object
+          type: object
+        - properties:
+            agencies:
+              type: array
+              items:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                type: object
+          type: object
+        - properties:
+            reporter:
+              type: object
+              allOf:
+              - properties:
+                  id:
+                    type: integer
+                  person_profile:
+                    $ref: '#/components/schemas/PersonProfile'
+                type: object
+          type: object
+        - properties:
+            tags:
+              type: array
+              items:
+                $ref: '#/components/schemas/NewsTags'
+          type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

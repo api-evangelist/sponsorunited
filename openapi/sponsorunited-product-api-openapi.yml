@@ -1,0 +1,214 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Product API
+  version: v1
+  description: Product
+tags:
+- name: Product
+  description: Product
+paths:
+  /api/product:
+    get:
+      tags:
+      - Product
+      operationId: 5cc57bec35d0f2045983cc8dcd00eccd
+      responses:
+        '200':
+          description: List of products.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductResource'
+      security:
+      - bearerAuth: []
+      summary: 5cc57bec35d0f2045983cc8dcd00eccd
+      x-summary-source: derived
+    post:
+      tags:
+      - Product
+      operationId: 1d0b0d8724685b7b8f9d87f403bfc4df
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCreateRequest'
+      responses:
+        '200':
+          description: Products details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResource'
+      security:
+      - bearerAuth: []
+      summary: 1d0b0d8724685b7b8f9d87f403bfc4df
+      x-summary-source: derived
+  /api/product/{product_id}:
+    get:
+      tags:
+      - Product
+      operationId: 9d631e70d2683d5e29f944f988b99f8b
+      parameters:
+      - name: id
+        in: path
+        description: Product id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Products details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResource'
+      security:
+      - bearerAuth: []
+      summary: 9d631e70d2683d5e29f944f988b99f8b
+      x-summary-source: derived
+    put:
+      tags:
+      - Product
+      operationId: e1fbefb0afb09c2ebaf2e04353dc83d7
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdateRequest'
+      responses:
+        '200':
+          description: Products details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResource'
+      security:
+      - bearerAuth: []
+      summary: E1fbefb0afb09c2ebaf2e04353dc83d7
+      x-summary-source: derived
+    delete:
+      tags:
+      - Product
+      operationId: f72155e45b912db495b280c1967e9263
+      parameters:
+      - name: id
+        in: path
+        description: Product Id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty on success.
+      security:
+      - bearerAuth: []
+      summary: F72155e45b912db495b280c1967e9263
+      x-summary-source: derived
+components:
+  schemas:
+    ProductUpdateRequest:
+      properties:
+        name:
+          type: string
+          example: Product 1
+        roles:
+          type: string
+          example: 1,2,3
+        surface_limit:
+          properties:
+            organization:
+              type:
+              - integer
+              - 'null'
+              example: 500
+            user:
+              type:
+              - integer
+              - 'null'
+              example: 100
+          type: object
+      type: object
+    RoleResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: admin
+        display_name:
+          type: string
+          example: Administrator
+        description:
+          type: string
+          example: Administrator
+      type: object
+    ProductCreateRequest:
+      properties:
+        name:
+          type: string
+          example: Product 1
+        badge:
+          type: string
+          example: su,supr,spnd
+        roles:
+          type: string
+          example: 1,2,3
+        surface_limit:
+          properties:
+            organization:
+              type:
+              - integer
+              - 'null'
+              example: 500
+            user:
+              type:
+              - integer
+              - 'null'
+              example: 100
+          type: object
+      type: object
+    ProductResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Product 1
+        badge:
+          type: string
+          example: su
+        export_limit:
+          type: integer
+          example: '100'
+        organization_surface_limit:
+          type:
+          - integer
+          - 'null'
+          example: 500
+        user_surface_limit:
+          type:
+          - integer
+          - 'null'
+          example: 100
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleResource'
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

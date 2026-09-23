@@ -1,0 +1,511 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Tasks API
+  version: v1
+  description: Tasks
+tags:
+- name: Tasks
+  description: Tasks
+paths:
+  /api/tasks/metadata:
+    get:
+      tags:
+      - Tasks
+      summary: Get task metadata
+      description: Returns metadata for filtering tasks such as properties, leagues, and managers
+      operationId: 444ba23093ea6f3cf8d23d92af8e6b31
+      parameters:
+      - name: entity_type
+        in: query
+        description: The type of the entity for which to display tasks.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The metadata for the tasks found for the given entity type.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIndexMetadataResource'
+      security:
+      - bearerAuth: []
+  /api/tasks:
+    get:
+      tags:
+      - Tasks
+      summary: List tasks
+      description: Returns a paginated list of tasks filtered by entity type and other criteria
+      operationId: 471d938a3bfaeb6fbd981d7c3e2728b0
+      parameters:
+      - name: entity_type
+        in: query
+        description: The type of the entity for which to display tasks.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The tasks found for the given entity type.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/TaskIndexResource'
+                - $ref: '#/components/schemas/ContactTaskIndexResource'
+      security:
+      - bearerAuth: []
+  /api/tasks/export/invalid-emails:
+    get:
+      tags:
+      - Tasks
+      summary: Export invalid email tasks
+      description: Downloads a CSV file of all invalid email tasks for contacts
+      operationId: fe4d5adeeb1b1e7cc12d5aeb05052c83
+      parameters:
+      - name: entity_type
+        in: query
+        description: The type of the entity for which to export tasks.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A csv file with invalid email tasks for contacts.
+      security:
+      - bearerAuth: []
+  /api/tasks/export/invalid-social-tasks:
+    get:
+      tags:
+      - Tasks
+      summary: Export invalid social tasks
+      description: Downloads a CSV file of all invalid social tasks created for handles
+      operationId: 5a000e24be009bfb116cc4ef5689c983
+      parameters:
+      - name: entity_type
+        in: query
+        description: The type of the entity for which to export tasks.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A csv file with invalid tasks for handles.
+      security:
+      - bearerAuth: []
+  /api/tasks/{id}:
+    get:
+      tags:
+      - Tasks
+      summary: Get task by ID
+      description: Returns a specific task with its details
+      operationId: 90b3cd4d2d4b416dc989d2055dbed06c
+      parameters:
+      - name: id
+        in: path
+        description: The id of the task to fetch.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The task with the given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskShowStoreUpdateResource'
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Tasks
+      summary: Update task
+      description: Updates an existing task's details
+      operationId: 1aaf37e74360ef4c10fadaee02ae77fb
+      parameters:
+      - name: id
+        in: path
+        description: The id of the task to update.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskUpdateRequest'
+      responses:
+        '200':
+          description: The updated task.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskShowStoreUpdateResource'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Tasks
+      summary: Delete task
+      description: Removes a task from the system
+      operationId: ad582480cd57c2a4e3b6a426943eeca5
+      parameters:
+      - name: id
+        in: path
+        description: The id of the task to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty response when task has been deleted successfully.
+          content:
+            application/json:
+              schema: {}
+              example: '[]'
+      security:
+      - bearerAuth: []
+  /api/tasks/:
+    post:
+      tags:
+      - Tasks
+      summary: Create task
+      description: Creates a new task for a property or contact entity
+      operationId: b263247033817cfd225af5d2a51a93fb
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskStoreRequest'
+      responses:
+        '200':
+          description: The newly created task.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskShowStoreUpdateResource'
+      security:
+      - bearerAuth: []
+  /api/tasks/{taskId}/assign:
+    put:
+      tags:
+      - Tasks
+      summary: Assign task to user
+      description: Assigns a task to the authenticated user
+      operationId: 8e3bea883b14aa0aae0f3f808b0beac1
+      parameters:
+      - name: taskId
+        in: path
+        description: The id of the task to assign.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Task assigned successfully.
+          content:
+            application/json:
+              schema: {}
+              example: '[]'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ContactLinkedinData:
+      properties:
+        id:
+          type: integer
+        person_profile_id:
+          type: integer
+        type:
+          type: string
+          example: agency|company|property
+        data:
+          description: JSON data fetched from Linkedin, with jobs, schools, skills, general data etc.
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    TaskShowStoreUpdateResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Task'
+      - properties:
+          entity_logo:
+            type: string
+          league_id:
+            type: integer
+          league_name:
+            type: string
+        type: object
+    Task:
+      properties:
+        id:
+          type: integer
+        session_id:
+          type:
+          - integer
+          - 'null'
+        type:
+          type: string
+        entity_id:
+          type: integer
+        entity_ulid:
+          type: string
+        entity_type:
+          type: string
+        invalid_data:
+          type: string
+        reason:
+          type: string
+        assigned_to:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        due_date:
+          type: string
+          format: date-time
+      type: object
+    PropertyContact:
+      properties:
+        id:
+          type: integer
+        property_id:
+          type: integer
+        name:
+          type: string
+        position:
+          type: string
+        suggested:
+          type: integer
+        previous_suggested:
+          type: integer
+        approved:
+          type: boolean
+        notes:
+          type: string
+        birthday:
+          type: string
+          deprecated: true
+        profile_picture:
+          type: string
+        work_phone:
+          type: string
+        work_phone_ext:
+          type: string
+        email:
+          type: string
+        previous_email_status:
+          type: string
+        previous_email_status_updated_at:
+          type: string
+          format: date-time
+        email_status:
+          type: string
+        email_status_updated_at:
+          type: string
+          format: date-time
+        mail_code:
+          type: string
+        linkedin:
+          description: Linkedin profile url
+          type: string
+        facebook:
+          description: Facebook profile url
+          type: string
+        twitter:
+          description: Twitter profile url
+          type: string
+        instagram:
+          description: Instagram profile url
+          type: string
+        synopsys:
+          type: string
+          deprecated: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+        linkedin_data:
+          $ref: '#/components/schemas/ContactLinkedinData'
+        agencies:
+          description: An array with agencies to which a contact that represents the current property belongs.
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              logo:
+                type: string
+              properties:
+                description: An array with properties represented by the current contact.
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    logo:
+                      type: string
+                  type: object
+            type: object
+      type: object
+    TaskIndexResource:
+      type: array
+      items:
+        allOf:
+        - $ref: '#/components/schemas/Task'
+        - properties:
+            entity_ulid:
+              type: string
+            entity_logo:
+              type: string
+            league_id:
+              type: integer
+            league_name:
+              type: string
+            league_manager_id:
+              type: integer
+            league_manager_name:
+              type: string
+          type: object
+    AgencyContactIndexResource:
+      type: array
+      items: {}
+      allOf:
+      - $ref: '#/components/schemas/PropertyContact'
+    ContactTaskIndexResource:
+      type: array
+      items:
+        allOf:
+        - $ref: '#/components/schemas/Task'
+        - properties:
+            contact_type:
+              type: string
+            related_entity_id:
+              type: integer
+            related_entity_name:
+              type: string
+            related_entity_logo:
+              type: string
+            related_entity_ulid:
+              type: string
+            contact:
+              type: object
+              oneOf:
+              - $ref: '#/components/schemas/AgencyContactIndexResource'
+              - $ref: '#/components/schemas/PropertyContactIndexResource'
+              - $ref: '#/components/schemas/BrandContactIndexResource'
+          type: object
+    TaskUpdateRequest:
+      properties:
+        session_id:
+          type: integer
+        type:
+          type: string
+        entity_id:
+          type: integer
+        entity_type:
+          type: string
+        invalid_data:
+          type: string
+      type: object
+    TaskIndexMetadataResource:
+      properties:
+        type:
+          type: array
+          items:
+            allOf:
+            - properties:
+                text:
+                  type: string
+                name:
+                  type: string
+              type: object
+        entity:
+          type: array
+          items:
+            allOf:
+            - properties:
+                id:
+                  type: integer
+                text:
+                  type: string
+                league_id:
+                  type: integer
+                league_manager_id:
+                  type: integer
+              type: object
+        league:
+          type: array
+          items:
+            allOf:
+            - properties:
+                id:
+                  type: integer
+                text:
+                  type: string
+                league_manager_id:
+                  type: integer
+              type: object
+        league_manager:
+          type: array
+          items:
+            allOf:
+            - properties:
+                id:
+                  type: integer
+                text:
+                  type: string
+              type: object
+      type: object
+    PropertyContactIndexResource:
+      type: array
+      items: {}
+      allOf:
+      - $ref: '#/components/schemas/PropertyContact'
+    BrandContactIndexResource:
+      type: array
+      items: {}
+      allOf:
+      - $ref: '#/components/schemas/PropertyContact'
+    TaskStoreRequest:
+      properties:
+        scraping_session_id:
+          type: integer
+        type:
+          type: string
+        entity_id:
+          type: integer
+        entity_type:
+          type: string
+        invalid_data:
+          type: string
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

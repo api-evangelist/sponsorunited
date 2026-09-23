@@ -1,0 +1,401 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Saved Reports API
+  version: v1
+  description: Saved Reports
+tags:
+- name: Saved Reports
+  description: Saved Reports
+paths:
+  /api/saved-report:
+    post:
+      tags:
+      - Saved Reports
+      summary: Create saved report
+      description: Creates a new saved report with the provided name, type, URL, and payload data
+      operationId: 4b17aa49f0abf8949e4abc0977c76b7e
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedReportStoreRequest'
+      responses:
+        '200':
+          description: The new report.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedReportResource'
+      security:
+      - bearerAuth: []
+  /api/saved-report/{id}:
+    put:
+      tags:
+      - Saved Reports
+      summary: Update saved report
+      description: Updates an existing saved report's name, type, URL, payload, or description
+      operationId: e4a65fb6c9ecaf55bcc616c4c574c2b5
+      parameters:
+      - name: id
+        in: path
+        description: The id of the saved report to update.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The updated report.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedReportResource'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Saved Reports
+      summary: Delete saved report
+      description: Permanently removes a saved report from the system
+      operationId: ff2f1444c914623a22c0192e67dbc52c
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty on success.
+      security:
+      - bearerAuth: []
+  /api/saved-report/{id}/duplicate:
+    post:
+      tags:
+      - Saved Reports
+      summary: Duplicate saved report
+      description: Creates a copy of an existing saved report with a new name
+      operationId: 723516a6ca767d93c8130a900001cfe1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedReportUpdateRequest'
+      responses:
+        '200':
+          description: The duplicate report.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedReportResource'
+      security:
+      - bearerAuth: []
+  /api/saved-report-light/{id}/duplicate:
+    post:
+      tags:
+      - Saved Reports
+      summary: Duplicate light report
+      description: Creates a copy of an existing light report without thumbnail data
+      operationId: 6c0f74781e0fe168304ee8b993ec7c38
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedReportUpdateRequest'
+      responses:
+        '200':
+          description: The duplicated light report.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedReportLightResource'
+      security:
+      - bearerAuth: []
+  /api/saved-report-light:
+    post:
+      tags:
+      - Saved Reports
+      summary: Create light report
+      description: Creates a new saved report without generating a thumbnail image
+      operationId: edd4a58f082fabf7ef3629d9a1f224e1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedReportStoreRequest'
+      responses:
+        '200':
+          description: The new report without thumbnail.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedReportLightResource'
+      security:
+      - bearerAuth: []
+  /api/saved-report-light/{id}:
+    put:
+      tags:
+      - Saved Reports
+      summary: Update light report
+      description: Updates an existing light report without regenerating thumbnail data
+      operationId: 39b5adc9239e1dfbb1a3c003c9639bb0
+      parameters:
+      - name: id
+        in: path
+        description: The id of the saved report to update.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedReportStoreRequest'
+      responses:
+        '200':
+          description: The updated report without thumbnail.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedReportLightResource'
+      security:
+      - bearerAuth: []
+  /api/saved-report/{savedReport}/share:
+    post:
+      tags:
+      - Saved Reports
+      summary: Share saved report
+      description: Shares a saved report with specified users or organizations by creating copies for each recipient
+      operationId: d5c66ff43c9179ea630704c0dcd3dadb
+      parameters:
+      - name: savedReport
+        in: path
+        description: The ID of the saved report to share
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedReportShareRequest'
+      responses:
+        '200':
+          description: Report shared successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedReportLightCollection'
+        '404':
+          description: Report not found
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                type: object
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                type: object
+      security:
+      - bearerAuth: []
+  /api/saved-report/{id}/mark-viewed:
+    post:
+      tags:
+      - Saved Reports
+      summary: Mark saved report as viewed
+      description: Marks a saved report as viewed by the authenticated user
+      operationId: c9223109f8bbfd438f21dbb3ed54c7b4
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the saved report to mark as viewed
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Report marked as viewed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedReportResource'
+        '403':
+          description: Access denied - user is not the owner of this report
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: You do not have permission to mark this report as viewed.
+                type: object
+        '404':
+          description: Report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Not found
+                type: object
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    SavedReportResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          type: string
+        url:
+          type: string
+        payload:
+          type: string
+        is_viewed:
+          type: boolean
+        source_user_id:
+          type: integer
+        source_report_id:
+          type: integer
+      type: object
+    SavedReportUpdateRequest:
+      properties:
+        name:
+          type: string
+      type: object
+    SavedReportShareRequest:
+      required:
+      - user_ids
+      properties:
+        user_ids:
+          description: Array of user IDs to share the report with
+          type: array
+          items:
+            type: integer
+          minItems: 1
+      type: object
+    SavedReportStoreRequest:
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          example: spend-categories|spend-major-assets|spend-deal-builder|spend-comparison|categories|markets|leagues|assets|properties-comparison|brands-comparison|trending-topics|smart-search-results|proposal-evaluator|smart-lists-contacts
+        url:
+          type: string
+        payload:
+          description: Report state, persisted as sent. Its shape depends on `type`, and the server reads type-specific keys from it to resolve the report thumbnail. For `trending-topics`, `seasons` is a comma-separated list of four-digit years and `search_term` a comma-separated list of terms.
+          type: object
+          example:
+            seasons: 2023,2024
+            search_term: nike,adidas
+      type: object
+    SavedReportLightCollection:
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SavedReportLightResource'
+        links:
+          properties:
+            first:
+              type: string
+            last:
+              type: string
+            prev:
+              type:
+              - string
+              - 'null'
+            next:
+              type:
+              - string
+              - 'null'
+          type: object
+        meta:
+          properties:
+            current_page:
+              type: integer
+            from:
+              type: integer
+            last_page:
+              type: integer
+            path:
+              type: string
+            per_page:
+              type: integer
+            to:
+              type: integer
+            total:
+              type: integer
+          type: object
+      type: object
+    SavedReportLightResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          type: string
+        url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

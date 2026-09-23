@@ -1,0 +1,68 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Product Type API
+  version: v1
+  description: Product Type
+tags:
+- name: Product Type
+  description: Product Type
+paths:
+  /api/product-type:
+    get:
+      tags:
+      - Product Type
+      summary: List all product types
+      description: Returns all available product types with their associated organization types. Product types define the categories of products available in the platform
+      operationId: d0119194a566221bfbbbd5ecd5caa5a1
+      responses:
+        '200':
+          description: All Product Types.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                  - $ref: '#/components/schemas/ProductType'
+                  - properties:
+                      organization_type:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/OrganizationType'
+                    type: object
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ProductType:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
+    OrganizationType:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        properties:
+          type: boolean
+        brands:
+          type: boolean
+        agencies:
+          type: boolean
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

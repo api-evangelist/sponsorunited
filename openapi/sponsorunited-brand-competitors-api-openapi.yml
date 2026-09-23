@@ -1,0 +1,511 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Brand Competitors API
+  version: v1
+  description: Brand Competitors
+tags:
+- name: Brand Competitors
+  description: Brand Competitors
+paths:
+  /api/admin/brand-competitors/review-items:
+    get:
+      tags:
+      - Brand Competitors
+      summary: List brand competitor review items
+      description: Paginated list of review items produced by the brand-competitor matching pipeline. Requires approve-company permission.
+      operationId: ef33ce8f47232350778e28b7a8128da2
+      parameters:
+      - name: status
+        in: query
+        description: Filter by review status. Defaults to pending.
+        required: false
+        schema:
+          type: string
+          default: pending
+          enum:
+          - pending
+          - approved
+          - rejected
+          - superseded
+      - name: source_brand_id
+        in: query
+        description: Filter by source brand id (companies.id).
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          example: 4711
+      - name: q
+        in: query
+        description: Substring search over raw_competitor_name / normalized_name.
+        required: false
+        schema:
+          type: string
+          maxLength: 255
+          example: coca
+      - name: order_by
+        in: query
+        description: 'Sort column. Default: last_seen_at.'
+        required: false
+        schema:
+          type: string
+          default: last_seen_at
+          enum:
+          - last_seen_at
+          - first_seen_at
+          - suggested_score
+      - name: order_direction
+        in: query
+        description: 'Sort direction. Default: desc.'
+        required: false
+        schema:
+          type: string
+          default: desc
+          enum:
+          - asc
+          - desc
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+          example: 1
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          example: 25
+      responses:
+        '200':
+          description: Paginated review items.
+          content:
+            application/json:
+              schema:
+                properties:
+                  current_page:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BrandCompetitorReviewItemResource'
+                  first_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  from:
+                    type:
+                    - integer
+                    - 'null'
+                    example: 1
+                  last_page:
+                    type: integer
+                    example: 12
+                  last_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  links:
+                    type: array
+                    items:
+                      properties:
+                        url:
+                          type:
+                          - string
+                          - 'null'
+                        label:
+                          type: string
+                        active:
+                          type: boolean
+                      type: object
+                  next_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  path:
+                    type:
+                    - string
+                    - 'null'
+                  per_page:
+                    type: integer
+                    example: 25
+                  prev_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  to:
+                    type:
+                    - integer
+                    - 'null'
+                    example: 25
+                  total:
+                    type: integer
+                    example: 287
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+  /api/admin/brand-competitors/review-items/summary:
+    get:
+      tags:
+      - Brand Competitors
+      summary: Summary of the brand competitor review queue
+      description: Returns count by status and the top source brands ranked by pending items. Requires approve-company permission.
+      operationId: 06edd57996f87e3cf16b3f38425bdd9d
+      responses:
+        '200':
+          description: Summary payload.
+          content:
+            application/json:
+              schema:
+                properties:
+                  counts:
+                    properties:
+                      pending:
+                        type: integer
+                        example: 37
+                      approved:
+                        type: integer
+                        example: 240
+                      rejected:
+                        type: integer
+                        example: 15
+                      superseded:
+                        type: integer
+                        example: 4
+                    type: object
+                  top_source_brands:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                          example: 4711
+                        name:
+                          type: string
+                          example: Coca-Cola Company
+                        pending_count:
+                          type: integer
+                          example: 6
+                      type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+  /api/admin/brand-competitors/review-items/{id}:
+    get:
+      tags:
+      - Brand Competitors
+      summary: Show a brand competitor review item
+      description: Full detail with re-hydrated candidates_payload. Requires approve-company permission.
+      operationId: 5994068bc291fd6584835d19294042fb
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Single review item.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: '#/components/schemas/BrandCompetitorReviewItemResource'
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Review item not found
+      security:
+      - bearerAuth: []
+  /api/admin/brand-competitors/review-items/{id}/approve:
+    post:
+      tags:
+      - Brand Competitors
+      summary: Approve a brand competitor review item
+      description: Marks the review item as approved and persists the resulting pair in brand_competitors. Requires approve-company permission.
+      operationId: c550a86e80111c831db9d16b2f54cafb
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApproveBrandCompetitorReviewItemRequest'
+      responses:
+        '200':
+          description: Item approved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandCompetitorReviewItemResource'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Review item or resolution brand not found
+        '422':
+          description: Validation error (already resolved or self-link)
+      security:
+      - bearerAuth: []
+  /api/admin/brand-competitors/review-items/{id}/reject:
+    post:
+      tags:
+      - Brand Competitors
+      summary: Reject a brand competitor review item
+      description: Marks the review item as rejected with a reason and optional note. Requires approve-company permission.
+      operationId: dddca4d8e4a781afaa11c6fd38fa1d2c
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectBrandCompetitorReviewItemRequest'
+      responses:
+        '200':
+          description: Item rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandCompetitorReviewItemResource'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Review item not found
+        '422':
+          description: Validation error (already resolved)
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    RejectBrandCompetitorReviewItemRequest:
+      required:
+      - rejection_reason
+      properties:
+        rejection_reason:
+          type: string
+          enum:
+          - not_a_brand
+          - not_on_platform
+          - scraper_noise
+          - other
+          example: scraper_noise
+        note:
+          description: Free-form rationale. Required when rejection_reason=other.
+          type:
+          - string
+          - 'null'
+          maxLength: 2048
+          example: OCR noise from synopsis HTML extraction.
+      type: object
+    ApproveBrandCompetitorReviewItemRequest:
+      required:
+      - resolution_brand_id
+      properties:
+        resolution_brand_id:
+          description: ID of the existing brand (companies.id) to link as competitor.
+          type: integer
+          example: 4711
+      type: object
+    BrandCompetitorReviewItemResource:
+      properties:
+        id:
+          type: integer
+          example: 12345
+        raw_competitor_name:
+          type: string
+          example: Pepsi Inc.
+        normalized_name:
+          type: string
+          example: pepsi
+        suggested_score:
+          type:
+          - integer
+          - 'null'
+          example: 87
+        status:
+          type: string
+          enum:
+          - pending
+          - approved
+          - rejected
+          - superseded
+          example: pending
+        rejection_reason:
+          type:
+          - string
+          - 'null'
+          enum:
+          - not_a_brand
+          - not_on_platform
+          - scraper_noise
+          - other
+          example: null
+        note:
+          type:
+          - string
+          - 'null'
+          example: null
+        ingestion_run_id:
+          type:
+          - string
+          - 'null'
+          example: 01HFK8MZ4Y3R6XPC8KH3D2VVPS
+        first_seen_at:
+          type: string
+          format: date-time
+          example: '2026-05-20T14:32:11+00:00'
+        last_seen_at:
+          type: string
+          format: date-time
+          example: '2026-05-24T08:11:02+00:00'
+        resolved_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: null
+        source_brand:
+          properties:
+            id:
+              type: integer
+              example: 4711
+            name:
+              type: string
+              example: Coca-Cola Company
+            logo:
+              type:
+              - string
+              - 'null'
+              example: null
+          type: object
+        suggested_target:
+          properties:
+            id:
+              type: integer
+              example: 9001
+            name:
+              type: string
+              example: Pepsi
+            logo:
+              type:
+              - string
+              - 'null'
+              example: null
+          type:
+          - object
+          - 'null'
+        resolution_brand:
+          properties:
+            id:
+              type: integer
+              example: 9001
+            name:
+              type: string
+              example: Pepsi
+            logo:
+              type:
+              - string
+              - 'null'
+              example: null
+          type:
+          - object
+          - 'null'
+        resolved_by:
+          properties:
+            id:
+              type: integer
+              example: 42
+            name:
+              type:
+              - string
+              - 'null'
+              example: Jane Reviewer
+            email:
+              type:
+              - string
+              - 'null'
+              example: jane@sponsorunited.com
+          type:
+          - object
+          - 'null'
+        candidates:
+          description: Re-hydrated from candidates_payload using the current companies state.
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+                example: 9001
+              name:
+                type: string
+                example: Pepsi
+              logo:
+                type:
+                - string
+                - 'null'
+                example: null
+              score:
+                type: integer
+                example: 87
+              relationship:
+                type:
+                - string
+                - 'null'
+                enum:
+                - parent
+                - subsidiary
+                - sibling
+                example: null
+              exists:
+                description: False when the candidate id no longer points to an active brand.
+                type: boolean
+                example: true
+            type: object
+        matcher_version:
+          type:
+          - string
+          - 'null'
+          example: v1
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

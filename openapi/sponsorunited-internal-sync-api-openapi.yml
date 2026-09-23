@@ -1,0 +1,352 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Internal Sync API
+  version: v1
+  description: Internal Sync
+tags:
+- name: Internal Sync
+  description: Internal Sync
+paths:
+  /api/internal/sync/brands:
+    get:
+      tags:
+      - Internal Sync
+      summary: Paginated brand reference data for internal service sync
+      description: Returns a cursor-paginated list of brand id and name pairs. Brands map to the Company model internally. Intended for service-to-service consumption by vortex-api. Walk pages using the returned next_cursor as after_id until data is empty.
+      operationId: eb1be6c3c1a6ad6ceaeb2412572d9013
+      parameters:
+      - name: after_id
+        in: query
+        description: 'Cursor: return records with id greater than this value. Omit for the first page.'
+        required: false
+        schema:
+          type:
+          - integer
+          - 'null'
+          example: 500
+      - name: per_page
+        in: query
+        description: Number of records per page (1–10000, default 500).
+        required: false
+        schema:
+          type: integer
+          example: 500
+      responses:
+        '200':
+          description: Paginated brand list
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GenericEntity'
+                  next_cursor:
+                    description: Id of the last record on this page. Pass as after_id on the next request. Null when data is empty.
+                    type:
+                    - integer
+                    - 'null'
+                    example: 1500
+                type: object
+        '401':
+          description: Missing or invalid API key
+        '422':
+          description: Validation error
+      security:
+      - apiKeyAuth: []
+  /api/internal/sync/league-assets:
+    get:
+      tags:
+      - Internal Sync
+      summary: Paginated per-league capture-scope assets for internal service sync
+      description: 'Returns a cursor-paginated list of the assets in capture scope for each league: every league_items row whose item captures something per brand (hasFrequency or hasAmount), sits on a VENUE or PROPERTY platform, and is not soft-deleted. MEDIA assets are excluded — a broadcast or streaming commercial cannot be observed by a scout walking a venue. Key-asset status is a ranking hint, not a filter. Each row carries capture_type so the consumer knows which input to render, and item_subplatform because item_name alone is ambiguous. Intended for service-to-service consumption by vortex-api. Walk pages using the returned next_cursor as after_id until data is empty.'
+      operationId: 09babef733ef121274ebf107361d7d97
+      parameters:
+      - name: after_id
+        in: query
+        description: 'Cursor: return records with id greater than this value. Omit for the first page.'
+        required: false
+        schema:
+          type:
+          - integer
+          - 'null'
+          example: 500
+      - name: per_page
+        in: query
+        description: Number of records per page (1–10000, default 500).
+        required: false
+        schema:
+          type: integer
+          example: 500
+      responses:
+        '200':
+          description: Paginated per-league capture-scope assets
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LeagueAssetEntity'
+                  next_cursor:
+                    description: Id of the last record on this page. Pass as after_id on the next request. Null when data is empty.
+                    type:
+                    - integer
+                    - 'null'
+                    example: 98716
+                type: object
+        '401':
+          description: Missing or invalid API key
+        '422':
+          description: Validation error
+      security:
+      - apiKeyAuth: []
+  /api/internal/sync/properties:
+    get:
+      tags:
+      - Internal Sync
+      summary: Paginated property reference data for internal service sync
+      description: Returns a cursor-paginated list of properties as id, name and league_id. Properties map to the Team model internally. Intended for service-to-service consumption by vortex-api. Walk pages using the returned next_cursor as after_id until data is empty.
+      operationId: c7b0c346b6ba87c7709dfafee4201fc1
+      parameters:
+      - name: after_id
+        in: query
+        description: 'Cursor: return records with id greater than this value. Omit for the first page.'
+        required: false
+        schema:
+          type:
+          - integer
+          - 'null'
+          example: 500
+      - name: per_page
+        in: query
+        description: Number of records per page (1–10000, default 500).
+        required: false
+        schema:
+          type: integer
+          example: 500
+      responses:
+        '200':
+          description: Paginated property list
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PropertySyncEntity'
+                  next_cursor:
+                    description: Id of the last record on this page. Pass as after_id on the next request. Null when data is empty.
+                    type:
+                    - integer
+                    - 'null'
+                    example: 1500
+                type: object
+        '401':
+          description: Missing or invalid API key
+        '422':
+          description: Validation error
+      security:
+      - apiKeyAuth: []
+  /api/internal/sync/property-known-brands:
+    get:
+      tags:
+      - Internal Sync
+      summary: Paginated property/asset brand history for internal service sync
+      description: Returns a cursor-paginated list of (property, asset, brand) triples derived from approved audits in the current and prior season. Read straight from the property_asset_brand_history table, which is rebuilt nightly — no aggregation happens at request time. Intended for service-to-service consumption by vortex-api. Walk pages using the returned next_cursor as after_id until data is empty.
+      operationId: a6b51ca083fd0296c53223bd546c06e1
+      parameters:
+      - name: after_id
+        in: query
+        description: 'Cursor: return records with id greater than this value. Omit for the first page.'
+        required: false
+        schema:
+          type:
+          - integer
+          - 'null'
+          example: 500
+      - name: per_page
+        in: query
+        description: Number of records per page (1–10000, default 500).
+        required: false
+        schema:
+          type: integer
+          example: 500
+      responses:
+        '200':
+          description: Paginated property/asset brand history
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PropertyKnownBrandEntity'
+                  next_cursor:
+                    description: Id of the last record on this page. Pass as after_id on the next request. Null when data is empty.
+                    type:
+                    - integer
+                    - 'null'
+                    example: 1500
+                type: object
+        '401':
+          description: Missing or invalid API key
+        '422':
+          description: Validation error
+      security:
+      - apiKeyAuth: []
+  /api/internal/sync/venues:
+    get:
+      tags:
+      - Internal Sync
+      summary: Paginated venue reference data for internal service sync
+      description: Returns a cursor-paginated list of venue id and name pairs. Intended for service-to-service consumption by vortex-api. Walk pages using the returned next_cursor as after_id until data is empty.
+      operationId: f515866308595b255b8a5ec1029f563e
+      parameters:
+      - name: after_id
+        in: query
+        description: 'Cursor: return records with id greater than this value. Omit for the first page.'
+        required: false
+        schema:
+          type:
+          - integer
+          - 'null'
+          example: 500
+      - name: per_page
+        in: query
+        description: Number of records per page (1–10000, default 500).
+        required: false
+        schema:
+          type: integer
+          example: 500
+      responses:
+        '200':
+          description: Paginated venue list
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GenericEntity'
+                  next_cursor:
+                    description: Id of the last record on this page. Pass as after_id on the next request. Null when data is empty.
+                    type:
+                    - integer
+                    - 'null'
+                    example: 1500
+                type: object
+        '401':
+          description: Missing or invalid API key
+        '422':
+          description: Validation error
+      security:
+      - apiKeyAuth: []
+components:
+  schemas:
+    PropertyKnownBrandEntity:
+      properties:
+        id:
+          description: Row id. Use as the after_id cursor.
+          type: integer
+          example: 42
+        team_id:
+          description: Property the brand was recorded against.
+          type: integer
+          example: 2
+        item_id:
+          description: Asset the brand was recorded on.
+          type: integer
+          example: 191
+        company_id:
+          description: Brand id.
+          type: integer
+          example: 55
+        company_name:
+          description: Brand name, denormalized so consumers need no second lookup.
+          type:
+          - string
+          - 'null'
+          example: Nike
+      type: object
+    GenericEntity:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
+    LeagueAssetEntity:
+      properties:
+        id:
+          description: league_items row id. Use as the after_id cursor.
+          type: integer
+          example: 38439
+        league_id:
+          description: League the asset is in capture scope for.
+          type: integer
+          example: 109
+        item_id:
+          description: Asset id. Identifies the tab; two assets in one league may share a name, so never key on item_name.
+          type: integer
+          example: 350
+        item_name:
+          description: Asset name, denormalized so consumers need no second lookup. NOT unique within a league — MLB carries eleven distinct assets under this exact name.
+          type: string
+          example: 'COMMERCIAL: Recorded'
+        item_platform:
+          description: Platform name — the coarse family the asset belongs to. Intended for grouping a league's assets into something navigable, and for telling venue-observable assets apart from broadcast ones. Null when the item has no platform.
+          type:
+          - string
+          - 'null'
+          example: 'MEDIA:  Broadcast, Streaming & Other'
+        item_subplatform:
+          description: Subplatform name, and the only thing separating same-named assets. Null when the item has no subplatform. Consumers must use it to disambiguate labels.
+          type:
+          - string
+          - 'null'
+          example: 'TV: Pre Show(s)'
+        is_key_asset:
+          description: 'Whether the asset is flagged key for this league. A ranking hint, not a filter: key assets make sensible default tabs, non-key ones are opt-in.'
+          type: integer
+          example: 1
+        capture_type:
+          description: 'What the asset captures per brand, and therefore the input the scout is given: ''frequency'' counts occurrences and is pushed as items[].frequency; ''amount'' records presence or quantity and is pushed as items[].value.'
+          type: string
+          enum:
+          - frequency
+          - amount
+          example: frequency
+      type: object
+    PropertySyncEntity:
+      properties:
+        id:
+          type: integer
+          example: 42
+        name:
+          type: string
+          example: New England Patriots
+        league_id:
+          description: League the property belongs to. Consumers map property -> league to resolve league-scoped reference data offline.
+          type:
+          - integer
+          - 'null'
+          example: 7
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

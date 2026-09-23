@@ -1,0 +1,1326 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Organization API
+  version: v1
+  description: Organization
+tags:
+- name: Organization
+  description: Organization
+paths:
+  /api/organization:
+    get:
+      tags:
+      - Organization
+      summary: List organizations
+      description: Returns a paginated or slim list of organizations with optional filtering by type, contract status, and more
+      operationId: d7e9f6249d9c3e47bfbe93d7443024d5
+      parameters:
+      - name: OrganizationIndexRequest
+        in: query
+        schema:
+          $ref: '#/components/schemas/OrganizationIndexRequest'
+      responses:
+        '200':
+          description: A list of organizations with some relations.
+      security:
+      - bearerAuth: []
+  /api/organization/limit-access-types:
+    get:
+      tags:
+      - Organization
+      summary: List organization limit-access types
+      description: Returns all selectable access-limiting modes (e.g. su, spnd_agency) for the organization Profile & Access screen.
+      operationId: 9fc24fe91dc4d6d90c95277245bf8a2c
+      responses:
+        '200':
+          description: A list of organization limit-access types.
+      security:
+      - bearerAuth: []
+  /api/organization/{id}:
+    get:
+      tags:
+      - Organization
+      summary: Show organization
+      description: Returns a single organization by ID. Pass `?slim=1` for a lightweight response or omit for the full representation with relationships (excluding users).
+      operationId: c6eaed98be50125ab15f307335034733
+      parameters:
+      - name: id
+        in: path
+        description: ID of the organization
+        required: true
+        schema:
+          type: integer
+      - name: slim
+        in: query
+        description: When truthy, returns the organization via Organization::withTrashed()->findOrFail() without extra relationships
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Organization details
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden — user does not have view-administration-organization permission
+        '404':
+          description: Organization not found
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Organization
+      summary: Update organization
+      description: Updates core organization attributes (name, product, type, MFA) and syncs representatives, users, markets, and property-type access. Does NOT update contract, subscription, account limits, or surface-usage limits — use `PUT /api/organization/{organizationId}/contract/update` for those.
+      operationId: c02b93d9c41f9b5b9b8500f4c7703194
+      parameters:
+      - name: id
+        in: path
+        description: ID of the organization
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdateRequest'
+      responses:
+        '200':
+          description: Organization updated
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden — user does not have edit-organization permission
+        '404':
+          description: Organization not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/organization/{organizationId}/property-types:
+    post:
+      tags:
+      - Organization
+      summary: Sync organization property types
+      description: Updates the property types access list for an organization
+      operationId: b2d204294987ec34fb221b6681ae5bdf
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationSyncPropertyTypeRequest'
+      responses:
+        '200':
+          description: Property types.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationSyncPropertyTypeResource'
+      security:
+      - bearerAuth: []
+  /api/organization/{organizationId}/markets:
+    post:
+      tags:
+      - Organization
+      summary: Sync organization markets
+      description: Updates the markets access list for an organization
+      operationId: 846eeb3e555479af60d87fecfbafe28d
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationSyncMarketsRequest'
+      responses:
+        '200':
+          description: Markets.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationSyncMarketsResource'
+      security:
+      - bearerAuth: []
+  /api/organizations/{organizationId}/access:
+    get:
+      tags:
+      - Organization
+      summary: Get access information for an organization
+      operationId: 1ffa201c65ab4ada35f8eec1deb71274
+      parameters:
+      - name: organizationId
+        in: path
+        description: ID of the organization
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationAccessResource'
+      security:
+      - bearerAuth: []
+  /api/organizations/{organizationId}/users:
+    get:
+      tags:
+      - Organization
+      summary: Get users from organization
+      operationId: a40971204aa0a52b1e45306a771666dc
+      parameters:
+      - name: organizationId
+        in: path
+        description: ID of the organization
+        required: true
+        schema:
+          type: integer
+      - name: user_name
+        in: query
+        description: Filter users by name
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: Page number for pagination
+        required: false
+        schema:
+          type: integer
+      - name: per_page
+        in: query
+        description: Number of results per page
+        required: false
+        schema:
+          type: integer
+      - name: status
+        in: query
+        description: Filter users by status
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - active
+            - inactive
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationUsersResource'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Organization
+      summary: Delete users from organization
+      operationId: 789d59a344ae67c564163fdfa5bff9e8
+      parameters:
+      - name: organizationId
+        in: path
+        description: ID of the organization
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty response when organization users has been deleted successfully.
+          content:
+            application/json:
+              schema: {}
+              example: '[]'
+      security:
+      - bearerAuth: []
+  /api/organization/{organizationId}/contract:
+    get:
+      tags:
+      - Organization
+      summary: Get organization contract
+      description: Returns contract details for an organization including billing and subscription information
+      operationId: 3e20227a3888c1e50aef1c0adc279650
+      parameters:
+      - name: organizationId
+        in: path
+        description: ID of the organization
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationContractResource'
+      security:
+      - bearerAuth: []
+  /api/organization/{organizationId}/contract/update:
+    put:
+      tags:
+      - Organization
+      summary: Update organization contract
+      description: Updates contract-related fields for an organization, including account limits, surface usage limits, subscription details, and Salesforce integration fields.
+      operationId: a43d85dce02b65cff44049c6527a8177
+      parameters:
+      - name: organizationId
+        in: path
+        description: ID of the organization
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdateContractRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationContractResource'
+      security:
+      - bearerAuth: []
+  /api/organization/{organizationId}/users/download:
+    get:
+      tags:
+      - Organization
+      summary: Export users from organization
+      operationId: 086ce38682c5572d54633c9dace2302e
+      parameters:
+      - name: organizationId
+        in: path
+        description: ID of the organization
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A csv file with users data.
+      security:
+      - bearerAuth: []
+  /api/organization/{organizationId}/integration/salesforce:
+    get:
+      tags:
+      - Organization
+      summary: Get Salesforce integration
+      description: Returns Salesforce integration settings and fields for an organization
+      operationId: 3a2a66df0516c68e3bb2dfc35903ca28
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A list of salesforce integration for the organization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsSalesforceResource'
+      security:
+      - bearerAuth: []
+  /api/organization/{organizationId}/integration/salesforce/save:
+    post:
+      tags:
+      - Organization
+      summary: Save Salesforce integration
+      description: Creates or updates Salesforce integration settings for an organization
+      operationId: ef42519e63760645836c779bd0975bec
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveSalesforceRequest'
+      responses:
+        '200':
+          description: The duplicate report.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsSalesforceResource'
+      security:
+      - bearerAuth: []
+  /api/organization/{organizationId}/eval-proposal/save:
+    post:
+      tags:
+      - Organization
+      summary: Save evaluation proposal limit for an organization
+      description: Updates the evaluation deep mode limit for the specified organization
+      operationId: 91fdfaa8436dd74e405049a7d3449f6e
+      parameters:
+      - name: organizationId
+        in: path
+        description: ID of the organization
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Evaluation proposal data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationEvalProposalSaveRequest'
+      responses:
+        '200':
+          description: Organization with updated evaluation proposal limit
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Example Organization
+                  eval_deep_mode_limit:
+                    type: integer
+                    example: 10
+                type: object
+        '404':
+          description: Organization not found
+        '500':
+          description: Failed to save evaluation proposal limit
+      security:
+      - bearerAuth: []
+  /api/organizations/intercom-sync:
+    post:
+      tags:
+      - Organization
+      summary: Sync organizations to Intercom
+      description: Triggers bulk synchronization of organizations to Intercom. Returns a job status ID for tracking progress.
+      operationId: 204f5ff35e569f1f8cc07aa7110aa8e9
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationIntercomSyncRequest'
+      responses:
+        '202':
+          description: Sync job has been queued
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Organizations sync to Intercom has been queued
+                  total_organizations:
+                    type: integer
+                    example: 123
+                type: object
+        '403':
+          description: Forbidden - User does not have permission
+      security:
+      - bearerAuth: []
+  /api/organizations/intercom-sync-status:
+    get:
+      tags:
+      - Organization
+      summary: Get organizations Intercom sync status
+      description: Returns the Intercom sync status for specified organizations.
+      operationId: 9be9abe37d425004b7e7357fc239b786
+      parameters:
+      - name: organization_ids
+        in: query
+        description: Array of organization IDs to check status for
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      responses:
+        '200':
+          description: Sync status for organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationSyncStatusResource'
+        '403':
+          description: Forbidden - User does not have permission
+      security:
+      - bearerAuth: []
+  /api/organization/type:
+    get:
+      tags:
+      - Organization
+      operationId: 4ae2cd0d1306e86e66d789cce8771dac
+      responses:
+        '200':
+          description: All Organization Types.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationTypeIndexResource'
+      security:
+      - bearerAuth: []
+      summary: 4ae2cd0d1306e86e66d789cce8771dac
+      x-summary-source: derived
+    post:
+      tags:
+      - Organization
+      operationId: 2d6ae3f163844a4e39f546f18c873d69
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreOrganizationTypeRequest'
+      responses:
+        '201':
+          description: New Organization Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationType'
+      security:
+      - bearerAuth: []
+      summary: 2d6ae3f163844a4e39f546f18c873d69
+      x-summary-source: derived
+  /api/organization/type/{id}:
+    put:
+      tags:
+      - Organization
+      operationId: ab87760499bd9e415ca3bc7b7f471bee
+      parameters:
+      - name: id
+        in: path
+        description: Id of type
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrganizationTypeRequest'
+      responses:
+        '201':
+          description: Updated Organization Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationType'
+      security:
+      - bearerAuth: []
+      summary: Ab87760499bd9e415ca3bc7b7f471bee
+      x-summary-source: derived
+    delete:
+      tags:
+      - Organization
+      operationId: bc78288008cadd45f1391bd5cb7d9213
+      parameters:
+      - name: id
+        in: path
+        description: Id of Organization Type
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty response when deleted was successfully.
+        '422':
+          description: Organization Type has Organization Assigned.
+          content:
+            application/json:
+              schema: {}
+              example: Organization Type has organizations assigned.
+      security:
+      - bearerAuth: []
+      summary: Bc78288008cadd45f1391bd5cb7d9213
+      x-summary-source: derived
+components:
+  schemas:
+    UserOrganizationBrandsResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: integer
+      type: object
+    OrganizationSubcategoryAccessResource:
+      properties:
+        id:
+          type: integer
+          example: 14
+        name:
+          type: string
+          example: Banking
+      type: object
+    OrganizationSyncStatusResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        organization_id:
+          type: integer
+          example: 123
+        status:
+          type:
+          - string
+          - 'null'
+          example: success
+      type: object
+    PersonProfile:
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        avatar_id:
+          type:
+          - integer
+          - 'null'
+        person_profile_job_role_id:
+          type:
+          - integer
+          - 'null'
+        market_id:
+          type:
+          - integer
+          - 'null'
+        name:
+          type: string
+        job_title:
+          type:
+          - string
+          - 'null'
+        location:
+          type:
+          - string
+          - 'null'
+        school:
+          type:
+          - string
+          - 'null'
+        info:
+          type:
+          - string
+          - 'null'
+        suggested:
+          type:
+          - integer
+          - 'null'
+        previous_suggested:
+          type:
+          - integer
+          - 'null'
+        approved:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UserOrganizationPropertiesResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: integer
+      type: object
+    OrganizationSyncPropertyTypeResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        uuid:
+          type: string
+          example: 1bdefe12-6cb2-4d6a-b208-b04602ae79c3
+        genre_id:
+          type: integer
+          example: 1
+        subgenre_id:
+          type: integer
+          example: 1
+        label_id:
+          type: integer
+          example: 1
+        type:
+          type: string
+          example: ''
+        is_continuous:
+          type: integer
+          example: 'null'
+        sport_id:
+          type: integer
+          example: 1
+        owner_id:
+          type: integer
+          example: 1
+        scouting_priority:
+          type: integer
+          example: 4
+        name:
+          type: string
+          example: National Football League
+        short_name:
+          type: string
+          example: NFL
+        governing_body:
+          type: string
+          example: ''
+        grouping:
+          type: string
+          example: ''
+        website_url:
+          type: string
+          example: https://www.nfl.com/
+        created_at:
+          type: string
+          example: '2017-05-08T22:03:49.000000Z'
+        updated_at:
+          type: string
+          example: '2017-05-08T22:03:49.000000Z'
+        deleted_at:
+          type: string
+          example: '2017-05-08T22:03:49.000000Z'
+      type: object
+    OrganizationUpdateContractRequest:
+      properties:
+        account_manager_id:
+          type:
+          - integer
+          - 'null'
+        sales_user_id:
+          type:
+          - integer
+          - 'null'
+        contract_auto_renew:
+          type:
+          - boolean
+          - 'null'
+        contract_start_date:
+          type:
+          - string
+          - 'null'
+          example: '2026-01-01'
+        contract_end_date:
+          type:
+          - string
+          - 'null'
+          example: '2026-12-31'
+        contract_file_url:
+          type:
+          - string
+          - 'null'
+        contract_monthly_spend:
+          type:
+          - number
+          - 'null'
+        contract_onboarding_date:
+          type:
+          - string
+          - 'null'
+        contract_payment_type_id:
+          type:
+          - integer
+          - 'null'
+        contract_status_id:
+          type:
+          - integer
+          - 'null'
+        max_user_seats:
+          description: Seat cap for org-admin user management. `null` disables the feature, `-1` enables it with unlimited seats, `0` is normalized to `null`, and a positive value caps the organization at that many active users. Any other negative value is rejected.
+          type:
+          - integer
+          - 'null'
+          minimum: -1
+          example: 25
+        default_user_subscription_cancel_date:
+          type:
+          - string
+          - 'null'
+        default_user_subscription_plan_id:
+          type:
+          - string
+          - 'null'
+        default_user_subscription_product_name:
+          type:
+          - string
+          - 'null'
+        user_email_domain:
+          type:
+          - string
+          - 'null'
+        subscription_plan_id:
+          type:
+          - string
+          - 'null'
+        subscription_product_name:
+          type:
+          - string
+          - 'null'
+        trial_ends_at:
+          type:
+          - string
+          - 'null'
+        salesforce_id:
+          type:
+          - string
+          - 'null'
+        account_limit:
+          properties:
+            organization:
+              properties:
+                monthly:
+                  type: integer
+                  example: 500
+                annual:
+                  type: integer
+                  example: 6000
+              type: object
+            user:
+              properties:
+                monthly:
+                  type: integer
+                  example: 100
+                annual:
+                  type: integer
+                  example: 1200
+              type: object
+          type: object
+        surface_limit:
+          description: Surface usage limits. Use `monthly` for the cap value and `type` for the scope.
+          properties:
+            monthly:
+              type: integer
+              example: 500
+            type:
+              type: string
+              enum:
+              - user
+              - organization
+              example: organization
+          type: object
+      type: object
+    OrganizationContractResource:
+      properties:
+        contract_status_id:
+          type: integer
+        contract_payment_type_id:
+          type: integer
+        contract_monthly_spend:
+          type: integer
+        contract_file_url:
+          type: string
+        contract_onboarding_date:
+          type: string
+        contract_start_date:
+          type: string
+        contract_end_date:
+          type: string
+        contract_auto_renew:
+          type: integer
+        max_user_seats:
+          description: Seat cap for org-admin user management. `null` means the feature is disabled, `-1` means unlimited seats, a positive value is the number of active users allowed.
+          type:
+          - integer
+          - 'null'
+          minimum: -1
+        sales_user_id:
+          type: integer
+        salesforce_id:
+          type: string
+        account_manager_id:
+          type: integer
+        default_user_subscription_plan_id:
+          type: string
+        default_user_subscription_product_name:
+          type: string
+        default_user_subscription_cancel_date:
+          type: string
+        user_email_domain:
+          type: string
+        billable:
+          type: array
+          items: {}
+        sales_user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          - $ref: '#/components/schemas/PersonProfile'
+        account_manager:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          - $ref: '#/components/schemas/PersonProfile'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserOrganizationResource'
+        surface_monthly_limit:
+          type: integer
+          example: 500
+        surface_limit_type:
+          type: string
+          enum:
+          - user
+          - organization
+          example: organization
+        surface_monthly_balance:
+          type: string
+          example: 47/500
+      type: object
+    OrganizationUpdateRequest:
+      required:
+      - name
+      - organization_type_id
+      - product_id
+      - representatives
+      - representative_id
+      - representative_type
+      properties:
+        name:
+          type: string
+          example: Acme Sports
+        organization_type_id:
+          type: integer
+          example: 1
+        product_id:
+          type: integer
+          example: 1
+        mfa_enabled:
+          type: boolean
+          example: false
+        contract_status_id:
+          type: integer
+        representative_id:
+          type: integer
+          example: 12362
+        representative_type:
+          type: string
+          enum:
+          - brand
+          - property
+          - agency
+          example: property
+        representatives:
+          type: array
+          items:
+            required:
+            - representative_id
+            - representative_type
+            - is_main
+            properties:
+              representative_id:
+                type: integer
+                example: 12362
+              representative_type:
+                type: string
+                enum:
+                - brand
+                - property
+                - agency
+                example: property
+              is_main:
+                type: integer
+                enum:
+                - 0
+                - 1
+                example: 1
+            type: object
+        users:
+          type: array
+          items:
+            type: integer
+        teams:
+          type: array
+          items:
+            type: integer
+        agencies:
+          type: array
+          items:
+            type: integer
+        companies:
+          type: array
+          items:
+            type: integer
+        market_access:
+          description: Array or comma-separated list of market IDs
+          example: 336,420,337
+        property_type_access:
+          description: Array or comma-separated list of property-type IDs
+          example: 1,5,833
+        organization_limit_access_type_id:
+          description: Access-limiting mode (FK to organization_limit_access_types). The 'none' row id or null both mean no restriction.
+          type:
+          - integer
+          - 'null'
+          example: 2
+        subcategory_access:
+          description: Array or comma-separated list of subcategory IDs
+          example: 14,27
+      type: object
+    Role:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    OrganizationType:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        properties:
+          type: boolean
+        brands:
+          type: boolean
+        agencies:
+          type: boolean
+      type: object
+    ProductType:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
+    SaveSalesforceRequest:
+      properties:
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        url:
+          type: string
+      type: object
+    OrganizationSyncMarketsResource:
+      properties:
+        id:
+          type: integer
+          example: 3
+        country_id:
+          type: integer
+          example: 1
+        region_id:
+          type: integer
+          example: 2
+        subregion_id:
+          type: integer
+          example: 3
+        name:
+          type: string
+          example: Ontario
+        market_category_id:
+          type: integer
+          example: 5
+        created_at:
+          type: string
+          example: '2017-08-17T15:12:45.000000Z'
+        updated_at:
+          type: string
+          example: '2017-08-17T15:12:45.000000Z'
+        deleted_at:
+          type: string
+          example: '2017-08-17T15:12:45.000000Z'
+      type: object
+    User:
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        currency:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+        last_active_at:
+          type: string
+          format: date-time
+        is_external:
+          type: boolean
+        verified:
+          type: integer
+        genuine:
+          type: integer
+        hubspot_id:
+          type: integer
+        hubspot_synced_on:
+          type: string
+          format: date-time
+        force_new_password:
+          type: integer
+        credentials_sent_at:
+          type: string
+          format: date-time
+      type: object
+    UserOrganizationAgenciesResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: integer
+      type: object
+    UpdateOrganizationTypeRequest:
+      required:
+      - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        properties:
+          type: boolean
+        brands:
+          type: boolean
+        agencies:
+          type: boolean
+      type: object
+    OrganizationSyncPropertyTypeRequest:
+      properties:
+        property_types:
+          type: string
+          example: 1,2,3
+      type: object
+    OrganizationAccessResource:
+      properties:
+        property_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationSyncPropertyTypeResource'
+        markets:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationSyncMarketsResource'
+        limit_access_type:
+          oneOf:
+          - $ref: '#/components/schemas/OrganizationLimitAccessTypeResource'
+          description: The organization's access-limiting mode, or null when no restriction.
+        subcategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationSubcategoryAccessResource'
+      type: object
+    CredentialsSalesforceResource:
+      properties:
+        client_id:
+          type: integer
+        client_secret:
+          type: string
+        url:
+          type: string
+      type: object
+    UserOrganizationResource:
+      properties:
+        user:
+          type: object
+          allOf:
+          - properties:
+              id:
+                type: integer
+              name:
+                type: string
+              email:
+                type: string
+              avatar:
+                type: string
+              roles:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+              is_external:
+                type: string
+              user_permissions:
+                type: array
+                items: {}
+              teams:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserOrganizationPropertiesResource'
+              brands:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserOrganizationBrandsResource'
+              agencies:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserOrganizationAgenciesResource'
+              created_at:
+                type: string
+              last_active_at:
+                type: string
+              deleted_at:
+                type: string
+              billable:
+                type: array
+                items: {}
+            type: object
+      type: object
+    OrganizationEvalProposalSaveRequest:
+      properties:
+        eval_deep_mode_limit:
+          type: integer
+          example: '1'
+      type: object
+    OrganizationTypeIndexResource:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Mixed Agency
+        properties:
+          type: boolean
+          example: true
+        brands:
+          type: boolean
+          example: false
+        agencies:
+          type: boolean
+          example: false
+        organizations_count:
+          type: integer
+          format: int64
+          example: 1
+        product_type:
+          $ref: '#/components/schemas/ProductType'
+      type: object
+    OrganizationIntercomSyncRequest:
+      properties:
+        organization_ids:
+          description: Array of organization IDs to sync. If not provided, all organizations will be synced.
+          type: array
+          items:
+            type: integer
+      type: object
+    OrganizationLimitAccessTypeResource:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 2
+        name:
+          type: string
+          example: SPND Agency
+        slug:
+          type: string
+          example: spnd_agency
+      type: object
+    OrganizationSyncMarketsRequest:
+      properties:
+        markets:
+          type: string
+          example: 1,2,3
+      type: object
+    OrganizationIndexRequest:
+      properties:
+        per_page:
+          type: integer
+          example: '25'
+        order_by:
+          type: string
+          example: name,types,contract_statuses,contract_payment_types,sales_account,account_manager,contract_onboarding_date,contract_start_date,contract_end_date,contract_auto_renew,properties_count,agencies_count,companies_count,users_count
+        order:
+          type: string
+          example: asc
+        name:
+          type: string
+          example: John
+        types:
+          type: string
+          example: 1,2,3
+        contract_statuses:
+          type: string
+          example: 1,2,3
+        contract_payment_types:
+          type: string
+          example: 1,2,3
+        contract_auto_renew:
+          type: string
+          example: 0,1
+        sales_account:
+          type: string
+          example: John
+        account_manager:
+          type: string
+          example: John
+      type: object
+    OrganizationUsersResource:
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserOrganizationResource'
+        organization_user_count:
+          description: Total number of users matching the current filters
+          type: integer
+        surface_monthly_prompts:
+          description: Surface AI prompts used by this user in the current month
+          type: integer
+      type: object
+    StoreOrganizationTypeRequest:
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        properties:
+          type: boolean
+        brands:
+          type: boolean
+        agencies:
+          type: boolean
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

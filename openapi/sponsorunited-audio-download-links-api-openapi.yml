@@ -1,0 +1,157 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Audio Download Links API
+  version: v1
+  description: Audio Download Links
+tags:
+- name: Audio Download Links
+  description: Audio Download Links
+paths:
+  /api/user/{user_id}/event/{event_id}/property/{property_id}/audio-download-links:
+    get:
+      tags:
+      - Audio Download Links
+      summary: Get audio download link
+      description: Retrieves the audio download link associated with a user's scouting event for a specific property
+      operationId: c2e5f6c0fc67f2eda4da441931c1597c
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: event_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: property_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Audio download link retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioDownloadLinkResource'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Audio Download Links
+      summary: Create or update audio download link
+      description: Creates a new audio download link or updates an existing one for a user's scouting event for a specific property. If a link already exists for the user event, it will be updated with the new URL.
+      operationId: 4bdbdb07e1b0858bb7bea28207af2c83
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: event_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: property_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreAudioDownloadLinkRequest'
+      responses:
+        '201':
+          description: Audio download link created or updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioDownloadLinkResource'
+      security:
+      - bearerAuth: []
+  /api/user/{user_id}/event/{event_id}/property/{property_id}/audio-download-links/{id}:
+    delete:
+      tags:
+      - Audio Download Links
+      summary: Delete audio download link
+      description: Deletes an audio download link associated with a user's scouting event for a specific property
+      operationId: 7904d623aeaa1d3108faf379b3b1a449
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: event_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: property_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Audio download link deleted successfully.
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    StoreAudioDownloadLinkRequest:
+      required:
+      - url
+      properties:
+        url:
+          description: Audio download URL
+          type: string
+          format: uri
+          maxLength: 500
+          example: https://example.com/audio/download.mp3
+      type: object
+    AudioDownloadLinkResource:
+      properties:
+        id:
+          description: Audio download link ID
+          type: integer
+          example: 1
+        url:
+          description: Audio download URL
+          type: string
+          example: https://example.com/audio/download.mp3
+        createdAt:
+          description: Creation timestamp
+          type: string
+          format: date-time
+          example: '2023-01-01T12:00:00.000000Z'
+        updatedAt:
+          description: Last update timestamp
+          type: string
+          format: date-time
+          example: '2023-01-01T12:00:00.000000Z'
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

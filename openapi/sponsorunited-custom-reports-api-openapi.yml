@@ -1,0 +1,884 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Custom Reports API
+  version: v1
+  description: Custom Reports
+tags:
+- name: Custom Reports
+  description: Custom Reports
+paths:
+  /api/custom-reports:
+    get:
+      tags:
+      - Custom Reports
+      summary: List custom reports
+      description: Retrieves a list of custom reports with optional filtering. Reports are filtered by user's organization membership.
+      operationId: b02ba06dc96b360112a2ceb8147ee2ac
+      parameters:
+      - name: user
+        in: query
+        description: Filter by user ID
+        required: false
+        schema:
+          type: string
+          example: 1,2,3
+      - name: agency
+        in: query
+        description: Filter by agency ID
+        required: false
+        schema:
+          type: string
+          example: 1,2,3
+      - name: brand
+        in: query
+        description: Filter by brand ID
+        required: false
+        schema:
+          type: string
+          example: 1,2,3
+      - name: property
+        in: query
+        description: Filter by property ID
+        required: false
+        schema:
+          type: string
+          example: 1,2,3
+      - name: tag
+        in: query
+        description: Filter by tag ID
+        required: false
+        schema:
+          type: string
+          example: 1,2,3
+      - name: organization
+        in: query
+        description: Filter by organization ID
+        required: false
+        schema:
+          type: string
+          example: 1,2,3
+      - name: publishedBefore
+        in: query
+        description: Filter by reports published before the given date
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: publishedAfter
+        in: query
+        description: Filter by reports published after the given date
+        required: false
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Custom reports list
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CustomReportResource'
+                type: object
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Custom Reports
+      summary: Create a custom report
+      description: Creates a new custom report with associated entities and file uploads.
+      operationId: 991700be4fd2c2764d531f50687b91a1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomReportStoreRequest'
+      responses:
+        '201':
+          description: Custom report created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomReportResource'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                type: object
+      security:
+      - bearerAuth: []
+  /api/custom-reports/{id}:
+    get:
+      tags:
+      - Custom Reports
+      summary: Retrieve a custom report
+      description: Fetches a custom report by its ID. User must have access through organization membership.
+      operationId: 313428b3f95d2fffe877d7f01c3e1152
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the custom report to retrieve
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomReportResource'
+        '403':
+          description: Access denied - user does not have permission
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: You do not have permission to access this custom report.
+                type: object
+        '404':
+          description: Custom report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Custom report not found
+                type: object
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Custom Reports
+      summary: Update a custom report
+      description: Updates an existing custom report by its ID with the provided data. User must have access through organization membership.
+      operationId: 7d380803fd1bcc21e3cf81019e8c6d87
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the custom report to update
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Custom report data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomReportStoreRequest'
+      responses:
+        '200':
+          description: Custom report successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomReportResource'
+        '403':
+          description: Access denied - user does not have permission
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: You do not have permission to access this custom report.
+                type: object
+        '404':
+          description: Custom report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Custom report not found
+                type: object
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                type: object
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Custom Reports
+      summary: Delete a custom report
+      description: Soft deletes a custom report by its ID from the database and returns its data. User must be the owner of the report.
+      operationId: 891c1947e8d4ee10de25d872c74e67bf
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the custom report to delete
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Custom report successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomReportResource'
+        '403':
+          description: Access denied - user is not the owner of this report
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: You do not have permission to delete this custom report.
+                type: object
+        '404':
+          description: Custom report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Custom report not found
+                type: object
+      security:
+      - bearerAuth: []
+  /api/custom-reports/{id}/duplicate:
+    post:
+      tags:
+      - Custom Reports
+      summary: Duplicate a custom report
+      description: Creates a duplicate of a custom report for the authenticated user with all relationships copied. The new report will have '(1)' appended to the title if a conflict exists.
+      operationId: 885efeb0dbb2fb3d78bb821d1d018477
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the custom report to duplicate
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '201':
+          description: Custom report duplicated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomReportResource'
+        '403':
+          description: Access denied - user is not the owner of this report
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: You do not have permission to duplicate this custom report.
+                type: object
+        '404':
+          description: Custom report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Custom report not found
+                type: object
+      security:
+      - bearerAuth: []
+  /api/custom-reports/{id}/rename:
+    patch:
+      tags:
+      - Custom Reports
+      summary: Rename a custom report
+      description: Updates the title of a custom report. User must be the owner. If the new title conflicts with an existing report, it will be automatically adjusted with a numeric suffix.
+      operationId: 9f17e88224a4efee50f56e3e6c88dad6
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the custom report to rename
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomReportRenameRequest'
+      responses:
+        '200':
+          description: Custom report renamed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomReportResource'
+        '403':
+          description: Access denied - user is not the owner of this report
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: You do not have permission to rename this custom report.
+                type: object
+        '404':
+          description: Custom report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Custom report not found
+                type: object
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                type: object
+      security:
+      - bearerAuth: []
+  /api/custom-reports/{customReport}/share:
+    post:
+      tags:
+      - Custom Reports
+      operationId: 342a800c570b4f60211fb2616996b4ad
+      parameters:
+      - name: customReport
+        in: path
+        description: The ID of the custom report to share
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomReportShareRequest'
+      responses:
+        '200':
+          description: Report shared successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CustomReportResource'
+                type: object
+        '404':
+          description: Report not found
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                type: object
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                type: object
+      security:
+      - bearerAuth: []
+      summary: 342a800c570b4f60211fb2616996b4ad
+      x-summary-source: derived
+components:
+  schemas:
+    Company:
+      properties:
+        id:
+          type: integer
+        parent_company_id:
+          type: integer
+        subcategory_id:
+          type: integer
+        categories_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        exclude_from_social_scan:
+          type: boolean
+        exclude_from_transcribe:
+          type: boolean
+        feed_url:
+          type: string
+        statistics:
+          type: string
+        no_of_employees:
+          type: string
+        priority_markets:
+          type: string
+        parent_company:
+          type: string
+        ad_agency:
+          type: string
+        existing:
+          type: string
+        owned_by:
+          type: string
+        approved:
+          type: boolean
+        approved_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    Tag:
+      properties:
+        id:
+          description: Tag Model
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      type: object
+    CustomReportShareRequest:
+      required:
+      - user_ids
+      properties:
+        user_ids:
+          description: Array of user IDs to share the report with
+          type: array
+          items:
+            type: integer
+          minItems: 1
+      type: object
+    FileUpload:
+      properties:
+        id:
+          description: The FileUpload model represents an uploaded file record, including its metadata and relation to a user and thumbnail image.
+          type: integer
+        user_id:
+          description: The ID of the user who uploaded the file
+          type: integer
+          example: 1
+        original_name:
+          description: The original name of the uploaded file
+          type: string
+          example: document.pdf
+        stored_name:
+          description: The stored name of the file in the filesystem
+          type: string
+          example: 2023_01_document.pdf
+        mime_type:
+          description: The MIME type of the file
+          type: string
+          example: application/pdf
+        file_size:
+          description: The size of the file in bytes
+          type: integer
+          example: 2048
+        file_hash:
+          description: A hash of the file for integrity verification
+          type: string
+          example: 5fghjk234ghj234gj234g234
+        url:
+          description: The URL where the file can be accessed
+          type: string
+          example: https://example.com/files/2023_01_document.pdf
+        thumbnail_id:
+          description: The ID of the thumbnail image associated with the file
+          type: integer
+          example: 2
+        created_at:
+          description: Timestamp when the file upload was created
+          type: string
+          format: date-time
+        updated_at:
+          description: Timestamp when the file upload was last updated
+          type: string
+          format: date-time
+        deleted_at:
+          description: Timestamp when the file upload was deleted, if applicable
+          type:
+          - string
+          - 'null'
+          format: date-time
+      type: object
+    Property:
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        type_id:
+          type: integer
+        uuid:
+          type: integer
+        division_id:
+          type: integer
+        sport_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        alias:
+          type: string
+        logo:
+          type: string
+        cover:
+          type: string
+        is_continuous:
+          type: integer
+        league_level_property:
+          type: integer
+        no_of_employees:
+          type: integer
+        email:
+          type: string
+        website_url:
+          type: string
+        linkedin_url:
+          type: string
+        linkedin_id_url:
+          type: string
+        facebook_url:
+          type: string
+        twitter_url:
+          type: string
+        instagram_url:
+          type: string
+        twitch_url:
+          type: string
+        tiktok_url:
+          type: string
+        youtube_url:
+          type: string
+        exclude_from_social_scan:
+          type: integer
+        inactive:
+          type: integer
+        market:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        geolocation:
+          type: string
+        corporate_phone:
+          type: string
+        linkedin_employees:
+          type: string
+        targeted_prospects_feed_url:
+          type: string
+        top_sponsorship_headlines_feed_url:
+          type: string
+        headlines_feed_url:
+          type: string
+        capacity:
+          type: string
+        venue_uuid:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    Agency:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        logo:
+          type: string
+        no_of_employees:
+          type: integer
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        feed_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    CustomReportResource:
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        report_file_id:
+          type:
+          - integer
+          - 'null'
+        thumbnail_url:
+          type:
+          - string
+          - 'null'
+        published_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        brands:
+          type: array
+          items:
+            $ref: '#/components/schemas/Company'
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/Property'
+        agencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Agency'
+        organization_users:
+          description: Organizations with their users who have access to the report
+          type: array
+          items:
+            properties:
+              id:
+                description: Organization ID
+                type: integer
+              name:
+                description: Organization name
+                type: string
+              users:
+                description: Users from this organization with access
+                type: array
+                items:
+                  properties:
+                    id:
+                      description: User ID
+                      type: integer
+                    name:
+                      description: User name
+                      type: string
+                  type: object
+            type: object
+        file:
+          oneOf:
+          - $ref: '#/components/schemas/FileUpload'
+          type:
+          - object
+          - 'null'
+        sent_count:
+          description: Number of users this report was shared with
+          type: integer
+        opened_count:
+          description: Number of recipients who have viewed the report
+          type: integer
+      type: object
+    CustomReportStoreRequest:
+      required:
+      - title
+      properties:
+        title:
+          description: Report title
+          type: string
+        description:
+          description: Report description
+          type:
+          - string
+          - 'null'
+        report_file_id:
+          description: Report file ID (infographic PDF)
+          type:
+          - integer
+          - 'null'
+        thumbnail_url:
+          description: Thumbnail image URL
+          type:
+          - string
+          - 'null'
+        published_at:
+          description: Publication date
+          type:
+          - string
+          - 'null'
+          format: date-time
+        tags:
+          description: Associated tags
+          type: array
+          items:
+            oneOf:
+            - description: Tag ID
+              type: integer
+            - properties:
+                name:
+                  description: Tag name
+                  type: string
+              type: object
+        brands:
+          description: Associated brand IDs (comma-separated)
+          type: string
+          example: 1,2,3
+        properties:
+          description: Associated property IDs (comma-separated)
+          type: string
+          example: 1,2,3
+        agencies:
+          description: Associated agency IDs (comma-separated)
+          type: string
+          example: 1,2,3
+        organizations:
+          description: Organization IDs (assigns to ALL users in org, comma-separated)
+          type: string
+          example: 1,2,3
+        users:
+          description: Individual user IDs (comma-separated)
+          type: string
+          example: 1,2,3
+      type: object
+    CustomReportRenameRequest:
+      required:
+      - title
+      properties:
+        title:
+          description: New report title
+          type: string
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

@@ -1,0 +1,258 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Report Sharing API
+  version: v1
+  description: Report sharing tracking endpoints
+tags:
+- name: Report Sharing
+  description: Report sharing tracking endpoints
+paths:
+  /api/report-sharing/recipients:
+    get:
+      tags:
+      - Report Sharing
+      summary: Get recipients of a shared report
+      description: Returns the list of users who received a specific report, with view status and dates.
+      operationId: reportSharingRecipients
+      parameters:
+      - name: report_type
+        in: query
+        description: 'Type of report: user_custom or saved'
+        required: true
+        schema:
+          type: string
+          enum:
+          - user_custom
+          - saved
+      - name: report_id
+        in: query
+        description: 'Report ID: the admin custom report id (custom_reports.id) for user_custom, or the source saved report id (saved_reports.id) for saved'
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: List of recipients
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReportSharingRecipientResource'
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/report-sharing/reports:
+    get:
+      tags:
+      - Report Sharing
+      summary: Get reports received by a user
+      description: Returns the list of reports a specific user has received, with view status and dates.
+      operationId: reportSharingReports
+      parameters:
+      - name: user_id
+        in: query
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: List of reports
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReportSharingReportResource'
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/report-sharing/saved-reports:
+    get:
+      tags:
+      - Report Sharing
+      summary: Get all shared saved reports
+      description: Returns the list of saved reports that have been shared, with sharer info, recipients (users and organizations), sent count and open count.
+      operationId: reportSharingSavedReports
+      responses:
+        '200':
+          description: List of shared saved reports
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReportSharingSavedReportResource'
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+  /api/report-sharing/representatives:
+    get:
+      tags:
+      - Report Sharing
+      summary: Get representatives in use by active users
+      description: Returns the names and IDs of all entities (agencies, brands, properties) currently set as representatives of at least one active user. Intended as the option list for the representative filter in report sharing.
+      operationId: reportSharingRepresentatives
+      responses:
+        '200':
+          description: List of representatives in use
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReportSharingRepresentativeResource'
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ReportSharingRecipientResource:
+      properties:
+        userName:
+          type: string
+        organizationName:
+          type: string
+        isViewed:
+          type: boolean
+        dateReceived:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        dateOpened:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        sharedByUserName:
+          type:
+          - string
+          - 'null'
+      type: object
+    ReportSharingReportResource:
+      properties:
+        reportName:
+          type: string
+        reportType:
+          type: string
+        isViewed:
+          type: boolean
+        dateReceived:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        dateOpened:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        sharedByUserName:
+          type:
+          - string
+          - 'null'
+      type: object
+    ReportSharingRepresentativeResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - agency
+          - brand
+          - property
+      type: object
+    ReportSharingSavedReportResource:
+      properties:
+        report_id:
+          type: integer
+        report_name:
+          type: string
+        report_description:
+          type:
+          - string
+          - 'null'
+        report_type:
+          type: string
+        report_url:
+          type: string
+        created_at:
+          type: string
+          example: '2026-03-17 10:00:00'
+        shared_by_user_id:
+          type: integer
+        shared_by_user_name:
+          type:
+          - string
+          - 'null'
+        recipients:
+          type: array
+          items:
+            properties:
+              user_id:
+                type: integer
+              user_name:
+                type:
+                - string
+                - 'null'
+              organization_id:
+                type:
+                - integer
+                - 'null'
+              organization_name:
+                type:
+                - string
+                - 'null'
+              is_viewed:
+                type: boolean
+            type: object
+        sent_count:
+          type: integer
+        open_count:
+          type: integer
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

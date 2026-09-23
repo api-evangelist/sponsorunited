@@ -1,0 +1,62 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited User Authentication API
+  version: v1
+  description: User Authentication
+tags:
+- name: User Authentication
+  description: User Authentication
+paths:
+  /api/users/{id}/invalidate:
+    get:
+      tags:
+      - User Authentication
+      summary: Invalidate User Tokens
+      operationId: invalidateUserTokens
+      parameters:
+      - name: id
+        in: path
+        description: The user id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: User token invalidated successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: User token invalidated successfully
+                type: object
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+components:
+  schemas:
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

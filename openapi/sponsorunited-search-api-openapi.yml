@@ -1,0 +1,463 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Search API
+  version: v1
+  description: Search
+tags:
+- name: Search
+  description: Search
+paths:
+  /api/search/smart/brands/locations:
+    post:
+      tags:
+      - Search
+      summary: Search brand locations
+      description: 'Returns a paginated list of brand locations matching the search criteria. Deprecated: use the Reporting API /brands/locations endpoint instead.'
+      operationId: 6f77cd0dc54389927b6029003009d583
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationForSmartSearchOnBrandsShowRequest'
+      responses:
+        '200':
+          description: A paginated list of brand locations.
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LocationForSmartSearchOnBrandsShowResource'
+                type: object
+        '401':
+          description: Unauthenticated.
+        '422':
+          description: Validation error.
+      deprecated: true
+      security:
+      - bearerAuth: []
+  /api/search/smart/brands/locations/metadata:
+    post:
+      tags:
+      - Search
+      summary: Get metadata for brand locations smart search
+      description: 'Returns aggregated metadata (counts, filters) for brand locations search. Deprecated: use the Reporting API POST /brands/locations/metadata endpoint instead.'
+      operationId: 0da01e381072ea7386ed981e13045004
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationForSmartSearchOnBrandsMetadataRequest'
+      responses:
+        '200':
+          description: Location search metadata
+      deprecated: true
+      security:
+      - bearerAuth: []
+  /api/search/smart/brands/locations/download:
+    post:
+      tags:
+      - Search
+      summary: Download brand locations as CSV
+      description: 'Downloads filtered brand locations as a CSV file. Deprecated: use the Reporting API POST /brands/locations/download endpoint instead.'
+      operationId: 24c1066d5edffa9b62deef7672933b23
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationForSmartSearchOnBrandsDownloadRequest'
+      responses:
+        '200':
+          description: CSV file download
+        '500':
+          description: Download error
+      deprecated: true
+      security:
+      - bearerAuth: []
+  /api/search/{entity}/by-id/list:
+    post:
+      tags:
+      - Search
+      summary: Get entities by IDs as flat list
+      description: A dynamic endpoint that returns simple items for the given entity. Supports brand and property entities, returning ID, name, and logo for each item
+      operationId: b878b803278e85324c0e01ac4ccf1f66
+      parameters:
+      - name: entity
+        in: path
+        description: Entity used for retrieving the data
+        required: true
+        schema:
+          type: string
+      - name: SearchEntityByIdRequest
+        in: query
+        schema:
+          $ref: '#/components/schemas/SearchEntityByIdRequest'
+      responses:
+        '200':
+          description: An array with simple items.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchEntityResource'
+      security:
+      - bearerAuth: []
+  /api/search/{entity}/by-id/grouped:
+    post:
+      tags:
+      - Search
+      summary: Get entities by IDs grouped by category/league
+      description: A dynamic endpoint that returns simple items for the given entity, grouped by their parent category (for brands) or league (for properties)
+      operationId: c54af0a74c2159945f8aee0028dd54ab
+      parameters:
+      - name: entity
+        in: path
+        description: Entity used for retrieving the data
+        required: true
+        schema:
+          type: string
+      - name: SearchEntityByIdRequest
+        in: query
+        schema:
+          $ref: '#/components/schemas/SearchEntityByIdRequest'
+      responses:
+        '200':
+          description: An array of groups with simple items.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchByIdGroupedResource'
+      security:
+      - bearerAuth: []
+  /api/search/entity/{entity}:
+    get:
+      tags:
+      - Search
+      summary: Search entities by name
+      description: A dynamic endpoint that searches and returns simple items for the given entity type. Supports agency, company, league, market, organization, property, scouting_group, scouting_market, user, and role entities
+      operationId: c1112a58865f6722aed94b0a1a32c80a
+      parameters:
+      - name: entity
+        in: path
+        description: Entity used for retrieving the data
+        required: true
+        schema:
+          type: string
+      - name: SearchEntityRequest
+        in: query
+        schema:
+          $ref: '#/components/schemas/SearchEntityRequest'
+      responses:
+        '200':
+          description: An array with simple items.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchEntityResource'
+      security:
+      - bearerAuth: []
+  /api/search/{indexed_entity}:
+    get:
+      tags:
+      - Search
+      summary: Global search over a Meilisearch-indexed entity
+      description: Searches the Meilisearch index for the given entity type and returns matching items (capped at 100), with entity-specific filtering, permission checks, and optional relationship loading applied.
+      operationId: 82e1cade2feeb042d7132eb6df8da393
+      parameters:
+      - name: indexed_entity
+        in: path
+        description: Indexed entity to search
+        required: true
+        schema:
+          type: string
+          enum:
+          - agency
+          - brand
+          - property
+          - contact
+          - user
+          - league
+          - category
+          - market
+          - organization
+          - venue
+          - subcategory
+          - genre
+          - subgenre
+          - asset
+      - name: SearchIndexedRequest
+        in: query
+        schema:
+          $ref: '#/components/schemas/SearchIndexedRequest'
+      responses:
+        '200':
+          description: The matching indexed items and a total count.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchIndexedResource'
+        '400':
+          description: Provided entity is not supported.
+        '503':
+          description: Search service is temporarily unavailable.
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    SearchIndexedRequest:
+      required:
+      - search_term
+      properties:
+        search_term:
+          description: Term to search the Meilisearch index for
+          type: string
+        with_relationships:
+          description: Relationships to eager-load on the results
+          type: array
+          items:
+            type: string
+        team_type_id:
+          description: Filter property results by team type
+          type: integer
+        excluded_id:
+          description: IDs to exclude from the results
+          type: array
+          items:
+            type: integer
+        with_deleted:
+          description: Include soft-deleted records
+          type: boolean
+        is_parent:
+          description: Filter brands/properties by parent vs child
+          type: boolean
+        is_contact_of:
+          description: Restrict contacts to those belonging to the given entity id
+          type: integer
+        brand_typo_tolerance:
+          description: Use the brand index with typo tolerance
+          type: boolean
+        organization_access:
+          type: array
+          items:
+            type: string
+            enum:
+            - brands
+            - properties
+            - agencies
+        linkedin_url:
+          type: string
+        email:
+          type: string
+          format: email
+        for_primary_profile:
+          type: boolean
+        for_secondary_profile:
+          type: boolean
+        with_organization_users:
+          type: boolean
+        show_secondary_profiles:
+          type: boolean
+      type: object
+    SearchEntityResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/GenericEntity'
+    LocationForSmartSearchOnBrandsDownloadRequest:
+      properties:
+        brand:
+          type: string
+        city:
+          type: string
+        locatated_in_market:
+          type: string
+        order_by:
+          type: string
+        order_direction:
+          type: string
+      type: object
+    SearchEntityByIdRequest:
+      required:
+      - id
+      properties:
+        id:
+          type: string
+        limit:
+          type: integer
+      type: object
+    SearchByIdGroupedResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/GenericEntity'
+    LocationForSmartSearchOnBrandsShowResource:
+      properties:
+        company_id:
+          type: integer
+        company_logo:
+          type: string
+        company_name:
+          type: string
+        subcategory_id:
+          type: integer
+        subcategory_name:
+          type: string
+        category_id:
+          type: integer
+        category_name:
+          type: string
+        street:
+          type: string
+        is_hq:
+          type: integer
+        city_name:
+          type: string
+        city_id:
+          type: integer
+        state_name:
+          type: string
+        state_id:
+          type: integer
+        county_name:
+          type: string
+        county_id:
+          type: integer
+        country_name:
+          type: string
+        country_id:
+          type: integer
+      type: object
+    SearchIndexedResource:
+      properties:
+        items:
+          type: array
+          items:
+            description: Shape varies by indexed entity; only the core fields are guaranteed, the rest depend on the matched model and requested relationships.
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              type:
+                description: Set only for company/team/agency/contact entities; absent for all other indexed types.
+                type:
+                - string
+                - 'null'
+              ulid:
+                type: string
+              logo:
+                type:
+                - string
+                - 'null'
+              is_primary_profile:
+                type: boolean
+            type: object
+        total:
+          type: integer
+      type: object
+    GenericEntity:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
+    LocationForSmartSearchOnBrandsMetadataRequest:
+      required:
+      - brand
+      properties:
+        located_in_market:
+          description: Comma separated located in market ids.
+          type: string
+        market:
+          description: Comma separated market ids.
+          type: string
+        league:
+          description: Comma separated league ids.
+          type: string
+        brand:
+          description: Comma separated brand ids.
+          type: string
+        category:
+          description: Comma separated category ids.
+          type: string
+        subcategory:
+          description: Comma separated subcategory ids.
+          type: string
+        city:
+          description: Comma separated city ids.
+          type: string
+        state:
+          description: Comma separated state ids.
+          type: string
+      type: object
+    LocationForSmartSearchOnBrandsShowRequest:
+      properties:
+        located_in_market:
+          description: Comma-separated located-in market IDs.
+          type: string
+        market:
+          description: Comma-separated target market IDs.
+          type: string
+        league:
+          description: Comma-separated league IDs.
+          type: string
+        brand:
+          description: Comma-separated brand IDs.
+          type: string
+        city:
+          description: Comma-separated city IDs.
+          type: string
+        category:
+          description: Comma-separated category IDs.
+          type: string
+        subcategory:
+          description: Comma-separated subcategory IDs.
+          type: string
+        state:
+          description: Comma-separated state IDs.
+          type: string
+        order_by:
+          description: Field to order results by.
+          type: string
+          enum:
+          - brand
+          - category
+          - subcategory
+          - street
+          - city
+          - state
+          - country
+          - total_deals_count
+        order_direction:
+          description: Sort direction.
+          type: string
+          enum:
+          - asc
+          - desc
+        page:
+          description: Page number.
+          type: integer
+        per_page:
+          description: Number of items per page.
+          type: integer
+      type: object
+    SearchEntityRequest:
+      properties:
+        name:
+          type: string
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

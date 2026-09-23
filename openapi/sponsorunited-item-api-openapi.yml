@@ -1,0 +1,546 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Item API
+  version: v1
+  description: Item
+tags:
+- name: Item
+  description: Item
+paths:
+  /api/item:
+    get:
+      tags:
+      - Item
+      summary: List all items (assets)
+      description: Returns a list of items with optional filtering by subplatform, league, property, subgenre, or season deals
+      operationId: b6b5f8ca55f3977ad2ce6777f035c40e
+      parameters:
+      - name: ItemIndexRequest
+        in: query
+        schema:
+          $ref: '#/components/schemas/AssetIndexRequest'
+      responses:
+        '200':
+          description: A list of assets.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetIndexResource'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Item
+      summary: Create a new item (asset)
+      description: Creates a new item with platform, subplatform, grouping, and feature flags. Associates item with all leagues.
+      operationId: 5567f92eba0a6eaacf0124498e81dadf
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetStoreUpdateRequest'
+      responses:
+        '200':
+          description: Item created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResource'
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/item/{id}:
+    get:
+      tags:
+      - Item
+      summary: Get an item by ID
+      description: Returns a single item with its definition and synonyms
+      operationId: c6650aff4f52c233e3fd6e521dfc2be4
+      parameters:
+      - name: id
+        in: path
+        description: ID of the item
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Item details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResource'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Item not found
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Item
+      summary: Update an item
+      description: Updates an existing item with new data including definition and synonyms
+      operationId: 5a1c317476a9ece281b918a25ced7a63
+      parameters:
+      - name: id
+        in: path
+        description: ID of the item to update
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetStoreUpdateRequest'
+      responses:
+        '200':
+          description: Item updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResource'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Item not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Item
+      summary: Delete an item
+      description: Deletes an item and all associated data
+      operationId: 722d07df6daf6b4d3eaf8295b04bf942
+      parameters:
+      - name: id
+        in: path
+        description: ID of the item to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Item deleted successfully
+        '400':
+          description: Failed to delete item
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Item not found
+      security:
+      - bearerAuth: []
+  /api/item/{id}/intent:
+    get:
+      tags:
+      - Item
+      summary: Get item intent data
+      description: Returns intent measurement data for an item including audits count and item values count
+      operationId: 28052170355afddfeddc33f76ab4a22e
+      parameters:
+      - name: id
+        in: path
+        description: ID of the item
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Item intent data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    created_at:
+                      type: string
+                      format: date-time
+                    updated_at:
+                      type: string
+                      format: date-time
+                    audits_count:
+                      type: integer
+                    item_values_count:
+                      type: integer
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/items-slim:
+    get:
+      tags:
+      - Item
+      summary: Get slim items list with platforms and subplatforms
+      description: Returns a list of items with their platforms, subplatforms, and groupings.
+      operationId: 1b581894ea4f1744b7e73cca5087f804
+      responses:
+        '200':
+          description: Slim items list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    description:
+                      type:
+                      - string
+                      - 'null'
+                    platform_id:
+                      type: integer
+                    platform_name:
+                      type: string
+                    subplatform_id:
+                      type: integer
+                    subplatform_name:
+                      type: string
+                    grouping_id:
+                      type: integer
+                    grouping_name:
+                      type: string
+                  type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+  /api/items-slim-with-counts:
+    get:
+      tags:
+      - Item
+      summary: Get slim items list with current-season audits and brands counts
+      description: Returns the slim items list plus current-season audits_count and brands_count per item, sourced from season_current_deals.
+      operationId: 49b6e8dfc0fb660e4924608e6c78a8f6
+      responses:
+        '200':
+          description: Slim items list with current-season counts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    description:
+                      type:
+                      - string
+                      - 'null'
+                    platform_id:
+                      type: integer
+                    platform_name:
+                      type: string
+                    subplatform_id:
+                      type: integer
+                    subplatform_name:
+                      type: string
+                    grouping_id:
+                      type: integer
+                    grouping_name:
+                      type: string
+                    audits_count:
+                      type: integer
+                    brands_count:
+                      type: integer
+                  type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+  /api/items/export:
+    get:
+      tags:
+      - Item
+      summary: Export items to CSV
+      description: Exports all items with their platform, subplatform, grouping, type flags, and usage counts as a CSV file
+      operationId: 984836ec54b623824658d3d0e6dde70d
+      responses:
+        '200':
+          description: CSV file with items data
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    AssetIndexResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Item'
+      - type: string
+        property: subplatformName
+      - type: string
+        property: platformName
+    AssetStoreUpdateRequest:
+      required:
+      - name
+      - item_platform_id
+      - item_subplatform_id
+      - item_grouping_id
+      properties:
+        name:
+          description: Name of the asset
+          type: string
+        item_platform_id:
+          description: Platform ID
+          type: integer
+        item_subplatform_id:
+          description: Subplatform ID
+          type: integer
+        item_grouping_id:
+          description: Grouping ID
+          type: integer
+        default_rank:
+          description: Default rank for the asset
+          type: integer
+        description:
+          description: Description of the asset
+          type: string
+        hasAmount:
+          description: Whether the asset has amount
+          type: boolean
+        hasDescription:
+          description: Whether the asset has description
+          type: boolean
+        hasFrequency:
+          description: Whether the asset has frequency
+          type: boolean
+        hasImages:
+          description: Whether the asset has images
+          type: boolean
+        hasVideos:
+          description: Whether the asset has videos
+          type: boolean
+        isDigital:
+          description: Whether the asset is digital
+          type: boolean
+        isPrint:
+          description: Whether the asset is print
+          type: boolean
+        isRadio:
+          description: Whether the asset is radio
+          type: boolean
+        isSocial:
+          description: Whether the asset is social
+          type: boolean
+        isSponsor:
+          description: Whether the asset is sponsor
+          type: boolean
+        isTv:
+          description: Whether the asset is TV
+          type: boolean
+        isVendor:
+          description: Whether the asset is vendor
+          type: boolean
+        isOutOfHome:
+          description: Whether the asset is out of home
+          type: boolean
+        definition:
+          description: Definition of the asset
+          type: string
+        synonyms:
+          description: Array of synonym strings
+          type: array
+          items:
+            type: string
+      type: object
+    AssetResource:
+      properties:
+        id:
+          description: Asset ID
+          type: integer
+        name:
+          description: Asset name
+          type: string
+        description:
+          description: Asset description
+          type:
+          - string
+          - 'null'
+        default_rank:
+          description: Default rank for the asset
+          type: integer
+        item_platform_id:
+          description: Platform ID
+          type: integer
+        item_subplatform_id:
+          description: Subplatform ID
+          type: integer
+        item_grouping_id:
+          description: Grouping ID
+          type: integer
+        hasFrequency:
+          description: Whether the asset has frequency
+          type: boolean
+        hasDescription:
+          description: Whether the asset has description
+          type: boolean
+        hasImages:
+          description: Whether the asset has images
+          type: boolean
+        hasVideos:
+          description: Whether the asset has videos
+          type: boolean
+        hasSocialMediaValue:
+          description: Whether the asset has social media value
+          type: boolean
+        hasAmount:
+          description: Whether the asset has amount
+          type: boolean
+        is_premium:
+          description: Whether the asset is premium
+          type: boolean
+        isSponsor:
+          description: Whether the asset is sponsor
+          type: boolean
+        isTv:
+          description: Whether the asset is TV
+          type: boolean
+        isRadio:
+          description: Whether the asset is radio
+          type: boolean
+        isVendor:
+          description: Whether the asset is vendor
+          type: boolean
+        isSocial:
+          description: Whether the asset is social
+          type: boolean
+        isDigital:
+          description: Whether the asset is digital
+          type: boolean
+        isPrint:
+          description: Whether the asset is print
+          type: boolean
+        isOutOfHome:
+          description: Whether the asset is out of home
+          type: boolean
+        definition:
+          description: Asset definition name
+          type:
+          - string
+          - 'null'
+        synonyms:
+          description: Array of synonym strings
+          type: array
+          items:
+            type: string
+      type: object
+    Item:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        default_rank:
+          type: integer
+        item_platform_id:
+          type: integer
+        item_subplatform_id:
+          type: integer
+        item_grouping_id:
+          type: integer
+        hasFrequency:
+          type: integer
+        hasDescription:
+          type: integer
+        hasImages:
+          type: integer
+        hasVideos:
+          type: integer
+        hasSocialMediaValue:
+          type: integer
+        hasAmount:
+          type: integer
+        is_premium:
+          type: integer
+        isSponsor:
+          type: integer
+        isTv:
+          type: integer
+        isRadio:
+          type: integer
+        isVendor:
+          type: integer
+        isSocial:
+          type: integer
+        isDigital:
+          type: integer
+        isPrint:
+          type: integer
+        isOutOfHome:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    AssetIndexRequest:
+      properties:
+        subplatform:
+          description: Comma separated subplatform ids.
+          type: string
+        league:
+          description: Comma separated league ids.
+          type: string
+        property:
+          description: Comma separated property ids.
+          type: string
+        subgenre:
+          description: Comma separated subgenre ids.
+          type: string
+        having_deals_in_season:
+          description: A season in which the assets have deals.
+          type: integer
+        season:
+          description: Season year the assets are requested for. When given, each property's enabled assets are resolved from the league it belonged to in that season instead of its current league.
+          type: integer
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

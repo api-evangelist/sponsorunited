@@ -1,0 +1,101 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Language API
+  version: v1
+  description: language
+tags:
+- name: Language
+  description: language
+paths:
+  /api/language/{domain}:
+    get:
+      tags:
+      - Language
+      description: Fetch language fields
+      operationId: 24e2d761909b96c578396a9f6ae302ee
+      responses:
+        '200':
+          description: Language fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuLanguageCollection'
+      security:
+      - bearerAuth: []
+      summary: 24e2d761909b96c578396a9f6ae302ee
+      x-summary-source: derived
+    post:
+      tags:
+      - Language
+      operationId: b7539dd42890b9eff8362db9c7317bc9
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuLanguageRequest'
+      responses:
+        '201':
+          description: Language fields updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuLanguageCollection'
+      security:
+      - bearerAuth: []
+      summary: B7539dd42890b9eff8362db9c7317bc9
+      x-summary-source: derived
+components:
+  schemas:
+    SuLanguageRequest:
+      required:
+      - fields
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SuLanguage'
+      type: object
+    SuLanguageCollection:
+      type: array
+      items:
+        $ref: '#/components/schemas/SuLanguageResource'
+    SuLanguage:
+      properties:
+        id:
+          type: integer
+          example: '1'
+        domain:
+          type: string
+          example: spend_tracker
+        field_name:
+          type: string
+          example: deal_level_parent
+        content:
+          type: string
+          example: lorem ipsum
+      type: object
+    SuLanguageResource:
+      properties:
+        domain:
+          type: string
+          example: spend_tracker
+        field_name:
+          type: string
+          example: deal_level_parent
+        content:
+          type: string
+          example: lorem ipsum
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

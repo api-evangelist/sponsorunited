@@ -1,0 +1,426 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Partnership Reports API
+  version: v1
+  description: Partnership Reports
+tags:
+- name: Partnership Reports
+  description: Partnership Reports
+paths:
+  /api/reports/partnership:
+    get:
+      tags:
+      - Partnership Reports
+      summary: List partnership reports
+      description: Retrieves a list of partnership reports, with optional filtering by category, subcategory, agency, league, tag, and publication date range.
+      operationId: 24076faf5891747e250cc430862e5cfa
+      parameters:
+      - name: category
+        in: query
+        description: Filter by report category ID
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: subcategory
+        in: query
+        description: Filter by report subcategory ID
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: agency
+        in: query
+        description: Filter by agency ID
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: league
+        in: query
+        description: Filter by league ID
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: tag
+        in: query
+        description: Filter by tag ID
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: publishedBefore
+        in: query
+        description: Filter by reports published before the given date
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: publishedAfter
+        in: query
+        description: Filter by reports published after the given date
+        required: false
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Partnership reports list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnershipReportCollection'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Partnership Reports
+      summary: Create a partnership report
+      description: Creates a partnership report.
+      operationId: e349ad776b0a6f15a5e4f98171cd27a3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnershipReportWriteRequest'
+      responses:
+        '200':
+          description: Parnership report object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnershipReportResource'
+      security:
+      - bearerAuth: []
+  /api/reports/partnership/{id}:
+    get:
+      tags:
+      - Partnership Reports
+      summary: Retrieve a partnership report
+      description: Fetches a partnership report by its ID.
+      operationId: a1b7d5450a707f2651bec8c2a35e2d2a
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the partnership report to retrieve
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnershipReportResource'
+        '404':
+          description: Partnership report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Partnership report not found
+                type: object
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Partnership Reports
+      summary: Update a partnership report
+      description: Updates an existing partnership report by its ID with the provided data.
+      operationId: e6dab17823064b265f4fa50ce92da980
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the partnership report to update
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Partnership report data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnershipReportWriteRequest'
+      responses:
+        '200':
+          description: Partnership report successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnershipReportResource'
+        '404':
+          description: Partnership report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Partnership report not found
+                type: object
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Partnership Reports
+      summary: Delete a partnership report
+      description: Deletes a partnership report by its ID from the database and returns its data.
+      operationId: b48ee161356151da529ca8c52c1ac043
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the partnership report to delete
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Partnership report successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnershipReportResource'
+        '404':
+          description: Partnership report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Partnership report not found
+                type: object
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    PartnershipReportResource:
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        report_external_url:
+          type: string
+        thumbnail_url:
+          type: string
+        resized_url:
+          type: string
+        original_url:
+          type: string
+        published_at:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+            type: object
+        brands:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+            type: object
+        properties:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+            type: object
+        agencies:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+            type: object
+        file:
+          $ref: '#/components/schemas/FileUploadResource'
+      type: object
+    PartnershipReportCollection:
+      description: List of partnership reports.
+      type: array
+      items:
+        $ref: '#/components/schemas/PartnershipReportResource'
+    PartnershipReportWriteRequest:
+      properties:
+        title:
+          type: string
+          example: Partnership Report Title
+        description:
+          type: string
+          example: Partnership Report Description
+        report_file_id:
+          type: integer
+          example: '1'
+        report_external_url:
+          type: string
+          example: https://www.example.com
+        thumbnail_url:
+          type: string
+          example: https://www.example.com
+        resized_url:
+          type: string
+          example: https://www.example.com
+        original_url:
+          type: string
+          example: https://www.example.com
+        published_at:
+          type: string
+          example: '2021-01-01'
+        tags:
+          type: array
+          items:
+            oneOf:
+            - type: integer
+            - type: string
+          example: '[1, ''test'', 2]'
+        brands:
+          type: array
+          items:
+            type: integer
+          example: '[1,2,3]'
+        properties:
+          type: array
+          items:
+            type: integer
+          example: '[1,2,3]'
+        agencies:
+          type: array
+          items:
+            type: integer
+          example: '[1,2,3]'
+      type: object
+    FileUploadResource:
+      description: File upload details.
+      properties:
+        id:
+          description: Unique identifier of the file upload
+          type: integer
+          example: 1
+        original_name:
+          description: The original name of the file
+          type: string
+          example: document.pdf
+        stored_name:
+          description: The stored name of the file
+          type: string
+          example: 202101_document.pdf
+        mime_type:
+          description: The MIME type of the file
+          type: string
+          example: application/pdf
+        file_size:
+          description: The size of the file in bytes
+          type: integer
+          example: 204800
+        file_hash:
+          description: A hash of the file for integrity verification
+          type: string
+          example: abcdef123456
+        url:
+          description: The URL where the file can be accessed
+          type: string
+          example: https://example.com/files/document.pdf
+        created_at:
+          description: Timestamp when the file was created
+          type: string
+          format: date-time
+        updated_at:
+          description: Timestamp when the file was last updated
+          type: string
+          format: date-time
+        user:
+          description: The user who uploaded the file
+          properties:
+            id:
+              description: Unique identifier of the user
+              type: integer
+              example: 1
+            name:
+              description: Name of the user
+              type: string
+              example: John Doe
+          type: object
+        thumbnail:
+          description: Thumbnail of the file
+          properties:
+            id:
+              description: Unique identifier of the thumbnail
+              type: integer
+              example: 2
+            original_url:
+              description: Original URL of the thumbnail
+              type: string
+              example: https://example.com/thumbnails/original.png
+            image_url:
+              description: Image URL of the thumbnail
+              type: string
+              example: https://example.com/thumbnails/image.png
+            resized_image_url:
+              description: Resized image URL of the thumbnail
+              type: string
+              example: https://example.com/thumbnails/resized.png
+            extension:
+              description: File extension of the thumbnail
+              type: string
+              example: png
+            mime_type:
+              description: MIME type of the thumbnail
+              type: string
+              example: image/png
+            file_size:
+              description: File size of the thumbnail in bytes
+              type: integer
+              example: 10240
+            width:
+              description: Width of the thumbnail in pixels
+              type: integer
+              example: 100
+            height:
+              description: Height of the thumbnail in pixels
+              type: integer
+              example: 100
+          type: object
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

@@ -1,0 +1,1367 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited League API
+  version: v1
+  description: League
+tags:
+- name: League
+  description: League
+paths:
+  /api/league:
+    get:
+      tags:
+      - League
+      summary: List leagues
+      description: Returns leagues with their related data. Supports filtering, ordering and pagination. When download is true a CSV file is streamed instead of JSON.
+      operationId: 0c4c4242dae75f46c431035a2afc13ea
+      parameters:
+      - name: name
+        in: query
+        description: Filter leagues whose name contains this value.
+        required: false
+        schema:
+          type: string
+      - name: genre
+        in: query
+        description: Genre IDs to filter by (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: subgenre
+        in: query
+        description: Subgenre IDs to filter by (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: owner
+        in: query
+        description: Owner user IDs to filter by (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: withRelationships
+        in: query
+        description: Additional relationships to eager load (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: order_by
+        in: query
+        description: Column to order by (e.g. name, genre_name, subgenre_name, owner_name, divisions_count, properties_count, scouting_priority, platforms_scouted, times_scouted_per_year, release_date).
+        required: false
+        schema:
+          type: string
+      - name: order
+        in: query
+        description: Order direction (asc or desc).
+        required: false
+        schema:
+          type: string
+      - name: paginated
+        in: query
+        description: When present, returns a paginated response instead of the full collection.
+        required: false
+        schema:
+          type: boolean
+      - name: per_page
+        in: query
+        description: Items per page when paginated (default 25).
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Page number when paginated.
+        required: false
+        schema:
+          type: integer
+      - name: download
+        in: query
+        description: When true, streams the result as a CSV file instead of returning JSON.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: A list of leagues (array, or paginated object when paginated is set). When download is true, a text/csv file is returned instead.
+        '403':
+          description: The user lacks the permission required to view leagues.
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - League
+      summary: Create a league
+      description: Creates a league along with its seasons (when dates are provided), default per-platform social scraping settings, league items and assistants.
+      operationId: d59a99da2297073547ac6dcf6d70bf74
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueStoreRequest'
+      responses:
+        '200':
+          description: The created league with its seasons and logo.
+        '400':
+          description: Wrong parameters (e.g. too many assistants or invalid date order).
+        '403':
+          description: The user lacks the permission required to create leagues.
+      security:
+      - bearerAuth: []
+  /api/league/{league}:
+    get:
+      tags:
+      - League
+      summary: Get a single league
+      description: Returns a single league with its seasons, owner, rejected companies, notes, assistants and division count.
+      operationId: 36bbe02f129adbea6fcbb0feed3cf475
+      parameters:
+      - name: league
+        in: path
+        description: League ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The requested league.
+        '404':
+          description: League not found.
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - League
+      summary: Update a league
+      description: Updates a league and, when date fields are provided, batch-updates the dates across all of its seasons. Also syncs assistants, divisions and rejected companies, and reorders sibling leagues.
+      operationId: 8b44cb2b08ef82098760d05ae8c59e81
+      parameters:
+      - name: league
+        in: path
+        description: League ID.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueUpdateRequest'
+      responses:
+        '200':
+          description: The updated league with its seasons, rejected companies, notes and assistants.
+        '400':
+          description: Wrong parameters (e.g. too many assistants, invalid date order, or seasons not set up).
+        '403':
+          description: The user lacks the permission required to edit leagues.
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - League
+      summary: Delete a league
+      description: Deletes the league after validating it can be deleted, removing its notes and logo.
+      operationId: 6517bdd725bb2ffc8c10bbc08c3bf631
+      parameters:
+      - name: league
+        in: path
+        description: League ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The league was deleted.
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    example: deleted
+                type: object
+        '400':
+          description: The league could not be deleted (deletion validation failed).
+        '403':
+          description: The user lacks the permission required to delete leagues.
+        '404':
+          description: League not found.
+      security:
+      - bearerAuth: []
+  /api/league/{league_id}/social-scraping-settings:
+    get:
+      tags:
+      - League
+      summary: Get a league's social scraping settings
+      description: Returns the league together with its Twitter, Facebook, Instagram and TikTok social scraping settings.
+      operationId: b782a5ead2399d407e9930811d1b7c42
+      parameters:
+      - name: league_id
+        in: path
+        description: League ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The league with its per-platform social scraping settings.
+        '403':
+          description: The user lacks the social scraping settings permission.
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - League
+      summary: Update a league's social scraping settings
+      description: Creates or updates the per-platform (Twitter, Facebook, Instagram, TikTok) social scraping settings for the league. Only the platforms present in the request body are modified.
+      operationId: 5c60c9bbdbc44d39b7c43a3c0c37b827
+      parameters:
+      - name: league_id
+        in: path
+        description: League ID.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueUpdateSocialScrapingSettingsRequest'
+      responses:
+        '200':
+          description: The league with its updated per-platform social scraping settings.
+        '403':
+          description: The user lacks the social scraping settings permission.
+      security:
+      - bearerAuth: []
+  /api/league/social-scraping-settings:
+    get:
+      tags:
+      - League
+      summary: List social scraping settings for all leagues
+      description: Returns one row per league/platform social scraping setting, including the handle count for the platform, with optional filtering and ordering.
+      operationId: ebda2e4221196cfd9d67672533d7bd4f
+      parameters:
+      - name: enabled_status
+        in: query
+        description: Filter by enabled status (enabled or disabled).
+        required: true
+        schema:
+          type: string
+          enum:
+          - enabled
+          - disabled
+      - name: name
+        in: query
+        description: Filter leagues whose name contains this value.
+        required: false
+        schema:
+          type: string
+      - name: genre_id
+        in: query
+        description: Genre IDs to filter by (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: subgenre_id
+        in: query
+        description: Subgenre IDs to filter by (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: platform
+        in: query
+        description: Platforms to filter by (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: week_day
+        in: query
+        description: Week days to filter by (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: order_by
+        in: query
+        description: Column to order by (e.g. handles_count or any returned column).
+        required: false
+        schema:
+          type: string
+      - name: order
+        in: query
+        description: Order direction (asc or desc).
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of league/platform social scraping settings with handle counts.
+        '422':
+          description: Validation failed. The enabled_status parameter is required.
+      security:
+      - bearerAuth: []
+  /api/league/{league_id}/seasons:
+    get:
+      tags:
+      - League
+      summary: List a league's seasons
+      description: Returns the league with its seasons sorted ascending. The latest released season is flagged as the default/current one. Returns null when the league does not exist.
+      operationId: f8c5002f468ca3e53f73b82736d30bdf
+      parameters:
+      - name: league_id
+        in: path
+        description: League ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The league with its seasons, or null when the league does not exist.
+      security:
+      - bearerAuth: []
+  /api/league/{league_id}/season/{season_id}/properties-for-spend-tracker:
+    get:
+      tags:
+      - League
+      summary: List league properties for the spend tracker
+      description: Returns the league's properties bucketed for the spend tracker for the given season.
+      operationId: c75649948530590adcfff34ae80e00ac
+      parameters:
+      - name: league_id
+        in: path
+        description: League ID.
+        required: true
+        schema:
+          type: integer
+      - name: season_id
+        in: path
+        description: Season ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The league's properties bucketed for the spend tracker.
+      security:
+      - bearerAuth: []
+  /api/league/owners:
+    get:
+      tags:
+      - League
+      summary: List league owners
+      description: Returns the distinct set of users that own at least one league, including their person profile and permissions.
+      operationId: 44f79b733bee59b79eb73d263d6e46fd
+      responses:
+        '200':
+          description: A list of distinct league owner users.
+      security:
+      - bearerAuth: []
+  /api/league/{league_id}/organizations:
+    get:
+      tags:
+      - League
+      summary: List a league's organizations
+      description: Returns a simple-paginated list of organizations that have teams in the league, including each organization's type, product type, contract status and matching teams.
+      operationId: b6e22b90bdffa54f949cea34a8716745
+      parameters:
+      - name: league_id
+        in: path
+        description: League ID.
+        required: true
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: Column to order by.
+        required: false
+        schema:
+          type: string
+          default: organization
+          enum:
+          - organization
+          - types
+          - contract_statuses
+      - name: order_direction
+        in: query
+        description: Order direction.
+        required: false
+        schema:
+          type: string
+          default: asc
+          enum:
+          - asc
+          - desc
+      - name: types
+        in: query
+        description: Organization type IDs to filter by (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: contract_statuses
+        in: query
+        description: Contract status IDs to filter by (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: page
+        in: query
+        description: Page number.
+        required: false
+        schema:
+          type: integer
+          default: 1
+      - name: per_page
+        in: query
+        description: Items per page.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A simple-paginated list of organizations with their teams in the league.
+        '422':
+          description: Validation failed due to invalid parameters.
+      security:
+      - bearerAuth: []
+  /api/league/{league_id}/latest-scouting-dates:
+    get:
+      tags:
+      - League
+      summary: List latest scouting dates per property for a league
+      description: Returns the latest scouting dates for each property in the league, wrapped with pagination metadata.
+      operationId: c36410a0b71fea4ca36c7b574629130d
+      parameters:
+      - name: league_id
+        in: path
+        description: League ID to list scouting dates for.
+        required: true
+        schema:
+          type: integer
+      - name: division_id
+        in: query
+        description: Filter properties by division ID.
+        required: false
+        schema:
+          type: integer
+      - name: per_page
+        in: query
+        description: Items per page (1-20). Defaults to 10.
+        required: false
+        schema:
+          type: integer
+          maximum: 20
+          minimum: 1
+          example: 10
+      - name: page
+        in: query
+        description: Page number. Defaults to 1.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          example: 1
+      - name: properties
+        in: query
+        description: 'Column filter: property (team) IDs to include (comma-separated). Applied across the full dataset.'
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: scouting_market_owners
+        in: query
+        description: 'Column filter: owner IDs of the property''s representative (earliest-created) scouting market (comma-separated).'
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: sort_by
+        in: query
+        description: Column to sort the full dataset by. Date columns always sort NULLs last, in both directions.
+        required: false
+        schema:
+          type: string
+          enum:
+          - name
+          - scouting_market_owner
+          - latest_venue_user_event
+          - latest_tv_user_event
+          - latest_radio_user_event
+          - latest_website_audit
+          - latest_email_and_app_audit
+          - latest_linkedin_audit
+          - latest_facebook_social_scraping_session
+          - latest_twitter_social_scraping_session
+          - latest_instagram_social_scraping_session
+          - latest_audit
+      - name: sort_order
+        in: query
+        description: Sort direction. Defaults to asc.
+        required: false
+        schema:
+          type: string
+          default: asc
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: Successful response. Returns latest scouting dates per property in a paginated envelope.
+        '422':
+          description: Validation failed due to invalid parameters.
+      security:
+      - bearerAuth: []
+  /api/league/{league_id}/latest-scouting-dates/filter-options:
+    get:
+      tags:
+      - League
+      summary: Full-dataset filter options for the Audit Dates table
+      description: Returns the available Property and Scouting Market Owner values for the column filters on GET /api/league/{league_id}/latest-scouting-dates. Values are computed across the full dataset defined by the league and the optional division scope, not just the current page.
+      operationId: 317cbb22010e0365588a397a9e5c92d9
+      parameters:
+      - name: league_id
+        in: path
+        description: League ID to list filter options for.
+        required: true
+        schema:
+          type: integer
+      - name: division_id
+        in: query
+        description: Restrict the options to a division.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Available filter values.
+          content:
+            application/json:
+              schema:
+                properties:
+                  filterOptions:
+                    properties:
+                      properties:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                          type: object
+                      scouting_market_owners:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type:
+                              - string
+                              - 'null'
+                          type: object
+                    type: object
+                type: object
+        '422':
+          description: Validation failed due to invalid parameters.
+      security:
+      - bearerAuth: []
+  /api/league/deals:
+    get:
+      tags:
+      - League
+      summary: List league deals per property with aggregated statistics
+      description: Returns deal statistics for each property (team) matching the provided filters. When use_new_behavior is true the response is a paginated envelope; otherwise it returns all matching properties plus league-level statistics.
+      operationId: 0345053225041f1a688be78ede2ee6ba
+      parameters:
+      - name: season
+        in: query
+        description: Season year to report on.
+        required: true
+        schema:
+          type: integer
+          example: 2025
+      - name: status
+        in: query
+        description: User-event statuses to filter deals by (comma-separated UserEventStatus values, e.g. 4,2,1,0). Only applied when use_new_behavior is true.
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: platform_id
+        in: query
+        description: Platform ID to filter deals by.
+        required: false
+        schema:
+          type: integer
+      - name: subplatform_id
+        in: query
+        description: Subplatform ID to filter deals by.
+        required: false
+        schema:
+          type: integer
+      - name: item_id
+        in: query
+        description: Item ID to filter deals by.
+        required: false
+        schema:
+          type: integer
+      - name: leagues
+        in: query
+        description: League IDs to filter properties by (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: scouting_groups
+        in: query
+        description: Scouting group IDs to filter properties by (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: scouting_markets
+        in: query
+        description: Scouting market IDs to filter properties by (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: properties
+        in: query
+        description: 'Column filter: property (team) IDs to include (comma-separated). Applied across the full dataset. Only used when use_new_behavior is true.'
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: scouting_market_owners
+        in: query
+        description: 'Column filter: owner IDs of the property''s representative (earliest-created) scouting market (comma-separated). Only used when use_new_behavior is true.'
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: divisions
+        in: query
+        description: 'Column filter: division IDs to include (comma-separated). Only used when use_new_behavior is true.'
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: sort_by
+        in: query
+        description: Column to sort the full dataset by. Only used when use_new_behavior is true. Non-listed columns (assigned counts, brand lists, out_of_home/other companies) are not sortable.
+        required: false
+        schema:
+          type: string
+          enum:
+          - name
+          - owner
+          - division
+          - companies_total
+          - sponsor_companies
+          - sponsor_in_venue
+          - tv_companies
+          - radio_companies
+          - social_companies
+          - digital_companies
+          - vendor_companies
+          - sponsor_subcategories_count
+      - name: sort_order
+        in: query
+        description: Sort direction. Defaults to asc.
+        required: false
+        schema:
+          type: string
+          default: asc
+          enum:
+          - asc
+          - desc
+      - name: with_assets_count_by_audit_status
+        in: query
+        description: Include asset counts grouped by audit status in the statistics.
+        required: false
+        schema:
+          type: boolean
+      - name: use_new_behavior
+        in: query
+        description: When true, returns a paginated response envelope instead of the full result set with league statistics.
+        required: false
+        schema:
+          type: boolean
+          example: false
+      - name: per_page
+        in: query
+        description: Items per page (max 20). Only used when use_new_behavior is true.
+        required: false
+        schema:
+          type: integer
+          maximum: 20
+      - name: page
+        in: query
+        description: Page number. Only used when use_new_behavior is true.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful response. Returns deal statistics per property; shape depends on use_new_behavior.
+        '422':
+          description: Validation failed. The season parameter is required.
+      security:
+      - bearerAuth: []
+  /api/league/deals/filter-options:
+    get:
+      tags:
+      - League
+      summary: Full-dataset filter options for the league-deals table
+      description: Returns the available Property, Scouting Market Owner and Division values for the column filters on GET /api/league/deals. Values use the same scoped property set as the index endpoint (season, leagues, division_id, scouting_groups, scouting_markets). Deal-level filters (status, platform_id, subplatform_id, item_id) are accepted for request compatibility but do not restrict the option list.
+      operationId: 159c70a8643366b1c625b2794ed8a1e4
+      parameters:
+      - name: season
+        in: query
+        description: Season year to report on.
+        required: true
+        schema:
+          type: integer
+          example: 2025
+      - name: status
+        in: query
+        description: Accepted for compatibility; does not restrict filter options.
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: platform_id
+        in: query
+        description: Accepted for compatibility; does not restrict filter options.
+        required: false
+        schema:
+          type: integer
+      - name: subplatform_id
+        in: query
+        description: Accepted for compatibility; does not restrict filter options.
+        required: false
+        schema:
+          type: integer
+      - name: item_id
+        in: query
+        description: Accepted for compatibility; does not restrict filter options.
+        required: false
+        schema:
+          type: integer
+      - name: leagues
+        in: query
+        description: League IDs (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: division_id
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: scouting_groups
+        in: query
+        description: Scouting group IDs (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: scouting_markets
+        in: query
+        description: Scouting market IDs (comma-separated).
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      responses:
+        '200':
+          description: Available filter values.
+          content:
+            application/json:
+              schema:
+                properties:
+                  filterOptions:
+                    properties:
+                      properties:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                          type: object
+                      scouting_market_owners:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type:
+                              - string
+                              - 'null'
+                          type: object
+                      divisions:
+                        type: array
+                        items:
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                          type: object
+                    type: object
+                type: object
+        '422':
+          description: Validation failed. The season parameter is required.
+      security:
+      - bearerAuth: []
+  /api/league/{league_id}/deals/export:
+    get:
+      tags:
+      - League
+      summary: Export year-over-year league deal reports
+      description: Generates year-over-year deal reports for the league and streams them back as a ZIP archive. When split is true, a report is generated per property in the league.
+      operationId: 679a14c74ed3d8ee068108392cfc39f0
+      parameters:
+      - name: league_id
+        in: path
+        description: League ID to export reports for.
+        required: true
+        schema:
+          type: integer
+      - name: season
+        in: query
+        description: Season year to report on. The previous season is derived automatically for comparison.
+        required: true
+        schema:
+          type: integer
+          example: 2025
+      - name: split
+        in: query
+        description: When true, generates a separate report for every property in the league.
+        required: false
+        schema:
+          type: boolean
+      - name: property_id
+        in: query
+        description: Restrict the export to a single property.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: ZIP archive containing the generated reports.
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        '422':
+          description: Validation failed. The season parameter is required.
+      security:
+      - bearerAuth: []
+  /api/league/statistics:
+    get:
+      tags:
+      - League
+      summary: Fetch aggregated statistics filtered by leagues and/or scouting markets
+      description: Returns aggregated statistics for teams matching the provided leagues and/or scouting markets. At least one of league_ids or scouting_markets must be provided.
+      operationId: 18454192a6ec88c59f14a3cdd8ee92a6
+      parameters:
+      - name: league_ids
+        in: query
+        description: League IDs to filter teams by. Required when scouting_markets is not provided.
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+          example:
+          - 11
+          - 12
+      - name: scouting_markets
+        in: query
+        description: Scouting market IDs to filter teams by. Required when league_ids is not provided.
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+          example:
+          - 42
+      - name: season
+        in: query
+        description: Season year. Defaults to the current year when omitted.
+        required: false
+        schema:
+          type: integer
+          example: 2025
+      responses:
+        '200':
+          description: Successful response. Returns aggregated statistics.
+        '422':
+          description: Validation failed. Neither league_ids nor scouting_markets provided, or invalid parameters.
+      security:
+      - bearerAuth: []
+  /api/league/statistics/completion:
+    get:
+      tags:
+      - League
+      summary: Fetch per-metric data-quality completion percentages for a league scope
+      description: Returns, for each metric, the percentage of properties in the scope whose value is neither zero nor more than 25% below the league value. Computed over the full population server-side so it stays correct when the deals list is paginated. Scope matches /api/league/statistics; season is required; at least one of league_ids or scouting_markets must be provided.
+      operationId: 41f4e25e1230259e57c4d74ff64b82ef
+      parameters:
+      - name: league_ids
+        in: query
+        description: League IDs to filter properties by. Required when scouting_markets is not provided.
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+          example:
+          - 11
+          - 12
+      - name: scouting_markets
+        in: query
+        description: Scouting market IDs to filter properties by. Required when league_ids is not provided.
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+          example:
+          - 42
+      - name: season
+        in: query
+        description: Season year.
+        required: true
+        schema:
+          type: integer
+          example: 2025
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                properties:
+                  completion:
+                    description: Percentage (0-100) of properties that are healthy for each metric.
+                    properties:
+                      companies_total:
+                        type: integer
+                        example: 87
+                      sponsor_companies:
+                        type: integer
+                        example: 72
+                      sponsor_in_venue:
+                        type: integer
+                        example: 64
+                      tv_companies:
+                        type: integer
+                        example: 55
+                      radio_companies:
+                        type: integer
+                        example: 40
+                      social_companies:
+                        type: integer
+                        example: 68
+                      digital_companies:
+                        type: integer
+                        example: 71
+                      vendor_companies:
+                        type: integer
+                        example: 33
+                      sponsor_subcategories_count:
+                        type: integer
+                        example: 59
+                    type: object
+                  total_properties:
+                    description: Number of properties in the scope the percentages were computed over.
+                    type: integer
+                    example: 32
+                type: object
+        '422':
+          description: Validation failed. Season missing, neither league_ids nor scouting_markets provided, or invalid parameters.
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    LeagueSocialScrapingPlatformSettings:
+      properties:
+        enabled:
+          description: Whether scraping is enabled for the platform.
+          type: boolean
+        frequency_value:
+          description: How often to scrape, paired with frequency_unit.
+          type: integer
+        frequency_unit:
+          description: Unit for the scraping frequency.
+          type: string
+        week_day:
+          description: Day of week scraping runs on.
+          type: string
+        end_day_offset:
+          description: Offset, in days, applied to the scraping window end.
+          type: integer
+      type: object
+    LeagueUpdateSocialScrapingSettingsRequest:
+      properties:
+        twitter:
+          oneOf:
+          - $ref: '#/components/schemas/LeagueSocialScrapingPlatformSettings'
+        facebook:
+          oneOf:
+          - $ref: '#/components/schemas/LeagueSocialScrapingPlatformSettings'
+        instagram:
+          oneOf:
+          - $ref: '#/components/schemas/LeagueSocialScrapingPlatformSettings'
+        tiktok:
+          oneOf:
+          - $ref: '#/components/schemas/LeagueSocialScrapingPlatformSettings'
+      type: object
+    LeagueStoreRequest:
+      properties:
+        name:
+          description: League name.
+          type:
+          - string
+          - 'null'
+        short_name:
+          description: League short name.
+          type:
+          - string
+          - 'null'
+        currency:
+          description: ISO currency code.
+          type:
+          - string
+          - 'null'
+          maxLength: 3
+        logo_url:
+          description: URL of the league logo image.
+          type:
+          - string
+          - 'null'
+        website_url:
+          description: League website URL.
+          type:
+          - string
+          - 'null'
+        sport_id:
+          description: Associated sport ID.
+          type:
+          - integer
+          - 'null'
+        owner_id:
+          description: League owner user ID.
+          type:
+          - integer
+          - 'null'
+        scouting_priority:
+          description: Scouting priority.
+          type:
+          - integer
+          - 'null'
+        platforms_scouted:
+          description: Number of platforms scouted.
+          type:
+          - integer
+          - 'null'
+        times_scouted_per_year:
+          description: Times scouted per year.
+          type:
+          - integer
+          - 'null'
+        genre_id:
+          description: Genre ID.
+          type:
+          - integer
+          - 'null'
+        subgenre_id:
+          description: Subgenre ID.
+          type:
+          - integer
+          - 'null'
+        release_date:
+          description: Season release date (MM/DD).
+          type:
+          - string
+          - 'null'
+        start_date:
+          description: Season start date (MM/DD).
+          type:
+          - string
+          - 'null'
+        end_date:
+          description: Season end date (MM/DD).
+          type:
+          - string
+          - 'null'
+        social_start_date:
+          description: Social scraping start date (MM/DD).
+          type:
+          - string
+          - 'null'
+        social_end_date:
+          description: Social scraping end date (MM/DD).
+          type:
+          - string
+          - 'null'
+        notes:
+          description: Free-text notes.
+          type:
+          - string
+          - 'null'
+        assistants:
+          description: User IDs to assign as league assistants.
+          type: array
+          items:
+            type: integer
+        is_continuous:
+          description: Whether the league runs continuously (no fixed season window).
+          type:
+          - boolean
+          - 'null'
+        separator_text:
+          description: Separator label used in listings.
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+      type: object
+    LeagueUpdateRequest:
+      properties:
+        name:
+          description: League name.
+          type:
+          - string
+          - 'null'
+        short_name:
+          description: League short name.
+          type:
+          - string
+          - 'null'
+        currency:
+          description: ISO currency code.
+          type:
+          - string
+          - 'null'
+          maxLength: 3
+        is_continuous:
+          description: Whether the league runs continuously (no fixed season window).
+          type:
+          - boolean
+          - 'null'
+        logo_url:
+          description: URL of the league logo image.
+          type:
+          - string
+          - 'null'
+        website_url:
+          description: League website URL.
+          type:
+          - string
+          - 'null'
+        sport_id:
+          description: Associated sport ID.
+          type:
+          - integer
+          - 'null'
+        owner_id:
+          description: League owner user ID.
+          type:
+          - integer
+          - 'null'
+        scouting_priority:
+          description: Scouting priority.
+          type:
+          - integer
+          - 'null'
+        platforms_scouted:
+          description: Number of platforms scouted.
+          type:
+          - integer
+          - 'null'
+        times_scouted_per_year:
+          description: Times scouted per year.
+          type:
+          - integer
+          - 'null'
+        genre_id:
+          description: Genre ID.
+          type:
+          - integer
+          - 'null'
+        subgenre_id:
+          description: Subgenre ID.
+          type:
+          - integer
+          - 'null'
+        notes:
+          description: Free-text notes.
+          type:
+          - string
+          - 'null'
+        assistants:
+          description: User IDs to assign as league assistants.
+          type: array
+          items:
+            type: integer
+        divisions:
+          description: League divisions to sync.
+          type: array
+          items:
+            type: object
+        rejected_companies:
+          description: Companies to mark as rejected.
+          type: array
+          items:
+            required:
+            - id
+            properties:
+              id:
+                type: integer
+            type: object
+        order:
+          description: Display order within its genre/subgenre group.
+          type: integer
+        separator_text:
+          description: Separator label used in listings.
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        release_date:
+          description: Season release date (MM/DD); applied across the league's seasons.
+          type:
+          - string
+          - 'null'
+        start_date:
+          description: Season start date (MM/DD); applied across the league's seasons.
+          type:
+          - string
+          - 'null'
+        end_date:
+          description: Season end date (MM/DD); applied across the league's seasons.
+          type:
+          - string
+          - 'null'
+        social_start_date:
+          description: Social scraping start date (MM/DD); applied across the league's seasons.
+          type:
+          - string
+          - 'null'
+        social_end_date:
+          description: Social scraping end date (MM/DD); applied across the league's seasons.
+          type:
+          - string
+          - 'null'
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

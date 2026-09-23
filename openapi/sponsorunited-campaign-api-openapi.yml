@@ -1,0 +1,167 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Campaign API
+  version: v1
+  description: Campaign
+tags:
+- name: Campaign
+  description: Campaign
+paths:
+  /api/campaign:
+    get:
+      tags:
+      - Campaign
+      summary: List all campaigns
+      description: Retrieves a list of all campaigns for the authenticated user.
+      operationId: ce69497e98cccfa18649dece699570fd
+      responses:
+        '200':
+          description: List of campaigns.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Campaign
+      summary: Create a new campaign
+      description: Creates a new campaign for the authenticated user.
+      operationId: e8348bef63e3bb96a143ee46402cccab
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - entityId
+              - entityType
+              properties:
+                entityId:
+                  description: The entity ID
+                  type: integer
+                entityType:
+                  description: The entity type
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: Campaign creation result.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+  /api/campaign/{id}/meta:
+    post:
+      tags:
+      - Campaign
+      summary: Update campaign metadata
+      description: Creates or replaces metadata entries for a specific campaign.
+      operationId: 4563fbc3450f25c86bd32aa0d811397f
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the campaign.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - type
+              - data
+              properties:
+                type:
+                  description: The metadata type prefix
+                  type: string
+                data:
+                  description: Key-value pairs of metadata
+                  type: object
+              type: object
+      responses:
+        '200':
+          description: Campaign metadata updated.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type:
+                    - object
+                    - 'null'
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+  /api/campaign/draft:
+    get:
+      tags:
+      - Campaign
+      summary: Get draft campaign
+      description: Retrieves the current user's draft campaign with its metadata.
+      operationId: 710500032cf488a2308d634c724ebec0
+      responses:
+        '200':
+          description: The draft campaign or null if none exists.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type:
+                    - object
+                    - 'null'
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

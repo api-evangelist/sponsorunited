@@ -1,0 +1,379 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Data Ingestion API
+  version: v1
+  description: Data Ingestion
+tags:
+- name: Data Ingestion
+  description: Data Ingestion
+paths:
+  /api/ingestion/submit:
+    post:
+      tags:
+      - Data Ingestion
+      summary: Submit an ingestion request
+      operationId: 1ac6b736a48f5cd0c473de8670b78e20
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitIngestionRequest'
+      responses:
+        '201':
+          description: Ingestion request submitted successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  job_uuid:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                  tasks:
+                    type: array
+                    items:
+                      properties:
+                        uuid:
+                          type: string
+                          format: uuid
+                        type:
+                          type: string
+                        status:
+                          type: string
+                      type: object
+                type: object
+        '422':
+          description: Validation error
+        '500':
+          description: Ingestion API submission failed
+      security:
+      - bearerAuth: []
+  /api/ingestion/jobs:
+    get:
+      tags:
+      - Data Ingestion
+      summary: List user's ingestion jobs
+      operationId: 383852e686eab096f952fdd496508162
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - pending
+          - in_progress
+          - completed
+          - partially_completed
+          - failed
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 15
+      responses:
+        '200':
+          description: Paginated list of ingestion jobs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IngestionJobResource'
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/ingestion/jobs/{uuid}:
+    get:
+      tags:
+      - Data Ingestion
+      summary: Get ingestion job status with all tasks
+      operationId: e8f3415453f8570d2fc348781de24e40
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Ingestion job details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionJobResource'
+        '404':
+          description: Job not found
+      security:
+      - bearerAuth: []
+  /api/ingestion/tasks/{uuid}:
+    get:
+      tags:
+      - Data Ingestion
+      summary: Get ingestion task details
+      operationId: b754d0aeb0006297c4e08d5652f8e645
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Ingestion task details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionTaskResource'
+        '404':
+          description: Task not found
+      security:
+      - bearerAuth: []
+  /api/ingestion/jobs/{uuid}/contacts:
+    get:
+      tags:
+      - Data Ingestion
+      summary: Get contact extraction results for an ingestion job
+      operationId: b91feacf49b7e5b4627e48cdcab01a4f
+      parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Contact extraction results
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    enum:
+                    - pending
+                    - processing
+                    - completed
+                    - failed
+                  result_payload:
+                    type:
+                    - object
+                    - 'null'
+                  contacts:
+                    type: array
+                    items:
+                      type: object
+                  quotes:
+                    type: array
+                    items:
+                      type: object
+                type: object
+        '404':
+          description: Job not found
+      security:
+      - bearerAuth: []
+  /api/webhooks/ingestion:
+    post:
+      tags:
+      - Data Ingestion
+      summary: Handle Data Ingestion webhook callback
+      operationId: 96c82d5fba07d678cc8472a8feb2dd90
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngestionWebhookRequest'
+      responses:
+        '200':
+          description: Webhook received
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Webhook received
+                type: object
+        '422':
+          description: Validation error
+      security:
+      - apiKey: []
+components:
+  schemas:
+    IngestionWebhookRequest:
+      required:
+      - request_id
+      - task_id
+      - type
+      - status
+      properties:
+        event_id:
+          type: string
+          format: uuid
+        correlation_id:
+          description: Optional client correlation id echoed for tracing
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        request_id:
+          type: string
+        task_id:
+          type: string
+        type:
+          type: string
+          enum:
+          - content_extraction
+          - screenshot_extraction
+          - markdown_conversion
+          - contact_extraction
+          - entity_extraction
+        status:
+          type: string
+          enum:
+          - pending
+          - accepted
+          - queued
+          - processing
+          - completed
+          - failed
+        timestamp:
+          type: string
+          format: date-time
+        result:
+          type: object
+        error:
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+          type: object
+      type: object
+    IngestionTaskResource:
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        task_type:
+          type: string
+        status:
+          type: string
+        ingestion_task_id:
+          type:
+          - string
+          - 'null'
+        task_options:
+          type:
+          - object
+          - 'null'
+        result_payload:
+          type:
+          - object
+          - 'null'
+        error_code:
+          type:
+          - string
+          - 'null'
+        error_message:
+          type:
+          - string
+          - 'null'
+        completed_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        created_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        updated_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      type: object
+    SubmitIngestionRequest:
+      required:
+      - url
+      - tasks
+      properties:
+        url:
+          type: string
+          format: url
+          maxLength: 2048
+          example: https://example.com/article
+        tasks:
+          type: array
+          items:
+            required:
+            - type
+            properties:
+              type:
+                type: string
+                enum:
+                - content_extraction
+                - screenshot_extraction
+                - markdown_conversion
+                - contact_extraction
+                - entity_extraction
+              options:
+                type: object
+            type: object
+      type: object
+    IngestionJobResource:
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        source_url:
+          type: string
+        status:
+          type: string
+        correlation_id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        completed_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        created_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        updated_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngestionTaskResource'
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

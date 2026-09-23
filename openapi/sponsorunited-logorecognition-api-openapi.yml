@@ -1,0 +1,135 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Logo Recognition API
+  version: v1
+  description: Logo recognition and brand detection endpoints
+tags:
+- name: LogoRecognition
+  description: Logo recognition and brand detection endpoints
+paths:
+  /api/logo-recognition/{logo_recognition_entity}/{logo_recognition_entity_id}/ignore-brands:
+    post:
+      tags:
+      - LogoRecognition
+      summary: Ignore brands in logo recognition
+      description: Sets the list of brands to be ignored during logo recognition for a property or league
+      operationId: 14c6aceb7082ad12958c9114e9ddf13a
+      parameters:
+      - name: logo_recognition_entity
+        in: path
+        description: Entity type (property or leagues)
+        required: true
+        schema:
+          type: string
+          enum:
+          - property
+          - leagues
+      - name: logo_recognition_entity_id
+        in: path
+        description: The ID of the entity
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoRecognitionIgnoreBrandsRequest'
+      responses:
+        '200':
+          description: List of rejected brands for the entity
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Entity not found
+      security:
+      - bearerAuth: []
+  /api/logo-recognition/image-process:
+    post:
+      tags:
+      - LogoRecognition
+      summary: Process images for logo recognition
+      description: Marks images as processed or unprocessed for logo recognition training. Requires logo training permission.
+      operationId: 6eebea24c204bb57d38b56ab5d8b266f
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoRecognitionImageProcessRequest'
+      responses:
+        '200':
+          description: Synced image data
+          content:
+            application/json:
+              schema:
+                properties:
+                  item_images:
+                    description: Array of processed item images
+                    type: array
+                    items:
+                      properties:
+                        item_value_id:
+                          type: integer
+                        image_ids:
+                          type: array
+                          items:
+                            type: integer
+                      type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - requires logo training permission
+        '500':
+          description: Server error during processing
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    LogoRecognitionImageProcessRequest:
+      required:
+      - item_images
+      properties:
+        item_images:
+          description: Array of images to process
+          type: array
+          items:
+            properties:
+              item_value_id:
+                description: The item value ID
+                type: integer
+              image_id:
+                description: The image ID
+                type: integer
+              processed:
+                description: Whether the image is processed
+                type: boolean
+                default: false
+            type: object
+      type: object
+    LogoRecognitionIgnoreBrandsRequest:
+      properties:
+        brands:
+          description: Array of brand IDs to ignore in logo recognition
+          type: array
+          items:
+            type: integer
+          example:
+          - 1
+          - 2
+          - 3
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

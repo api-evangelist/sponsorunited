@@ -1,0 +1,229 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Scouting Groups API
+  version: v1
+  description: Scouting Groups
+tags:
+- name: Scouting Groups
+  description: Scouting Groups
+paths:
+  /api/scouting-groups:
+    get:
+      tags:
+      - Scouting Groups
+      summary: List scouting groups
+      description: Returns all scouting groups with their owners, members, and member counts
+      operationId: c5781451f1f168b06373e1540fb1b1de
+      responses:
+        '200':
+          description: All Scouting Groups
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoutingGroupsIndex'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Scouting Groups
+      summary: Create or update scouting group
+      description: Creates a new scouting group or updates an existing one if an ID is provided, and syncs the group members
+      operationId: a62afe6f35086bd538f28960530ea525
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoutingGroupsStoreRequest'
+      responses:
+        '200':
+          description: The created Scouting Group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoutingGroup'
+      security:
+      - bearerAuth: []
+  /api/scouting-groups/{id}:
+    delete:
+      tags:
+      - Scouting Groups
+      summary: Delete scouting group
+      description: Removes a scouting group and detaches all its members
+      operationId: 6dc6853da67618952c1bc19a474813b4
+      parameters:
+      - name: id
+        in: path
+        description: ID of Scouting Group to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Scouting Group deleted
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ScoutingGroupsIndex:
+      allOf:
+      - $ref: '#/components/schemas/ScoutingGroup'
+      - properties:
+          members_count:
+            type: integer
+          owner:
+            allOf:
+            - $ref: '#/components/schemas/User'
+            - $ref: '#/components/schemas/PersonProfile'
+          members:
+            type: array
+            items:
+              allOf:
+              - $ref: '#/components/schemas/User'
+              - properties:
+                  person_profile:
+                    $ref: '#/components/schemas/PersonProfile'
+                  pivot:
+                    allOf:
+                    - properties:
+                        scouting_group_id:
+                          type: integer
+                        user_id:
+                          type: integer
+                      type: object
+                type: object
+        type: object
+    ScoutingGroup:
+      properties:
+        id:
+          type: integer
+        owner_id:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    PersonProfile:
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        avatar_id:
+          type:
+          - integer
+          - 'null'
+        person_profile_job_role_id:
+          type:
+          - integer
+          - 'null'
+        market_id:
+          type:
+          - integer
+          - 'null'
+        name:
+          type: string
+        job_title:
+          type:
+          - string
+          - 'null'
+        location:
+          type:
+          - string
+          - 'null'
+        school:
+          type:
+          - string
+          - 'null'
+        info:
+          type:
+          - string
+          - 'null'
+        suggested:
+          type:
+          - integer
+          - 'null'
+        previous_suggested:
+          type:
+          - integer
+          - 'null'
+        approved:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    ScoutingGroupsStoreRequest:
+      required:
+      - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        owner_id:
+          type: integer
+        members:
+          type: string
+          example: 123,456,789
+      type: object
+    User:
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        currency:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+        last_active_at:
+          type: string
+          format: date-time
+        is_external:
+          type: boolean
+        verified:
+          type: integer
+        genuine:
+          type: integer
+        hubspot_id:
+          type: integer
+        hubspot_synced_on:
+          type: string
+          format: date-time
+        force_new_password:
+          type: integer
+        credentials_sent_at:
+          type: string
+          format: date-time
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

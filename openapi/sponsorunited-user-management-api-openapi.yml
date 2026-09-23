@@ -1,0 +1,2367 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited User Management API
+  version: v1
+  description: User Management
+tags:
+- name: User Management
+  description: User Management
+paths:
+  /api/me:
+    get:
+      tags:
+      - User Management
+      summary: Get current user
+      description: Retrieves the authenticated user's profile, permissions, access, entities, and settings.
+      operationId: 31b0d32acb524c1d5a56453eb860d66d
+      responses:
+        '200':
+          description: Current user profile with permissions, access, entities, and settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserMeResponse'
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/me/access/{entityType}:
+    get:
+      tags:
+      - User Management
+      summary: Get user access permissions
+      description: Retrieves the authenticated user's access permissions for a specific entity type.
+      operationId: ce3191316a8b980d74a4df910febbb5d
+      parameters:
+      - name: entityType
+        in: path
+        description: Entity type to get access for (teams, brands, agencies, markets, property-types)
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User access permissions for the entity type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAccessResource'
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/entities:
+    get:
+      tags:
+      - User Management
+      summary: Get user entities
+      description: Retrieves the entities (teams, brands, agencies) available to the authenticated user.
+      operationId: 13cd6aa88ab21979affb330d56c503b6
+      responses:
+        '200':
+          description: User entities data
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/user/{user_id}:
+    get:
+      tags:
+      - User Management
+      summary: Get user by ID
+      description: Retrieves a specific user by their ID with profile and relationships.
+      operationId: a06a40effd210ef49367ada55a928970
+      parameters:
+      - name: user_id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResource'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - Not authorized to view this user
+        '404':
+          description: User not found
+      security:
+      - bearerAuth: []
+  /api/users:
+    post:
+      tags:
+      - User Management
+      summary: List all users
+      description: Retrieves a paginated list of users with optional filtering.
+      operationId: 9428a8001e09068bab0dc2a6fcd34054
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAllRequest'
+      responses:
+        '200':
+          description: Paginated list of users
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserResource'
+                  current_page:
+                    type: integer
+                  last_page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  total:
+                    type: integer
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - Not authorized to view users
+      security:
+      - bearerAuth: []
+  /api/user:
+    post:
+      tags:
+      - User Management
+      summary: Create new user
+      description: Creates a new user with the provided information.
+      operationId: f180c4943527271251a17160f5602a89
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+      responses:
+        '200':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResource'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - Not authorized to create users
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/user/{id}:
+    delete:
+      tags:
+      - User Management
+      summary: Delete user
+      description: Soft deletes a user and their associated data.
+      operationId: 156d66de1b244d16b2daa335a30ffefb
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: User deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResource'
+        '400':
+          description: Cannot delete user
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - Not authorized to delete users
+        '404':
+          description: User not found
+      security:
+      - bearerAuth: []
+  /api/user/{id}/representative:
+    get:
+      tags:
+      - User Management
+      summary: Get user representative
+      description: Retrieves the representative(s) for a user based on their organization.
+      operationId: e6764d61307532449b0aedb7c79a4232
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      - name: search_term
+        in: query
+        description: Filter representatives by name
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of representatives
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserRepresentativeResource'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: User not found
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - User Management
+      summary: Update user representative
+      description: Updates the representative(s) for a user.
+      operationId: 5973cac744f8def9246a667b80d5566f
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                representatives:
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                      is_main:
+                        type: boolean
+                      representative_type:
+                        type: string
+                    type: object
+              type: object
+      responses:
+        '200':
+          description: Updated representatives
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserRepresentativeResource'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: User not found
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - User Management
+      summary: Delete user representative
+      description: Removes the user's custom representative, reverting to organization default.
+      operationId: 3bc9d96939d74dc51210159ee97cc6f8
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Representative deleted, showing organization default
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRepresentativeResource'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+      security:
+      - bearerAuth: []
+  /api/user/{id}/profile/phone/check:
+    post:
+      tags:
+      - User Management
+      summary: Check phone number validity
+      description: Validates a phone number format without sending verification.
+      operationId: c1762c95ea1a53b3b14206aadc746dd9
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateUserPhoneNumberRequest'
+      responses:
+        '200':
+          description: Phone number validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilePhoneCheckResource'
+        '400':
+          description: Invalid phone number format
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/user/{id}/profile/email/validate:
+    post:
+      tags:
+      - User Management
+      summary: Initiate email validation
+      description: Initiates email validation by sending a verification PIN to the new email address.
+      operationId: 47409117d1235835a9cabe9cbb7d2c87
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateUserEmailRequest'
+      responses:
+        '200':
+          description: Validation initiated, PIN sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileFieldMfaResource'
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/user/{id}/profile/mfa:
+    put:
+      tags:
+      - User Management
+      summary: Update MFA preference
+      description: Updates the user's multi-factor authentication preference.
+      operationId: af2a4d9e2915e62eda3ba1e0ea5f6c86
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateMfaPreferenceRequest'
+      responses:
+        '200':
+          description: MFA preference updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileMfaUpdateResource'
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/user/{id}/password:
+    put:
+      tags:
+      - User Management
+      summary: Change user password
+      description: Changes the password for a user. Users can change their own password with current password verification, or admins can change any user's password.
+      operationId: 6269f58e997d88ec71e1791e7d03ba33
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                password:
+                  description: Current password (required for self-change)
+                  type: string
+                newPasswordGroup:
+                  properties:
+                    password:
+                      description: New password
+                      type: string
+                    password_confirmation:
+                      description: New password confirmation
+                      type: string
+                  type: object
+              type: object
+      responses:
+        '200':
+          description: Password change result
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  refresh_token:
+                    type:
+                    - string
+                    - 'null'
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+  /api/user/{id}/credentials:
+    post:
+      tags:
+      - User Management
+      summary: Send user credentials
+      description: Generates a new password and sends credentials email to the user.
+      operationId: f036656c76cab76ec0c2580a240c6e93
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - template
+              properties:
+                template:
+                  description: Email template slug to use
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: Credentials sent successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - Not authorized to send credentials
+        '404':
+          description: User not found
+      security:
+      - bearerAuth: []
+  /api/user/{fromUserId}/dm-reassign:
+    post:
+      tags:
+      - User Management
+      summary: Bulk-reassign Deal Manager profiles and contacts
+      description: Reassigns every Deal Manager profile and contact owned by the source user to the target user, within a single organization and database transaction. Used before deactivating a user.
+      operationId: 10130677567c18866edd30ae2ef900c6
+      parameters:
+      - name: fromUserId
+        in: path
+        description: Id of the user whose Deal Manager profiles and contacts are reassigned.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DealManagerReassignRequest'
+      responses:
+        '200':
+          description: Reassignment completed
+          content:
+            application/json:
+              schema:
+                properties:
+                  profiles_reassigned:
+                    type: integer
+                    example: 12
+                  contacts_reassigned:
+                    type: integer
+                    example: 34
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - Not authorized to reassign Deal Manager records
+        '404':
+          description: User not found
+        '422':
+          description: Validation error - cross-organization or self-target reassignment
+      security:
+      - bearerAuth: []
+  /api/user/{userId}/dm-assignments/count:
+    get:
+      tags:
+      - User Management
+      summary: Count a user's Deal Manager assignments
+      description: Returns the number of Deal Manager profiles and contacts owned by the user. Used as a cheap precheck before deactivation to decide whether the reassignment modal must be shown.
+      operationId: e51f7b0dfba6af8d14d397ede3c8194c
+      parameters:
+      - name: userId
+        in: path
+        description: Id of the user whose Deal Manager assignments are counted.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Assignment counts
+          content:
+            application/json:
+              schema:
+                properties:
+                  profiles:
+                    type: integer
+                    example: 12
+                  contacts:
+                    type: integer
+                    example: 34
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - Not authorized to view this user's Deal Manager assignments
+        '404':
+          description: User not found
+      security:
+      - bearerAuth: []
+  /api/user/{id}/restore:
+    post:
+      tags:
+      - User Management
+      summary: Restore deleted user
+      description: Restores a soft-deleted user and their associated data.
+      operationId: 392df502a617d3cb0bf5ca193553dc86
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: User restored successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResource'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - Not authorized to restore users
+        '404':
+          description: User not found
+      security:
+      - bearerAuth: []
+  /api/users/export:
+    get:
+      tags:
+      - User Management
+      summary: Export users
+      description: Exports users to a CSV file with optional filtering.
+      operationId: aff36670925ec67b69499b1f73c0b112
+      parameters:
+      - name: active
+        in: query
+        description: Filter by active status (0 or 1)
+        required: false
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+      - name: order_by
+        in: query
+        description: Field to order by
+        required: false
+        schema:
+          type: string
+      - name: order
+        in: query
+        description: Sort direction
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: CSV file download
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/user/{id}/profile/phone/countries:
+    get:
+      tags:
+      - User Management
+      summary: Get countries list
+      description: Retrieves a list of countries with phone codes for phone number validation.
+      operationId: 72e97ad7438e8f4863022a18e1e02f05
+      responses:
+        '200':
+          description: List of countries with phone codes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    name:
+                      type: string
+                    code:
+                      type: string
+                    dial_code:
+                      type: string
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/user/{id}/integration/salesforce:
+    get:
+      tags:
+      - User Management
+      summary: Get Salesforce integration status
+      description: Retrieves the Salesforce integration status and configuration for a user.
+      operationId: d619c947f2abd8328e8e10cd75e9e29a
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Salesforce integration status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSalesforceIntegrationResource'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: User not found
+      security:
+      - bearerAuth: []
+  /api/users/intercom-sync:
+    post:
+      tags:
+      - User Management
+      summary: Sync users to Intercom
+      description: Triggers bulk synchronization of users to Intercom. Returns the total number of users queued for sync.
+      operationId: 01abe88ed275b660cadbe0464da5d806
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserIntercomSyncRequest'
+      responses:
+        '202':
+          description: Sync job has been queued
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Users sync to Intercom has been queued
+                  total_users:
+                    type: integer
+                    example: 123
+                type: object
+        '403':
+          description: Forbidden - User does not have permission
+      security:
+      - bearerAuth: []
+  /api/users/intercom-sync-status:
+    get:
+      tags:
+      - User Management
+      summary: Get users Intercom sync status
+      description: Returns the Intercom sync status for specified users.
+      operationId: af628fcb5305272cb6fd1e3ce3ce0af0
+      parameters:
+      - name: user_ids
+        in: query
+        description: Array of user IDs to check status for
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+      responses:
+        '200':
+          description: Sync status for users
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserSyncStatusResource'
+                type: object
+        '403':
+          description: Forbidden - User does not have permission
+      security:
+      - bearerAuth: []
+  /api/users/for-report-sharing:
+    post:
+      tags:
+      - User Management
+      summary: List users for report sharing
+      description: Returns a paginated list of users filtered by role orientation, job role, user role, organization, organization type, product, account manager, representative, league, subcategory, genre, subgenre, category, user name, job title, last activity dates, and report received/opened counts and dates. Used to select recipients when sharing custom reports.
+      operationId: forReportSharing
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserForReportSharingRequest'
+      responses:
+        '200':
+          description: Paginated list of users for report sharing
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserForReportSharingResource'
+                  current_page:
+                    type: integer
+                    example: 1
+                  last_page:
+                    type: integer
+                    example: 1
+                  per_page:
+                    type: integer
+                    example: 50
+                  total:
+                    type: integer
+                    example: 0
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - Not authorized to view users
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/user/events:
+    get:
+      tags:
+      - User Management
+      summary: List user events
+      description: Retrieves a paginated list of user events with optional filtering.
+      operationId: c0a5bdc0b689d60bb5cdd0d12329a890
+      parameters:
+      - name: page
+        in: query
+        description: Page number for pagination
+        required: true
+        schema:
+          type: integer
+      - name: per_page
+        in: query
+        description: Number of items per page
+        required: false
+        schema:
+          type: integer
+      - name: status
+        in: query
+        description: Filter by event status codes (comma-separated)
+        required: false
+        schema:
+          type: string
+      - name: user
+        in: query
+        description: Filter by user IDs (comma-separated)
+        required: false
+        schema:
+          type: string
+      - name: scouting_groups
+        in: query
+        description: Filter by scouting group IDs (comma-separated)
+        required: false
+        schema:
+          type: string
+      - name: season
+        in: query
+        description: Filter by season IDs (comma-separated)
+        required: false
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Filter by event type codes (comma-separated)
+        required: false
+        schema:
+          type: string
+      - name: property_id
+        in: query
+        description: Filter by property ID
+        required: false
+        schema:
+          type: integer
+      - name: property_name
+        in: query
+        description: Filter by property name
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: Field to order results by
+        required: false
+        schema:
+          type: string
+      - name: order
+        in: query
+        description: Sort order (asc or desc)
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: Paginated list of user events
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                  current_page:
+                    type: integer
+                  last_page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  total:
+                    type: integer
+                type: object
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/user/{user_id}/event/{event_id}/team/{team_id}:
+    get:
+      tags:
+      - User Management
+      summary: Get single user event
+      description: Retrieves a specific user event by user, event, and team IDs.
+      operationId: 7bbb03c61b3c5af244d4c639cbaeb45d
+      parameters:
+      - name: user_id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      - name: event_id
+        in: path
+        description: Event ID
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: Team ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: User event details
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Unauthenticated
+        '404':
+          description: User event not found
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - User Management
+      summary: Create or update user event
+      description: Creates a new user event or updates an existing one.
+      operationId: 6307350b8b21cdf4dcac4a4a3955f4b8
+      parameters:
+      - name: user_id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      - name: event_id
+        in: path
+        description: Event ID
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: Team ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserEventCreateOrUpdateRequest'
+      responses:
+        '200':
+          description: User event created or updated
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Cannot reassign event with audits
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - User Management
+      summary: Delete user event
+      description: Deletes a user event. Cannot delete events that have audits.
+      operationId: b73c3ac932c400bf4c1d7be4ee040237
+      parameters:
+      - name: user_id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: integer
+      - name: event_id
+        in: path
+        description: Event ID
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: Team ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: User event deleted successfully
+        '400':
+          description: Cannot delete user events with audits
+        '401':
+          description: Unauthenticated
+        '404':
+          description: User event not found
+      security:
+      - bearerAuth: []
+  /api/user/events/download:
+    get:
+      tags:
+      - User Management
+      summary: Export user events
+      description: Exports user events to a CSV file with optional filtering.
+      operationId: a97da5668fccb315a5e42734a466026b
+      parameters:
+      - name: page
+        in: query
+        description: Page number (required for validation)
+        required: true
+        schema:
+          type: integer
+      - name: status
+        in: query
+        description: Filter by status codes (comma-separated)
+        required: false
+        schema:
+          type: string
+      - name: user
+        in: query
+        description: Filter by user IDs (comma-separated)
+        required: false
+        schema:
+          type: string
+      - name: leagues
+        in: query
+        description: Filter by league IDs (comma-separated)
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: CSV file download
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/user/settings:
+    post:
+      tags:
+      - User Management
+      summary: Create user setting
+      description: Creates a new user setting with the provided type and payload.
+      operationId: 4a09ccf8120071be7948ae3b6dfcc859
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSettingCreateRequest'
+            example:
+              type: company_revenue
+              payload: '100000000'
+      responses:
+        '200':
+          description: Setting created successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  payload:
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/user/settings/{id}:
+    put:
+      tags:
+      - User Management
+      summary: Update user setting
+      description: Updates an existing user setting's payload.
+      operationId: fbb8a4cd8a6dfba5b2546051ab8a0dd1
+      parameters:
+      - name: id
+        in: path
+        description: Setting ID
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSettingUpdateRequest'
+      responses:
+        '200':
+          description: Setting updated successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  payload:
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - Not authorized to update this setting
+        '404':
+          description: Setting not found
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - User Management
+      summary: Delete user setting
+      description: Deletes a user setting and associated cookies if applicable.
+      operationId: 70c5f8429bdb0d889f8138bc1024d012
+      parameters:
+      - name: id
+        in: path
+        description: Setting ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Setting deleted successfully
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - Not authorized to delete this setting
+        '404':
+          description: Setting not found
+        '500':
+          description: Failed to delete setting
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    UserForReportSharingRequest:
+      properties:
+        role_orientation:
+          description: Filter by role orientation IDs. Array or comma-separated string.
+        user_job_role:
+          description: Filter by person profile job role IDs. Array or comma-separated string.
+        user_role:
+          description: Filter by user role IDs. Array or comma-separated string.
+        organization:
+          description: Filter by organization IDs. Array or comma-separated string.
+        organization_type:
+          description: Filter by organization type IDs. Array or comma-separated string.
+        organization_product:
+          description: Filter by organization product IDs. Array or comma-separated string.
+        organization_account_manager:
+          description: Filter by organization account manager user IDs. Array or comma-separated string.
+        representative:
+          description: Filter by representative IDs. Array or comma-separated string.
+        league:
+          description: Filter by league IDs (property/team representatives). Array or comma-separated string.
+        subcategory:
+          description: Filter by subcategory IDs ({company} representatives). Array or comma-separated string.
+        genre:
+          description: Filter by genre IDs (via property/team representative leagues). Array or comma-separated string.
+        subgenre:
+          description: Filter by subgenre IDs (via property/team representative leagues). Array or comma-separated string.
+        category:
+          description: Filter by category IDs (via {company} representative subcategories). Array or comma-separated string.
+        user_name:
+          description: Search by user name (partial match).
+          type: string
+        job_title:
+          description: Search by job title (partial match).
+          type: string
+        last_activity_from:
+          description: Filter by last activity on or after this date.
+          type: string
+          format: date-time
+        last_activity_to:
+          description: Filter by last activity on or before this date.
+          type: string
+          format: date-time
+        reports_received_min:
+          description: Filter by minimum number of reports received.
+          type: integer
+        last_received_date_from:
+          description: Filter by last received report date on or after this date.
+          type: string
+          format: date-time
+        last_received_date_to:
+          description: Filter by last received report date on or before this date.
+          type: string
+          format: date-time
+        reports_opened_min:
+          description: Filter by minimum number of reports opened.
+          type: integer
+        last_opened_date_from:
+          description: Filter by last opened report date on or after this date.
+          type: string
+          format: date-time
+        last_opened_date_to:
+          description: Filter by last opened report date on or before this date.
+          type: string
+          format: date-time
+        page:
+          description: Page number for pagination
+          type: integer
+        per_page:
+          description: Items per page (max 1000)
+          type: integer
+          maximum: 1000
+      type: object
+    PersonProfile:
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        avatar_id:
+          type:
+          - integer
+          - 'null'
+        person_profile_job_role_id:
+          type:
+          - integer
+          - 'null'
+        market_id:
+          type:
+          - integer
+          - 'null'
+        name:
+          type: string
+        job_title:
+          type:
+          - string
+          - 'null'
+        location:
+          type:
+          - string
+          - 'null'
+        school:
+          type:
+          - string
+          - 'null'
+        info:
+          type:
+          - string
+          - 'null'
+        suggested:
+          type:
+          - integer
+          - 'null'
+        previous_suggested:
+          type:
+          - integer
+          - 'null'
+        approved:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UserForReportSharingResource:
+      properties:
+        id:
+          description: API resource for a user in the report-sharing selection list.
+          type: integer
+        userName:
+          type: string
+        email:
+          type:
+          - string
+          - 'null'
+        jobTitle:
+          type:
+          - string
+          - 'null'
+        roleOrientation:
+          type:
+          - string
+          - 'null'
+        userJobRole:
+          type:
+          - string
+          - 'null'
+        userRole:
+          type:
+          - string
+          - 'null'
+        organization:
+          type:
+          - string
+          - 'null'
+        organizationType:
+          type:
+          - string
+          - 'null'
+        organizationProduct:
+          type:
+          - string
+          - 'null'
+        organizationAccountManager:
+          type:
+          - string
+          - 'null'
+        representatives:
+          type:
+          - string
+          - 'null'
+        representativesFull:
+          type: array
+          items:
+            type: string
+        representativesCount:
+          type: integer
+        leagueAndPlatform:
+          type:
+          - string
+          - 'null'
+        leaguesFull:
+          type: array
+          items:
+            type: string
+        leaguesCount:
+          type: integer
+        subcategory:
+          type:
+          - string
+          - 'null'
+        subcategoriesFull:
+          type: array
+          items:
+            type: string
+        subcategoriesCount:
+          type: integer
+        genre:
+          type:
+          - string
+          - 'null'
+        subgenre:
+          type:
+          - string
+          - 'null'
+        category:
+          type:
+          - string
+          - 'null'
+        lastActivity:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        reportsReceived:
+          type: integer
+        lastReceivedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        reportsOpened:
+          type: integer
+        lastOpenedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      type: object
+    ProfileFieldMfaResource:
+      description: MFA field validation response
+      properties:
+        field:
+          description: Field being validated
+          type: string
+        valid:
+          description: Whether the field is valid
+          type: boolean
+        message:
+          description: Validation message
+          type: string
+      type: object
+    Company:
+      properties:
+        id:
+          type: integer
+        parent_company_id:
+          type: integer
+        subcategory_id:
+          type: integer
+        categories_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        exclude_from_social_scan:
+          type: boolean
+        exclude_from_transcribe:
+          type: boolean
+        feed_url:
+          type: string
+        statistics:
+          type: string
+        no_of_employees:
+          type: string
+        priority_markets:
+          type: string
+        parent_company:
+          type: string
+        ad_agency:
+          type: string
+        existing:
+          type: string
+        owned_by:
+          type: string
+        approved:
+          type: boolean
+        approved_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    ValidateUserEmailRequest:
+      required:
+      - email
+      properties:
+        email:
+          type: string
+      type: object
+    ProfilePhoneCheckResource:
+      properties:
+        phone_country:
+          type: string
+        phone:
+          type: string
+        valid:
+          type: boolean
+        phone_number:
+          type: string
+      type: object
+    Role:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    UserResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - properties:
+          roles:
+            type: array
+            items:
+              $ref: '#/components/schemas/Role'
+          teams:
+            type: array
+            items:
+              $ref: '#/components/schemas/Property'
+          agencies:
+            type: array
+            items:
+              $ref: '#/components/schemas/Agency'
+          brands:
+            type: array
+            items:
+              $ref: '#/components/schemas/Company'
+          organization:
+            type: array
+            items:
+              $ref: '#/components/schemas/Organization'
+          person_profile:
+            type: object
+            allOf:
+            - $ref: '#/components/schemas/PersonProfile'
+            - properties:
+                contact_details:
+                  $ref: '#/components/schemas/PersonProfileContactDetail'
+                social_details:
+                  $ref: '#/components/schemas/PersonProfileSocialDetail'
+              type: object
+          user_permissions:
+            type: array
+            items: {}
+          role_orientation:
+            oneOf:
+            - $ref: '#/components/schemas/RoleOrientationResource'
+        type: object
+    UserAccessResource:
+      description: User access permissions by entity type
+      properties:
+        teams:
+          description: Team IDs user has access to
+          type: array
+          items:
+            type: integer
+        brands:
+          description: Brand IDs user has access to
+          type: array
+          items:
+            type: integer
+        agencies:
+          description: Agency IDs user has access to
+          type: array
+          items:
+            type: integer
+      type: object
+    UserMeResponse:
+      description: Complete response for authenticated user profile with permissions, access, entities, and settings
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UserResource'
+      - properties:
+          user_permissions:
+            description: List of permission names granted to the user. Includes all user permissions with special handling for VIEW_INTERCOM, BETA, and RELEASE_V3_0 permissions based on subscription status.
+            type: array
+            items:
+              type: string
+              example: EDIT_USERS
+            example:
+            - EDIT_USERS
+            - CREATE_CONTACTS
+            - VIEW_INTERCOM
+            - BETA
+          representative:
+            description: Main representative entity for the user
+            properties:
+              id:
+                type: integer
+              ulid:
+                type:
+                - string
+                - 'null'
+              type:
+                type: string
+                enum:
+                - brand
+                - property
+                - agency
+              name:
+                type: string
+              logo:
+                type:
+                - string
+                - 'null'
+              market:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                type:
+                - object
+                - 'null'
+              league_id:
+                type:
+                - integer
+                - 'null'
+              league_name:
+                type:
+                - string
+                - 'null'
+              genre_id:
+                type:
+                - integer
+                - 'null'
+              subgenre_id:
+                type:
+                - integer
+                - 'null'
+              category_id:
+                type:
+                - integer
+                - 'null'
+              category_name:
+                type:
+                - string
+                - 'null'
+              subcategory_id:
+                type:
+                - integer
+                - 'null'
+              leagues:
+                type:
+                - array
+                - 'null'
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                  type: object
+            type: object
+          representatives:
+            description: All representative entities for the user
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                ulid:
+                  type:
+                  - string
+                  - 'null'
+                type:
+                  type: string
+                  enum:
+                  - brand
+                  - property
+                  - agency
+                name:
+                  type: string
+                logo:
+                  type:
+                  - string
+                  - 'null'
+                is_main:
+                  type: boolean
+              type: object
+          teams:
+            description: Properties/teams the user has access to
+            type: array
+            items:
+              type: object
+          agencies:
+            description: Agencies the user has access to
+            type: array
+            items:
+              type: object
+          brands:
+            description: Brands/companies the user has access to
+            type: array
+            items:
+              type: object
+          teams_count:
+            description: Total teams count
+            type: integer
+          agencies_count:
+            description: Total agencies count
+            type: integer
+          brands_count:
+            description: Total brands count
+            type: integer
+          access:
+            description: User access permissions
+            properties:
+              markets:
+                type: array
+                items:
+                  type: object
+              property_types:
+                type: array
+                items:
+                  type: object
+            type: object
+          viewEntity:
+            description: Currently selected view entity
+            properties:
+              type:
+                type: string
+                enum:
+                - team
+                - brand
+                - agency
+              entity:
+                type: object
+            type:
+            - object
+            - 'null'
+          active_subscription:
+            description: Whether user has active subscription
+            type: boolean
+          refreshed_token:
+            description: Refreshed JWT token if applicable
+            type:
+            - string
+            - 'null'
+        type: object
+    UserSyncStatusResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 123
+        status:
+          type:
+          - string
+          - 'null'
+          example: success
+      type: object
+    UserUpdateMfaPreferenceRequest:
+      required:
+      - mfa_preference
+      properties:
+        mfa_preference:
+          type: integer
+      type: object
+    UserCreateRequest:
+      required:
+      - name
+      - email
+      - password
+      - role
+      properties:
+        name:
+          description: User's full name
+          type: string
+        email:
+          description: User's email address
+          type: string
+          format: email
+        password:
+          description: Password (min 8 chars, mixed case, letters, symbols)
+          type: string
+          format: password
+        role:
+          description: Role ID to assign to user
+          type: integer
+        person_profile_job_role_id:
+          description: Job role ID from person profiles
+          type: integer
+        job_title:
+          description: User's job title
+          type: string
+        linkedin_url:
+          description: LinkedIn profile URL
+          type: string
+        facebook_url:
+          description: Facebook profile URL
+          type: string
+        twitter_url:
+          description: Twitter/X profile URL
+          type: string
+        instagram_url:
+          description: Instagram profile URL
+          type: string
+        organizations:
+          description: Organization IDs to associate
+          type: array
+          items:
+            type: integer
+        permissions:
+          description: Permission strings to assign
+          type: array
+          items:
+            type: string
+        is_external:
+          description: Whether user is external
+          type: boolean
+        force_new_password:
+          description: Force password change on first login
+          type: boolean
+        send_credentials:
+          description: Send credentials email to user
+          type: boolean
+        template:
+          description: Email template to use for credentials
+          type: string
+        role_orientation_id:
+          description: Role orientation ID (1=sell_side, 2=buy_side, 3=student)
+          type: integer
+      type: object
+    PersonProfileContactDetail:
+      properties:
+        id:
+          type: integer
+        person_profile_id:
+          type: integer
+        primary_email:
+          type: string
+        secondary_email:
+          type: string
+        previous_primary_email_status:
+          type: string
+        previous_primary_email_status_updated_at:
+          type: string
+          format: date-time
+        primary_email_status:
+          type: string
+        primary_email_status_updated_at:
+          type: string
+          format: date-time
+        manual_primary_email_status:
+          type: string
+        manual_primary_email_status_updated_at:
+          type: string
+          format: date-time
+        mail_code:
+          type: string
+        phone:
+          type: string
+        phone_country:
+          type: string
+        phone_number:
+          type: string
+        phone_extension:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    Property:
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        type_id:
+          type: integer
+        uuid:
+          type: integer
+        division_id:
+          type: integer
+        sport_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        alias:
+          type: string
+        logo:
+          type: string
+        cover:
+          type: string
+        is_continuous:
+          type: integer
+        league_level_property:
+          type: integer
+        no_of_employees:
+          type: integer
+        email:
+          type: string
+        website_url:
+          type: string
+        linkedin_url:
+          type: string
+        linkedin_id_url:
+          type: string
+        facebook_url:
+          type: string
+        twitter_url:
+          type: string
+        instagram_url:
+          type: string
+        twitch_url:
+          type: string
+        tiktok_url:
+          type: string
+        youtube_url:
+          type: string
+        exclude_from_social_scan:
+          type: integer
+        inactive:
+          type: integer
+        market:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        geolocation:
+          type: string
+        corporate_phone:
+          type: string
+        linkedin_employees:
+          type: string
+        targeted_prospects_feed_url:
+          type: string
+        top_sponsorship_headlines_feed_url:
+          type: string
+        headlines_feed_url:
+          type: string
+        capacity:
+          type: string
+        venue_uuid:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    Agency:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        logo:
+          type: string
+        no_of_employees:
+          type: integer
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        feed_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UserIntercomSyncRequest:
+      properties:
+        user_ids:
+          description: Array of user IDs to sync. If not provided, all users will be synced.
+          type: array
+          items:
+            type: integer
+      type: object
+    DealManagerReassignRequest:
+      required:
+      - to_user_id
+      properties:
+        to_user_id:
+          description: Id of the user that will receive the Deal Manager profiles and contacts.
+          type: integer
+      type: object
+    User:
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        currency:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+        last_active_at:
+          type: string
+          format: date-time
+        is_external:
+          type: boolean
+        verified:
+          type: integer
+        genuine:
+          type: integer
+        hubspot_id:
+          type: integer
+        hubspot_synced_on:
+          type: string
+          format: date-time
+        force_new_password:
+          type: integer
+        credentials_sent_at:
+          type: string
+          format: date-time
+      type: object
+    ValidateUserPhoneNumberRequest:
+      required:
+      - phone_country
+      - phone_number
+      properties:
+        phone_country:
+          type: string
+        phone_number:
+          type: string
+      type: object
+    UserSettingUpdateRequest:
+      required:
+      - payload
+      properties:
+        payload:
+          description: Setting payload data
+          type: object
+        userAgent:
+          description: Browser user agent string
+          type: string
+      type: object
+    UserRepresentativeResource:
+      description: User representative information
+      properties:
+        id:
+          description: Representative ID
+          type: integer
+        is_main:
+          description: Whether this is the main representative
+          type: boolean
+        name:
+          description: Representative name
+          type: string
+        representative_type:
+          description: Type of representative
+          type: string
+      type: object
+    UserEventCreateOrUpdateRequest:
+      required:
+      - status
+      properties:
+        status:
+          description: Event status code
+          type: integer
+        type:
+          description: Event type code
+          type: integer
+        due_date:
+          description: Event due date
+          type: string
+          format: date-time
+        attended_date:
+          description: Date event was attended
+          type: string
+          format: date-time
+        initial_note:
+          description: Initial note for the event
+          type: string
+        new_user_id:
+          description: New user ID to reassign event to
+          type: integer
+      type: object
+    ProfileMfaUpdateResource:
+      properties:
+        mfa_reference:
+          type: integer
+      type: object
+    UserAllRequest:
+      properties:
+        name:
+          description: Filter by user name
+          type: string
+        role:
+          description: Filter by role IDs
+          type: array
+          items:
+            type: integer
+        organization:
+          description: Filter by organization IDs
+          type: array
+          items:
+            type: integer
+        contract_status:
+          description: Filter by contract status
+          type: array
+          items:
+            type: string
+        external:
+          description: Filter by external status (0 or 1)
+          type: integer
+          enum:
+          - 0
+          - 1
+        active:
+          description: Filter by active status (0 or 1)
+          type: integer
+          enum:
+          - 0
+          - 1
+        order_by:
+          description: Field to order results by
+          type: string
+        order:
+          description: Sort order direction
+          type: string
+          enum:
+          - asc
+          - desc
+        page:
+          description: Page number for pagination
+          type: integer
+      type: object
+    UserSalesforceIntegrationResource:
+      description: User Salesforce integration status and configuration
+      properties:
+        has_set_salesforce_integration:
+          description: Whether Salesforce integration is configured
+          type: boolean
+        access_token:
+          description: Salesforce access token
+          type:
+          - string
+          - 'null'
+        export_contact:
+          description: Whether contact export is enabled
+          type: boolean
+        export_lead:
+          description: Whether lead export is enabled
+          type: boolean
+        user_monthly_limit:
+          description: User's monthly export limit
+          type: integer
+        user_annual_limit:
+          description: User's annual export limit
+          type: integer
+        monthly_limit:
+          description: Organization monthly limit
+          type: integer
+        annual_limit:
+          description: Annual balance remaining
+          type: integer
+        authorization_url:
+          description: Salesforce OAuth authorization URL
+          type: string
+        should_alert_download_limits:
+          description: Whether to show download limit alerts
+          type: boolean
+      type: object
+    RoleOrientationResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: sell_side
+      type: object
+    Organization:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        logo:
+          type: string
+        mfa_enabled:
+          type: integer
+        intercom_company_id:
+          type: string
+        intercom_company_company_id:
+          type: string
+        contract_status_id:
+          type: integer
+        contract_payment_type_id:
+          type: integer
+        contract_monthly_spend:
+          type: integer
+        contract_file_url:
+          type: string
+        contract_onboarding_date:
+          type: string
+          format: date-time
+        contract_start_date:
+          type: string
+          format: date-time
+        contract_end_date:
+          type: string
+          format: date-time
+        contract_auto_renew:
+          type: integer
+        product_id:
+          type: integer
+        sales_user_id:
+          type: integer
+        salesforce_id:
+          type: string
+        account_manager_id:
+          type: integer
+        default_user_subscription_plan_id:
+          type: string
+        default_user_subscription_product_name:
+          type: string
+        default_user_subscription_cancel_date:
+          type: string
+          format: date-time
+        user_email_domain:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UserSettingCreateRequest:
+      required:
+      - type
+      - payload
+      properties:
+        type:
+          description: Setting type identifier
+          type: string
+        payload:
+          description: Setting payload data
+          type: object
+        userAgent:
+          description: Browser user agent string
+          type: string
+      type: object
+    PersonProfileSocialDetail:
+      properties:
+        id:
+          type: integer
+        person_profile_id:
+          type: integer
+        linkedin_profile_url:
+          type: string
+        facebook_profile_url:
+          type: string
+        twitter_profile_url:
+          type: string
+        instagram_profile_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

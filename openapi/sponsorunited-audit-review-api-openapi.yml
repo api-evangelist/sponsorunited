@@ -1,0 +1,376 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Audit Review API
+  version: v1
+  description: Audit Review
+tags:
+- name: Audit Review
+  description: Audit Review
+paths:
+  /api/audit/{eventId}/team/{propertyId}/review/{userId}/bulk-clone:
+    post:
+      tags:
+      - Audit Review
+      summary: Bulk clone item values to a different asset within audit review.
+      operationId: 88c7a43f29eb45595efe1c8449d8c18d
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditReviewBulkCloneRequest'
+      responses:
+        '200':
+          description: Collection of cloned item values
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemValueUpdateResource'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/audit/{eventId}/team/{propertyId}/review/{userId}/bulk-update:
+    put:
+      tags:
+      - Audit Review
+      summary: Bulk update item values within audit review. Omit item_value_ids to update all
+      operationId: 9aa2de5802da6550bb9bfadc67cc8864
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditReviewBulkUpdateRequest'
+      responses:
+        '200':
+          description: Collection of updated item values
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemValueUpdateResource'
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/audit/{eventId}/team/{propertyId}/review/{userId}/bulk-delete:
+    delete:
+      tags:
+      - Audit Review
+      summary: Bulk delete item values within audit review. Omit item_value_ids to delete all
+      operationId: adfa94558a981085a8c0da43a073249d
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditReviewBulkDeleteRequest'
+      responses:
+        '204':
+          description: Successfully deleted
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+      security:
+      - bearerAuth: []
+  /api/audit/{eventId}/team/{propertyId}/review/{userId}/bulk-reject:
+    post:
+      tags:
+      - Audit Review
+      summary: Bulk reject item values within audit review. Omit item_value_ids to reject all
+      operationId: 80b7d75859134740e8a5133a37bd87ec
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditReviewBulkRejectRequest'
+      responses:
+        '204':
+          description: Successfully rejected
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ItemVideo:
+      properties:
+        id:
+          type: integer
+        video_id:
+          type: integer
+        item_value_id:
+          type: integer
+        rank:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    AuditReviewBulkDeleteRequest:
+      required: []
+      properties:
+        item_value_ids:
+          type: array
+          items:
+            type: integer
+        excluded_item_value_ids:
+          description: Item value IDs to exclude (used when item_value_ids is not provided)
+          type: array
+          items:
+            type: integer
+      type: object
+    ItemValueUpdateResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ItemValue'
+      - properties:
+          item_images:
+            type: array
+            items:
+              $ref: '#/components/schemas/ItemImage'
+        type: object
+      - properties:
+          item_videos:
+            type: array
+            items:
+              $ref: '#/components/schemas/ItemVideo'
+        type: object
+      - properties:
+          item_audios:
+            type: array
+            items:
+              $ref: '#/components/schemas/ItemAudio'
+        type: object
+    AuditReviewBulkUpdateRequest:
+      required:
+      - asset_id
+      properties:
+        item_value_ids:
+          type: array
+          items:
+            type: integer
+        excluded_item_value_ids:
+          description: Item value IDs to exclude (used when item_value_ids is not provided)
+          type: array
+          items:
+            type: integer
+        asset_id:
+          type: integer
+        frequency:
+          type:
+          - number
+          - 'null'
+        item_images:
+          type: array
+          items:
+            properties:
+              image_id:
+                type: integer
+            type: object
+        item_videos:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+            type: object
+      type: object
+    ItemImage:
+      properties:
+        id:
+          type: integer
+        image_id:
+          type: integer
+        item_value_id:
+          type: integer
+        rank:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    ItemAudio:
+      properties:
+        id:
+          type: integer
+        audio_id:
+          type: integer
+        item_value_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    AuditReviewBulkRejectRequest:
+      required:
+      - content
+      properties:
+        item_value_ids:
+          type: array
+          items:
+            type: integer
+        excluded_item_value_ids:
+          description: Item value IDs to exclude (used when item_value_ids is not provided)
+          type: array
+          items:
+            type: integer
+        content:
+          type: string
+      type: object
+    ItemValue:
+      properties:
+        id:
+          type: integer
+        item_id:
+          type: integer
+        audit_id:
+          type: integer
+        value:
+          type: integer
+        social_media_type:
+          type: integer
+        social_media_value:
+          type: string
+        frequency:
+          type: integer
+        description:
+          type: string
+        retained_at:
+          type: string
+          format: date-time
+        issued_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    AuditReviewBulkCloneRequest:
+      required:
+      - asset_id
+      properties:
+        item_value_ids:
+          type: array
+          items:
+            type: integer
+        excluded_item_value_ids:
+          description: Item value IDs to exclude (used when item_value_ids is not provided)
+          type: array
+          items:
+            type: integer
+        asset_id:
+          type: integer
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

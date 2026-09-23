@@ -1,0 +1,475 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Subcategory API
+  version: v1
+  description: Subcategory
+tags:
+- name: Subcategory
+  description: Subcategory
+paths:
+  /api/subcategory:
+    get:
+      tags:
+      - Subcategory
+      summary: List all subcategories
+      description: Returns a list of all subcategories, optionally filtered by name
+      operationId: d0ef34a3d183131dac2ccc3fee2f3764
+      parameters:
+      - name: name
+        in: query
+        description: Filter subcategories by name prefix
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of subcategories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Electric Vehicles
+                    category_id:
+                      type: integer
+                      example: 5
+                    synopsis:
+                      type:
+                      - string
+                      - 'null'
+                    rank:
+                      type:
+                      - integer
+                      - 'null'
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Subcategory
+      summary: Create a new subcategory
+      description: Creates a new subcategory with the provided data
+      operationId: 0b77d9c7d1c76b7bd5fb6f6d94bdd94e
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcategoryStoreRequest'
+      responses:
+        '200':
+          description: Subcategory created successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Electric Vehicles
+                  category_id:
+                    type: integer
+                    example: 5
+                  synopsis:
+                    type:
+                    - string
+                    - 'null'
+                  always_in_social_review:
+                    type: boolean
+                  leagues_in_social_review:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                      type: object
+                  always_in_social_reject:
+                    type: boolean
+                  leagues_in_social_reject:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                      type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+      security:
+      - bearerAuth: []
+  /api/subcategory/{id}:
+    get:
+      tags:
+      - Subcategory
+      summary: Get a subcategory by ID
+      description: Returns a single subcategory by its ID with associated leagues in social review and social reject
+      operationId: 06653546c6a25efefe7d2bdcfc813606
+      parameters:
+      - name: id
+        in: path
+        description: ID of the subcategory
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Subcategory details
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Electric Vehicles
+                  category_id:
+                    type: integer
+                    example: 5
+                  synopsis:
+                    type:
+                    - string
+                    - 'null'
+                  always_in_social_review:
+                    type: boolean
+                  leagues_in_social_review:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                      type: object
+                  always_in_social_reject:
+                    type: boolean
+                  leagues_in_social_reject:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                      type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Subcategory
+      summary: Update a subcategory
+      description: Updates an existing subcategory with the provided data
+      operationId: 79b491fe0b903767f66257da636daa10
+      parameters:
+      - name: id
+        in: path
+        description: ID of the subcategory to update
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcategoryUpdateRequest'
+      responses:
+        '200':
+          description: Subcategory updated successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  category_id:
+                    type: integer
+                  synopsis:
+                    type:
+                    - string
+                    - 'null'
+                  always_in_social_review:
+                    type: boolean
+                  leagues_in_social_review:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                      type: object
+                  always_in_social_reject:
+                    type: boolean
+                  leagues_in_social_reject:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                      type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Subcategory not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Subcategory
+      summary: Delete a subcategory
+      description: Deletes a subcategory and its associated droplets and revenues
+      operationId: 86e8237bae1ff5d55df21e12e496619c
+      parameters:
+      - name: id
+        in: path
+        description: ID of the subcategory to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Subcategory deleted successfully
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Subcategory not found
+      security:
+      - bearerAuth: []
+  /api/subcategory/top-rank:
+    get:
+      tags:
+      - Subcategory
+      summary: Get top ranked subcategory
+      description: Returns the subcategory with rank 1
+      operationId: 76ad458de6f592a6b8eb0ce14b2ced78
+      responses:
+        '200':
+          description: Top ranked subcategory
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  category_id:
+                    type: integer
+                  rank:
+                    type: integer
+                    example: 1
+                type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/subcategory/{id}/intent:
+    get:
+      tags:
+      - Subcategory
+      summary: Get subcategory intent data
+      description: Returns intent measurement data for a subcategory including brands count and audits count
+      operationId: 120e6b1e4f171feb9e8d1b804b702f81
+      parameters:
+      - name: id
+        in: path
+        description: ID of the subcategory
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Subcategory intent data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    brands_count:
+                      type: integer
+                    audits_count:
+                      type: integer
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/subcategory/{oldId}/reassign/{newId}:
+    put:
+      tags:
+      - Subcategory
+      summary: Reassign brands to another subcategory
+      description: Reassigns all brands from one subcategory to another and returns intent data for the old subcategory
+      operationId: 93b4b32dc9daebdd4d0a480c6aa0d522
+      parameters:
+      - name: oldId
+        in: path
+        description: ID of the source subcategory
+        required: true
+        schema:
+          type: integer
+      - name: newId
+        in: path
+        description: ID of the target subcategory
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Reassignment successful, returns intent data for old subcategory
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    brands_count:
+                      type: integer
+                    audits_count:
+                      type: integer
+                  type: object
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Subcategory not found
+        '500':
+          description: Server error
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    SubcategoryUpdateRequest:
+      properties:
+        name:
+          description: Name of the subcategory
+          type:
+          - string
+          - 'null'
+          example: Electric Vehicles
+        synopsis:
+          description: Brief description of the subcategory
+          type:
+          - string
+          - 'null'
+          example: Electric and hybrid vehicle manufacturers
+        always_in_social_review:
+          description: Whether this subcategory is always included in social review
+          type: boolean
+          example: false
+        leagues_social_review:
+          description: Array of league IDs for social review
+          type: array
+          items:
+            type: integer
+            example: 1
+        always_in_social_reject:
+          description: Whether brands in this subcategory are always auto-rejected in social scans
+          type: boolean
+          example: false
+        leagues_social_reject:
+          description: Array of league IDs for social auto-reject
+          type: array
+          items:
+            type: integer
+            example: 1
+      type: object
+    SubcategoryStoreRequest:
+      required:
+      - category_id
+      properties:
+        name:
+          description: Name of the subcategory
+          type:
+          - string
+          - 'null'
+          example: Electric Vehicles
+        category_id:
+          description: ID of the parent category
+          type: string
+          example: '1'
+        synopsis:
+          description: Brief description of the subcategory
+          type:
+          - string
+          - 'null'
+          example: Electric and hybrid vehicle manufacturers
+        always_in_social_review:
+          description: Whether this subcategory is always included in social review
+          type: boolean
+          example: false
+        leagues_social_review:
+          description: Array of league IDs for social review
+          type: array
+          items:
+            type: integer
+            example: 1
+        always_in_social_reject:
+          description: Whether brands in this subcategory are always auto-rejected in social scans
+          type: boolean
+          example: false
+        leagues_social_reject:
+          description: Array of league IDs for social auto-reject
+          type: array
+          items:
+            type: integer
+            example: 1
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

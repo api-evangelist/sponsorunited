@@ -1,0 +1,256 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Item Platform API
+  version: v1
+  description: Item Platform
+tags:
+- name: Item Platform
+  description: Item Platform
+paths:
+  /api/item-platform:
+    get:
+      tags:
+      - Item Platform
+      summary: List all item platforms
+      description: Returns a list of item platforms with optional filtering by platform ID, team ID, or with subplatforms
+      operationId: b2e49dcc485f0564767ecfb686b04cb8
+      parameters:
+      - name: platform_id
+        in: query
+        description: Filter by platform ID
+        required: false
+        schema:
+          type: integer
+      - name: withSubplatformsAndItems
+        in: query
+        description: Include subplatforms and items
+        required: false
+        schema:
+          type: boolean
+      - name: team_id
+        in: query
+        description: Filter by team ID
+        required: false
+        schema:
+          type: string
+      - name: season
+        in: query
+        description: Season year the counts are requested for. When given, each team's assets are counted against the league it belonged to in that season instead of its current league.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: List of item platforms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    items_count:
+                      type: integer
+                  type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Item Platform
+      summary: Create a new item platform
+      description: Creates a new platform to categorize items
+      operationId: 0d2685847bb7856e10871a329c2e8112
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: Platform created
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/item-platform/{id}:
+    get:
+      tags:
+      - Item Platform
+      summary: Get a platform by ID
+      description: Returns details of a specific item platform
+      operationId: 411eb37df1ff7e72d0aad48b5c85ff49
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Platform details
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Item Platform
+      summary: Update a platform
+      description: Updates the name of an existing item platform
+      operationId: 07294c66c34201034d70c4663a9cbada
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: Platform updated
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Item Platform
+      summary: Delete a platform
+      description: Removes an item platform from the system
+      operationId: d8ad597abfad9c34d05c3407e45cb128
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Platform deleted
+        '400':
+          description: Failed to delete
+        '404':
+          description: Platform not found
+      security:
+      - bearerAuth: []
+  /api/item-platform/{id}/subplatform:
+    get:
+      tags:
+      - Item Platform
+      summary: Get platform's subplatforms
+      description: Returns subplatforms for a platform with optional item count filtering by team
+      operationId: 306d5d4ba7e724e1e6bed9a92821e4fc
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: season
+        in: query
+        description: Season year the counts are requested for. When given, the team's assets are counted against the league it belonged to in that season instead of its current league.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: List of subplatforms with item counts
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Platform not found
+      security:
+      - bearerAuth: []
+  /api/item-platform/{id}/intent:
+    get:
+      tags:
+      - Item Platform
+      summary: Get platform intent data
+      description: Returns usage metrics for a platform including audits, items, item values, and subplatforms counts
+      operationId: f3395de70dee767dddb4e3d7cf8ffa32
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Platform intent data
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/item-platform/{oldId}/reassign/{newId}:
+    put:
+      tags:
+      - Item Platform
+      summary: Reassign items and subplatforms to another platform
+      description: Reassigns all subplatforms and items from one platform to another
+      operationId: 608b966f1337688fe6b2c3bf7face0d5
+      parameters:
+      - name: oldId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: newId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Reassignment successful, returns old platform intent data
+        '404':
+          description: Platform not found
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

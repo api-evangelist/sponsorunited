@@ -1,0 +1,153 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Agency Services Type API
+  version: v1
+  description: AgencyServicesType
+tags:
+- name: AgencyServicesType
+  description: AgencyServicesType
+paths:
+  /api/agency-services-types:
+    get:
+      tags:
+      - AgencyServicesType
+      summary: List agency service types
+      description: Returns all available agency service types with optional filtering by name and sorting options
+      operationId: e741361353dffb28f2d2360486ead685
+      responses:
+        '200':
+          description: List of agency services types.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgencyServicesTypeIndexResource'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - AgencyServicesType
+      summary: Create agency service type
+      description: Creates a new agency service type with the provided data
+      operationId: 4220a5c00d542910c4a18d46e9eb8f8e
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgencyServiceTypeCreateRequest'
+      responses:
+        '200':
+          description: Service Type details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgencyServicesTypeResource'
+      security:
+      - bearerAuth: []
+  /api/agency-services-types/{type_id}:
+    get:
+      tags:
+      - AgencyServicesType
+      summary: Get agency service type
+      description: Returns the details of a specific agency service type by its ID
+      operationId: b4e4f49e59e0651f4de4ab71afb32d75
+      parameters:
+      - name: id
+        in: path
+        description: Service Type id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Service Type details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgencyServicesTypeResource'
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - AgencyServicesType
+      summary: Update agency service type
+      description: Updates an existing agency service type with the provided data
+      operationId: d44a64dbb51364ce2ddee8d04bfd2d8b
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgencyServiceTypeUpdateRequest'
+      responses:
+        '200':
+          description: Service Type details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgencyServicesTypeResource'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - AgencyServicesType
+      summary: Delete agency service type
+      description: Deletes an agency service type by its ID. Requires delete permission
+      operationId: 75ed2ac36401e5549e10cc290d6e7c3e
+      parameters:
+      - name: id
+        in: path
+        description: AgencyServicesType Id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty on success.
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    AgencyServicesTypeResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Type 1
+      type: object
+    AgencyServicesTypeIndexResource:
+      type: array
+      items:
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+        type: object
+    AgencyServiceTypeUpdateRequest:
+      properties:
+        name:
+          type: string
+          example: Type 1
+      type: object
+    AgencyServiceTypeCreateRequest:
+      properties:
+        name:
+          type: string
+          example: Type 1
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

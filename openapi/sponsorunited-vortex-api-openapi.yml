@@ -1,0 +1,456 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Vortex API
+  version: v1
+  description: Service-to-service endpoints for the Vortex mobile app. Authenticated via X-API-Key header.
+tags:
+- name: Vortex
+  description: Service-to-service endpoints for the Vortex mobile app. Authenticated via X-API-Key header.
+paths:
+  /api/vortex/upload-image-from-url:
+    post:
+      tags:
+      - Vortex
+      summary: Ingest a scouting photo from a URL as an asset
+      description: Pulls an image from the provided URL, stores it on S3 as an asset, and returns the created Image record. The returned id can be attached to a scouting audit via items.*.images.*.id on POST /api/vortex/audit/bulk. Always creates an asset (type is fixed server-side). Authenticated via X-API-Key.
+      operationId: 3bc149d730c8a0f92d46b2a9aa9fc9a3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadImageFromUrlRequest'
+      responses:
+        '201':
+          description: Asset created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        '422':
+          description: Validation error or invalid image
+        '401':
+          description: Unauthenticated
+      security:
+      - apiKeyAuth: []
+  /api/vortex/events:
+    post:
+      tags:
+      - Vortex
+      summary: Create a scouting event from a Vortex session
+      description: Creates a new event and assigns it to the specified user. Authenticated via X-API-Key.
+      operationId: 735059a13732ba80b5619ddbc579e9f4
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VortexCreateEventRequest'
+      responses:
+        '201':
+          description: Event created successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  event_type:
+                    type: string
+                  season:
+                    type: integer
+                  hometeam_id:
+                    type: integer
+                  awayteam_id:
+                    type: integer
+                  scheduled:
+                    type:
+                    - string
+                    - 'null'
+                    format: date-time
+                type: object
+        '422':
+          description: Validation error
+        '401':
+          description: Unauthenticated
+      security:
+      - apiKeyAuth: []
+  /api/vortex/audit/bulk:
+    post:
+      tags:
+      - Vortex
+      summary: Push bulk scouting data from a completed Vortex session
+      description: Creates audits and item values for multiple brands across a scouting event. Authenticated via X-API-Key. All entity IDs (brands, properties, events) must be pre-resolved. Sessions with unresolved IDs should be filtered out before calling this endpoint.
+      operationId: b345ce5989c7db7985d6226075ceca03
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VortexBulkAddRequest'
+      responses:
+        '200':
+          description: Item values created successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '422':
+          description: Validation error
+        '401':
+          description: Unauthenticated
+      security:
+      - apiKeyAuth: []
+  /api/vortex/user-event-notes:
+    post:
+      tags:
+      - Vortex
+      summary: Attach notes to a scouting event
+      description: Attaches one or more notes to a user's scouting session for an event+property, stored exactly like the single-note Scout flow. Creates the user event in the review queue if it does not yet exist. Idempotent. Authenticated via X-API-Key.
+      operationId: 7688f9a0f9fc94c86a6f3aec6bb465c7
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VortexUserEventNotesStoreRequest'
+      responses:
+        '201':
+          description: Notes attached successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '422':
+          description: Validation error
+        '401':
+          description: Unauthenticated
+      security:
+      - apiKeyAuth: []
+  /api/vortex/user-event-uploads:
+    post:
+      tags:
+      - Vortex
+      summary: Attach session-level media to a scouting event
+      description: Attaches already-uploaded media (e.g. images from POST /api/vortex/upload-image-from-url) to a user's scouting session for an event+property, without recording any brand/item audit. Creates the user event in the review queue if it does not yet exist. Idempotent. Authenticated via X-API-Key.
+      operationId: 64882b86eec7c644fd28067f5e650665
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VortexUserEventUploadsStoreRequest'
+      responses:
+        '201':
+          description: Uploads attached successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '422':
+          description: Validation error
+        '401':
+          description: Unauthenticated
+      security:
+      - apiKeyAuth: []
+components:
+  schemas:
+    VortexUserEventNotesStoreRequest:
+      required:
+      - user_id
+      - event_id
+      - property_id
+      - notes
+      properties:
+        user_id:
+          description: ID of the scout the notes belong to
+          type: integer
+        event_id:
+          description: Event ID (must pre-exist)
+          type: integer
+        property_id:
+          description: Property / team ID being scouted
+          type: integer
+        notes:
+          description: Notes to attach to the user event
+          type: array
+          items:
+            required:
+            - content
+            properties:
+              content:
+                description: Note body
+                type: string
+            type: object
+      type: object
+    VortexBulkAddRequest:
+      required:
+      - user_id
+      - companies
+      - properties
+      - items
+      properties:
+        user_id:
+          description: ID of the user submitting the scouting session
+          type: integer
+        isQuickAdd:
+          description: Whether this is a quick-add session (always true for vortex)
+          type: boolean
+          default: true
+        companies:
+          description: Brands with resolved core-api IDs
+          type: array
+          items:
+            required:
+            - id
+            properties:
+              id:
+                description: Brand ID
+                type: integer
+            type: object
+        properties:
+          description: Properties with their associated events
+          type: array
+          items:
+            required:
+            - id
+            - events
+            properties:
+              id:
+                description: Property / team ID
+                type: integer
+              events:
+                type: array
+                items:
+                  required:
+                  - id
+                  - season
+                  - event_type
+                  - scheduled
+                  properties:
+                    id:
+                      description: Event ID (must pre-exist)
+                      type: integer
+                    season:
+                      description: Season year
+                      type: integer
+                    event_type:
+                      type: string
+                      enum:
+                      - season
+                      - single
+                      - multi
+                      - social
+                      - twitter_scan
+                      - facebook_scan
+                      - instagram_scan
+                      - tiktok_scan
+                    scheduled:
+                      type:
+                      - string
+                      - 'null'
+                      format: date-time
+                    startDate:
+                      type:
+                      - string
+                      - 'null'
+                      format: date
+                    endDate:
+                      type:
+                      - string
+                      - 'null'
+                      format: date
+                  type: object
+            type: object
+        items:
+          description: Placement items with counts
+          type: array
+          items:
+            required:
+            - id
+            properties:
+              id:
+                description: Item ID
+                type: integer
+              frequency:
+                description: Occurrence count
+                type: integer
+              value:
+                type:
+                - number
+                - 'null'
+                format: float
+            type: object
+      type: object
+    VortexUserEventUploadsStoreRequest:
+      required:
+      - user_id
+      - event_id
+      - property_id
+      - uploads
+      properties:
+        user_id:
+          description: ID of the scout the session belongs to
+          type: integer
+        event_id:
+          description: Event ID (must pre-exist)
+          type: integer
+        property_id:
+          description: Property / team ID being scouted
+          type: integer
+        uploads:
+          description: Session-level media to attach to the user event (e.g. scouting photos uploaded via POST /api/vortex/upload-image-from-url)
+          type: array
+          items:
+            required:
+            - media_id
+            - media_type
+            properties:
+              media_id:
+                description: Image / Video / Audio ID
+                type: integer
+              media_type:
+                type: string
+                enum:
+                - image
+                - video
+                - audio
+            type: object
+      type: object
+    Image:
+      properties:
+        id:
+          type: integer
+        storage:
+          type: string
+        folder:
+          type: string
+        original_name:
+          type: string
+        stored_name:
+          type: string
+        needs_check:
+          type: integer
+        blurhash:
+          type: string
+        hammhash:
+          type: string
+        original_url:
+          type: string
+        image_url:
+          type: string
+        resized_image_url:
+          type: string
+        enhanced_image_url:
+          type: string
+        extension:
+          type: string
+        mime_type:
+          type: string
+        exif:
+          type: string
+        file_size:
+          type: string
+        width:
+          type: string
+        height:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    VortexCreateEventRequest:
+      required:
+      - user_id
+      - hometeam_id
+      - name
+      - event_type
+      - season
+      properties:
+        user_id:
+          description: ID of the user to assign this event to
+          type: integer
+        hometeam_id:
+          description: ID of the home team / property
+          type: integer
+        awayteam_id:
+          description: ID of the away team (defaults to hometeam_id if omitted)
+          type:
+          - integer
+          - 'null'
+        name:
+          description: Event name
+          type: string
+        event_type:
+          description: Type of event
+          type: string
+          enum:
+          - season
+          - single
+          - multi
+          - social
+        season:
+          description: Season year (e.g. 2026)
+          type: integer
+        scheduled:
+          description: ISO 8601 scheduled datetime
+          type:
+          - string
+          - 'null'
+          format: date-time
+        venue_id:
+          description: Venue ID
+          type:
+          - integer
+          - 'null'
+        attended_date:
+          description: When the scout was demonstrably on site — the earliest photo capture time. Falls back to scheduled when omitted.
+          type:
+          - string
+          - 'null'
+          format: date-time
+      type: object
+    UploadImageFromUrlRequest:
+      title: Upload Image From URL Request
+      description: Request schema for uploading an image from a URL to S3
+      required:
+      - url
+      properties:
+        url:
+          description: The URL of the image to upload
+          type: string
+          format: url
+          example: https://example.com/image.png
+        type:
+          description: The upload type category
+          type:
+          - string
+          - 'null'
+          example: generic
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

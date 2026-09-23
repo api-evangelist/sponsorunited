@@ -1,0 +1,191 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Role Orientation API
+  version: v1
+  description: Role orientation management endpoints
+tags:
+- name: RoleOrientation
+  description: Role orientation management endpoints
+paths:
+  /api/role-orientation:
+    get:
+      tags:
+      - RoleOrientation
+      summary: List all role orientations
+      description: Returns a list of all role orientations
+      operationId: 292d4f62d109dc4e646db1663a613a8d
+      parameters:
+      - name: name
+        in: query
+        description: Filter by name
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of role orientations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleOrientation'
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - RoleOrientation
+      summary: Create a new role orientation
+      description: Creates a new role orientation
+      operationId: 29611295373290831b5d974f9802f8f6
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleOrientationStoreRequest'
+      responses:
+        '201':
+          description: Role orientation created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleOrientation'
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/role-orientation/{id}:
+    get:
+      tags:
+      - RoleOrientation
+      summary: Get a role orientation by ID
+      description: Returns a single role orientation
+      operationId: c3daf8320d973d283c6fa7291e95ec2e
+      parameters:
+      - name: id
+        in: path
+        description: ID of the role orientation
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Role orientation details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleOrientation'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Not found
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - RoleOrientation
+      summary: Update a role orientation
+      description: Updates an existing role orientation
+      operationId: 619f8e9c0df36d6d5e34779bf3b03b81
+      parameters:
+      - name: id
+        in: path
+        description: ID of the role orientation to update
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleOrientationUpdateRequest'
+      responses:
+        '200':
+          description: Role orientation updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleOrientation'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - RoleOrientation
+      summary: Delete a role orientation
+      description: Deletes a role orientation
+      operationId: 4fa1a73cd654513bfeef220f76136407
+      parameters:
+      - name: id
+        in: path
+        description: ID of the role orientation to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Role orientation deleted successfully
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Not found
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    RoleOrientation:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          enum:
+          - sell_side
+          - buy_side
+          - student
+      type: object
+    RoleOrientationUpdateRequest:
+      required:
+      - name
+      properties:
+        name:
+          description: Name of the role orientation
+          type: string
+          maxLength: 255
+          minLength: 1
+          example: buy_side
+      type: object
+    RoleOrientationStoreRequest:
+      required:
+      - name
+      properties:
+        name:
+          description: Name of the role orientation
+          type: string
+          maxLength: 255
+          minLength: 1
+          example: sell_side
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

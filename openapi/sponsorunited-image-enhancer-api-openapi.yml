@@ -1,0 +1,93 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Image Enhancer API
+  version: v1
+  description: Image Enhancer
+tags:
+- name: Image Enhancer
+  description: Image Enhancer
+paths:
+  /api/image/{id}/enhance:
+    put:
+      tags:
+      - Image Enhancer
+      summary: Save enhanced image
+      description: Replaces image URL with enhanced image URL
+      operationId: 14776c9602fcec3adfdf420a096c0bbe
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the image
+        required: true
+        schema:
+          type: integer
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    description: Error message
+                    type: string
+                type: object
+    post:
+      tags:
+      - Image Enhancer
+      summary: Enhance Image
+      description: Enhances an image by its ID using VanceAI and returns the transformation ID.
+      operationId: 92f2efccbdac4fbf9f4b2c4a933b2594
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the image to enhance
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  trans_id:
+                    description: The VanceAI ID of the transformed image
+                    type: string
+                type: object
+        '404':
+          description: Image not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    description: Error message
+                    type: string
+                type: object
+        '502':
+          description: VanceAI enhancement failed
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    description: Error message
+                    type: string
+                type: object
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

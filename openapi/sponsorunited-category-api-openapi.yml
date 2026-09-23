@@ -1,0 +1,528 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Category API
+  version: v1
+  description: Category
+tags:
+- name: Category
+  description: Category
+paths:
+  /api/category:
+    get:
+      tags:
+      - Category
+      summary: List all categories
+      description: Returns a list of all categories with subcategory counts. Results are cached for 5 minutes.
+      operationId: 327644f4d836240fa297b2822ab6ca92
+      parameters:
+      - name: name
+        in: query
+        description: Filter categories by name prefix
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Automotive
+                    synopsis:
+                      type:
+                      - string
+                      - 'null'
+                    subcategories_count:
+                      type: integer
+                      example: 15
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Category
+      summary: Create a new category
+      description: Creates a new category with the provided name and optional synopsis
+      operationId: de40ad04180a48262a05cf249f785ab3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryStoreRequest'
+      responses:
+        '200':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Automotive
+                  synopsis:
+                    type:
+                    - string
+                    - 'null'
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+      security:
+      - bearerAuth: []
+  /api/category/{categoryId}/subcategories:
+    get:
+      tags:
+      - Category
+      summary: Get category with its subcategories
+      description: Returns a category with all its associated subcategories
+      operationId: 5ac8a30a0a3c05aac34caee11cee81f4
+      parameters:
+      - name: categoryId
+        in: path
+        description: ID of the category
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Category with subcategories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    subcategories:
+                      type: array
+                      items:
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          category_id:
+                            type: integer
+                        type: object
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/category/subcategories/{subcategoryId}/export/contacts:
+    get:
+      tags:
+      - Category
+      summary: Export contacts for a subcategory
+      description: Exports all brand contacts for a given subcategory as a CSV file
+      operationId: c90e8190971834f196af3f29be981524
+      parameters:
+      - name: subcategoryId
+        in: path
+        description: ID of the subcategory
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: CSV file with contacts
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Subcategory not found
+      security:
+      - bearerAuth: []
+  /api/category/subcategories:
+    get:
+      tags:
+      - Category
+      summary: Get extended list of categories with subcategories
+      description: Returns all categories with their subcategories including extended information like teams with deals, revenue per deal, rank, brands count, and contacts count
+      operationId: e5177fd1e6da08384c1a3ce8e12f0565
+      responses:
+        '200':
+          description: Extended list of subcategories with category information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    subcategory_id:
+                      type: integer
+                    subcategory_name:
+                      type: string
+                    teams_w_deal:
+                      type: integer
+                    rev_per_deal:
+                      type: number
+                    rank:
+                      type: integer
+                    brands_count:
+                      type: integer
+                    contacts_count:
+                      type: integer
+                    category_id:
+                      type: integer
+                    category_name:
+                      type: string
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/brands/categories:
+    get:
+      tags:
+      - Category
+      summary: Get all categories with subcategories
+      description: Returns cached list of all categories with their subcategories
+      operationId: dc4b547df11e479d1c62778cf173bcaa
+      responses:
+        '200':
+          description: List of categories with subcategories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    subcategories:
+                      type: array
+                      items:
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                        type: object
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/category/with-teams/{categoryId}:
+    get:
+      tags:
+      - Category
+      summary: Get category with audited properties
+      description: Returns categories that have audited properties (teams). If categoryId is provided, filters to that specific category.
+      operationId: 8bc1ece7d7c47fc62daeacd3506a89a5
+      parameters:
+      - name: categoryId
+        in: path
+        description: ID of the category (optional)
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: List of categories with audited properties
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/category/{id}:
+    get:
+      tags:
+      - Category
+      summary: Get a category by ID
+      description: Returns a single category by its ID
+      operationId: 25690688339275caf7ded3e8702e7670
+      parameters:
+      - name: id
+        in: path
+        description: ID of the category
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Category details
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Automotive
+                  synopsis:
+                    type:
+                    - string
+                    - 'null'
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+                type: object
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Category
+      summary: Update a category
+      description: Updates an existing category with the provided data
+      operationId: 9be67b4880d28356ade2ebc0b425415e
+      parameters:
+      - name: id
+        in: path
+        description: ID of the category to update
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryUpdateRequest'
+      responses:
+        '204':
+          description: Category updated successfully
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Category not found
+        '422':
+          description: Validation error
+        '500':
+          description: Server error
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Category
+      summary: Delete a category
+      description: Soft deletes a category by its ID
+      operationId: 534a636fb456263f752f0983f8097fb5
+      parameters:
+      - name: id
+        in: path
+        description: ID of the category to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Category deleted successfully
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Category not found
+        '500':
+          description: Server error
+      security:
+      - bearerAuth: []
+  /api/category/{id}/intent:
+    get:
+      tags:
+      - Category
+      summary: Get category intent data
+      description: Returns intent measurement data for a category including brands count and audits count
+      operationId: 8e13bcbaa1070ba06f5e70505c69f87f
+      parameters:
+      - name: id
+        in: path
+        description: ID of the category
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Category intent data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    brands_count:
+                      type: integer
+                    audits_count:
+                      type: integer
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/category/{oldId}/reassign/{newId}:
+    put:
+      tags:
+      - Category
+      summary: Reassign subcategories to another category
+      description: Reassigns all subcategories from one category to another and returns intent data for the old category
+      operationId: 938c724b855fe2503eb00c86d38ea942
+      parameters:
+      - name: oldId
+        in: path
+        description: ID of the source category
+        required: true
+        schema:
+          type: integer
+      - name: newId
+        in: path
+        description: ID of the target category
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Reassignment successful, returns intent data for old category
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    brands_count:
+                      type: integer
+                    audits_count:
+                      type: integer
+                  type: object
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Category not found
+      security:
+      - bearerAuth: []
+  /api/category/download:
+    get:
+      tags:
+      - Category
+      description: The endpoint returns list of exported categories
+      operationId: 8fe5c701866791d2605caa179ddea8cc
+      responses:
+        '200':
+          description: A response with categories
+      security:
+      - bearerAuth: []
+      summary: 8fe5c701866791d2605caa179ddea8cc
+      x-summary-source: derived
+  /api/category/subcategories/download:
+    get:
+      tags:
+      - Category
+      description: The endpoint returns list of exported subcategories
+      operationId: 67421d0d3de41e23c90b996497f01dcc
+      responses:
+        '200':
+          description: A response with subcategories
+      security:
+      - bearerAuth: []
+      summary: 67421d0d3de41e23c90b996497f01dcc
+      x-summary-source: derived
+components:
+  schemas:
+    CategoryStoreRequest:
+      required:
+      - name
+      properties:
+        name:
+          description: Name of the category
+          type: string
+          minLength: 3
+          example: Automotive
+        synopsis:
+          description: Brief description of the category
+          type:
+          - string
+          - 'null'
+          example: Automotive industry brands and companies
+      type: object
+    CategoryUpdateRequest:
+      required:
+      - name
+      properties:
+        name:
+          description: Name of the category
+          type: string
+          minLength: 3
+          example: Automotive
+        synopsis:
+          description: Brief description of the category
+          type:
+          - string
+          - 'null'
+          example: Automotive industry brands and companies
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

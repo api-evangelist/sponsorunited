@@ -1,0 +1,260 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Keyword API
+  version: v1
+  description: Keyword
+tags:
+- name: Keyword
+  description: Keyword
+paths:
+  /api/keywords:
+    get:
+      tags:
+      - Keyword
+      operationId: ff11c6bbebabf52b4e565bde4f8bca0c
+      responses:
+        '200':
+          description: Keywords with their assets.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeywordIndexResource'
+      security:
+      - bearerAuth: []
+      summary: Ff11c6bbebabf52b4e565bde4f8bca0c
+      x-summary-source: derived
+    post:
+      tags:
+      - Keyword
+      operationId: df36fd61d5ccd37fd06b051065a37327
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreKeywordRequest'
+      responses:
+        '201':
+          description: A new keyword with its image.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeywordShowStoreUpdateResource'
+      security:
+      - bearerAuth: []
+      summary: Df36fd61d5ccd37fd06b051065a37327
+      x-summary-source: derived
+  /api/keywords/{id}:
+    get:
+      tags:
+      - Keyword
+      operationId: fbceb84328d1c895ce7972a724f11ca0
+      parameters:
+      - name: id
+        in: path
+        description: Id of a keyword
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A keyword with its image.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeywordShowStoreUpdateResource'
+      security:
+      - bearerAuth: []
+      summary: Fbceb84328d1c895ce7972a724f11ca0
+      x-summary-source: derived
+    put:
+      tags:
+      - Keyword
+      operationId: dcf0c181115fdd532fdbf102e6b9069e
+      parameters:
+      - name: id
+        in: path
+        description: Id of a keyword
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateKeywordRequest'
+      responses:
+        '201':
+          description: The updated keyword with its image.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeywordShowStoreUpdateResource'
+      security:
+      - bearerAuth: []
+      summary: Dcf0c181115fdd532fdbf102e6b9069e
+      x-summary-source: derived
+    delete:
+      tags:
+      - Keyword
+      operationId: de3314af464060f2c2a9fc3e74ae22de
+      parameters:
+      - name: id
+        in: path
+        description: Id of a keyword
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty response when the keyword has been deleted successfully.
+          content:
+            application/json:
+              schema: {}
+              example: '[]'
+      security:
+      - bearerAuth: []
+      summary: De3314af464060f2c2a9fc3e74ae22de
+      x-summary-source: derived
+  /api/keywords/position:
+    post:
+      tags:
+      - Keyword
+      operationId: 95353e101c64d0c6f1f36a0642194638
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PositionKeywordRequest'
+      responses:
+        '200':
+          description: Keywords with their assets.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeywordIndexResource'
+      security:
+      - bearerAuth: []
+      summary: 95353e101c64d0c6f1f36a0642194638
+      x-summary-source: derived
+components:
+  schemas:
+    KeywordIndexResource:
+      type: array
+      items:
+        properties:
+          id:
+            type: integer
+          keyword:
+            type: string
+          image_id:
+            type: integer
+          position:
+            type: integer
+          image:
+            $ref: '#/components/schemas/Image'
+        type: object
+    PositionKeywordRequest:
+      required:
+      - keywords
+      properties:
+        keywords:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+            type: object
+      type: object
+    Image:
+      properties:
+        id:
+          type: integer
+        storage:
+          type: string
+        folder:
+          type: string
+        original_name:
+          type: string
+        stored_name:
+          type: string
+        needs_check:
+          type: integer
+        blurhash:
+          type: string
+        hammhash:
+          type: string
+        original_url:
+          type: string
+        image_url:
+          type: string
+        resized_image_url:
+          type: string
+        enhanced_image_url:
+          type: string
+        extension:
+          type: string
+        mime_type:
+          type: string
+        exif:
+          type: string
+        file_size:
+          type: string
+        width:
+          type: string
+        height:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    StoreKeywordRequest:
+      required:
+      - keyword
+      - image_id
+      properties:
+        keyword:
+          type: string
+        image_id:
+          type: integer
+      type: object
+    KeywordShowStoreUpdateResource:
+      properties:
+        id:
+          type: integer
+        keyword:
+          type: string
+        image_id:
+          type: integer
+        position:
+          type: integer
+        image:
+          $ref: '#/components/schemas/Image'
+      type: object
+    UpdateKeywordRequest:
+      properties:
+        keyword:
+          type: string
+        image_id:
+          type: integer
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

@@ -1,0 +1,220 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited File Uploads API
+  version: v1
+  description: FileUploads
+tags:
+- name: File Uploads
+  description: FileUploads
+paths:
+  /api/files:
+    get:
+      tags:
+      - File Uploads
+      summary: Get list of file uploads
+      description: Returns a list of all file uploads along with associated user and thumbnail information.
+      operationId: 27dd464763aad5e6651dbfa7fd432371
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileUploadResource'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - File Uploads
+      summary: Upload a new file
+      description: Stores a file, generates a thumbnail if necessary, and returns its details.
+      operationId: 2498ca43195246370e48eb355e0e4fed
+      requestBody:
+        description: File details
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
+      responses:
+        '200':
+          description: The uploaded file details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadResource'
+        '400':
+          description: Invalid request
+      security:
+      - bearerAuth: []
+  /api/files/{id}:
+    get:
+      tags:
+      - File Uploads
+      summary: Get file upload by ID
+      description: Returns a single file upload along with associated user and thumbnail information by ID.
+      operationId: 13d2f487727ef239622c205a541f3905
+      parameters:
+      - name: id
+        in: path
+        description: ID of the file upload to return
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadResource'
+        '404':
+          description: File upload not found
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - File Uploads
+      summary: Delete a file upload
+      description: Deletes a single file upload by ID and returns the deleted file's details.
+      operationId: ff9f36d679456b089d6834cd6978bafd
+      parameters:
+      - name: id
+        in: path
+        description: ID of the file upload to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The deleted file upload details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadResource'
+        '404':
+          description: File upload not found
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    FileUploadRequest:
+      description: Request schema for uploading a file
+      required:
+      - file
+      properties:
+        file:
+          description: The file to upload. Must be a PDF, PPT, PPTX, XLS, XLSX, or CSV. Max size 20MB.
+          type: string
+          format: binary
+        generate_thumbnail:
+          description: Whether to generate a thumbnail for the uploaded file.
+          type: boolean
+          example: true
+      type: object
+    FileUploadResource:
+      description: File upload details.
+      properties:
+        id:
+          description: Unique identifier of the file upload
+          type: integer
+          example: 1
+        original_name:
+          description: The original name of the file
+          type: string
+          example: document.pdf
+        stored_name:
+          description: The stored name of the file
+          type: string
+          example: 202101_document.pdf
+        mime_type:
+          description: The MIME type of the file
+          type: string
+          example: application/pdf
+        file_size:
+          description: The size of the file in bytes
+          type: integer
+          example: 204800
+        file_hash:
+          description: A hash of the file for integrity verification
+          type: string
+          example: abcdef123456
+        url:
+          description: The URL where the file can be accessed
+          type: string
+          example: https://example.com/files/document.pdf
+        created_at:
+          description: Timestamp when the file was created
+          type: string
+          format: date-time
+        updated_at:
+          description: Timestamp when the file was last updated
+          type: string
+          format: date-time
+        user:
+          description: The user who uploaded the file
+          properties:
+            id:
+              description: Unique identifier of the user
+              type: integer
+              example: 1
+            name:
+              description: Name of the user
+              type: string
+              example: John Doe
+          type: object
+        thumbnail:
+          description: Thumbnail of the file
+          properties:
+            id:
+              description: Unique identifier of the thumbnail
+              type: integer
+              example: 2
+            original_url:
+              description: Original URL of the thumbnail
+              type: string
+              example: https://example.com/thumbnails/original.png
+            image_url:
+              description: Image URL of the thumbnail
+              type: string
+              example: https://example.com/thumbnails/image.png
+            resized_image_url:
+              description: Resized image URL of the thumbnail
+              type: string
+              example: https://example.com/thumbnails/resized.png
+            extension:
+              description: File extension of the thumbnail
+              type: string
+              example: png
+            mime_type:
+              description: MIME type of the thumbnail
+              type: string
+              example: image/png
+            file_size:
+              description: File size of the thumbnail in bytes
+              type: integer
+              example: 10240
+            width:
+              description: Width of the thumbnail in pixels
+              type: integer
+              example: 100
+            height:
+              description: Height of the thumbnail in pixels
+              type: integer
+              example: 100
+          type: object
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

@@ -1,0 +1,1029 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Audits API
+  version: v1
+  description: Audit management endpoints for scouting reports
+tags:
+- name: Audits
+  description: Audit management endpoints for scouting reports
+paths:
+  /api/audit/{event_id}/team/{team_id}/company/{brand_id}:
+    get:
+      tags:
+      - Audits
+      summary: Get audit by brand for current user
+      description: Returns audit data for a specific event, team, and brand combination for the authenticated user
+      operationId: 11f41b8d9f2333f1e9d669b8b620291b
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: The ID of the team/property
+        required: true
+        schema:
+          type: integer
+      - name: brand_id
+        in: path
+        description: The ID of the brand/company
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Audit data with brand, event, team, user, and item values
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/team/{team_id}/review/{user_id}:
+    get:
+      tags:
+      - Audits
+      summary: Get audits for review
+      description: Returns all audits for a specific event, team, and user for review purposes
+      operationId: a66f6d57d90708be64f31f82049c8ec0
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: The ID of the team/property
+        required: true
+        schema:
+          type: integer
+      - name: user_id
+        in: path
+        description: The ID of the user
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: List of audits for review
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Audits
+      summary: Update user events with audits and item values
+      description: Updates user event status, handles property/league changes, and manages audit approvals/rejections
+      operationId: 5f74e3e99c601565edd0082beb9b22e4
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: The ID of the team/property
+        required: true
+        schema:
+          type: integer
+      - name: user_id
+        in: path
+        description: The ID of the user
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserEventsRequest'
+      responses:
+        '200':
+          description: Updated user event(s)
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/team/{team_id}/user/{user_id}/user-event-media-data:
+    get:
+      tags:
+      - Audits
+      summary: Get processed media data for user event
+      description: Retrieves processed JSON data from uploaded audio files for a specific user event. Returns processed audio transcription data or empty array if no audio media is found.
+      operationId: c2d679de4e9b5f5a66275c665a3d64fd
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: The ID of the team/property
+        required: true
+        schema:
+          type: integer
+      - name: user_id
+        in: path
+        description: The ID of the user
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Processed media data from audio files or empty array
+          content:
+            application/json:
+              schema:
+                description: Processed JSON data from audio transcription files
+                type: array
+                items:
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/property/{property_id}/review/{user_id}/bulk-keyword:
+    get:
+      tags:
+      - Audits
+      summary: Get audits for review with bulk keyword
+      description: Returns audits for review and appends a keyword to item value descriptions
+      operationId: 8a6eda06ac278f55392a045e0daa61f5
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: property_id
+        in: path
+        description: The ID of the property
+        required: true
+        schema:
+          type: integer
+      - name: user_id
+        in: path
+        description: The ID of the user
+        required: true
+        schema:
+          type: integer
+      - name: keyword
+        in: query
+        description: Keyword to append to item value descriptions
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of audits with updated descriptions
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/team/{team_id}/review/{user_id}/download:
+    get:
+      tags:
+      - Audits
+      summary: Download scouting report as CSV
+      description: Downloads the scouting report for a specific event, team, and user as a CSV file
+      operationId: 835aa69e78cfd97f28a3250ef9dd152f
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: The ID of the team/property
+        required: true
+        schema:
+          type: integer
+      - name: user_id
+        in: path
+        description: The ID of the user
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: CSV file download
+          content:
+            text/csv: {}
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - requires download scouting report permission
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/team/{team_id}/review/{user_id}/metadata:
+    get:
+      tags:
+      - Audits
+      summary: Get metadata for audit review
+      description: Returns distinct values for brand, platform, subplatform, and asset for filtering audit review data
+      operationId: 18e9b885369719fd5a75f7cd189967e2
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: The ID of the team/property
+        required: true
+        schema:
+          type: integer
+      - name: user_id
+        in: path
+        description: The ID of the user
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Distinct metadata values for filtering
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewMetadataResource'
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/team/{team_id}/review/{user_id}/list:
+    get:
+      tags:
+      - Audits
+      summary: Get paginated audit reviews with filters
+      description: Returns paginated audit reviews with optional filtering by brand, platform, subplatform, and asset
+      operationId: c9d456156a2d80efed9836b8037bdb99
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: The ID of the team/property
+        required: true
+        schema:
+          type: integer
+      - name: user_id
+        in: path
+        description: The ID of the user
+        required: true
+        schema:
+          type: integer
+      - name: brand_ids
+        in: query
+        description: Comma-separated brand IDs
+        schema:
+          type: string
+          example: 1,2,3
+      - name: platform_ids
+        in: query
+        description: Comma-separated platform IDs
+        schema:
+          type: string
+          example: 1,2
+      - name: subplatform_ids
+        in: query
+        description: Comma-separated subplatform IDs
+        schema:
+          type: string
+          example: 1,2
+      - name: asset_ids
+        in: query
+        description: Comma-separated asset IDs
+        schema:
+          type: string
+          example: 1,2,3
+      - name: per_page
+        in: query
+        description: Items per page (default 10)
+        schema:
+          type: integer
+          example: 15
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          example: 1
+      - name: order_by
+        in: query
+        description: Field to order by
+        schema:
+          type: string
+          enum:
+          - brand
+          - platform
+          - subplatform
+          - asset
+          - created_at
+          example: brand
+      - name: order_direction
+        in: query
+        description: Sort direction
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          example: asc
+      responses:
+        '200':
+          description: Paginated audit reviews
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                  current_page:
+                    type: integer
+                    example: 1
+                  last_page:
+                    type: integer
+                    example: 5
+                  per_page:
+                    type: integer
+                    example: 15
+                  total:
+                    type: integer
+                    example: 73
+                  first_page_url:
+                    type: string
+                  last_page_url:
+                    type: string
+                  next_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  prev_page_url:
+                    type:
+                    - string
+                    - 'null'
+                  filtered_item_values_ids:
+                    type: array
+                    items:
+                      type: integer
+                type: object
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/team/{team_id}/review/{user_id}/counts:
+    get:
+      tags:
+      - Audits
+      summary: Get review counts for property or league
+      description: Returns the count of user events for review filtered by property or league changes
+      operationId: caf9e363d73ccca9b52e15e301a9feac
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: The ID of the team/property
+        required: true
+        schema:
+          type: integer
+      - name: user_id
+        in: path
+        description: The ID of the user
+        required: true
+        schema:
+          type: integer
+      - name: property
+        in: query
+        description: Filter by property changes (true/false)
+        schema:
+          type: string
+      - name: league
+        in: query
+        description: Filter by league changes (true/false)
+        schema:
+          type: string
+      - name: brand_id
+        in: query
+        description: Filter by brand/company ID
+        schema:
+          type: integer
+      - name: event
+        in: query
+        description: Comma-separated list of event IDs
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Count of user events
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/scan/{event_id}:
+    get:
+      tags:
+      - Audits
+      summary: Get social scan review data
+      description: Returns comprehensive data for reviewing a social media scan including event, audits, sponsor brands, and quick add items
+      operationId: 0f04091bcfcc3578f8420eaff7eced9c
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Scan review data
+          content:
+            application/json:
+              schema:
+                properties:
+                  quickAddItems:
+                    description: Quick add items grouped by social media value, brand, and item
+                    type: object
+                  event:
+                    description: Event details with social scraping sessions
+                    type: object
+                  audits:
+                    description: List of audits with brands and item values
+                    type: array
+                    items:
+                      type: object
+                  sponsorBrandIds:
+                    description: IDs of sponsor brands
+                    type: array
+                    items:
+                      type: integer
+                  socialScrapingSession:
+                    description: Social scraping session details
+                    type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Event not found
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/team/{team_id}/item/{item_id}:
+    get:
+      tags:
+      - Audits
+      summary: Get audit by item
+      description: Returns audit data for a specific event, team, and item combination for the authenticated user
+      operationId: 20f7cc34b17295e7a51087a18e5ca466
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: The ID of the team/property
+        required: true
+        schema:
+          type: integer
+      - name: item_id
+        in: path
+        description: The ID of the item
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Audit data filtered by item
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/audit/bulk:
+    post:
+      tags:
+      - Audits
+      summary: Bulk add audits with item values
+      description: Creates multiple audits with item values across companies, properties, and events in a single operation
+      operationId: b10728f6765ff75d8823617fb604ace8
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkAddAuditsRequest'
+      responses:
+        '200':
+          description: Created item values
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/team/{team_id}/company/{brand_id}/{season}:
+    post:
+      tags:
+      - Audits
+      summary: Save audit with item values for a brand
+      description: Creates or updates an audit with item values for a specific event, team, and brand. Supports social media scouting and event-based scouting.
+      operationId: 7dd5498c9b500f69b94469e9ab629819
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event or 'social' for social media scouting
+        required: true
+        schema:
+          type: string
+      - name: team_id
+        in: path
+        description: The ID of the team/property
+        required: true
+        schema:
+          type: integer
+      - name: brand_id
+        in: path
+        description: The ID of the brand/company
+        required: true
+        schema:
+          type: integer
+      - name: season
+        in: path
+        description: Season year (required for social media scouting)
+        required: false
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveUserEventRequest'
+      responses:
+        '200':
+          description: Saved audit with item values
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Item or user event not found
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/team/{team_id}/review/{user_id}/move-company:
+    put:
+      tags:
+      - Audits
+      summary: Move item values to a different company
+      description: Moves specified item values from one company to another within an audit review
+      operationId: 0a354ddfd3c05e4a2eaf1397f6e1bd75
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: team_id
+        in: path
+        description: The ID of the team/property
+        required: true
+        schema:
+          type: integer
+      - name: user_id
+        in: path
+        description: The ID of the user
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - old_company_id
+              - new_company_id
+              properties:
+                old_company_id:
+                  description: Source company ID
+                  type: integer
+                new_company_id:
+                  description: Target company ID
+                  type: integer
+                item_values:
+                  description: Item values to move
+                  type: array
+                  items:
+                    type: object
+              type: object
+      responses:
+        '200':
+          description: Updated audits after move
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/audit/remove/{audit_id}:
+    delete:
+      tags:
+      - Audits
+      summary: Delete an audit
+      description: Soft deletes an audit. Requires delete audits permission.
+      operationId: c19d7bf70a1a96519334dafffe93686c
+      parameters:
+      - name: audit_id
+        in: path
+        description: The ID of the audit to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Audit deleted successfully
+        '400':
+          description: Failed to delete audit
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - requires delete audits permission
+        '404':
+          description: Audit not found
+      security:
+      - bearerAuth: []
+  /api/audit/{audit_id}/item-value/{item_value_id}/copy:
+    post:
+      tags:
+      - Audits
+      summary: Copy an audit with item value to a new brand
+      description: Creates a copy of an audit and its item value, assigning it to a different brand
+      operationId: 0d13d137407bd238fa27162c338433ad
+      parameters:
+      - name: audit_id
+        in: path
+        description: The ID of the audit to copy
+        required: true
+        schema:
+          type: integer
+      - name: item_value_id
+        in: path
+        description: The ID of the item value to copy
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditCopyRequest'
+      responses:
+        '200':
+          description: Copied item value
+        '400':
+          description: Audit not found
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/audit-count/{league_id}:
+    get:
+      tags:
+      - Audits
+      summary: Get audit counts for a league
+      description: Returns asset audit counts grouped by league for spend tracker analysis
+      operationId: f9180cac12467d118ff86fc38269e8c6
+      parameters:
+      - name: league_id
+        in: path
+        description: The ID of the league
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: League assets audit counts
+        '401':
+          description: Unauthenticated
+        '404':
+          description: League not found
+      security:
+      - bearerAuth: []
+  /api/audit/{eventId}/team/{propertyId}/review/{userId}/bulk-clear-keyword-phrase:
+    put:
+      tags:
+      - Audits
+      summary: Clear keywords from item value descriptions
+      description: Clears the description field from specified item values during audit review
+      operationId: 712b63adadb83ca2bef9753fa889804d
+      parameters:
+      - name: eventId
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: propertyId
+        in: path
+        description: The ID of the property
+        required: true
+        schema:
+          type: integer
+      - name: userId
+        in: path
+        description: The ID of the user
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                item_value_ids:
+                  description: Array of item value IDs to clear (optional, clears all if not provided)
+                  type: array
+                  items:
+                    type: integer
+                excluded_item_value_ids:
+                  description: Item value IDs to exclude (used when item_value_ids is not provided)
+                  type: array
+                  items:
+                    type: integer
+              type: object
+      responses:
+        '200':
+          description: Cleared keywords from item values
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/property/{property_id}/review/{user_id}/bulk-reassign-brand:
+    post:
+      tags:
+      - Audits
+      summary: Bulk reassign brand for item values
+      description: Reassigns multiple item values to a different brand during audit review. Requires bulk reassign permission.
+      operationId: af3d7add39e7bcc43b983b0bf4568572
+      parameters:
+      - name: event_id
+        in: path
+        description: The ID of the event
+        required: true
+        schema:
+          type: integer
+      - name: property_id
+        in: path
+        description: The ID of the property
+        required: true
+        schema:
+          type: integer
+      - name: user_id
+        in: path
+        description: The ID of the user
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditBulkReassignBrandRequest'
+      responses:
+        '200':
+          description: Updated audits after bulk reassignment
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden - requires bulk reassign permission
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ReviewMetadataResource:
+      properties:
+        brands:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+            type: object
+        platforms:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+            type: object
+        subplatforms:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+            type: object
+        assets:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+            type: object
+      type: object
+    SaveUserEventRequest:
+      required:
+      - item_id
+      properties:
+        item_id:
+          description: Item ID
+          type: integer
+        frequency:
+          description: Frequency value
+          type: integer
+        value:
+          description: Amount value
+          type: number
+        description:
+          description: Description/keyword
+          type: string
+        socialMediaValue:
+          description: Social media post URL
+          type: string
+        item_images:
+          type: array
+          items:
+            type: object
+        item_videos:
+          type: array
+          items:
+            type: object
+        audios:
+          type: array
+          items:
+            type: object
+        user_id:
+          description: User ID (requires edit-any-scouting-report permission)
+          type: integer
+      type: object
+    AuditCopyRequest:
+      required:
+      - new_brand_id
+      properties:
+        new_brand_id:
+          description: ID of the brand to copy the audit to
+          type: integer
+          example: 456
+        item_id:
+          description: Optional new item ID for the copied item value
+          type: integer
+          example: 789
+      type: object
+    UpdateUserEventsRequest:
+      properties:
+        status:
+          description: New status for the user event
+          type: integer
+        league:
+          description: Apply changes to the entire league
+          type: boolean
+        property:
+          description: Apply changes to the entire property
+          type: boolean
+        scan:
+          description: Apply changes to the entire scan
+          type: boolean
+        review_notes:
+          description: Review notes
+          type: string
+        event:
+          description: Comma-separated event IDs
+          type: string
+        brand_id:
+          description: Brand ID for property/league changes
+          type: integer
+        type:
+          description: Update user-event type
+          type: string
+        eventId:
+          description: Move audits to a different event
+          type: integer
+        teamId:
+          description: Source team ID for a move operation
+          type: integer
+      type: object
+    BulkAddAuditsRequest:
+      required:
+      - companies
+      - properties
+      - items
+      properties:
+        companies:
+          description: Companies/brands to create audits for
+          type: array
+          items:
+            required:
+            - id
+            properties:
+              id:
+                description: Brand ID
+                type: integer
+            type: object
+        properties:
+          description: Properties with their associated events
+          type: array
+          items:
+            required:
+            - id
+            - events
+            properties:
+              id:
+                description: Property / team ID
+                type: integer
+              events:
+                type: array
+                items:
+                  type: object
+            type: object
+        items:
+          description: Items with their values
+          type: array
+          items:
+            required:
+            - id
+            properties:
+              id:
+                description: Item ID
+                type: integer
+            type: object
+        synonyms:
+          description: Synonyms to add to events
+          type: array
+          items:
+            type: object
+        isQuickAdd:
+          description: Whether this is a quick-add operation
+          type: boolean
+          default: true
+      type: object
+    AuditBulkReassignBrandRequest:
+      required:
+      - brand_id
+      properties:
+        item_value_ids:
+          description: Array of item value IDs to reassign (optional, reassigns all if not provided)
+          type: array
+          items:
+            type: integer
+        excluded_item_value_ids:
+          description: Item value IDs to exclude (used when item_value_ids is not provided)
+          type: array
+          items:
+            type: integer
+        brand_id:
+          description: Target brand ID to reassign item values to
+          type: integer
+          example: 123
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

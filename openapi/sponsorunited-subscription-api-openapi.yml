@@ -1,0 +1,94 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Subscription API
+  version: v1
+  description: Subscription
+tags:
+- name: Subscription
+  description: Subscription
+paths:
+  /api/subscription/swap-plan:
+    post:
+      tags:
+      - Subscription
+      summary: Swap the subscription plan of a billable entity
+      description: Swaps the Stripe subscription of the billable named by `billable_id` onto another plan without prorating, and records the new contracted monthly spend against that billable's organization. The target is the billable in the request, not the one belonging to the acting user.
+      operationId: swapSubscriptionPlan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SwapPlanRequest'
+      responses:
+        '200':
+          description: The swap was attempted. A successful swap returns the new plan; a billable that cannot be swapped (no Stripe customer, no Stripe subscription, or rejected by Stripe) returns an `error`.
+          content:
+            application/json:
+              schema:
+                properties:
+                  subscription_plan_id:
+                    description: The plan now active on the subscription. Absent when `error` is present.
+                    type: string
+                    example: price_1PmxYxC7D8t3rP7mSia7osJP
+                  error:
+                    description: Why the swap could not be completed. Absent on success.
+                    type: string
+                    example: This account does not have a Stripe subscription
+                type: object
+        '403':
+          description: The user lacks the permission required to swap subscription plans.
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                    example: You are not authorized to swap subscription plans.
+                type: object
+        '422':
+          description: Validation failed — a missing or non-integer `billable_id`, one that matches no billable or a soft-deleted one, a missing plan, or a non-numeric monthly spend.
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                    example: The billable entity to swap the plan for could not be found.
+                type: object
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    SwapPlanRequest:
+      required:
+      - billable_id
+      - subscription_plan_id
+      - contract_monthly_spend
+      properties:
+        billable_id:
+          description: The billable entity whose plan is swapped. Soft-deleted billables are rejected.
+          type: integer
+          example: 17
+        subscription_plan_id:
+          description: The Stripe price ID to swap to.
+          type: string
+          example: price_1PmxYxC7D8t3rP7mSia7osJP
+        contract_monthly_spend:
+          description: The contracted monthly spend for the new plan. Stored against the billable's organization.
+          type: number
+          format: float
+          example: 313.75
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

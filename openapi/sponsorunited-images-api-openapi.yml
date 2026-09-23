@@ -1,0 +1,254 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Images API
+  version: v1
+  description: Images
+tags:
+- name: Images
+  description: Images
+paths:
+  /api/logos:
+    get:
+      tags:
+      - Images
+      summary: Detect logos in an image
+      description: Fetches an image from the provided URL and uses Google Cloud Vision to detect logos.
+      operationId: getLogosFromImage
+      parameters:
+      - name: img_url
+        in: query
+        description: The URL of the image to detect logos from
+        required: true
+        schema:
+          type: string
+          format: url
+      responses:
+        '200':
+          description: Logo detection results
+          content:
+            application/json:
+              schema:
+                properties:
+                  total:
+                    description: Total number of logos detected
+                    type: integer
+                  threshold:
+                    description: Confidence threshold used
+                    type: number
+                    format: float
+                  height:
+                    description: Image height in pixels
+                    type: integer
+                  width:
+                    description: Image width in pixels
+                    type: integer
+                  logos:
+                    description: Logos above threshold
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        score:
+                          type: number
+                          format: float
+                        vertices:
+                          type: array
+                          items:
+                            properties:
+                              x:
+                                type: integer
+                              y:
+                                type: integer
+                            type: object
+                        company:
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                          type:
+                          - object
+                          - 'null'
+                      type: object
+                  skippedLogos:
+                    description: Logos below threshold
+                    type: array
+                    items:
+                      type: object
+                type: object
+        '422':
+          description: Validation error or failed to fetch the image
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: The URL did not return an image.
+                type: object
+      security:
+      - bearerAuth: []
+  /api/download-image:
+    get:
+      tags:
+      - Images
+      summary: Download an image as base64
+      description: Fetches an image from the provided URL and returns it as a base64-encoded data URI.
+      operationId: downloadImageAsBase64
+      parameters:
+      - name: url
+        in: query
+        description: The URL of the image to download
+        required: true
+        schema:
+          type: string
+          format: url
+      responses:
+        '200':
+          description: Base64-encoded image data URI
+          content:
+            application/json:
+              schema:
+                properties:
+                  image:
+                    description: Base64-encoded data URI of the image
+                    type: string
+                type: object
+        '422':
+          description: Validation error or failed to fetch the image
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: The URL did not return an image.
+                type: object
+      security:
+      - bearerAuth: []
+  /api/crop-image:
+    post:
+      tags:
+      - Images
+      summary: Crop an image
+      description: Accepts a base64-encoded image, optionally duplicates it if shared across items, uploads the cropped version to S3, and updates the image record.
+      operationId: cropImage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CropImageRequest'
+      responses:
+        '200':
+          description: Updated image record
+          content:
+            application/json:
+              schema:
+                type: object
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: The given data was invalid.
+                type: object
+      security:
+      - bearerAuth: []
+  /api/upload-image-from-url:
+    post:
+      tags:
+      - Images
+      summary: Upload an image from a URL
+      description: Downloads an image from the provided URL, uploads it to S3, and returns the upload result. When type is "asset", creates an Image record in the database.
+      operationId: uploadImageFromUrl
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadImageFromUrlRequest'
+      responses:
+        '200':
+          description: Upload result (S3 paths or Image asset record)
+          content:
+            application/json:
+              schema:
+                type: object
+        '422':
+          description: Validation error or invalid image
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Image is invalid. Please try again.
+                type: object
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    CropImageRequest:
+      title: Crop Image Request
+      description: Request schema for cropping an image
+      required:
+      - file
+      properties:
+        file:
+          description: Base64-encoded image data URI (must start with data:image/)
+          type: string
+          example: data:image/png;base64,iVBORw0KGgo...
+        type:
+          description: The upload type category
+          type:
+          - string
+          - 'null'
+          example: generic
+        id:
+          description: The image ID
+          type:
+          - integer
+          - 'null'
+        item_image_id:
+          description: The item image ID (triggers duplication if image is used on multiple items)
+          type:
+          - integer
+          - 'null'
+      type: object
+    UploadImageFromUrlRequest:
+      title: Upload Image From URL Request
+      description: Request schema for uploading an image from a URL to S3
+      required:
+      - url
+      properties:
+        url:
+          description: The URL of the image to upload
+          type: string
+          format: url
+          example: https://example.com/image.png
+        type:
+          description: The upload type category
+          type:
+          - string
+          - 'null'
+          example: generic
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

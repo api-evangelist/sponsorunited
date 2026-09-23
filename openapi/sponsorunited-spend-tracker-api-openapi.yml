@@ -1,0 +1,3053 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Spend tracker API
+  version: v1
+  description: Spend tracker
+tags:
+- name: Spend tracker
+  description: Spend tracker
+paths:
+  /api/spend-tracker/accuracy-metrics/league/{leagueId}/season/{seasonId}:
+    get:
+      tags:
+      - Spend tracker
+      description: Get accuracy metrics for league in season
+      operationId: f500969136e1001e147bce6ef2156007
+      parameters:
+      - name: leagueId
+        in: path
+        description: League ID
+        required: true
+        schema:
+          type: integer
+        example: '3'
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: integer
+        example: '298'
+      responses:
+        '200':
+          description: League accuracy metrics for Predicted Deal Revenues for league in season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccuracyMetricsResultResource'
+      security:
+      - bearerAuth: []
+      summary: F500969136e1001e147bce6ef2156007
+      x-summary-source: derived
+  /api/spend-tracker/currency-rates:
+    get:
+      tags:
+      - Spend tracker
+      description: Get currency exchange rates for a season
+      operationId: 217cadb5e7e9edb860992e98b98f6b1c
+      parameters:
+      - name: season_id
+        in: query
+        required: true
+        schema:
+          type: integer
+          example: 292
+      responses:
+        '200':
+          description: Currency exchange rates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CurrencyExchangeRateResource'
+      security:
+      - bearerAuth: []
+      summary: 217cadb5e7e9edb860992e98b98f6b1c
+      x-summary-source: derived
+    put:
+      tags:
+      - Spend tracker
+      description: Update currency exchange rates for a season
+      operationId: 63f9d62ecf90fce72c96064315f19417
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CurrencyExchangeRateUpdateRequest'
+      responses:
+        '200':
+          description: Updated currency exchange rates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CurrencyExchangeRateResource'
+      security:
+      - bearerAuth: []
+      summary: 63f9d62ecf90fce72c96064315f19417
+      x-summary-source: derived
+  /api/spend-tracker/bucket/assets:
+    get:
+      tags:
+      - Spend tracker
+      summary: Get all asset buckets
+      description: Fetch asset buckets with droplets
+      operationId: 3b21ebc75cf8f6e4ace00b5f4d79e670
+      responses:
+        '200':
+          description: Asset Buckets with droplets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetBucketsCollection'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Spend tracker
+      summary: Update asset buckets
+      description: Updates multiple asset buckets with their droplet configurations
+      operationId: 39ee2b1280b1ae0e5cdd5ac37bed9ef6
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetsBucketsUpdateRequest'
+      responses:
+        '201':
+          description: Asset Buckets with droplets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetBucketsCollection'
+      security:
+      - bearerAuth: []
+  /api/spend-tracker/change-log/season/{seasonId}:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch and format activity logs for spend tracker actions by season id
+      operationId: 11336d3a0c7334f0513e31ba5703601f
+      parameters:
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The formatted change log for the given season.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpendTrackerChangeLogShowResource'
+      security:
+      - bearerAuth: []
+      summary: 11336d3a0c7334f0513e31ba5703601f
+      x-summary-source: derived
+  /api/spend-tracker/deal-bucket-assets:
+    get:
+      tags:
+      - Spend tracker
+      description: Get deal with deal assets in buckets
+      operationId: cbfc753d982e3b42de8399fb18d7163a
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DealBucketAssetsGetDealAssetsByBucketsRequest'
+      responses:
+        '200':
+          description: Deal with deal assets in buckets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DealBucketAssetsGetDealAssetsByBucketsResource'
+      security:
+      - bearerAuth: []
+      summary: Cbfc753d982e3b42de8399fb18d7163a
+      x-summary-source: derived
+  /api/spend-tracker/league-assets/custom-bucket:
+    post:
+      tags:
+      - Spend tracker
+      description: Assing an asset to a different bucket, only for a certain deal
+      operationId: 065d70f66e9f126868752b47c57babff
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveCustomAssetBucketForDealRequest'
+      responses:
+        '200':
+          description: League Asset Buckets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DealBucketAssetsGetDealAssetsByBucketsResource'
+      security:
+      - bearerAuth: []
+      summary: 065d70f66e9f126868752b47c57babff
+      x-summary-source: derived
+  /api/spend-tracker/deal-levels:
+    put:
+      tags:
+      - Spend tracker
+      summary: Update deal level
+      description: Updates the deal level classification for a property-brand combination in a specific season
+      operationId: 46c17ed57521c9c33da7328d0594cdf5
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DealLevelsUpdateRequest'
+      responses:
+        '200':
+          description: Deal level updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DealLevelsResource'
+      security:
+      - bearerAuth: []
+  /api/spend-tracker/deal-levels/season/{seasonId}/property/{propertyId}/brand/{brandId}:
+    delete:
+      tags:
+      - Spend tracker
+      summary: Delete deal level
+      description: Removes a deal level classification for a specific property-brand combination in a season
+      operationId: bdfcaa7c7f3e7ae7f6df042f6f4ba891
+      parameters:
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: integer
+      - name: propertyId
+        in: path
+        description: Property ID
+        required: true
+        schema:
+          type: integer
+      - name: brandId
+        in: path
+        description: Brand ID
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty response when deal level has been deleted successfully.
+        '404':
+          description: Response with error.
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                    example: Could not find deal level to delete
+                type: object
+      security:
+      - bearerAuth: []
+  /api/spend-tracker/deal-types:
+    post:
+      tags:
+      - Spend tracker
+      description: Create deal type
+      operationId: 36dcf579f48882ca602031cb409a1a7e
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DealTypesCreateUpdateRequest'
+      responses:
+        '200':
+          description: Deal type created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DealTypesResource'
+      security:
+      - bearerAuth: []
+      summary: 36dcf579f48882ca602031cb409a1a7e
+      x-summary-source: derived
+  /api/spend-tracker/deal-types/{id}:
+    put:
+      tags:
+      - Spend tracker
+      description: Update deal type
+      operationId: 99072c0508aa97d8b2a7b84081ca51f4
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DealTypesCreateUpdateRequest'
+      responses:
+        '200':
+          description: Deal type updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DealTypesResource'
+      security:
+      - bearerAuth: []
+      summary: 99072c0508aa97d8b2a7b84081ca51f4
+      x-summary-source: derived
+    delete:
+      tags:
+      - Spend tracker
+      description: Delete deal type
+      operationId: 5cabbabc832c5a326ee8f9ea0acb30c7
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DealTypesDeleteRequest'
+      responses:
+        '204':
+          description: Empty response when deal type has been deleted successfully.
+        '404':
+          description: Response with error.
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                    example: Could not find deal type to delete
+                type: object
+      security:
+      - bearerAuth: []
+      summary: 5cabbabc832c5a326ee8f9ea0acb30c7
+      x-summary-source: derived
+  /api/spend-tracker/dollar-off-metrics/accuracy-selection:
+    get:
+      tags:
+      - Spend tracker
+      description: Get Dollar-Off Accuracy Selections for league and season
+      operationId: 1898aa181391b5b09622098751c9de87
+      responses:
+        '200':
+          description: Get Dollar-Off Accuracy Selections for league and season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccuracySelectionResource'
+      security:
+      - bearerAuth: []
+      summary: 1898aa181391b5b09622098751c9de87
+      x-summary-source: derived
+    post:
+      tags:
+      - Spend tracker
+      description: Highlight a cell in Dollar-Off Metrics Accuracy Selection table
+      operationId: e3ff2251a8900ab3b69941bb25cecfe9
+      responses:
+        '204':
+          description: Empty on success
+      security:
+      - bearerAuth: []
+      summary: E3ff2251a8900ab3b69941bb25cecfe9
+      x-summary-source: derived
+    delete:
+      tags:
+      - Spend tracker
+      description: Remove Highlight from a cell in Dollar-Off Metrics Accuracy Selection table
+      operationId: 3920981fad7b05b15a721072177aad85
+      responses:
+        '204':
+          description: Empty on success
+      security:
+      - bearerAuth: []
+      summary: 3920981fad7b05b15a721072177aad85
+      x-summary-source: derived
+  /api/spend-tracker/dollar-off-metrics/league:
+    get:
+      tags:
+      - Spend tracker
+      description: Get Dollar-Off metrics for league and season
+      operationId: 3a87e017973166a460942b4ef18f24a4
+      responses:
+        '200':
+          description: League Dollar-Off metrics for Predicted Deal Revenues for league and season
+          content:
+            application/json:
+              schema: {}
+      security:
+      - bearerAuth: []
+      summary: 3a87e017973166a460942b4ef18f24a4
+      x-summary-source: derived
+  /api/spend-tracker/metrics/dollar-off:
+    get:
+      tags:
+      - Spend tracker
+      summary: Get dollar-off metrics
+      description: Get Dollar-Off metrics for league in season
+      operationId: 35a2788882b0439863fc4e07be964795
+      responses:
+        '200':
+          description: League Dollar-Off metrics for Predicted Deal Revenues for league and season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DollarOffMetricsResource'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Spend tracker
+      summary: Highlight metrics cell
+      description: Highlight a cell in Dollar-Off metrics table
+      operationId: 9db709b9538d6ee05d797df13c23ef41
+      responses:
+        '204':
+          description: Empty on success
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Spend tracker
+      summary: Remove metrics cell highlight
+      description: Remove Highlight from a cell in Dollar-Off metrics table
+      operationId: d4dcdbeeba7aa55370c1c0778c85adb1
+      responses:
+        '204':
+          description: Empty on success
+      security:
+      - bearerAuth: []
+  /api/spend-tracker/league-assets/{leagueId}/season/{seasonId}:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch league asset buckets with droplets
+      operationId: 177818034594465200b97f570662f837
+      parameters:
+      - name: leagueId
+        in: path
+        description: League ID
+        required: true
+        schema:
+          type: string
+        example: '3'
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: string
+        example: '298'
+      responses:
+        '200':
+          description: League Asset Buckets with droplets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueAssetBucketsCollection'
+      security:
+      - bearerAuth: []
+      summary: 177818034594465200b97f570662f837
+      x-summary-source: derived
+    post:
+      tags:
+      - Spend tracker
+      description: Fetch league asset buckets with droplets
+      operationId: 5fd5bbae0bb3c4c3f3e667142c14a060
+      parameters:
+      - name: leagueId
+        in: path
+        description: League ID
+        required: true
+        schema:
+          type: string
+        example: '3'
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: string
+        example: '298'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeagueAssetBucketsUpdateRequest'
+      responses:
+        '200':
+          description: League Asset Buckets with droplets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueAssetBucketsCollection'
+      security:
+      - bearerAuth: []
+      summary: 5fd5bbae0bb3c4c3f3e667142c14a060
+      x-summary-source: derived
+  /api/spend-tracker/league/{leagueId}/season/{seasonId}/minimums/calculate:
+    get:
+      tags:
+      - Spend tracker
+      description: Calculate League Minimums, save to database, return League Minimums
+      operationId: d3948bb1739920103da839f857669647
+      parameters:
+      - name: leagueId
+        in: path
+        description: League ID
+        required: true
+        schema:
+          type: string
+        example: '1'
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: string
+        example: '286'
+      responses:
+        '200':
+          description: Minimums Predicted Deal Revenues per League and Season Property Bucket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculateLeagueMinimumsResource'
+      security:
+      - bearerAuth: []
+      summary: D3948bb1739920103da839f857669647
+      x-summary-source: derived
+  /api/spend-tracker/league-properties/{leagueId}/season/{seasonId}:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch league property buckets and revenues in season
+      operationId: 8f3c0dbe61678adbaef1063932d87b3f
+      parameters:
+      - name: leagueId
+        in: path
+        description: League ID
+        required: true
+        schema:
+          type: string
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: League data, revenue and buckets with revenues in season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaguePropertyBucketsShowResource'
+      security:
+      - bearerAuth: []
+      summary: 8f3c0dbe61678adbaef1063932d87b3f
+      x-summary-source: derived
+  /api/spend-tracker/league-properties:
+    post:
+      tags:
+      - Spend tracker
+      description: Creates/updates Buckets and Droplets in specific LeaguePropertyBuckets
+      operationId: 56c4a4c1da5a07a5eadf43482eaa3dce
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeaguePropertyBucketsUpdateRequest'
+      responses:
+        '200':
+          description: League data, revenue and buckets with revenus in season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaguePropertyBucketsShowResource'
+      security:
+      - bearerAuth: []
+      summary: 56c4a4c1da5a07a5eadf43482eaa3dce
+      x-summary-source: derived
+  /api/spend-tracker/revenue/league/{leagueId}/season/{seasonId}:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch league revenue in season
+      operationId: 7da04a734412dc545300d5b667bebfc1
+      parameters:
+      - name: leagueId
+        in: path
+        description: League ID
+        required: true
+        schema:
+          type: string
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: League revenue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevenueLeagueResource'
+        '404':
+          description: League revenue not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResource'
+      security:
+      - bearerAuth: []
+      summary: 7da04a734412dc545300d5b667bebfc1
+      x-summary-source: derived
+  /api/spend-tracker/leagues:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch spendtracker leagues with buckets
+      operationId: 9f09ef16ffc4e7558ffca3f983224776
+      responses:
+        '200':
+          description: List of spendtracker leagues
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeagueStatusCollection'
+      security:
+      - bearerAuth: []
+      summary: 9f09ef16ffc4e7558ffca3f983224776
+      x-summary-source: derived
+  /api/spend-tracker/league/{leagueId}/season/{seasonId}/margin-of-error/calculate:
+    get:
+      tags:
+      - Spend tracker
+      description: Calculate Margin of Error, save to database, return WIP Predicted Revenues with MOE
+      operationId: 18b2eda354297e7ba2b6b9783c7c7010
+      parameters:
+      - name: leagueId
+        in: path
+        description: League ID
+        required: true
+        schema:
+          type: string
+        example: '1'
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: string
+        example: '286'
+      responses:
+        '200':
+          description: WIP Predicted Deal Revenues with Margin of Error for whole league
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculateMarginOfErrorResource'
+      security:
+      - bearerAuth: []
+      summary: 18b2eda354297e7ba2b6b9783c7c7010
+      x-summary-source: derived
+  /api/spend-tracker/property-deal-revenues/actual/season/{seasonId}/property/{propertyId}:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch property deals with actual revenues grouped by parent brand
+      operationId: eb23e3c13fff633587f3d27f326ad6f4
+      parameters:
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: string
+        example: '296'
+      - name: propertyId
+        in: path
+        description: Property(Team) ID
+        required: true
+        schema:
+          type: string
+        example: '2'
+      responses:
+        '200':
+          description: League Asset Buckets, Property revenue and array of property deals with revenues
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyDealRevenuesGetActualResource'
+      security:
+      - bearerAuth: []
+      summary: Eb23e3c13fff633587f3d27f326ad6f4
+      x-summary-source: derived
+  /api/spend-tracker/property-deal-revenues/predicted/season/{seasonId}/property/{propertyId}:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch property deals with predicted revenues grouped by parent brand
+      operationId: 43710b2f5aa2248986bbfe24208909ea
+      parameters:
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: string
+        example: '296'
+      - name: propertyId
+        in: path
+        description: Property(Team) ID
+        required: true
+        schema:
+          type: string
+        example: '2'
+      responses:
+        '200':
+          description: Predicted Deal Revenues response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyDealRevenuesGetPredictedResource'
+      security:
+      - bearerAuth: []
+      summary: 43710b2f5aa2248986bbfe24208909ea
+      x-summary-source: derived
+  /api/spend-tracker/property-deal-revenues/predicted/league/{leagueId}/season/{seasonId}/download:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch league deals with predicted revenues grouped by parent brand
+      operationId: f65158e84467d3ba4b9026bc41937d9f
+      parameters:
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: string
+        example: '296'
+      responses:
+        '200':
+          description: Predicted Deal Revenues response
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+      - bearerAuth: []
+      summary: F65158e84467d3ba4b9026bc41937d9f
+      x-summary-source: derived
+  /api/spend-tracker/revenue/accept-wip-predicted-deal-revenues:
+    post:
+      tags:
+      - Spend tracker
+      operationId: a74b2a2bbdc1bfb4371ca649861ba15a
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptWIPPredictedDealRevenuesRequest'
+      responses:
+        '204':
+          description: Success response
+      security:
+      - bearerAuth: []
+      summary: A74b2a2bbdc1bfb4371ca649861ba15a
+      x-summary-source: derived
+  /api/spend-tracker/property-deal-revenues/season/{seasonId}/property/{propertyId}:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch property deals with revenues grouped by parent brand
+      operationId: fe1e46e83488920c9c29b1da40dced1b
+      parameters:
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: string
+      - name: propertyId
+        in: path
+        description: Property(Team) ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Property revenue and array of property deals with revenues for Subcategory Deals page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyDealRevenuesGetResource'
+      security:
+      - bearerAuth: []
+      summary: Fe1e46e83488920c9c29b1da40dced1b
+      x-summary-source: derived
+  /api/spend-tracker/publish/season:
+    put:
+      tags:
+      - Spend tracker
+      description: Publish SpendTracker data by League and Season
+      operationId: 34fee405549f93f4d09d510829b40034
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishedSeasonUpdateRequest'
+      responses:
+        '200':
+          description: SpendTracker data published successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublishedSeasonResource'
+      security:
+      - bearerAuth: []
+      summary: 34fee405549f93f4d09d510829b40034
+      x-summary-source: derived
+  /api/spend-tracker/revenue/deals:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch deal, property and predicted revenues for property in season
+      operationId: e9840745f3112724811eb572c9f278a1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevenueDealGetPropertyDealRevenuesRequest'
+      responses:
+        '200':
+          description: Deals,property and predicted revenues for property in season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevenueDealGetPropertyDealRevenuesResource'
+      security:
+      - bearerAuth: []
+      summary: E9840745f3112724811eb572c9f278a1
+      x-summary-source: derived
+  /api/spend-tracker/revenue/deals/deal:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch brand revenues, types and levels for property across seasons
+      operationId: 8a0e74abadaaa3a18f50c2fe43ffc97a
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevenueDealGetDealDataBySeasonsRequest'
+      responses:
+        '200':
+          description: Brand revenues with deal levels and types grouped by season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevenueDealGetDealDataBySeasonsCollection'
+      security:
+      - bearerAuth: []
+      summary: 8a0e74abadaaa3a18f50c2fe43ffc97a
+      x-summary-source: derived
+    post:
+      tags:
+      - Spend tracker
+      description: Update deal brand revenues across seasons
+      operationId: ef78556dff185a7e6a0bd4831b8240bc
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevenueDealUpdateDealRevenuesRequest'
+      responses:
+        '200':
+          description: Brand revenues with deal levels and types grouped by season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevenueDealGetDealDataBySeasonsCollection'
+      security:
+      - bearerAuth: []
+      summary: Ef78556dff185a7e6a0bd4831b8240bc
+      x-summary-source: derived
+  /api/spend-tracker/revenue/deals/deal/season:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch actual/estimated revenue and predicted revenue for deal in season
+      operationId: b80dfe9aeb9dac36e732c0a23b14215d
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevenueDealGetDealRevenueInSeasonRequest'
+      responses:
+        '200':
+          description: Deal actual/estimated revenue and predicted revenue in season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevenueDealGetDealRevenueInSeasonResource'
+      security:
+      - bearerAuth: []
+      summary: B80dfe9aeb9dac36e732c0a23b14215d
+      x-summary-source: derived
+  /api/spend-tracker/revenue/deal-revenues/duplicate:
+    post:
+      tags:
+      - Spend tracker
+      description: Duplicate actual/estimated Deal Revenues from one season to another
+      operationId: af3b544d938853f5f0bf665495c4f360
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DealRevenuesDuplicateRequest'
+      responses:
+        '200':
+          description: Success message
+          content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                type: object
+      security:
+      - bearerAuth: []
+      summary: Af3b544d938853f5f0bf665495c4f360
+      x-summary-source: derived
+  /api/spend-tracker/revenue/subcategory/factors:
+    post:
+      tags:
+      - Spend tracker
+      description: Update subcategory revenue factors for league in season
+      operationId: 19cbe81114ddb1f8f93f145818294cc9
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcategoryRevenueFactorsUpdateRequest'
+      responses:
+        '201':
+          description: Saved Subcategory Revenue Factors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubcategoryRevenueFactorsUpdateResource'
+      security:
+      - bearerAuth: []
+      summary: 19cbe81114ddb1f8f93f145818294cc9
+      x-summary-source: derived
+  /api/spend-tracker/revenue/subcategory/{subcategoryId}/season/{seasonId}:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch subcategory revenues in season
+      operationId: 87bcb93801ca3d4aa5d78f9615ac9904
+      parameters:
+      - name: subcategoryId
+        in: path
+        description: Subcategory ID
+        required: true
+        schema:
+          type: string
+        example: '41'
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: string
+        example: '298'
+      responses:
+        '200':
+          description: Total and average subcategory revenues in season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubcategoryRevenuesShowResource'
+      security:
+      - bearerAuth: []
+      summary: 87bcb93801ca3d4aa5d78f9615ac9904
+      x-summary-source: derived
+  /api/spend-tracker/revenue/subcategory-revenues:
+    post:
+      tags:
+      - Spend tracker
+      operationId: d107e572679297d0c9295b2f30d87792
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedSubcategoryRevenuesRequest'
+      responses:
+        '201':
+          description: Saved Total and average subcategory revenues
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateSubcategoryRevenuesResource'
+      security:
+      - bearerAuth: []
+      summary: D107e572679297d0c9295b2f30d87792
+      x-summary-source: derived
+  /api/spend-tracker/revenue/subcategories-deals/league/{leagueId}/season/{seasonId}:
+    get:
+      tags:
+      - Spend tracker
+      description: Fetch league subcategories revenues report in season
+      operationId: 18a937056b508c523abd38a822777184
+      parameters:
+      - name: leagueId
+        in: path
+        description: League ID
+        required: true
+        schema:
+          type: string
+        example: '1'
+      - name: seasonId
+        in: path
+        description: Season ID
+        required: true
+        schema:
+          type: string
+        example: '286'
+      responses:
+        '200':
+          description: Subcategories revenues league report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubcategoryRevenuesDealsBySubcategoryResource'
+      security:
+      - bearerAuth: []
+      summary: 18a937056b508c523abd38a822777184
+      x-summary-source: derived
+components:
+  schemas:
+    SpendTrackerChangeLogShowResource:
+      properties:
+        activity:
+          type: array
+          items:
+            properties:
+              date:
+                type: string
+                format: date-time
+              user:
+                type: string
+              action:
+                type: string
+              details:
+                type: string
+            type: object
+      type: object
+    PropertyDealRevenuesCollection:
+      $ref: '#/components/schemas/PropertyDealRevenueResource'
+    SubcategoryRevenuesReportResource:
+      type: object
+      allOf:
+      - properties:
+          subcategory:
+            type: object
+            allOf:
+            - properties:
+                id:
+                  type: integer
+                  example: '19'
+                name:
+                  type: string
+                  example: Beer (Import & Domestic)
+              type: object
+          category:
+            type: object
+            allOf:
+            - properties:
+                id:
+                  type: integer
+                  example: '12'
+                name:
+                  type: string
+                  example: Beverage - Alcohol
+              type: object
+          revenue_subcategory_factor:
+            type: object
+            allOf:
+            - properties:
+                saved:
+                  $ref: '#/components/schemas/RevenueSubcategoryFactorResource'
+                calculated:
+                  type: number
+                  example: '-44.35'
+              type: object
+          deals_count:
+            type: integer
+            example: '94'
+          subcategory_revenue:
+            type: object
+            allOf:
+            - properties:
+                total:
+                  $ref: '#/components/schemas/RevenueSubcategoryResource'
+                average:
+                  type: object
+                  allOf:
+                  - properties:
+                      midpoint:
+                        type: integer
+                        example: '20212'
+                      currency:
+                        type: string
+                        example: USD
+                    type: object
+              type: object
+          revenue_deal_predicted:
+            type: object
+            allOf:
+            - properties:
+                total:
+                  $ref: '#/components/schemas/RevenueCalculatedResource'
+                average:
+                  $ref: '#/components/schemas/RevenueCalculatedResource'
+              type: object
+        type: object
+    RevenueLeague:
+      properties:
+        id:
+          type: integer
+          example: '7'
+        recipient_id:
+          type: integer
+          example: '1'
+        season_id:
+          type: integer
+          example: '286'
+        min:
+          type: integer
+          example: '1459000000'
+        max:
+          type: integer
+          example: '1459000000'
+        is_actual:
+          type: boolean
+          example: 'true'
+        public_url:
+          type: string
+          example: https://www.sponsorunited.com/
+      type: object
+    AcceptWIPPredictedDealRevenuesRequest:
+      required:
+      - season_id
+      - property_id
+      properties:
+        season_id:
+          type: integer
+          example: '298'
+        league_id:
+          type: integer
+          example: '6'
+      type: object
+    PropertyDealRevenuesGetResource:
+      type: object
+      allOf:
+      - properties:
+          propertyRevenue:
+            $ref: '#/components/schemas/RevenuePropertyResource'
+        type: object
+      - properties:
+          deals:
+            type: array
+            items:
+              $ref: '#/components/schemas/PropertyDealRevenuesCollection'
+        type: object
+    AssetBucketsCollection:
+      type: array
+      items:
+        $ref: '#/components/schemas/AssetBucketResource'
+    DealBucketAssetsGetDealAssetsByBucketsResource:
+      type: object
+      allOf:
+      - properties:
+          deal:
+            allOf:
+            - properties:
+                property_id:
+                  type: integer
+                  example: '4'
+                property_name:
+                  type: string
+                  example: Arizona Diamondbacks
+                brand_id:
+                  type: integer
+                  example: '16857'
+                brand_name:
+                  type: string
+                  example: Michelob Ultra
+                season_id:
+                  type: integer
+                  example: '298'
+                season_season:
+                  type: string
+                  example: '2021'
+                season_name:
+                  type: string
+                  example: '2021'
+              type: object
+          bucketsWithDealAssets:
+            type: array
+            items:
+              $ref: '#/components/schemas/LeagueAssetBucketResource'
+        type: object
+    LeaguePropertyBucketsUpdateRequest:
+      required:
+      - buckets
+      - revenue
+      properties:
+        buckets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BucketLeagueProperty'
+        revenue:
+          $ref: '#/components/schemas/RevenueLeague'
+      type: object
+    PredictDealResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PredictChildDealResource'
+      - properties:
+          brand_id:
+            type: integer
+          brand_ulid:
+            type: string
+          brand_name:
+            type: string
+          brand_logo:
+            type: string
+          revenue:
+            $ref: '#/components/schemas/RevenueDealResource'
+          accepted_predicted_revenue:
+            $ref: '#/components/schemas/RevenueDealPredictedResource'
+          children:
+            type: array
+            items:
+              $ref: '#/components/schemas/PropertyDealRevenueChildResource'
+        type: object
+    LeagueAssetBucketResource:
+      properties:
+        id:
+          type: integer
+          example: '1'
+        league_id:
+          type: integer
+          example: '1'
+        season_id:
+          type: integer
+          example: '296'
+        name:
+          type: string
+          example: D - Exclusive/Venue/Property Services
+        weight:
+          type: number
+          example: 3,5
+        droplets:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetDropletResource'
+        revenue:
+          $ref: '#/components/schemas/RevenueCalculatedResource'
+        dealAssets:
+          $ref: '#/components/schemas/DealAssetAuditResource'
+      type: object
+    SubcategoryRevenueFactorsUpdateResource:
+      properties:
+        factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/RevenueSubcategoryFactorResource'
+      type: object
+    LeaguePropertyBucketsShowResource:
+      type: object
+      allOf:
+      - properties:
+          spendTrackerLeague:
+            allOf:
+            - properties:
+                league_id:
+                  type: integer
+                  example: '1'
+                league_name:
+                  type: string
+                  example: NFL - National Football League
+                season_id:
+                  type: integer
+                  example: '296'
+                season_name:
+                  type: string
+                  example: 2021-22
+              type: object
+          buckets:
+            type: array
+            items:
+              $ref: '#/components/schemas/BucketLeaguePropertyResource'
+          revenue:
+            oneOf:
+            - $ref: '#/components/schemas/RevenueLeagueResource'
+            - $ref: '#/components/schemas/RevenueCalculatedResource'
+          meta:
+            allOf:
+            - properties:
+                revenue_calculated:
+                  $ref: '#/components/schemas/RevenueCalculatedResource'
+                revenue_ignored:
+                  $ref: '#/components/schemas/RevenueCalculatedResource'
+              type: object
+        type: object
+    RevenueSubcategoryFactor:
+      properties:
+        id:
+          description: Class RevenueSubcategoryFactor
+          type: integer
+          example: '91'
+        subcategory_id:
+          type: integer
+          example: '41'
+        league_id:
+          type: integer
+          example: '1'
+        season_id:
+          type: integer
+          example: '298'
+        factor:
+          type: number
+          example: '-10.3'
+      type: object
+    CurrencyExchangeRateResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        season_id:
+          type: integer
+          example: 292
+        from:
+          type: string
+          example: EUR
+        to:
+          type: string
+          example: USD
+        rate:
+          type: number
+          format: float
+          example: 1.0478
+      type: object
+    RevenueDealMultiYear:
+      properties:
+        id:
+          type: integer
+        min:
+          type: integer
+        max:
+          type: integer
+        revenues:
+          type: array
+          items:
+            $ref: '#/components/schemas/RevenueDeal'
+      type: object
+    RevenueLeagueBucket:
+      properties:
+        id:
+          type: integer
+          example: '95'
+        recipient_id:
+          type: integer
+          example: '115'
+        season_id:
+          type: integer
+          example: '298'
+        min:
+          type: integer
+          example: '20000000'
+        max:
+          type: integer
+          example: '22000000'
+        is_actual:
+          type: integer
+          example: 'false'
+        notes:
+          type: string
+          example: a note
+      type: object
+    RevenueDealGetPropertyDealRevenuesResource:
+      type: object
+      allOf:
+      - properties:
+          revenues:
+            $ref: '#/components/schemas/RevenueDealCollection'
+        type: object
+      - properties:
+          accepted_predicted_revenues:
+            type: object
+            allOf:
+            - properties:
+                non_parent_line:
+                  $ref: '#/components/schemas/RevenueDealPredictedCollection'
+                parent_line:
+                  $ref: '#/components/schemas/RevenueDealPredictedCollection'
+              type: object
+        type: object
+      - properties:
+          client_facing_revenues:
+            type: object
+            allOf:
+            - properties:
+                non_parent_line:
+                  $ref: '#/components/schemas/ClientFacingDealRevenueCollection'
+                parent_line:
+                  $ref: '#/components/schemas/ClientFacingDealRevenueCollection'
+              type: object
+        type: object
+      - properties:
+          dealsTotalRevenue:
+            type: array
+            items:
+              $ref: '#/components/schemas/PropertyDealRevenuesCollection'
+        type: object
+      - properties:
+          propertyRevenue:
+            type: array
+            items:
+              $ref: '#/components/schemas/RevenuePropertyResource'
+        type: object
+      - properties:
+          propertyBucketRevenue:
+            type: object
+            allOf:
+            - title: BrandAgency
+              properties:
+                currency:
+                  type: string
+                is_calculated:
+                  type: boolean
+                min:
+                  type: integer
+                max:
+                  type: string
+              type: object
+        type: object
+    AssetDropletResource:
+      properties:
+        id:
+          type: integer
+          example: '3'
+        bucket_id:
+          type: integer
+          example: '1'
+        drop_id:
+          type: integer
+          example: '598'
+        drop_name:
+          type: string
+          example: 'Stage: Rotating Logo or Name Cutout'
+        drop_description:
+          type: string
+          example: Lower Bowl Stage Rotating Logo / Name
+        item_platform:
+          type: string
+          example: 'VENUE:  Signage'
+        item_subplatform:
+          type: string
+          example: 'LOWER BOWL: Rotating'
+        item_grouping:
+          type: string
+          example: Signage - Interior (Other)
+      type: object
+    DropletLeagueProperty:
+      properties:
+        id:
+          type: integer
+          example: '3'
+        drop_id:
+          type: integer
+          example: '598'
+        bucket_id:
+          type: integer
+          example: '1'
+        bucket_name:
+          type: string
+          example: High Income Bucket
+        revenue:
+          $ref: '#/components/schemas/RevenueProperty'
+      type: object
+    PublishedSeasonResource:
+      $ref: '#/components/schemas/PublishedSeasonResource'
+    PropertyDealRevenuesGetActualResource:
+      type: object
+      allOf:
+      - properties:
+          leagueAssetBuckets:
+            $ref: '#/components/schemas/LeagueAssetBucketsCollection'
+        type: object
+      - properties:
+          propertyRevenue:
+            $ref: '#/components/schemas/RevenuePropertyResource'
+        type: object
+      - properties:
+          dealsWithPredictedRevenues:
+            type: array
+            items:
+              $ref: '#/components/schemas/PropertyDealRevenuesCollection'
+        type: object
+    SubcategoryRevenuesShowResource:
+      type: object
+      allOf:
+      - properties:
+          totalRevenue:
+            $ref: '#/components/schemas/RevenueSubcategoryResource'
+        type: object
+      - properties:
+          averageRevenue:
+            $ref: '#/components/schemas/RevenueSubcategoryResource'
+        type: object
+    ClientFacingDealRevenueResource:
+      type: object
+      allOf:
+      - properties:
+          id:
+            type: integer
+            example: '433'
+          property_id:
+            type: integer
+            example: '22'
+          brand_id:
+            type: integer
+            example: '117050'
+          season_id:
+            type: integer
+            example: '298'
+          min:
+            type: integer
+            example: '3991142'
+          max:
+            type: integer
+            example: '4988928'
+          midpoint:
+            type: integer
+            example: '4600000'
+          currency:
+            type: string
+            example: USD
+          parent_line:
+            type: boolean
+            example: 'true'
+        type: object
+    BucketLeagueProperty:
+      properties:
+        id:
+          type: integer
+          example: '55'
+        league_id:
+          type: integer
+          example: '1'
+        season_id:
+          type: integer
+          example: '296'
+        name:
+          type: string
+          example: B - Naming Rights
+        league_minimum_calculated:
+          type: integer
+          example: '10000'
+        league_minimum_estimated:
+          type: integer
+          example: '20000'
+        droplets:
+          type: array
+          items:
+            $ref: '#/components/schemas/DropletLeagueProperty'
+        revenue:
+          $ref: '#/components/schemas/RevenueLeagueBucket'
+      type: object
+    UpdatedSubcategoryRevenuesRequest:
+      required:
+      - season_id
+      - league_id
+      - revenuesSubcategory
+      properties:
+        season_id:
+          type: integer
+          example: '298'
+        league_id:
+          type: integer
+          example: '3'
+        revenuesSubcategory:
+          type: array
+          items:
+            $ref: '#/components/schemas/RevenueSubcategory'
+        revenueDeals:
+          type: array
+          items:
+            $ref: '#/components/schemas/RevenueDeal'
+      type: object
+    DealLevel:
+      properties:
+        id:
+          type: integer
+          example: '1'
+        property_id:
+          type: integer
+          example: '47'
+        brand_id:
+          type: integer
+          example: '3108'
+        season_id:
+          type: integer
+          example: '292'
+        level:
+          type: string
+          example: league
+      type: object
+    DealAssetAuditResource:
+      properties:
+        asset_id:
+          type: integer
+          example: '3'
+        asset_name:
+          type: string
+          example: 'Stage: Rotating Logo or Name Cutout'
+        asset_description:
+          type: string
+          example: Lower Bowl Stage Rotating Logo / Name
+        isSponsor:
+          type: integer
+          example: '1'
+        item_platform:
+          type: string
+          example: 'VENUE:  Signage'
+        item_grouping:
+          type: string
+          example: Signage - Interior (Other)
+        item_images_count:
+          type: integer
+          example: '2'
+        item_videos_count:
+          type: integer
+          example: '0'
+        item_social_media_count:
+          type: integer
+          example: '0'
+        description:
+          type: array
+          items:
+            allOf:
+            - properties:
+                id:
+                  type: integer
+                  example: '16'
+                description:
+                  type: string
+                  example: Terrace
+              type: object
+      type: object
+    DealTypesCreateUpdateRequest:
+      required:
+      - property_id
+      - brand_id
+      - season_id
+      - label
+      properties:
+        brand_id:
+          type: integer
+          example: '3108'
+        property_id:
+          type: integer
+          example: '47'
+        season_id:
+          type: integer
+          example: '292'
+        type:
+          type: string
+          example: league
+        parent_line:
+          type: integer
+          example: '0'
+        notes:
+          type: string
+          example: notes
+      type: object
+    DealRevenuesDuplicateRequest:
+      required:
+      - league_id
+      - source_season_id
+      - target_season_id
+      - increase_percentage
+      properties:
+        league_id:
+          type: integer
+          example: '3'
+        source_season_id:
+          type: integer
+          example: '303'
+        target_season_id:
+          type: integer
+          example: '308'
+        increase_percentage:
+          type: numeric
+          example: '5.5'
+        override_low_confidence_block:
+          description: When true, bypasses the safeguard that blocks escalation of 20%-confidence estimates after 3 consecutive escalations at that confidence level. All other confidence downgrades still apply.
+          type: boolean
+          example: 'false'
+      type: object
+    PublishedSeasonUpdateRequest:
+      required:
+      - season_id
+      properties:
+        season_id:
+          type: integer
+          example: '303'
+        is_soft_published:
+          type: boolean
+          example: 'true'
+        is_hard_published:
+          type: boolean
+          example: 'false'
+      type: object
+    DealTypesDeleteRequest:
+      required:
+      - property_id
+      - brand_id
+      - season_id
+      properties:
+        brand_id:
+          type: integer
+          example: '3108'
+        property_id:
+          type: integer
+          example: '47'
+        season_id:
+          type: integer
+          example: '292'
+      type: object
+    DropletLeagueAsset:
+      properties:
+        id:
+          type: integer
+          example: '3'
+        bucket_id:
+          type: integer
+          example: '1'
+        drop_id:
+          type: integer
+          example: '598'
+        season_id:
+          type: integer
+          example: '303'
+      type: object
+    LeagueAssetBucketsCollection:
+      type: object
+      allOf:
+      - properties:
+          spendTrackerLeague:
+            allOf:
+            - properties:
+                league_id:
+                  type: integer
+                  example: '1'
+                league_name:
+                  type: string
+                  example: NFL - National Football League
+                season_id:
+                  type: integer
+                  example: '296'
+                season_name:
+                  type: string
+                  example: 2021-22
+              type: object
+          buckets:
+            type: array
+            items:
+              $ref: '#/components/schemas/LeagueAssetBucketResource'
+        type: object
+    RevenueSubcategoryFactorResource:
+      properties:
+        id:
+          type: integer
+          example: '91'
+        subcategory_id:
+          type: integer
+          example: '19'
+        league_id:
+          type: integer
+          example: '1'
+        season_id:
+          type: integer
+          example: '286'
+        factor:
+          type: number
+          example: -10,3
+      type: object
+    AccuracyMetricsResultResource:
+      properties:
+        accepted:
+          type: object
+          allOf:
+          - properties:
+              accuracyMetrics:
+                type: array
+                items:
+                  properties:
+                    label:
+                      type: string
+                      example: Within 25% of actual
+                    classification:
+                      type: string
+                      example: 0-25
+                    deals_count:
+                      type: integer
+                      example: '103'
+                    percent_of_total:
+                      type: string
+                      example: 26,79
+                  type: object
+            type: object
+          - properties:
+              averageOff:
+                type: string
+                example: 24,38
+              averageOffExcludingReds:
+                type: string
+                example: 99,109
+            type: object
+        wip:
+          type: object
+          allOf:
+          - properties:
+              accuracyMetrics:
+                type: array
+                items:
+                  properties:
+                    label:
+                      type: string
+                      example: Within 25% of actual
+                    classification:
+                      type: string
+                      example: 0-25
+                    deals_count:
+                      type: integer
+                      example: '103'
+                    percent_of_total:
+                      type: string
+                      example: 26,79
+                  type: object
+            type: object
+          - properties:
+              averageOff:
+                type: string
+                example: 24,38
+              averageOffExcludingReds:
+                type: string
+                example: 99,109
+            type: object
+      type: object
+    PropertyDealRevenuesGetPredictedResource:
+      type: object
+      allOf:
+      - properties:
+          propertyRevenue:
+            $ref: '#/components/schemas/RevenuePropertyResource'
+        type: object
+      - properties:
+          dealsWithPredictedRevenues:
+            type: array
+            items:
+              $ref: '#/components/schemas/PredictDealCollection'
+        type: object
+    RevenueDealCollection:
+      type: array
+      items:
+        $ref: '#/components/schemas/RevenueDealResource'
+    PredictionAccuracyResource:
+      type: object
+      allOf:
+      - properties:
+          classification:
+            type: integer
+            example: '1'
+          percentage:
+            type: number
+            example: 24,38
+          exceeding:
+            type: boolean
+            example: 'true'
+        type: object
+    SubcategoryRevenuesDealsBySubcategoryResource:
+      type: object
+      allOf:
+      - properties:
+          league_key_figures:
+            type: object
+            allOf:
+            - properties:
+                league_revenue:
+                  $ref: '#/components/schemas/RevenueLeagueResource'
+                league_subcategories_total_revenue:
+                  type: integer
+                  example: '20500000'
+                league_subcategories_average_revenue:
+                  type: integer
+                  example: '10250000'
+                currency:
+                  type: string
+                  example: USD
+              type: object
+        type: object
+      - properties:
+          subcategory_deals:
+            type: array
+            items:
+              $ref: '#/components/schemas/SubcategoryRevenuesReportResource'
+        type: object
+    CalculateLeagueMinimumsResource:
+      type: object
+    RevenueDealUpdateDealRevenuesRequest:
+      required:
+      - revenues
+      properties:
+        brand_id:
+          type: integer
+          example: '1596'
+        property_id:
+          type: integer
+          example: '6'
+        parent_line:
+          type: boolean
+          example: 'false'
+        revenues:
+          type: array
+          items:
+            $ref: '#/components/schemas/RevenueDeal'
+        multi_year_revenues:
+          type: array
+          items:
+            $ref: '#/components/schemas/RevenueDeal'
+      type: object
+    AssetBucketResource:
+      properties:
+        id:
+          type: integer
+          example: '1'
+        name:
+          type: string
+          example: D - Exclusive/Venue/Property Services
+        weight:
+          type: number
+          example: 3,5
+        droplets:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetDropletResource'
+      type: object
+    LeagueStatusCollection:
+      properties:
+        spendTrackerLeagues:
+          type: array
+          items:
+            $ref: '#/components/schemas/LeagueStatusResource'
+      type: object
+    SeasonsWithDealDataResource:
+      properties:
+        season_id:
+          type: integer
+          example: '293'
+        season_season:
+          type: integer
+          example: '2020'
+        revenue:
+          $ref: '#/components/schemas/RevenueDealResource'
+        deal_level:
+          type: string
+          example: parent
+        deal_type:
+          type: boolean
+          example: vendor
+        has_child_revenues:
+          type: boolean
+          example: 'false'
+        has_prent_revenue:
+          type: boolean
+          example: 'true'
+      type: object
+    DealBucketAssetsGetDealAssetsByBucketsRequest:
+      required:
+      - property_id
+      - brand_id
+      - season_id
+      properties:
+        brand_id:
+          type: integer
+          example: '3108'
+        property_id:
+          type: integer
+          example: '47'
+        season_id:
+          type: integer
+          example: '292'
+        parent_line:
+          type: integer
+          example: '0'
+      type: object
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
+      type: object
+    RevenueDealPredictedResource:
+      type: object
+      allOf:
+      - properties:
+          id:
+            type: integer
+            example: '433'
+          property_id:
+            type: integer
+            example: '22'
+          brand_id:
+            type: integer
+            example: '117050'
+          season_id:
+            type: integer
+            example: '298'
+          is_accepted:
+            type: boolean
+            example: 'true'
+          is_final:
+            type: boolean
+            example: 'true'
+          min:
+            type: integer
+            example: '3991142'
+          max:
+            type: integer
+            example: '4988928'
+          subcategory_factored_min:
+            type: integer
+            example: '3991142'
+          subcategory_factored_max:
+            type: integer
+            example: '4988928'
+          currency:
+            type: string
+            example: USD
+          parent_line:
+            type: boolean
+            example: 'true'
+          is_predicted:
+            type: boolean
+            example: 'true'
+          accuracy:
+            $ref: '#/components/schemas/PredictionAccuracyResource'
+          accuracy_subcategory_factored:
+            $ref: '#/components/schemas/PredictionAccuracyResource'
+          accuracy_margin_of_error:
+            $ref: '#/components/schemas/PredictionAccuracyResource'
+        type: object
+    CalculateMarginOfErrorResource:
+      properties:
+        deal_revenues:
+          properties:
+            standard_deviation:
+              $ref: '#/components/schemas/RevenueCalculatedResource'
+            margin_of_error:
+              $ref: '#/components/schemas/RevenueCalculatedResource'
+            revenues:
+              type: array
+              items:
+                $ref: '#/components/schemas/RevenueDealResource'
+          type: object
+        predicted_deal_revenues:
+          properties:
+            standard_deviation:
+              $ref: '#/components/schemas/RevenueCalculatedResource'
+            margin_of_error:
+              $ref: '#/components/schemas/RevenueCalculatedResource'
+            revenues:
+              type: array
+              items:
+                $ref: '#/components/schemas/RevenueDealPredictedResource'
+          type: object
+      type: object
+    PredictChildDealResource:
+      properties:
+        brand_id:
+          type: integer
+        brand_ulid:
+          type: string
+        brand_name:
+          type: string
+        brand_logo:
+          type: string
+        revenue:
+          $ref: '#/components/schemas/RevenueDealResource'
+        accepted_predicted_revenue:
+          $ref: '#/components/schemas/RevenueDealPredictedResource'
+      type: object
+    LeagueAssetBucketsUpdateRequest:
+      required:
+      - buckets
+      properties:
+        buckets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BucketLeagueAsset'
+      type: object
+    RevenueCalculatedResource:
+      properties:
+        min:
+          type: integer
+          example: '3568790'
+        max:
+          type: integer
+          example: '3632160'
+        currency:
+          type: string
+          example: USD
+        is_calculated:
+          type: boolean
+          example: 'true'
+        is_predicted:
+          type: boolean
+          example: 'true'
+        accuracy:
+          $ref: '#/components/schemas/PredictionAccuracyResource'
+      type: object
+    RevenueLeagueResource:
+      $ref: '#/components/schemas/RevenueLeague'
+    RevenueDealGetDealRevenueInSeasonRequest:
+      required:
+      - property_id
+      - brand_id
+      - season
+      properties:
+        property_id:
+          type: integer
+          example: '6'
+        brand_id:
+          type: integer
+          example: '357'
+        season:
+          type: integer
+          example: '2020'
+        parent_line:
+          type: integer
+          example: 'false'
+      type: object
+    DealTypesResource:
+      $ref: '#/components/schemas/DealType'
+    RevenueDealGetPropertyDealRevenuesRequest:
+      required:
+      - season_id
+      - property_id
+      properties:
+        season_id:
+          type: integer
+          example: '298'
+        property_id:
+          type: integer
+          example: '6'
+      type: object
+    DropletAsset:
+      properties:
+        id:
+          type: integer
+          example: '3'
+        drop_id:
+          type: integer
+          example: '598'
+        bucket_id:
+          type: integer
+          example: '1'
+      type: object
+    UpdateSubcategoryRevenuesResource:
+      type: object
+      allOf:
+      - properties:
+          revenuesSubcategory:
+            $ref: '#/components/schemas/SubcategoryRevenuesShowResource'
+        type: object
+    BucketAsset:
+      properties:
+        id:
+          type: integer
+          example: '1'
+        name:
+          type: string
+          example: D - Exclusive/Venue/Property Services
+        weight:
+          type: number
+          example: 3,50
+        droplets:
+          type: array
+          items:
+            $ref: '#/components/schemas/DropletAsset'
+      type: object
+    CurrencyExchangeRateUpdateRequest:
+      required:
+      - season_id
+      - rates
+      properties:
+        season_id:
+          type: integer
+          example: 292
+        rates:
+          type: array
+          items:
+            properties:
+              from:
+                type: string
+                example: EUR
+              rate:
+                type: number
+                format: float
+                example: 1.0478
+            type: object
+      type: object
+    RevenueDealGetDealDataBySeasonsCollection:
+      properties:
+        seasons_with_deal_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeasonsWithDealDataResource'
+      type: object
+    DealLevelsUpdateRequest:
+      required:
+      - property_id
+      - brand_id
+      - season_id
+      - label
+      properties:
+        brand_id:
+          type: integer
+          example: '3108'
+        property_id:
+          type: integer
+          example: '47'
+        season_id:
+          type: integer
+          example: '292'
+        level:
+          type: string
+          example: league
+      type: object
+    PropertyDealRevenueResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PropertyDealRevenueChildResource'
+      - properties:
+          brand_id:
+            type: integer
+          brand_ulid:
+            type: string
+          brand_name:
+            type: string
+          brand_logo:
+            type: string
+          category_id:
+            type: integer
+          category_name:
+            type: string
+          subcategory_id:
+            type: integer
+          subcategory_name:
+            type: string
+          total_assets_count:
+            type: integer
+          sponsor_assets_count:
+            type: integer
+          vendor_assets_count:
+            type: integer
+          tv_assets_count:
+            type: integer
+          radio_assets_count:
+            type: integer
+          digital_assets_count:
+            type: integer
+          other_assets_count:
+            type: integer
+          deal_level:
+            type: string
+            example: vendor
+          revenue:
+            $ref: '#/components/schemas/RevenueDealResource'
+          accepted_predicted_revenue:
+            $ref: '#/components/schemas/RevenueDealPredictedResource'
+          children:
+            type: array
+            items:
+              $ref: '#/components/schemas/PropertyDealRevenueChildResource'
+        type: object
+    RevenuePropertyResource:
+      $ref: '#/components/schemas/RevenueProperty'
+    RevenueDealGetDealRevenueInSeasonResource:
+      type: object
+      allOf:
+      - properties:
+          deal_revenues:
+            type: array
+            items:
+              $ref: '#/components/schemas/RevenueDealResource'
+        type: object
+      - properties:
+          predicted_deal_revenues:
+            type: array
+            items:
+              $ref: '#/components/schemas/RevenueDealPredictedResource'
+        type: object
+    PredictDealCollection:
+      $ref: '#/components/schemas/PredictDealResource'
+    AssetsBucketsUpdateRequest:
+      required:
+      - buckets
+      properties:
+        buckets:
+          type: array
+          items:
+            $ref: '#/components/schemas/BucketAsset'
+      type: object
+    RevenueSubcategory:
+      properties:
+        id:
+          type: integer
+          example: '91'
+        recipient_id:
+          type: integer
+          example: '41'
+        season_id:
+          type: integer
+          example: '298'
+        is_total:
+          type: integer
+          example: '1'
+        is_actual:
+          type: integer
+          example: '0'
+        public_url:
+          type: string
+          example: https://www.sponsorunited.com/
+        min:
+          type: integer
+          example: '83700'
+        max:
+          type: integer
+          example: '83700'
+        notes:
+          type: string
+          example: a note
+      type: object
+    RevenueResource:
+      type: object
+      allOf:
+      - properties:
+          id:
+            type: integer
+          recipient_id:
+            type: integer
+          season_id:
+            type: integer
+          min:
+            type: integer
+          max:
+            type: integer
+          is_actual:
+            type: integer
+          public_url:
+            type: string
+          currency:
+            type: string
+        type: object
+    DealType:
+      properties:
+        id:
+          type: integer
+          example: '1'
+        property_id:
+          type: integer
+          example: '47'
+        brand_id:
+          type: integer
+          example: '3108'
+        season_id:
+          type: integer
+          example: '292'
+        type:
+          type: string
+          example: league
+        parent_line:
+          type: integer
+          example: '0'
+      type: object
+    RevenueProperty:
+      properties:
+        id:
+          type: integer
+        recipient_id:
+          type: integer
+        season_id:
+          type: integer
+        min:
+          type: integer
+        max:
+          type: integer
+        is_actual:
+          type: integer
+        public_url:
+          type: string
+        notes:
+          type: string
+      type: object
+    SaveCustomAssetBucketForDealRequest:
+      required:
+      - property_id
+      - brand_id
+      - season_id
+      - asset_id
+      - original_bucket_id
+      - custom_bucket_id
+      properties:
+        property_id:
+          type: integer
+          example: '85'
+        brand_id:
+          type: integer
+          example: '476'
+        season_id:
+          type: integer
+          example: '303'
+        parent_line:
+          type: integer
+          example: '0'
+        asset_id:
+          type: integer
+          example: '1'
+        original_bucket_id:
+          type: integer
+          example: '1'
+        custom_bucket_id:
+          type: integer
+          example: '2'
+      type: object
+    LeagueStatusResource:
+      properties:
+        league_id:
+          type: integer
+          example: '1'
+        league_name:
+          type: string
+          example: NFL - National Football League
+      type: object
+    SubcategoryRevenueFactorsUpdateRequest:
+      required:
+      - season_id
+      - league_id
+      - factors
+      properties:
+        season_id:
+          type: integer
+          example: '298'
+        league_id:
+          type: integer
+          example: '1'
+        factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/RevenueSubcategoryFactor'
+      type: object
+    RevenueDealPredictedCollection:
+      properties:
+        revenues:
+          type: array
+          items:
+            $ref: '#/components/schemas/RevenueDealPredictedResource'
+      type: object
+    ClientFacingDealRevenueCollection:
+      type: array
+      items:
+        $ref: '#/components/schemas/ClientFacingDealRevenueResource'
+    RevenueDealGetDealDataBySeasonsRequest:
+      required:
+      - property_id
+      - brand_id
+      - parent_line
+      properties:
+        property_id:
+          type: integer
+          example: '6'
+        brand_id:
+          type: integer
+          example: '357'
+        parent_line:
+          type: integer
+          example: '0'
+      type: object
+    RevenueDealResource:
+      type: object
+      allOf:
+      - properties:
+          id:
+            type: integer
+            example: '433'
+          property_id:
+            type: integer
+            example: '22'
+          brand_id:
+            type: integer
+            example: '117050'
+          season_id:
+            type: integer
+            example: '298'
+          min:
+            type: integer
+            example: '3991142'
+          max:
+            type: integer
+            example: '4988928'
+          min_margin_of_error:
+            type: integer
+            example: '3991142'
+          max_margin_of_error:
+            type: integer
+            example: '4988928'
+          currency:
+            type: string
+            example: USD
+          parent_line:
+            type: boolean
+            example: 'true'
+          is_actual:
+            type: boolean
+            example: 'true'
+          source:
+            type: integer
+            example: '4'
+          escalations_count:
+            type: integer
+            example: '4'
+          escalation_percentage:
+            type: number
+            format: float
+            example: '5.00'
+          public_url:
+            type: string
+            example: https://www.sponsorunited.com/
+          multi_year_id:
+            type: integer
+            example: '23'
+          revenue_multi_year:
+            $ref: '#/components/schemas/RevenueDealMultiYear'
+        type: object
+    RevenueSubcategoryResource:
+      properties:
+        id:
+          type: integer
+          example: '91'
+        recipient_id:
+          type: integer
+          example: '41'
+        season_id:
+          type: integer
+          example: '298'
+        is_total:
+          type: integer
+          example: '1'
+        is_actual:
+          type: integer
+          example: '0'
+        public_url:
+          type: string
+          example: https://www.sponsorunited.com/
+        min:
+          type: integer
+          example: '83700'
+        max:
+          type: integer
+          example: '83700'
+        currency:
+          type: string
+          example: USD
+        notes:
+          type: string
+          example: a note
+        midpoint:
+          type: integer
+          example: '83700'
+      type: object
+    BucketLeagueAsset:
+      properties:
+        id:
+          type: integer
+          example: '55'
+        league_id:
+          type: integer
+          example: '1'
+        season_id:
+          type: integer
+          example: '296'
+        name:
+          type: string
+          example: B - Naming Rights
+        weight:
+          type: number
+          example: '1.91000'
+        cap:
+          type: integer
+          example: '1'
+        droplets:
+          type: array
+          items:
+            $ref: '#/components/schemas/DropletLeagueAsset'
+      type: object
+    PropertyDealRevenueChildResource:
+      properties:
+        brand_id:
+          type: integer
+        brand_ulid:
+          type: string
+        brand_name:
+          type: string
+        brand_logo:
+          type: string
+        category_id:
+          type: integer
+        category_name:
+          type: string
+        subcategory_id:
+          type: integer
+        subcategory_name:
+          type: string
+        total_assets_count:
+          type: integer
+        sponsor_assets_count:
+          type: integer
+        vendor_assets_count:
+          type: integer
+        tv_assets_count:
+          type: integer
+        radio_assets_count:
+          type: integer
+        digital_assets_count:
+          type: integer
+        other_assets_count:
+          type: integer
+        deal_level:
+          type: string
+          example: vendor
+        revenue:
+          $ref: '#/components/schemas/RevenueDealResource'
+        accepted_predicted_revenue:
+          $ref: '#/components/schemas/RevenueDealPredictedResource'
+      type: object
+    DropletLeaguePropertyResource:
+      properties:
+        id:
+          type: integer
+          example: '3'
+        bucket_id:
+          type: integer
+          example: '3'
+        drop_id:
+          type: integer
+          example: '12'
+        drop_name:
+          type: string
+          example: Boston Red Sox
+        total_followers:
+          type: integer
+          example: '9051435'
+        primary_market:
+          type: string
+          example: Boston
+        market_rank:
+          type: integer
+          example: '1'
+        revenue:
+          $ref: '#/components/schemas/RevenueResource'
+      type: object
+    DollarOffMetricsResource:
+      type: object
+    DealLevelsResource:
+      $ref: '#/components/schemas/DealLevel'
+    RevenueDeal:
+      properties:
+        id:
+          type: integer
+        property_id:
+          type: integer
+        brand_id:
+          type: integer
+        season_id:
+          type: integer
+        min:
+          type: integer
+        max:
+          type: integer
+        min_margin_of_error:
+          type: integer
+        max_margin_of_error:
+          type: integer
+        is_actual:
+          type: integer
+        source:
+          type: integer
+        public_url:
+          type: string
+        multi_year_id:
+          type: integer
+        parent_line:
+          type: boolean
+        escalations_count:
+          type: integer
+        escalation_percentage:
+          type: number
+          format: float
+        revenue_multi_year:
+          $ref: '#/components/schemas/RevenueDealMultiYear'
+      type: object
+    AccuracySelectionResource:
+      properties:
+        deal_size_ranges:
+          properties:
+            fifty_thousand:
+              properties:
+                dollar_off:
+                  properties:
+                    ten_thousand:
+                      type: boolean
+                    twenty_thousand:
+                      type: boolean
+                    fifty_thousand:
+                      type: boolean
+                    one_hundred_thousand:
+                      type: boolean
+                    two_hundred_thousand:
+                      type: boolean
+                    five_hundred_thousand:
+                      type: boolean
+                    one_million:
+                      type: boolean
+                    three_million:
+                      type: boolean
+                    five_million:
+                      type: boolean
+                    over_five_million:
+                      type: boolean
+                  type: object
+              type: object
+            one_hundred_thousand:
+              properties:
+                dollar_off:
+                  properties:
+                    ten_thousand:
+                      type: boolean
+                    twenty_thousand:
+                      type: boolean
+                    fifty_thousand:
+                      type: boolean
+                    one_hundred_thousand:
+                      type: boolean
+                    two_hundred_thousand:
+                      type: boolean
+                    five_hundred_thousand:
+                      type: boolean
+                    one_million:
+                      type: boolean
+                    three_million:
+                      type: boolean
+                    five_million:
+                      type: boolean
+                    over_five_million:
+                      type: boolean
+                  type: object
+              type: object
+            two_hundred_fifty_thousand:
+              properties:
+                dollar_off:
+                  properties:
+                    ten_thousand:
+                      type: boolean
+                    twenty_thousand:
+                      type: boolean
+                    fifty_thousand:
+                      type: boolean
+                    one_hundred_thousand:
+                      type: boolean
+                    two_hundred_thousand:
+                      type: boolean
+                    five_hundred_thousand:
+                      type: boolean
+                    one_million:
+                      type: boolean
+                    three_million:
+                      type: boolean
+                    five_million:
+                      type: boolean
+                    over_five_million:
+                      type: boolean
+                  type: object
+              type: object
+            five_hundred_thousand:
+              properties:
+                dollar_off:
+                  properties:
+                    ten_thousand:
+                      type: boolean
+                    twenty_thousand:
+                      type: boolean
+                    fifty_thousand:
+                      type: boolean
+                    one_hundred_thousand:
+                      type: boolean
+                    two_hundred_thousand:
+                      type: boolean
+                    five_hundred_thousand:
+                      type: boolean
+                    one_million:
+                      type: boolean
+                    three_million:
+                      type: boolean
+                    five_million:
+                      type: boolean
+                    over_five_million:
+                      type: boolean
+                  type: object
+              type: object
+            one_million:
+              properties:
+                dollar_off:
+                  properties:
+                    ten_thousand:
+                      type: boolean
+                    twenty_thousand:
+                      type: boolean
+                    fifty_thousand:
+                      type: boolean
+                    one_hundred_thousand:
+                      type: boolean
+                    two_hundred_thousand:
+                      type: boolean
+                    five_hundred_thousand:
+                      type: boolean
+                    one_million:
+                      type: boolean
+                    three_million:
+                      type: boolean
+                    five_million:
+                      type: boolean
+                    over_five_million:
+                      type: boolean
+                  type: object
+              type: object
+            three_million:
+              properties:
+                dollar_off:
+                  properties:
+                    ten_thousand:
+                      type: boolean
+                    twenty_thousand:
+                      type: boolean
+                    fifty_thousand:
+                      type: boolean
+                    one_hundred_thousand:
+                      type: boolean
+                    two_hundred_thousand:
+                      type: boolean
+                    five_hundred_thousand:
+                      type: boolean
+                    one_million:
+                      type: boolean
+                    three_million:
+                      type: boolean
+                    five_million:
+                      type: boolean
+                    over_five_million:
+                      type: boolean
+                  type: object
+              type: object
+            five_million:
+              properties:
+                dollar_off:
+                  properties:
+                    ten_thousand:
+                      type: boolean
+                    twenty_thousand:
+                      type: boolean
+                    fifty_thousand:
+                      type: boolean
+                    one_hundred_thousand:
+                      type: boolean
+                    two_hundred_thousand:
+                      type: boolean
+                    five_hundred_thousand:
+                      type: boolean
+                    one_million:
+                      type: boolean
+                    three_million:
+                      type: boolean
+                    five_million:
+                      type: boolean
+                    over_five_million:
+                      type: boolean
+                  type: object
+              type: object
+            ten_million:
+              properties:
+                dollar_off:
+                  properties:
+                    ten_thousand:
+                      type: boolean
+                    twenty_thousand:
+                      type: boolean
+                    fifty_thousand:
+                      type: boolean
+                    one_hundred_thousand:
+                      type: boolean
+                    two_hundred_thousand:
+                      type: boolean
+                    five_hundred_thousand:
+                      type: boolean
+                    one_million:
+                      type: boolean
+                    three_million:
+                      type: boolean
+                    five_million:
+                      type: boolean
+                    over_five_million:
+                      type: boolean
+                  type: object
+              type: object
+            twenty_million:
+              properties:
+                dollar_off:
+                  properties:
+                    ten_thousand:
+                      type: boolean
+                    twenty_thousand:
+                      type: boolean
+                    fifty_thousand:
+                      type: boolean
+                    one_hundred_thousand:
+                      type: boolean
+                    two_hundred_thousand:
+                      type: boolean
+                    five_hundred_thousand:
+                      type: boolean
+                    one_million:
+                      type: boolean
+                    three_million:
+                      type: boolean
+                    five_million:
+                      type: boolean
+                    over_five_million:
+                      type: boolean
+                  type: object
+              type: object
+            over_twenty_million:
+              properties:
+                dollar_off:
+                  properties:
+                    ten_thousand:
+                      type: boolean
+                    twenty_thousand:
+                      type: boolean
+                    fifty_thousand:
+                      type: boolean
+                    one_hundred_thousand:
+                      type: boolean
+                    two_hundred_thousand:
+                      type: boolean
+                    five_hundred_thousand:
+                      type: boolean
+                    one_million:
+                      type: boolean
+                    three_million:
+                      type: boolean
+                    five_million:
+                      type: boolean
+                    over_five_million:
+                      type: boolean
+                  type: object
+              type: object
+          type: object
+      type: object
+    BucketLeaguePropertyResource:
+      properties:
+        id:
+          type: integer
+          example: '1'
+        league_id:
+          type: integer
+          example: '3'
+        season_id:
+          type: integer
+          example: '298'
+        name:
+          type: string
+          example: Highest
+        droplets:
+          type: array
+          items:
+            $ref: '#/components/schemas/DropletLeaguePropertyResource'
+        revenue:
+          $ref: '#/components/schemas/RevenueResource'
+        meta:
+          allOf:
+          - properties:
+              revenue_calculated:
+                $ref: '#/components/schemas/RevenueCalculatedResource'
+              revenue_ignored:
+                $ref: '#/components/schemas/RevenueCalculatedResource'
+            type: object
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

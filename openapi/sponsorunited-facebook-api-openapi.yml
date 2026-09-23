@@ -1,0 +1,74 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Facebook API
+  version: v1
+  description: Facebook
+tags:
+- name: Facebook
+  description: Facebook
+paths:
+  /api/facebook/me:
+    get:
+      tags:
+      - Facebook
+      description: Retrieve Facebook information about the user.
+      operationId: a76c183630ba0f5b9aa256df8938ec79
+      parameters:
+      - name: token
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User object and picture of the facebook account
+          content:
+            application/json:
+              schema:
+                properties:
+                  user:
+                    type: object
+                  picture:
+                    type: string
+                type: object
+      security:
+      - bearerAuth: []
+      summary: A76c183630ba0f5b9aa256df8938ec79
+      x-summary-source: derived
+  /api/facebook/validate-token:
+    get:
+      tags:
+      - Facebook
+      description: Validate token
+      operationId: 6957675db782437e00ff23a275165404
+      parameters:
+      - name: token
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Return if token is valid
+          content:
+            application/json:
+              schema:
+                properties:
+                  valid:
+                    type: boolean
+                type: object
+      security:
+      - bearerAuth: []
+      summary: 6957675db782437e00ff23a275165404
+      x-summary-source: derived
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

@@ -1,0 +1,307 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited User Actions API
+  version: v1
+  description: User activity tracking and organization statistics endpoints
+tags:
+- name: User Actions
+  description: User activity tracking and organization statistics endpoints
+paths:
+  /api/user-actions:
+    get:
+      tags:
+      - User Actions
+      summary: Get user actions
+      description: 'Get paginated user actions from MongoDB for the administration activity page.
+
+
+        Retrieves user actions from year-based MongoDB collections (type-page-view-{year})
+
+        and enriches them with user, team, and organization data from MySQL.'
+      operationId: 8217d4dee6518c14d691f5d6e285c1aa
+      parameters:
+      - name: startDate
+        in: query
+        description: Start date for filtering actions
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        description: End date for filtering actions
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: paginate
+        in: query
+        description: Number of items per page
+        required: false
+        schema:
+          type: integer
+          default: 20
+      responses:
+        '200':
+          description: Successful response with paginated user actions
+  /api/track/organization/stats:
+    get:
+      tags:
+      - User Actions
+      summary: Get all organization statistics
+      description: Returns aggregated usage statistics for all organizations
+      operationId: 6c8929e308dd725c0a0e716ba633cb24
+      parameters:
+      - name: startDate
+        in: query
+        description: Start date for statistics period
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        description: End date for statistics period
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: Organization statistics
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/track/organization/stats/export:
+    get:
+      tags:
+      - User Actions
+      summary: Export all organization statistics
+      description: Downloads organization statistics as an Excel file
+      operationId: 8be3f9c3dfdd119d6d6955f1da6e1aef
+      parameters:
+      - name: startDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: Excel file download
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/track/organization/{organization_id}/stats:
+    get:
+      tags:
+      - User Actions
+      summary: Get organization statistics
+      description: Returns usage statistics for a specific organization
+      operationId: ffcc3b63bddd3d4f5f4e99c5665aa00a
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: startDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: Organization statistics
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/track/organization/{organization_id}/stats/export:
+    get:
+      tags:
+      - User Actions
+      summary: Export organization statistics
+      description: Downloads organization statistics as an Excel file
+      operationId: 8ee16e6ed81610e7aa962072b21defb4
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: startDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: Excel file download
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/track/organization/{organization_id}/stats/user:
+    get:
+      tags:
+      - User Actions
+      summary: Get organization user statistics
+      description: Returns user-level statistics for a specific organization
+      operationId: 884680279e13f7e35884fba30ff4f489
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: startDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: User statistics
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/track/organization/{organization_id}/stats/weekly:
+    get:
+      tags:
+      - User Actions
+      summary: Get organization weekly statistics
+      description: Returns weekly usage statistics for a specific organization
+      operationId: 17109e09fb716082b087fa6f3edae2a7
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: startDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: Weekly statistics
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/track/organization/{organization_id}/stats/category:
+    get:
+      tags:
+      - User Actions
+      summary: Get organization category statistics
+      description: Returns category-level usage statistics for a specific organization
+      operationId: 11db03e97916a183a03c8853dab1e493
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: startDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: Category statistics
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+  /api/track/organization/{organization_id}/stats/league:
+    get:
+      tags:
+      - User Actions
+      summary: Get organization property type statistics
+      description: Returns property type (league) statistics for a specific organization
+      operationId: cbe197d686bedeb45fb6665aa0b8be94
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: startDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: Property type statistics
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

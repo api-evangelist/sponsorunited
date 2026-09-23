@@ -1,0 +1,312 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited User Event Uploads API
+  version: v1
+  description: UserEventUploads
+tags:
+- name: UserEventUploads
+  description: UserEventUploads
+paths:
+  /api/user/{user_id}/event/{event_id}/property/{property_id}/uploads:
+    get:
+      tags:
+      - UserEventUploads
+      summary: List user event uploads
+      description: Returns all uploaded media files associated with a user's scouting event for a specific property
+      operationId: 524f8e4fdc1679c416a7d77907e179b9
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: event_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: property_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: An array with user event uploads and their media.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEventUploadsIndexResource'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - UserEventUploads
+      summary: Create user event upload
+      description: Associates a media file with a user's scouting event for a specific property
+      operationId: 771e646a60c2f5aa906c4bc4553604c4
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: event_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: property_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserEventUploadsStoreRequest'
+      responses:
+        '200':
+          description: A new user event upload and its media.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEventUploadsStoreResource'
+      security:
+      - bearerAuth: []
+  /api/user/{user_id}/event/{event_id}/property/{property_id}/uploads/{id}:
+    get:
+      tags:
+      - UserEventUploads
+      summary: Get user event upload
+      description: Returns a single uploaded media file associated with a user's scouting event for a specific property
+      operationId: 980635bb54b0609011b71e03bc7b2c4c
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: event_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: property_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: User event upload with media.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEventUploadsStoreResource'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - UserEventUploads
+      summary: Delete user event upload
+      description: Removes an uploaded media file from a user's scouting event
+      operationId: 24dc1887901dea7a932854a1f13a7a62
+      parameters:
+      - name: event_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Empty response when user event upload has been deleted successfully.
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    UserEventUploadsStoreRequest:
+      properties:
+        media_id:
+          type: integer
+        media_type:
+          type: string
+      type: object
+    Audio:
+      properties:
+        id:
+          type: integer
+        original_name:
+          type: string
+        stored_name:
+          type: string
+        vtt_url:
+          type: string
+        processed_json_file_url:
+          type: string
+        transcribe_job_id:
+          type: string
+        transcribe_job_status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+        item_subplatform_id:
+          type:
+          - integer
+          - 'null'
+      type: object
+    Video:
+      properties:
+        id:
+          type: integer
+        original_name:
+          type: string
+        stored_name:
+          type: string
+        input_url:
+          type: string
+        output_url:
+          type: string
+        thumbnail_url:
+          type: string
+        width:
+          type: integer
+        height:
+          type: integer
+        duration:
+          type: integer
+        original_file_size:
+          type: integer
+        job_id:
+          type: string
+        job_status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    Image:
+      properties:
+        id:
+          type: integer
+        storage:
+          type: string
+        folder:
+          type: string
+        original_name:
+          type: string
+        stored_name:
+          type: string
+        needs_check:
+          type: integer
+        blurhash:
+          type: string
+        hammhash:
+          type: string
+        original_url:
+          type: string
+        image_url:
+          type: string
+        resized_image_url:
+          type: string
+        enhanced_image_url:
+          type: string
+        extension:
+          type: string
+        mime_type:
+          type: string
+        exif:
+          type: string
+        file_size:
+          type: string
+        width:
+          type: string
+        height:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UserEventUploadsStoreResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UserEventUploads'
+      - properties:
+          media:
+            type: object
+            oneOf:
+            - $ref: '#/components/schemas/Audio'
+            - $ref: '#/components/schemas/Image'
+            - $ref: '#/components/schemas/Video'
+        type: object
+    UserEventUploads:
+      properties:
+        id:
+          type: integer
+        media_id:
+          type: integer
+        media_type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    UserEventUploadsIndexResource:
+      type: array
+      items:
+        allOf:
+        - $ref: '#/components/schemas/UserEventUploads'
+        - properties:
+            media:
+              type: object
+              oneOf:
+              - $ref: '#/components/schemas/Audio'
+              - $ref: '#/components/schemas/Image'
+              - $ref: '#/components/schemas/Video'
+          type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

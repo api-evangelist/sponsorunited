@@ -1,0 +1,127 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Audit Synonyms API
+  version: v1
+  description: AuditSynonyms
+tags:
+- name: AuditSynonyms
+  description: AuditSynonyms
+paths:
+  /api/audit/{event_id}/synonyms:
+    get:
+      tags:
+      - AuditSynonyms
+      summary: List audit synonyms
+      description: Returns all synonyms associated with a specific audit event, including their linked brand information
+      operationId: b581d853897a9b3ff9add213c501b345
+      parameters:
+      - name: event_id
+        in: path
+        description: The id of the event
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditSynonymCollection'
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/synonyms/{synonym_id}/accept:
+    post:
+      tags:
+      - AuditSynonyms
+      summary: Accept audit synonym
+      description: Accepts a synonym from an audit and moves it to the permanent brand synonyms list. Deletes all temporary audit synonyms with the same brand_id and synonym value
+      operationId: 63f94f886fbb7b6c867c1ab5a6940c84
+      parameters:
+      - name: event_id
+        in: path
+        description: The id of the event
+        required: true
+        schema:
+          type: integer
+      - name: synonym_id
+        in: path
+        description: The id of the synonym to accept
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful validation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditSynonymResource'
+      security:
+      - bearerAuth: []
+  /api/audit/{event_id}/synonyms/{synonym_id}:
+    delete:
+      tags:
+      - AuditSynonyms
+      summary: Delete audit synonym
+      description: Removes a specific synonym from an audit event without adding it to the brand synonyms
+      operationId: 2bed846d99e1b893ed8957e591ed76ff
+      parameters:
+      - name: event_id
+        in: path
+        description: The id of the event
+        required: true
+        schema:
+          type: integer
+      - name: synonym_id
+        in: path
+        description: The id of the synonym to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Successful deletion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditSynonymResource'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    AuditSynonymCollection:
+      description: List of audit synonyms.
+      type: array
+      items:
+        $ref: '#/components/schemas/AuditSynonymResource'
+    AuditSynonymResource:
+      properties:
+        id:
+          type: integer
+        brand:
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+          type: object
+        synonym:
+          type: string
+        transcription:
+          type: string
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

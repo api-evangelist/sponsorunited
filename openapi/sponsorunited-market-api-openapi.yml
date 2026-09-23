@@ -1,0 +1,344 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Market API
+  version: v1
+  description: Market
+tags:
+- name: Market
+  description: Market
+paths:
+  /api/market:
+    get:
+      tags:
+      - Market
+      summary: List all markets
+      description: Returns a list of all markets with optional filtering, relationships, and demographics
+      operationId: 6f7fafdb80c3b6f089224524083ecc3c
+      parameters:
+      - name: search
+        in: query
+        description: Search markets by name
+        required: false
+        schema:
+          type: string
+      - name: markets
+        in: query
+        description: Filter by specific market IDs (comma-separated)
+        required: false
+        schema:
+          type: string
+      - name: with_demographics
+        in: query
+        description: Include demographics data
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: List of markets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    country_id:
+                      type:
+                      - integer
+                      - 'null'
+                    market_grouping_id:
+                      type:
+                      - integer
+                      - 'null'
+                  type: object
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Market
+      summary: Create a new market
+      description: Creates a new market with the provided name and associated territories
+      operationId: e34e4e4872a06886d067ee46183fa34b
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketStoreUpdateRequest'
+      responses:
+        '200':
+          description: Market created successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  country_id:
+                    type:
+                    - integer
+                    - 'null'
+                  market_grouping_id:
+                    type:
+                    - integer
+                    - 'null'
+                type: object
+        '401':
+          description: Unauthenticated
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+  /api/market/{id}:
+    get:
+      tags:
+      - Market
+      summary: Get a market by ID
+      description: Returns a single market with its associated territories (continents, countries, states, counties, cities)
+      operationId: ac49ba212650ab24ded3428a6f1cc0ce
+      parameters:
+      - name: id
+        in: path
+        description: ID of the market
+        required: true
+        schema:
+          type: integer
+      - name: with
+        in: query
+        description: Additional relationships to include (comma-separated)
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Market details with territories
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  continents:
+                    type: array
+                    items:
+                      type: object
+                  countries:
+                    type: array
+                    items:
+                      type: object
+                  states:
+                    type: array
+                    items:
+                      type: object
+                  counties:
+                    type: array
+                    items:
+                      type: object
+                  cities:
+                    type: array
+                    items:
+                      type: object
+                type: object
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Market not found
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Market
+      summary: Update a market
+      description: Updates an existing market with the provided data and territories
+      operationId: 6c93de12ef8bbc568421e9efdd2de006
+      parameters:
+      - name: id
+        in: path
+        description: ID of the market to update
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketStoreUpdateRequest'
+      responses:
+        '200':
+          description: Market updated successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  market_grouping_id:
+                    type:
+                    - integer
+                    - 'null'
+                type: object
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Market not found
+        '422':
+          description: Validation error
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Market
+      summary: Delete a market
+      description: Deletes a market and detaches all associated territories
+      operationId: 801b9d96e19297d5db4c45798a4b8790
+      parameters:
+      - name: id
+        in: path
+        description: ID of the market to delete
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: Market deleted successfully
+        '401':
+          description: Unauthenticated
+        '403':
+          description: Forbidden
+        '404':
+          description: Market not found
+      security:
+      - bearerAuth: []
+  /api/market/aggregated:
+    get:
+      tags:
+      - Market
+      summary: Get aggregated markets
+      description: Returns aggregated markets based on the provided market IDs. Can return as a comma-separated string if 'raw' parameter is set.
+      operationId: bb99ec6ff704a85f5e421dc97ddb72bc
+      parameters:
+      - name: market_id[]
+        in: query
+        description: Array of market IDs
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: columns[]
+        in: query
+        description: Specific columns to return
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: raw
+        in: query
+        description: If set, returns comma-separated IDs instead of full objects
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Aggregated markets
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: array
+                  items:
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                    type: object
+                - description: Comma-separated IDs when raw=true
+                  type: string
+        '401':
+          description: Unauthenticated
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    MarketStoreUpdateRequest:
+      required:
+      - name
+      properties:
+        name:
+          description: Name of the market
+          type: string
+          example: New York Metro
+        market_category_id:
+          description: Market category ID
+          type: integer
+        market_grouping_id:
+          description: Market grouping ID
+          type: integer
+        continents:
+          description: Array of continent objects with IDs
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+            type: object
+        countries:
+          description: Array of country objects with IDs
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+            type: object
+        states:
+          description: Array of state objects with IDs
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+            type: object
+        counties:
+          description: Array of county objects with IDs
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+            type: object
+        cities:
+          description: Array of city objects with IDs
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+            type: object
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

@@ -1,0 +1,155 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Attendance API
+  version: v1
+  description: Attendance
+tags:
+- name: Attendance
+  description: Attendance
+paths:
+  /api/attendance/{propertyId}:
+    get:
+      tags:
+      - Attendance
+      summary: Get attendance per property by property ID
+      operationId: getAttendancePropertiesByPropertyId
+      parameters:
+      - name: propertyId
+        in: path
+        description: ID of the property
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttendanceResource'
+    put:
+      tags:
+      - Attendance
+      summary: Update properties attendance
+      operationId: updatePropertiesAttendance
+      parameters:
+      - name: propertyId
+        in: path
+        description: ID of the property
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Property attendances to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceUpdateRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttendanceResource'
+components:
+  schemas:
+    AttendanceUpdateRequest:
+      description: Request for updating attendance data
+      properties:
+        property_attendances:
+          description: Array of property attendances for update
+          type: array
+          items:
+            properties:
+              id:
+                description: Unique identifier of the attendance entry
+                type: integer
+              property_id:
+                description: The ID of the property
+                type: integer
+              season_id:
+                description: The ID of the season
+                type: integer
+              attendance_average:
+                description: The average attendance (optional)
+                type: integer
+              attendance_total:
+                description: The total attendance (optional)
+                type: integer
+            type: object
+      type: object
+    AttendanceResource:
+      properties:
+        id:
+          type: integer
+        property_id:
+          type: integer
+        season_id:
+          type: integer
+        season:
+          type: string
+        league_name:
+          type: string
+        attendance_average:
+          type: integer
+        attendance_total:
+          type: integer
+        is_added_by_api:
+          type: boolean
+        stats_mapping_id:
+          type:
+          - integer
+          - 'null'
+        stats_sport:
+          type:
+          - string
+          - 'null'
+        stats_sport_id:
+          type:
+          - integer
+          - 'null'
+        stats_league_id:
+          type:
+          - integer
+          - 'null'
+        stats_league_abbreviation:
+          type:
+          - string
+          - 'null'
+        stats_league_name:
+          type:
+          - string
+          - 'null'
+        stats_team_id:
+          type:
+          - integer
+          - 'null'
+        stats_team_name:
+          type:
+          - string
+          - 'null'
+        stats_api:
+          type:
+          - string
+          - 'null'
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

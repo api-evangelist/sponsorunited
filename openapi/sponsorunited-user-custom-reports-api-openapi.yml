@@ -1,0 +1,253 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited User Custom Reports API
+  version: v1
+  description: User Custom Reports
+tags:
+- name: User Custom Reports
+  description: User Custom Reports
+paths:
+  /api/user/custom-reports/{id}/rename:
+    put:
+      tags:
+      - User Custom Reports
+      summary: Rename a user's custom report
+      description: Renames the user's copy of a custom report. Only the owner can rename their report. If the new name conflicts with an existing report, it will be automatically adjusted with a numeric suffix.
+      operationId: 12d65039d785ecedbb39f94a0ee42507
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the user custom report to rename
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCustomReportRenameRequest'
+      responses:
+        '200':
+          description: Report renamed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCustomReportResource'
+        '403':
+          description: Access denied - user is not the owner of this report
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: This action is unauthorized.
+                type: object
+        '404':
+          description: Report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Not found
+                type: object
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                type: object
+      security:
+      - bearerAuth: []
+  /api/user/custom-reports/{id}:
+    delete:
+      tags:
+      - User Custom Reports
+      summary: Delete a user's custom report
+      description: Soft deletes the user's copy of a custom report. Only the owner can delete their report. This does not affect the original admin report or other users' copies.
+      operationId: 1bb45af3d01a08ee9ec58e516fdeb88c
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the user custom report to delete
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Report deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCustomReportResource'
+        '403':
+          description: Access denied - user is not the owner of this report
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: This action is unauthorized.
+                type: object
+        '404':
+          description: Report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Not found
+                type: object
+      security:
+      - bearerAuth: []
+  /api/user/custom-reports/{id}/duplicate:
+    post:
+      tags:
+      - User Custom Reports
+      summary: Duplicate a user's custom report
+      description: Creates an independent copy of the user's custom report. The new report will have a unique name with a numeric suffix if the original name conflicts. Only the owner can duplicate their report.
+      operationId: f95af124361b5ef8465fcf591e8cb612
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the user custom report to duplicate
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '201':
+          description: Report duplicated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCustomReportResource'
+        '403':
+          description: Access denied - user is not the owner of this report
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: This action is unauthorized.
+                type: object
+        '404':
+          description: Report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Not found
+                type: object
+      security:
+      - bearerAuth: []
+  /api/custom-reports/{id}/mark-viewed:
+    post:
+      tags:
+      - User Custom Reports
+      summary: Mark a user's custom report as viewed
+      description: Marks the user's copy of a custom report as viewed. Only the owner can mark their report as viewed.
+      operationId: 804d28c4e99271e2cc4e802b74f4ec3a
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the user custom report to mark as viewed
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Report marked as viewed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCustomReportResource'
+        '403':
+          description: Access denied - user is not the owner of this report
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: This action is unauthorized.
+                type: object
+        '404':
+          description: Report not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: Not found
+                type: object
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    UserCustomReportRenameRequest:
+      required:
+      - name
+      properties:
+        name:
+          description: New report name
+          type: string
+          maxLength: 255
+      type: object
+    UserCustomReportResource:
+      properties:
+        id:
+          type: integer
+          example: 123
+        name:
+          type: string
+          example: Q4 Sponsorship Report
+        description:
+          type:
+          - string
+          - 'null'
+          example: Report description
+        type:
+          type: string
+          example: Custom Report
+        url:
+          type:
+          - string
+          - 'null'
+          example: https://s3.amazonaws.com/...
+        created_at:
+          type: string
+          example: 2 days ago
+        is_viewed:
+          type:
+          - boolean
+          - 'null'
+          example: false
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header

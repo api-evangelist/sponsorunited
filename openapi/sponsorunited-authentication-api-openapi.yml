@@ -1,0 +1,392 @@
+openapi: 3.2.0
+info:
+  title: SponsorUnited Authentication API
+  version: v1
+  description: Authentication
+tags:
+- name: Authentication
+  description: Authentication
+paths:
+  /api/auth/login:
+    post:
+      tags:
+      - Authentication
+      summary: Authenticate user
+      description: Authenticates user credentials and generates an authentication token for further API calls. Returns MFA challenge if multi-factor authentication is enabled for the user.
+      operationId: 535ffeda4b78916efd658b2844ea897a
+      requestBody:
+        description: User credentials
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authentication Token or mfa_enabled true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResource'
+  /api/auth/logout:
+    get:
+      tags:
+      - Authentication
+      summary: Logout user
+      description: Invalidates the current authentication token and logs out the user from the system.
+      operationId: 8e5dc3654b57a13f0272f04962926281
+      responses:
+        '200':
+          description: Success message
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+      security:
+      - bearerAuth: []
+  /api/auth/pin/send/{mfaOption}:
+    get:
+      tags:
+      - Authentication
+      summary: Send MFA PIN
+      description: Generates and sends a login PIN via the specified method (email or SMS). Requires a valid JWT token from the initial login.
+      operationId: 5c72ebefedf27de4e2552c970a09eeb9
+      parameters:
+      - name: mfaOption
+        in: path
+        description: 'Method to send the PIN: email (default) or sms'
+        required: false
+        schema:
+          type: string
+          default: email
+          enum:
+          - email
+          - sms
+      responses:
+        '200':
+          description: PIN sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendPinResponse'
+        '401':
+          description: User not authorized
+        '429':
+          description: Maximum attempts reached
+        '500':
+          description: Could not send PIN
+        '503':
+          description: Authentication gateway unavailable
+      security:
+      - bearerAuth: []
+  /api/auth/pin/verify:
+    post:
+      tags:
+      - Authentication
+      summary: Verify MFA PIN
+      description: Verifies the MFA PIN and returns a full authentication token. Requires the temporary JWT token from the initial login.
+      operationId: 5f4adbec6a6eedd8be6332f0b05cabb8
+      requestBody:
+        description: PIN verification data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyLoginRequest'
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResource'
+        '401':
+          description: User not authorized
+        '429':
+          description: Invalid or expired PIN / Maximum attempts reached
+      security:
+      - bearerAuth: []
+  /api/email-exists:
+    get:
+      tags:
+      - Authentication
+      summary: Check if email exists
+      description: Checks if an email address is already registered in the system.
+      operationId: 345afa474b4097d1f2b85998d47f77c8
+      parameters:
+      - name: email
+        in: query
+        description: Email address to check
+        required: true
+        schema:
+          type: string
+          format: email
+      responses:
+        '200':
+          description: Email existence check result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailExistsResponse'
+        '422':
+          description: Validation error
+  /api/verify/{token}:
+    get:
+      tags:
+      - Authentication
+      summary: Verify user email
+      description: Verifies a user's email address using the token sent via email.
+      operationId: 42c9e8cadeae189ee4abcfb844d7f9ee
+      parameters:
+      - name: token
+        in: path
+        description: Email verification token
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Verification result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyUserResponse'
+  /api/enroll:
+    post:
+      tags:
+      - Authentication
+      summary: Enroll new user
+      description: Enrolls a new user into SponsorUnited. The user's email domain must match a registered organization. Credentials will be sent via email.
+      operationId: 1ed175346dbfc108bd5f7654afbcba0b
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnrollRequest'
+      responses:
+        '200':
+          description: Enrollment result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrollResponse'
+        '422':
+          description: Validation error
+  /api/auth/passwords/email:
+    post:
+      tags:
+      - Authentication
+      summary: Send password reset email
+      description: Sends a password reset link to the specified email address. Returns success even if email doesn't exist for security reasons.
+      operationId: d35a865c89c7b6977ccbfffbf4dbf5a4
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+      responses:
+        '200':
+          description: Password reset email sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgotPasswordResponse'
+        '422':
+          description: Validation error
+  /api/auth/passwords/reset:
+    post:
+      tags:
+      - Authentication
+      summary: Reset password
+      description: Resets the user's password using the token received via email. Password must be at least 8 characters with mixed case and symbols.
+      operationId: af7b3ac0f01be02abbf5b940f6c10e96
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+      responses:
+        '200':
+          description: Password reset result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetPasswordResponse'
+        '422':
+          description: Validation error
+components:
+  schemas:
+    ResetPasswordResponse:
+      properties:
+        status:
+          description: Status indicator (ok or error)
+          type: string
+        error:
+          description: Error details (only present on failure)
+          properties:
+            type:
+              description: Error type code
+              type: string
+            message:
+              description: Human-readable error message
+              type: string
+          type: object
+      type: object
+    VerifyUserResponse:
+      properties:
+        success:
+          description: Whether the verification was successful
+          type: boolean
+        message:
+          description: Verification result message
+          type: string
+      type: object
+    ForgotPasswordResponse:
+      properties:
+        success:
+          description: Whether the request was processed successfully
+          type: boolean
+        status:
+          description: Status message
+          type: string
+      type: object
+    ResetPasswordRequest:
+      required:
+      - token
+      - email
+      - password
+      - password_confirmation
+      properties:
+        token:
+          description: Password reset token from email
+          type: string
+        email:
+          description: User's email address
+          type: string
+          format: email
+        password:
+          description: New password (min 8 chars, mixed case, with symbols)
+          type: string
+          format: password
+        password_confirmation:
+          description: Password confirmation
+          type: string
+          format: password
+      type: object
+    EnrollRequest:
+      required:
+      - firstname
+      - lastname
+      - email
+      properties:
+        firstname:
+          description: User's first name
+          type: string
+        lastname:
+          description: User's last name
+          type: string
+        email:
+          description: User's email address
+          type: string
+          format: email
+      type: object
+    LoginResource:
+      required:
+      - token
+      - session
+      properties:
+        token:
+          description: JWT authentication token
+          type: string
+        session:
+          description: Session signature
+          type: string
+        mfa_enabled:
+          description: Whether MFA verification is required
+          type: boolean
+        user_id:
+          description: User ID (returned when MFA is enabled)
+          type: integer
+        has_phone:
+          description: Whether user has phone number for SMS MFA
+          type: boolean
+        force_new_password:
+          description: Whether user must reset password
+          type: integer
+        reset_token:
+          description: Password reset token (when force_new_password is set)
+          type: string
+      type: object
+    LoginRequest:
+      required:
+      - email
+      - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        remember_me:
+          type: boolean
+      type: object
+    EmailExistsResponse:
+      properties:
+        exists:
+          description: Whether the email exists in the system
+          type: boolean
+      type: object
+    VerifyLoginRequest:
+      required:
+      - pin
+      properties:
+        pin:
+          description: 6-digit verification PIN
+          type: string
+      type: object
+    ForgotPasswordRequest:
+      required:
+      - email
+      properties:
+        email:
+          description: Email address for password reset
+          type: string
+          format: email
+      type: object
+    EnrollResponse:
+      properties:
+        success:
+          description: Whether enrollment was successful
+          type: boolean
+        message:
+          description: Enrollment result message
+          type: string
+      type: object
+    SendPinResponse:
+      properties:
+        retries_left:
+          description: Number of PIN verification attempts remaining
+          type: integer
+        message:
+          description: Status message
+          type: string
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: JWT Authentication
+      in: header
+      bearerFormat: JWT
+      scheme: bearer
+    apiKeyAuth:
+      type: apiKey
+      description: 'Service API key for external services (ai-api, chat-api). Generate with: php artisan su:api-token:generate'
+      name: X-API-Key
+      in: header
