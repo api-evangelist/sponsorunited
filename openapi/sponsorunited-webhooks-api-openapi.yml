@@ -121,20 +121,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    BrightdataPostsDeliveryRequest:
-      required:
-      - session_id
-      - gap_id
-      properties:
-        session_id:
-          description: Scraping session ID (query param)
-          type: integer
-          example: 42
-        gap_id:
-          description: Scraping gap ID (query param)
-          type: integer
-          example: 7
-      type: object
     PhantombusterEmployeeSearchWebhookRequest:
       required:
       - agentId
@@ -184,6 +170,20 @@ components:
           description: Exit code (0 = success)
           type: integer
           example: 0
+      type: object
+    BrightdataPostsDeliveryRequest:
+      required:
+      - session_id
+      - gap_id
+      properties:
+        session_id:
+          description: Scraping session ID (query param)
+          type: integer
+          example: 42
+        gap_id:
+          description: Scraping gap ID (query param)
+          type: integer
+          example: 7
       type: object
   securitySchemes:
     bearerAuth:

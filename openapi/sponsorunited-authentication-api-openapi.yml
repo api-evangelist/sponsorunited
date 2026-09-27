@@ -222,29 +222,22 @@ paths:
           description: Validation error
 components:
   schemas:
-    ResetPasswordResponse:
+    SendPinResponse:
       properties:
-        status:
-          description: Status indicator (ok or error)
+        retries_left:
+          description: Number of PIN verification attempts remaining
+          type: integer
+        message:
+          description: Status message
           type: string
-        error:
-          description: Error details (only present on failure)
-          properties:
-            type:
-              description: Error type code
-              type: string
-            message:
-              description: Human-readable error message
-              type: string
-          type: object
       type: object
-    VerifyUserResponse:
+    EnrollResponse:
       properties:
         success:
-          description: Whether the verification was successful
+          description: Whether enrollment was successful
           type: boolean
         message:
-          description: Verification result message
+          description: Enrollment result message
           type: string
       type: object
     ForgotPasswordResponse:
@@ -279,23 +272,6 @@ components:
           type: string
           format: password
       type: object
-    EnrollRequest:
-      required:
-      - firstname
-      - lastname
-      - email
-      properties:
-        firstname:
-          description: User's first name
-          type: string
-        lastname:
-          description: User's last name
-          type: string
-        email:
-          description: User's email address
-          type: string
-          format: email
-      type: object
     LoginResource:
       required:
       - token
@@ -323,26 +299,6 @@ components:
           description: Password reset token (when force_new_password is set)
           type: string
       type: object
-    LoginRequest:
-      required:
-      - email
-      - password
-      properties:
-        email:
-          type: string
-          format: email
-        password:
-          type: string
-          format: password
-        remember_me:
-          type: boolean
-      type: object
-    EmailExistsResponse:
-      properties:
-        exists:
-          description: Whether the email exists in the system
-          type: boolean
-      type: object
     VerifyLoginRequest:
       required:
       - pin
@@ -360,23 +316,67 @@ components:
           type: string
           format: email
       type: object
-    EnrollResponse:
+    EmailExistsResponse:
+      properties:
+        exists:
+          description: Whether the email exists in the system
+          type: boolean
+      type: object
+    ResetPasswordResponse:
+      properties:
+        status:
+          description: Status indicator (ok or error)
+          type: string
+        error:
+          description: Error details (only present on failure)
+          properties:
+            type:
+              description: Error type code
+              type: string
+            message:
+              description: Human-readable error message
+              type: string
+          type: object
+      type: object
+    EnrollRequest:
+      required:
+      - firstname
+      - lastname
+      - email
+      properties:
+        firstname:
+          description: User's first name
+          type: string
+        lastname:
+          description: User's last name
+          type: string
+        email:
+          description: User's email address
+          type: string
+          format: email
+      type: object
+    VerifyUserResponse:
       properties:
         success:
-          description: Whether enrollment was successful
+          description: Whether the verification was successful
           type: boolean
         message:
-          description: Enrollment result message
+          description: Verification result message
           type: string
       type: object
-    SendPinResponse:
+    LoginRequest:
+      required:
+      - email
+      - password
       properties:
-        retries_left:
-          description: Number of PIN verification attempts remaining
-          type: integer
-        message:
-          description: Status message
+        email:
           type: string
+          format: email
+        password:
+          type: string
+          format: password
+        remember_me:
+          type: boolean
       type: object
   securitySchemes:
     bearerAuth:

@@ -181,25 +181,9 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    ItemVideo:
-      properties:
-        id:
-          type: integer
-        video_id:
-          type: integer
-        item_value_id:
-          type: integer
-        rank:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
-    AuditReviewBulkDeleteRequest:
-      required: []
+    AuditReviewBulkRejectRequest:
+      required:
+      - content
       properties:
         item_value_ids:
           type: array
@@ -210,29 +194,9 @@ components:
           type: array
           items:
             type: integer
+        content:
+          type: string
       type: object
-    ItemValueUpdateResource:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ItemValue'
-      - properties:
-          item_images:
-            type: array
-            items:
-              $ref: '#/components/schemas/ItemImage'
-        type: object
-      - properties:
-          item_videos:
-            type: array
-            items:
-              $ref: '#/components/schemas/ItemVideo'
-        type: object
-      - properties:
-          item_audios:
-            type: array
-            items:
-              $ref: '#/components/schemas/ItemAudio'
-        type: object
     AuditReviewBulkUpdateRequest:
       required:
       - asset_id
@@ -267,6 +231,76 @@ components:
                 type: integer
             type: object
       type: object
+    ItemAudio:
+      properties:
+        id:
+          type: integer
+        audio_id:
+          type: integer
+        item_value_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    ItemVideo:
+      properties:
+        id:
+          type: integer
+        video_id:
+          type: integer
+        item_value_id:
+          type: integer
+        rank:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    ItemValueUpdateResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ItemValue'
+      - properties:
+          item_images:
+            type: array
+            items:
+              $ref: '#/components/schemas/ItemImage'
+        type: object
+      - properties:
+          item_videos:
+            type: array
+            items:
+              $ref: '#/components/schemas/ItemVideo'
+        type: object
+      - properties:
+          item_audios:
+            type: array
+            items:
+              $ref: '#/components/schemas/ItemAudio'
+        type: object
+    AuditReviewBulkCloneRequest:
+      required:
+      - asset_id
+      properties:
+        item_value_ids:
+          type: array
+          items:
+            type: integer
+        excluded_item_value_ids:
+          description: Item value IDs to exclude (used when item_value_ids is not provided)
+          type: array
+          items:
+            type: integer
+        asset_id:
+          type: integer
+      type: object
     ItemImage:
       properties:
         id:
@@ -284,24 +318,8 @@ components:
           type: string
           format: date-time
       type: object
-    ItemAudio:
-      properties:
-        id:
-          type: integer
-        audio_id:
-          type: integer
-        item_value_id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
-    AuditReviewBulkRejectRequest:
-      required:
-      - content
+    AuditReviewBulkDeleteRequest:
+      required: []
       properties:
         item_value_ids:
           type: array
@@ -312,8 +330,6 @@ components:
           type: array
           items:
             type: integer
-        content:
-          type: string
       type: object
     ItemValue:
       properties:
@@ -345,22 +361,6 @@ components:
         updated_at:
           type: string
           format: date-time
-      type: object
-    AuditReviewBulkCloneRequest:
-      required:
-      - asset_id
-      properties:
-        item_value_ids:
-          type: array
-          items:
-            type: integer
-        excluded_item_value_ids:
-          description: Item value IDs to exclude (used when item_value_ids is not provided)
-          type: array
-          items:
-            type: integer
-        asset_id:
-          type: integer
       type: object
   securitySchemes:
     bearerAuth:

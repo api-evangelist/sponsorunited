@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: SponsorUnited Linked In API
+  title: SponsorUnited LinkedIn API
   version: v1
   description: LinkedIn
 tags:

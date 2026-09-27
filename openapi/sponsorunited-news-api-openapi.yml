@@ -1054,131 +1054,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    NewsAssetResource:
-      properties:
-        id:
-          description: 'Serialises a {@see NewsAsset} row for the Article Analysis view''s
-
-            assets table.  Hydrates the `item` payload (canonical catalog row,
-
-            incl. platform/subplatform ids) when set and always emits
-
-            `match_candidates` (as `[]` when no top-K available).'
-          type: integer
-        curated_news_id:
-          type: integer
-        suggested_name:
-          type: string
-        confidence:
-          type: number
-          format: float
-        match_status:
-          type: string
-          enum:
-          - pending
-          - auto_match
-          - needs_review
-          - no_match
-          - confirmed
-          - dismissed
-        source:
-          type: string
-          enum:
-          - extracted
-          - manual
-        context:
-          type:
-          - string
-          - 'null'
-        match_candidates:
-          type: array
-          items:
-            type: object
-        item:
-          properties:
-            id:
-              type: integer
-            name:
-              type:
-              - string
-              - 'null'
-            description:
-              type:
-              - string
-              - 'null'
-            item_platform_id:
-              type: integer
-            item_subplatform_id:
-              type: integer
-          type:
-          - object
-          - 'null'
-        created_by:
-          properties:
-            id:
-              type: integer
-            name:
-              type: string
-          type:
-          - object
-          - 'null'
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
-    NewsExtractionAdd:
-      description: Outcome of adding this extracted person to the platform. Contacts only — a quote becomes a note on a contact, never a contact of its own. `not_added` is the only selectable state; `needs_review` means the sourcing agent found profiles but could not choose between them.
-      properties:
-        status:
-          type: string
-          enum:
-          - not_added
-          - processing
-          - needs_review
-          - created
-          - updated
-          - failed
-        added_at:
-          description: When the reviewer clicked Add contacts selected.
-          type:
-          - string
-          - 'null'
-          format: date-time
-        contact_id:
-          description: The platform contact this row produced.
-          type:
-          - integer
-          - 'null'
-        error:
-          description: Readable failure reason when status is failed.
-          type:
-          - string
-          - 'null'
-        linkedin_url:
-          description: 'The profile in play for this row: the one it was created from when status is created, or the one last tried when status is processing or failed. With `candidates` still populated, a failed row can offer the same pick again instead of re-running the search.'
-          type:
-          - string
-          - 'null'
-        candidates:
-          description: Profiles the agent found but could not choose between. Present when status is needs_review; the reviewer picks one and posts it to the resolve endpoint.
-          type: array
-          items:
-            properties:
-              slug:
-                type: string
-              linkedin_url:
-                type: string
-              title:
-                type: string
-              snippet:
-                type: string
-              position:
-                type: integer
-            type: object
-      type: object
     PersonProfile:
       properties:
         id:
@@ -1235,92 +1110,6 @@ components:
           type: string
           format: date-time
       type: object
-    AddNewsContactsRequest:
-      required:
-      - news_contact_ids
-      properties:
-        news_contact_ids:
-          description: Ids of the extracted contacts the reviewer selected. Every id must belong to this article.
-          type: array
-          items:
-            type: integer
-            example: 4711
-          minItems: 1
-      type: object
-    ActiveCuratedNewsRequest:
-      properties:
-        news_tag:
-          type: string
-        brand:
-          description: Comma separated brand ids.
-          type: string
-        property:
-          description: Comma separated property ids.
-          type: string
-        agency:
-          description: Comma separated agency ids.
-          type: string
-        sub_brands:
-          type: boolean
-        with_image:
-          type: string
-        page:
-          type: integer
-        per_page:
-          type: string
-      type: object
-    NewsExtractionMatch:
-      description: Entity-mapping resolver verdict for one extracted person (OP-966/967/968).
-      properties:
-        status:
-          type: string
-          enum:
-          - pending
-          - auto_match
-          - needs_review
-          - no_match
-        confidence:
-          type:
-          - number
-          - 'null'
-          format: float
-        resolved_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        person_profile_id:
-          type:
-          - integer
-          - 'null'
-        contact_id:
-          type:
-          - integer
-          - 'null'
-        contactable_type:
-          description: Morph alias of the resolved entity; pairs with contactable_id to open the Administration Contacts context.
-          type:
-          - string
-          - 'null'
-          enum:
-          - agency
-          - brand
-          - property
-        contactable_id:
-          type:
-          - integer
-          - 'null'
-        entity_name:
-          description: Name of the resolved agency / brand / property.
-          type:
-          - string
-          - 'null'
-        candidates:
-          description: Resolver top-K candidates; empty when the row was never resolved.
-          type: array
-          items:
-            type: object
-      type: object
     AnalyseCuratedNewsResource:
       properties:
         url:
@@ -1360,35 +1149,14 @@ components:
           - string
           - 'null'
       type: object
-    UpdateNewsAssetRequest:
+    ResolveNewsContactRequest:
+      required:
+      - linkedin_url
       properties:
-        item_id:
-          description: FK to items; must reference an existing catalog row.
-          type:
-          - integer
-          - 'null'
-          example: 481
-        match_status:
-          description: Reviewer-driven state transitions (needs_review = unconfirm).
+        linkedin_url:
+          description: The chosen LinkedIn member profile, usually one of the row's sourced candidates.
           type: string
-          enum:
-          - confirmed
-          - dismissed
-          - needs_review
-          example: confirmed
-        context:
-          description: Editable free-text note. Send null or an empty string to clear it; omit to leave it unchanged.
-          type:
-          - string
-          - 'null'
-          example: Mentioned in paragraph 3 as the title sponsor.
-      type: object
-    NewsTags:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
+          example: https://www.linkedin.com/in/casey-wasserman
       type: object
     CuratedNews:
       properties:
@@ -1420,60 +1188,17 @@ components:
           type: string
           format: date-time
       type: object
-    AnalyseCuratedNewsRequest:
+    AddNewsContactsRequest:
       required:
-      - urls
+      - news_contact_ids
       properties:
-        urls:
+        news_contact_ids:
+          description: Ids of the extracted contacts the reviewer selected. Every id must belong to this article.
           type: array
           items:
-            type: string
-            format: url
-            maxLength: 2048
-            example: https://example.com/article
+            type: integer
+            example: 4711
           minItems: 1
-        companies:
-          type: array
-          items:
-            type: integer
-            example: 1
-        agencies:
-          type: array
-          items:
-            type: integer
-            example: 1
-        teams:
-          type: array
-          items:
-            type: integer
-            example: 1
-        extract_entities:
-          description: When true (default), entity extraction (brand/property/agency) runs in parallel with contact extraction.
-          type: boolean
-          example: true
-        extract_contacts:
-          description: When true (default), contact extraction runs after markdown conversion completes.
-          type: boolean
-          example: true
-        extract_assets:
-          description: When true (default), asset extraction runs after markdown conversion completes, in parallel with contact extraction.
-          type: boolean
-          example: true
-      type: object
-    StoreNewsAssetRequest:
-      required:
-      - item_id
-      properties:
-        item_id:
-          description: FK to items; must reference an existing catalog row. Searchable via GET /api/search/asset.
-          type: integer
-          example: 481
-        context:
-          description: Optional free-text note persisted on the asset row.
-          type:
-          - string
-          - 'null'
-          example: Mentioned in paragraph 3 as the title sponsor.
       type: object
     NewsContactAddResultsResource:
       properties:
@@ -1512,6 +1237,57 @@ components:
                 - string
                 - 'null'
             type: object
+      type: object
+    UpdateNewsAssetRequest:
+      properties:
+        item_id:
+          description: FK to items; must reference an existing catalog row.
+          type:
+          - integer
+          - 'null'
+          example: 481
+        match_status:
+          description: Reviewer-driven state transitions (needs_review = unconfirm).
+          type: string
+          enum:
+          - confirmed
+          - dismissed
+          - needs_review
+          example: confirmed
+        context:
+          description: Editable free-text note. Send null or an empty string to clear it; omit to leave it unchanged.
+          type:
+          - string
+          - 'null'
+          example: Mentioned in paragraph 3 as the title sponsor.
+      type: object
+    NewsTags:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
+    StoreNewsAssetRequest:
+      required:
+      - item_id
+      properties:
+        item_id:
+          description: FK to items; must reference an existing catalog row. Searchable via GET /api/search/asset.
+          type: integer
+          example: 481
+        context:
+          description: Optional free-text note persisted on the asset row.
+          type:
+          - string
+          - 'null'
+          example: Mentioned in paragraph 3 as the title sponsor.
+      type: object
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
       type: object
     NewsSubmissionResource:
       properties:
@@ -1744,45 +1520,67 @@ components:
                 - 'null'
             type: object
       type: object
-    NewsExtractionMatchedContact:
-      description: Present-day platform values of the matched contact, for side-by-side comparison against the extracted ones. Null when the extraction resolved to no contact.
+    AnalyseCuratedNewsRequest:
+      required:
+      - urls
       properties:
-        id:
-          type: integer
-        name:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        position:
-          type:
-          - string
-          - 'null'
-        linkedin:
-          type:
-          - string
-          - 'null'
-      type:
-      - object
-      - 'null'
-    AnalyseCuratedNewsResultsResource:
-      properties:
-        results:
+        urls:
           type: array
           items:
-            $ref: '#/components/schemas/AnalyseCuratedNewsResource'
+            type: string
+            format: url
+            maxLength: 2048
+            example: https://example.com/article
+          minItems: 1
+        companies:
+          type: array
+          items:
+            type: integer
+            example: 1
+        agencies:
+          type: array
+          items:
+            type: integer
+            example: 1
+        teams:
+          type: array
+          items:
+            type: integer
+            example: 1
+        extract_entities:
+          description: When true (default), entity extraction (brand/property/agency) runs in parallel with contact extraction.
+          type: boolean
+          example: true
+        extract_contacts:
+          description: When true (default), contact extraction runs after markdown conversion completes.
+          type: boolean
+          example: true
+        extract_assets:
+          description: When true (default), asset extraction runs after markdown conversion completes, in parallel with contact extraction.
+          type: boolean
+          example: true
       type: object
-    ResolveNewsContactRequest:
-      required:
-      - linkedin_url
+    ActiveCuratedNewsRequest:
       properties:
-        linkedin_url:
-          description: The chosen LinkedIn member profile, usually one of the row's sourced candidates.
+        news_tag:
           type: string
-          example: https://www.linkedin.com/in/casey-wasserman
+        brand:
+          description: Comma separated brand ids.
+          type: string
+        property:
+          description: Comma separated property ids.
+          type: string
+        agency:
+          description: Comma separated agency ids.
+          type: string
+        sub_brands:
+          type: boolean
+        with_image:
+          type: string
+        page:
+          type: integer
+        per_page:
+          type: string
       type: object
     CuratedNewsArticlePreviewResource:
       properties:
@@ -1792,12 +1590,6 @@ components:
           type: string
         image:
           type: string
-      type: object
-    ErrorResource:
-      properties:
-        error:
-          type: string
-          example: An error occurred
       type: object
     ActiveCuratedNewsResource:
       type: array
@@ -1860,6 +1652,214 @@ components:
               items:
                 $ref: '#/components/schemas/NewsTags'
           type: object
+    NewsExtractionMatch:
+      description: Entity-mapping resolver verdict for one extracted person (OP-966/967/968).
+      properties:
+        status:
+          type: string
+          enum:
+          - pending
+          - auto_match
+          - needs_review
+          - no_match
+        confidence:
+          type:
+          - number
+          - 'null'
+          format: float
+        resolved_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        person_profile_id:
+          type:
+          - integer
+          - 'null'
+        contact_id:
+          type:
+          - integer
+          - 'null'
+        contactable_type:
+          description: Morph alias of the resolved entity; pairs with contactable_id to open the Administration Contacts context.
+          type:
+          - string
+          - 'null'
+          enum:
+          - agency
+          - brand
+          - property
+        contactable_id:
+          type:
+          - integer
+          - 'null'
+        entity_name:
+          description: Name of the resolved agency / brand / property.
+          type:
+          - string
+          - 'null'
+        candidates:
+          description: Resolver top-K candidates; empty when the row was never resolved.
+          type: array
+          items:
+            type: object
+      type: object
+    NewsExtractionMatchedContact:
+      description: Present-day platform values of the matched contact, for side-by-side comparison against the extracted ones. Null when the extraction resolved to no contact.
+      properties:
+        id:
+          type: integer
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        position:
+          type:
+          - string
+          - 'null'
+        linkedin:
+          type:
+          - string
+          - 'null'
+      type:
+      - object
+      - 'null'
+    NewsAssetResource:
+      properties:
+        id:
+          description: 'Serialises a {@see NewsAsset} row for the Article Analysis view''s
+
+            assets table.  Hydrates the `item` payload (canonical catalog row,
+
+            incl. platform/subplatform ids) when set and always emits
+
+            `match_candidates` (as `[]` when no top-K available).'
+          type: integer
+        curated_news_id:
+          type: integer
+        suggested_name:
+          type: string
+        confidence:
+          type: number
+          format: float
+        match_status:
+          type: string
+          enum:
+          - pending
+          - auto_match
+          - needs_review
+          - no_match
+          - confirmed
+          - dismissed
+        source:
+          type: string
+          enum:
+          - extracted
+          - manual
+        context:
+          type:
+          - string
+          - 'null'
+        match_candidates:
+          type: array
+          items:
+            type: object
+        item:
+          properties:
+            id:
+              type: integer
+            name:
+              type:
+              - string
+              - 'null'
+            description:
+              type:
+              - string
+              - 'null'
+            item_platform_id:
+              type: integer
+            item_subplatform_id:
+              type: integer
+          type:
+          - object
+          - 'null'
+        created_by:
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+          type:
+          - object
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    AnalyseCuratedNewsResultsResource:
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalyseCuratedNewsResource'
+      type: object
+    NewsExtractionAdd:
+      description: Outcome of adding this extracted person to the platform. Contacts only — a quote becomes a note on a contact, never a contact of its own. `not_added` is the only selectable state; `needs_review` means the sourcing agent found profiles but could not choose between them.
+      properties:
+        status:
+          type: string
+          enum:
+          - not_added
+          - processing
+          - needs_review
+          - created
+          - updated
+          - failed
+        added_at:
+          description: When the reviewer clicked Add contacts selected.
+          type:
+          - string
+          - 'null'
+          format: date-time
+        contact_id:
+          description: The platform contact this row produced.
+          type:
+          - integer
+          - 'null'
+        error:
+          description: Readable failure reason when status is failed.
+          type:
+          - string
+          - 'null'
+        linkedin_url:
+          description: 'The profile in play for this row: the one it was created from when status is created, or the one last tried when status is processing or failed. With `candidates` still populated, a failed row can offer the same pick again instead of re-running the search.'
+          type:
+          - string
+          - 'null'
+        candidates:
+          description: Profiles the agent found but could not choose between. Present when status is needs_review; the reviewer picks one and posts it to the resolve endpoint.
+          type: array
+          items:
+            properties:
+              slug:
+                type: string
+              linkedin_url:
+                type: string
+              title:
+                type: string
+              snippet:
+                type: string
+              position:
+                type: integer
+            type: object
+      type: object
   securitySchemes:
     bearerAuth:
       type: http

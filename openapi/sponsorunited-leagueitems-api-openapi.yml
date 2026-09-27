@@ -112,29 +112,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    LeagueItemForLeagueResource:
-      type: array
-      items:
-        properties:
-          item_id:
-            type: integer
-          is_key_asset:
-            type: integer
-        type: object
-    LeagueItemsUpdateLeagueItemsRequest:
-      properties:
-        items:
-          type: array
-          items:
-            properties:
-              item_id:
-                type: integer
-              is_key_asset:
-                type: integer
-            type: object
-        search:
-          type: string
-      type: object
     LeagueItemForItemResource:
       type: array
       items:
@@ -158,6 +135,29 @@ components:
         search:
           type: string
       type: object
+    LeagueItemsUpdateLeagueItemsRequest:
+      properties:
+        items:
+          type: array
+          items:
+            properties:
+              item_id:
+                type: integer
+              is_key_asset:
+                type: integer
+            type: object
+        search:
+          type: string
+      type: object
+    LeagueItemForLeagueResource:
+      type: array
+      items:
+        properties:
+          item_id:
+            type: integer
+          is_key_asset:
+            type: integer
+        type: object
   securitySchemes:
     bearerAuth:
       type: http

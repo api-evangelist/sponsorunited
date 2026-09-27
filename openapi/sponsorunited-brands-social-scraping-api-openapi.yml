@@ -202,76 +202,6 @@ components:
         error:
           type: string
       type: object
-    Company:
-      properties:
-        id:
-          type: integer
-        parent_company_id:
-          type: integer
-        subcategory_id:
-          type: integer
-        categories_id:
-          type: integer
-        name:
-          type: string
-        synopsis:
-          type: string
-        corporate_phone:
-          type: string
-        website:
-          type: string
-        linkedin:
-          type: string
-        linkedin_id_url:
-          type: string
-        linkedin_employees:
-          type: string
-        facebook:
-          type: string
-        twitter:
-          type: string
-        instagram:
-          type: string
-        twitch:
-          type: string
-        tiktok:
-          type: string
-        youtube:
-          type: string
-        exclude_from_social_scan:
-          type: boolean
-        exclude_from_transcribe:
-          type: boolean
-        feed_url:
-          type: string
-        statistics:
-          type: string
-        no_of_employees:
-          type: string
-        priority_markets:
-          type: string
-        parent_company:
-          type: string
-        ad_agency:
-          type: string
-        existing:
-          type: string
-        owned_by:
-          type: string
-        approved:
-          type: boolean
-        approved_by:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
     BrandSocialScrapingSessionsResource:
       properties:
         metadata:
@@ -382,6 +312,76 @@ components:
               stats:
                 type: object
             type: object
+      type: object
+    Company:
+      properties:
+        id:
+          type: integer
+        parent_company_id:
+          type: integer
+        subcategory_id:
+          type: integer
+        categories_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        exclude_from_social_scan:
+          type: boolean
+        exclude_from_transcribe:
+          type: boolean
+        feed_url:
+          type: string
+        statistics:
+          type: string
+        no_of_employees:
+          type: string
+        priority_markets:
+          type: string
+        parent_company:
+          type: string
+        ad_agency:
+          type: string
+        existing:
+          type: string
+        owned_by:
+          type: string
+        approved:
+          type: boolean
+        approved_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
       type: object
   securitySchemes:
     bearerAuth:

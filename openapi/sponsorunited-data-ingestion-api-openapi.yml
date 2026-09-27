@@ -258,6 +258,40 @@ components:
               type: string
           type: object
       type: object
+    IngestionJobResource:
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        source_url:
+          type: string
+        status:
+          type: string
+        correlation_id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        completed_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        created_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        updated_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngestionTaskResource'
+      type: object
     IngestionTaskResource:
       properties:
         uuid:
@@ -330,40 +364,6 @@ components:
               options:
                 type: object
             type: object
-      type: object
-    IngestionJobResource:
-      properties:
-        uuid:
-          type: string
-          format: uuid
-        source_url:
-          type: string
-        status:
-          type: string
-        correlation_id:
-          type:
-          - string
-          - 'null'
-          format: uuid
-        completed_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        created_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        updated_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        tasks:
-          type: array
-          items:
-            $ref: '#/components/schemas/IngestionTaskResource'
       type: object
   securitySchemes:
     bearerAuth:

@@ -198,22 +198,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    UserSetting:
-      properties:
-        id:
-          type: integer
-        type:
-          type: string
-        payload:
-          type: object
-      type: object
-    SalesforceAccessTokenRequest:
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-      type: object
     PersonProfile:
       properties:
         id:
@@ -270,110 +254,6 @@ components:
           type: string
           format: date-time
       type: object
-    Company:
-      properties:
-        id:
-          type: integer
-        parent_company_id:
-          type: integer
-        subcategory_id:
-          type: integer
-        categories_id:
-          type: integer
-        name:
-          type: string
-        synopsis:
-          type: string
-        corporate_phone:
-          type: string
-        website:
-          type: string
-        linkedin:
-          type: string
-        linkedin_id_url:
-          type: string
-        linkedin_employees:
-          type: string
-        facebook:
-          type: string
-        twitter:
-          type: string
-        instagram:
-          type: string
-        twitch:
-          type: string
-        tiktok:
-          type: string
-        youtube:
-          type: string
-        exclude_from_social_scan:
-          type: boolean
-        exclude_from_transcribe:
-          type: boolean
-        feed_url:
-          type: string
-        statistics:
-          type: string
-        no_of_employees:
-          type: string
-        priority_markets:
-          type: string
-        parent_company:
-          type: string
-        ad_agency:
-          type: string
-        existing:
-          type: string
-        owned_by:
-          type: string
-        approved:
-          type: boolean
-        approved_by:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
-    UserDownloadFileRequest:
-      required:
-      - command
-      properties:
-        command:
-          description: 'Export command: TasksExportInvalidLinkedin, TasksExportInvalidSocial, or TasksExportInvalidEmails'
-          type: string
-          enum:
-          - TasksExportInvalidLinkedin
-          - TasksExportInvalidSocial
-          - TasksExportInvalidEmails
-        payload:
-          description: Optional payload (e.g. filters)
-          type: object
-      type: object
-    UserProfileResource:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/User'
-      - properties:
-          roles:
-            type: array
-            items:
-              $ref: '#/components/schemas/Role'
-          organizations:
-            type: array
-            items:
-              $ref: '#/components/schemas/Organization'
-          person_profile:
-            $ref: '#/components/schemas/PersonProfile'
-          user_permissions:
-            type: array
-            items: {}
-        type: object
     VerifyUserPhoneNumberRequest:
       required:
       - pin
@@ -384,15 +264,19 @@ components:
         e164_phone_number:
           type: string
       type: object
-    Role:
+    PersonProfileSocialDetail:
       properties:
         id:
           type: integer
-        name:
+        person_profile_id:
+          type: integer
+        linkedin_profile_url:
           type: string
-        display_name:
+        facebook_profile_url:
           type: string
-        description:
+        twitter_profile_url:
+          type: string
+        instagram_profile_url:
           type: string
         created_at:
           type: string
@@ -400,119 +284,9 @@ components:
         updated_at:
           type: string
           format: date-time
-      type: object
-    UserResource:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/User'
-      - properties:
-          roles:
-            type: array
-            items:
-              $ref: '#/components/schemas/Role'
-          teams:
-            type: array
-            items:
-              $ref: '#/components/schemas/Property'
-          agencies:
-            type: array
-            items:
-              $ref: '#/components/schemas/Agency'
-          brands:
-            type: array
-            items:
-              $ref: '#/components/schemas/Company'
-          organization:
-            type: array
-            items:
-              $ref: '#/components/schemas/Organization'
-          person_profile:
-            type: object
-            allOf:
-            - $ref: '#/components/schemas/PersonProfile'
-            - properties:
-                contact_details:
-                  $ref: '#/components/schemas/PersonProfileContactDetail'
-                social_details:
-                  $ref: '#/components/schemas/PersonProfileSocialDetail'
-              type: object
-          user_permissions:
-            type: array
-            items: {}
-          role_orientation:
-            oneOf:
-            - $ref: '#/components/schemas/RoleOrientationResource'
-        type: object
-    SalesforceAccessTokenResource:
-      properties:
-        access_token:
+        deleted_at:
           type: string
-      type: object
-    UserUpdateRequest:
-      required:
-      - name
-      - email
-      - role
-      properties:
-        name:
-          type: string
-        avatar:
-          type: string
-        email:
-          type: string
-        role:
-          type: integer
-        person_profile_job_role_id:
-          type: integer
-        job_title:
-          type: string
-        linkedin_url:
-          type: string
-        facebook_url:
-          type: string
-        twitter_url:
-          type: string
-        instagram_url:
-          type: string
-        organization:
-          type: array
-          items:
-            $ref: '#/components/schemas/Organization'
-        is_external:
-          type: boolean
-        force_new_password:
-          type: boolean
-        role_orientation_id:
-          description: Role orientation ID (1=sell_side, 2=buy_side, 3=student)
-          type: integer
-      type: object
-    UserLightResource:
-      properties:
-        user:
-          type: object
-          allOf:
-          - properties:
-              id:
-                type: integer
-              name:
-                type: string
-              email:
-                type: string
-              roles:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Role'
-              is_external:
-                type: boolean
-              force_new_password:
-                type: integer
-              verified:
-                type: integer
-              settings:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserSetting'
-            type: object
+          format: date-time
       type: object
     PersonProfileContactDetail:
       properties:
@@ -556,6 +330,195 @@ components:
           type: string
           format: date-time
         deleted_at:
+          type: string
+          format: date-time
+      type: object
+    SalesforceAccessTokenResource:
+      properties:
+        access_token:
+          type: string
+      type: object
+    UserUpdateRequest:
+      required:
+      - name
+      - email
+      - role
+      properties:
+        name:
+          type: string
+        avatar:
+          type: string
+        email:
+          type: string
+        role:
+          type: integer
+        person_profile_job_role_id:
+          type: integer
+        job_title:
+          type: string
+        linkedin_url:
+          type: string
+        facebook_url:
+          type: string
+        twitter_url:
+          type: string
+        instagram_url:
+          type: string
+        organization:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        is_external:
+          type: boolean
+        force_new_password:
+          type: boolean
+        role_orientation_id:
+          description: Role orientation ID (1=sell_side, 2=buy_side, 3=student)
+          type: integer
+      type: object
+    User:
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        currency:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+        last_active_at:
+          type: string
+          format: date-time
+        is_external:
+          type: boolean
+        verified:
+          type: integer
+        genuine:
+          type: integer
+        hubspot_id:
+          type: integer
+        hubspot_synced_on:
+          type: string
+          format: date-time
+        force_new_password:
+          type: integer
+        credentials_sent_at:
+          type: string
+          format: date-time
+      type: object
+    Agency:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        logo:
+          type: string
+        no_of_employees:
+          type: integer
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        feed_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UserProfileUpdateRequest:
+      required:
+      - name
+      - email
+      - id
+      properties:
+        name:
+          type: string
+        avatar:
+          type: string
+        email:
+          type: email
+        phone:
+          type: string
+        work_phone:
+          type: string
+        email_status:
+          type: string
+        email_status_updated:
+          type: boolean
+        manual_email_status:
+          type: string
+        manual_email_status_updated_at:
+          type: string
+          format: date-time
+        linkedin:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        id:
+          type: integer
+      type: object
+    ValidateUserPhoneNumberRequest:
+      required:
+      - phone_country
+      - phone_number
+      properties:
+        phone_country:
+          type: string
+        phone_number:
+          type: string
+      type: object
+    Role:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
           type: string
           format: date-time
       type: object
@@ -645,18 +608,27 @@ components:
           type: string
           format: date-time
       type: object
-    Agency:
+    SalesforceAccessTokenRequest:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      type: object
+    Company:
       properties:
         id:
+          type: integer
+        parent_company_id:
+          type: integer
+        subcategory_id:
+          type: integer
+        categories_id:
           type: integer
         name:
           type: string
         synopsis:
           type: string
-        logo:
-          type: string
-        no_of_employees:
-          type: integer
         corporate_phone:
           type: string
         website:
@@ -679,73 +651,46 @@ components:
           type: string
         youtube:
           type: string
+        exclude_from_social_scan:
+          type: boolean
+        exclude_from_transcribe:
+          type: boolean
         feed_url:
           type: string
-        created_at:
+        statistics:
           type: string
-          format: date-time
-        updated_at:
+        no_of_employees:
           type: string
-          format: date-time
-        deleted_at:
+        priority_markets:
           type: string
-          format: date-time
-      type: object
-    User:
-      properties:
-        id:
-          type: integer
-        email:
+        parent_company:
           type: string
-        currency:
+        ad_agency:
           type: string
-        created_at:
+        existing:
           type: string
-          format: date-time
-        updated_at:
+        owned_by:
           type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-        last_active_at:
-          type: string
-          format: date-time
-        is_external:
+        approved:
           type: boolean
-        verified:
-          type: integer
-        genuine:
-          type: integer
-        hubspot_id:
-          type: integer
-        hubspot_synced_on:
+        approved_by:
+          type: string
+        created_at:
           type: string
           format: date-time
-        force_new_password:
-          type: integer
-        credentials_sent_at:
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
           type: string
           format: date-time
       type: object
-    ValidateUserPhoneNumberRequest:
-      required:
-      - phone_country
-      - phone_number
+    UserDownloadFileResource:
       properties:
-        phone_country:
+        status:
           type: string
-        phone_number:
+        url:
           type: string
-      type: object
-    RoleOrientationResource:
-      properties:
-        id:
-          type: integer
-          example: 1
-        name:
-          type: string
-          example: sell_side
       type: object
     Organization:
       properties:
@@ -807,72 +752,127 @@ components:
           type: string
           format: date-time
       type: object
-    UserProfileUpdateRequest:
-      required:
-      - name
-      - email
-      - id
+    UserLightResource:
       properties:
+        user:
+          type: object
+          allOf:
+          - properties:
+              id:
+                type: integer
+              name:
+                type: string
+              email:
+                type: string
+              roles:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+              is_external:
+                type: boolean
+              force_new_password:
+                type: integer
+              verified:
+                type: integer
+              settings:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSetting'
+            type: object
+      type: object
+    UserDownloadFileRequest:
+      required:
+      - command
+      properties:
+        command:
+          description: 'Export command: TasksExportInvalidLinkedin, TasksExportInvalidSocial, or TasksExportInvalidEmails'
+          type: string
+          enum:
+          - TasksExportInvalidLinkedin
+          - TasksExportInvalidSocial
+          - TasksExportInvalidEmails
+        payload:
+          description: Optional payload (e.g. filters)
+          type: object
+      type: object
+    UserResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - properties:
+          roles:
+            type: array
+            items:
+              $ref: '#/components/schemas/Role'
+          teams:
+            type: array
+            items:
+              $ref: '#/components/schemas/Property'
+          agencies:
+            type: array
+            items:
+              $ref: '#/components/schemas/Agency'
+          brands:
+            type: array
+            items:
+              $ref: '#/components/schemas/Company'
+          organization:
+            type: array
+            items:
+              $ref: '#/components/schemas/Organization'
+          person_profile:
+            type: object
+            allOf:
+            - $ref: '#/components/schemas/PersonProfile'
+            - properties:
+                contact_details:
+                  $ref: '#/components/schemas/PersonProfileContactDetail'
+                social_details:
+                  $ref: '#/components/schemas/PersonProfileSocialDetail'
+              type: object
+          user_permissions:
+            type: array
+            items: {}
+          role_orientation:
+            oneOf:
+            - $ref: '#/components/schemas/RoleOrientationResource'
+        type: object
+    UserProfileResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - properties:
+          roles:
+            type: array
+            items:
+              $ref: '#/components/schemas/Role'
+          organizations:
+            type: array
+            items:
+              $ref: '#/components/schemas/Organization'
+          person_profile:
+            $ref: '#/components/schemas/PersonProfile'
+          user_permissions:
+            type: array
+            items: {}
+        type: object
+    UserSetting:
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+        payload:
+          type: object
+      type: object
+    RoleOrientationResource:
+      properties:
+        id:
+          type: integer
+          example: 1
         name:
           type: string
-        avatar:
-          type: string
-        email:
-          type: email
-        phone:
-          type: string
-        work_phone:
-          type: string
-        email_status:
-          type: string
-        email_status_updated:
-          type: boolean
-        manual_email_status:
-          type: string
-        manual_email_status_updated_at:
-          type: string
-          format: date-time
-        linkedin:
-          type: string
-        facebook:
-          type: string
-        twitter:
-          type: string
-        instagram:
-          type: string
-        id:
-          type: integer
-      type: object
-    PersonProfileSocialDetail:
-      properties:
-        id:
-          type: integer
-        person_profile_id:
-          type: integer
-        linkedin_profile_url:
-          type: string
-        facebook_profile_url:
-          type: string
-        twitter_profile_url:
-          type: string
-        instagram_profile_url:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
-    UserDownloadFileResource:
-      properties:
-        status:
-          type: string
-        url:
-          type: string
+          example: sell_side
       type: object
   securitySchemes:
     bearerAuth:

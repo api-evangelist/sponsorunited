@@ -430,20 +430,18 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Company:
+    Agency:
       properties:
         id:
-          type: integer
-        parent_company_id:
-          type: integer
-        subcategory_id:
-          type: integer
-        categories_id:
           type: integer
         name:
           type: string
         synopsis:
           type: string
+        logo:
+          type: string
+        no_of_employees:
+          type: integer
         corporate_phone:
           type: string
         website:
@@ -466,30 +464,8 @@ components:
           type: string
         youtube:
           type: string
-        exclude_from_social_scan:
-          type: boolean
-        exclude_from_transcribe:
-          type: boolean
         feed_url:
           type: string
-        statistics:
-          type: string
-        no_of_employees:
-          type: string
-        priority_markets:
-          type: string
-        parent_company:
-          type: string
-        ad_agency:
-          type: string
-        existing:
-          type: string
-        owned_by:
-          type: string
-        approved:
-          type: boolean
-        approved_by:
-          type: string
         created_at:
           type: string
           format: date-time
@@ -498,25 +474,6 @@ components:
           format: date-time
         deleted_at:
           type: string
-          format: date-time
-      type: object
-    Tag:
-      properties:
-        id:
-          description: Tag Model
-          type: integer
-        name:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type:
-          - string
-          - 'null'
           format: date-time
       type: object
     CustomReportShareRequest:
@@ -529,58 +486,6 @@ components:
           items:
             type: integer
           minItems: 1
-      type: object
-    FileUpload:
-      properties:
-        id:
-          description: The FileUpload model represents an uploaded file record, including its metadata and relation to a user and thumbnail image.
-          type: integer
-        user_id:
-          description: The ID of the user who uploaded the file
-          type: integer
-          example: 1
-        original_name:
-          description: The original name of the uploaded file
-          type: string
-          example: document.pdf
-        stored_name:
-          description: The stored name of the file in the filesystem
-          type: string
-          example: 2023_01_document.pdf
-        mime_type:
-          description: The MIME type of the file
-          type: string
-          example: application/pdf
-        file_size:
-          description: The size of the file in bytes
-          type: integer
-          example: 2048
-        file_hash:
-          description: A hash of the file for integrity verification
-          type: string
-          example: 5fghjk234ghj234gj234g234
-        url:
-          description: The URL where the file can be accessed
-          type: string
-          example: https://example.com/files/2023_01_document.pdf
-        thumbnail_id:
-          description: The ID of the thumbnail image associated with the file
-          type: integer
-          example: 2
-        created_at:
-          description: Timestamp when the file upload was created
-          type: string
-          format: date-time
-        updated_at:
-          description: Timestamp when the file upload was last updated
-          type: string
-          format: date-time
-        deleted_at:
-          description: Timestamp when the file upload was deleted, if applicable
-          type:
-          - string
-          - 'null'
-          format: date-time
       type: object
     Property:
       properties:
@@ -657,52 +562,6 @@ components:
         capacity:
           type: string
         venue_uuid:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
-    Agency:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        synopsis:
-          type: string
-        logo:
-          type: string
-        no_of_employees:
-          type: integer
-        corporate_phone:
-          type: string
-        website:
-          type: string
-        linkedin:
-          type: string
-        linkedin_id_url:
-          type: string
-        linkedin_employees:
-          type: string
-        facebook:
-          type: string
-        twitter:
-          type: string
-        instagram:
-          type: string
-        twitch:
-          type: string
-        tiktok:
-          type: string
-        youtube:
-          type: string
-        feed_url:
           type: string
         created_at:
           type: string
@@ -801,6 +660,103 @@ components:
           description: Number of recipients who have viewed the report
           type: integer
       type: object
+    CustomReportRenameRequest:
+      required:
+      - title
+      properties:
+        title:
+          description: New report title
+          type: string
+      type: object
+    Tag:
+      properties:
+        id:
+          description: Tag Model
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      type: object
+    Company:
+      properties:
+        id:
+          type: integer
+        parent_company_id:
+          type: integer
+        subcategory_id:
+          type: integer
+        categories_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        exclude_from_social_scan:
+          type: boolean
+        exclude_from_transcribe:
+          type: boolean
+        feed_url:
+          type: string
+        statistics:
+          type: string
+        no_of_employees:
+          type: string
+        priority_markets:
+          type: string
+        parent_company:
+          type: string
+        ad_agency:
+          type: string
+        existing:
+          type: string
+        owned_by:
+          type: string
+        approved:
+          type: boolean
+        approved_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
     CustomReportStoreRequest:
       required:
       - title
@@ -862,13 +818,57 @@ components:
           type: string
           example: 1,2,3
       type: object
-    CustomReportRenameRequest:
-      required:
-      - title
+    FileUpload:
       properties:
-        title:
-          description: New report title
+        id:
+          description: The FileUpload model represents an uploaded file record, including its metadata and relation to a user and thumbnail image.
+          type: integer
+        user_id:
+          description: The ID of the user who uploaded the file
+          type: integer
+          example: 1
+        original_name:
+          description: The original name of the uploaded file
           type: string
+          example: document.pdf
+        stored_name:
+          description: The stored name of the file in the filesystem
+          type: string
+          example: 2023_01_document.pdf
+        mime_type:
+          description: The MIME type of the file
+          type: string
+          example: application/pdf
+        file_size:
+          description: The size of the file in bytes
+          type: integer
+          example: 2048
+        file_hash:
+          description: A hash of the file for integrity verification
+          type: string
+          example: 5fghjk234ghj234gj234g234
+        url:
+          description: The URL where the file can be accessed
+          type: string
+          example: https://example.com/files/2023_01_document.pdf
+        thumbnail_id:
+          description: The ID of the thumbnail image associated with the file
+          type: integer
+          example: 2
+        created_at:
+          description: Timestamp when the file upload was created
+          type: string
+          format: date-time
+        updated_at:
+          description: Timestamp when the file upload was last updated
+          type: string
+          format: date-time
+        deleted_at:
+          description: Timestamp when the file upload was deleted, if applicable
+          type:
+          - string
+          - 'null'
+          format: date-time
       type: object
   securitySchemes:
     bearerAuth:

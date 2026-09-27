@@ -293,14 +293,83 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    AssetIndexResource:
+    Item:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        default_rank:
+          type: integer
+        item_platform_id:
+          type: integer
+        item_subplatform_id:
+          type: integer
+        item_grouping_id:
+          type: integer
+        hasFrequency:
+          type: integer
+        hasDescription:
+          type: integer
+        hasImages:
+          type: integer
+        hasVideos:
+          type: integer
+        hasSocialMediaValue:
+          type: integer
+        hasAmount:
+          type: integer
+        is_premium:
+          type: integer
+        isSponsor:
+          type: integer
+        isTv:
+          type: integer
+        isRadio:
+          type: integer
+        isVendor:
+          type: integer
+        isSocial:
+          type: integer
+        isDigital:
+          type: integer
+        isPrint:
+          type: integer
+        isOutOfHome:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
       type: object
-      allOf:
-      - $ref: '#/components/schemas/Item'
-      - type: string
-        property: subplatformName
-      - type: string
-        property: platformName
+    AssetIndexRequest:
+      properties:
+        subplatform:
+          description: Comma separated subplatform ids.
+          type: string
+        league:
+          description: Comma separated league ids.
+          type: string
+        property:
+          description: Comma separated property ids.
+          type: string
+        subgenre:
+          description: Comma separated subgenre ids.
+          type: string
+        having_deals_in_season:
+          description: A season in which the assets have deals.
+          type: integer
+        season:
+          description: Season year the assets are requested for. When given, each property's enabled assets are resolved from the league it belonged to in that season instead of its current league.
+          type: integer
+      type: object
     AssetStoreUpdateRequest:
       required:
       - name
@@ -455,83 +524,14 @@ components:
           items:
             type: string
       type: object
-    Item:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        description:
-          type: string
-        default_rank:
-          type: integer
-        item_platform_id:
-          type: integer
-        item_subplatform_id:
-          type: integer
-        item_grouping_id:
-          type: integer
-        hasFrequency:
-          type: integer
-        hasDescription:
-          type: integer
-        hasImages:
-          type: integer
-        hasVideos:
-          type: integer
-        hasSocialMediaValue:
-          type: integer
-        hasAmount:
-          type: integer
-        is_premium:
-          type: integer
-        isSponsor:
-          type: integer
-        isTv:
-          type: integer
-        isRadio:
-          type: integer
-        isVendor:
-          type: integer
-        isSocial:
-          type: integer
-        isDigital:
-          type: integer
-        isPrint:
-          type: integer
-        isOutOfHome:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
+    AssetIndexResource:
       type: object
-    AssetIndexRequest:
-      properties:
-        subplatform:
-          description: Comma separated subplatform ids.
-          type: string
-        league:
-          description: Comma separated league ids.
-          type: string
-        property:
-          description: Comma separated property ids.
-          type: string
-        subgenre:
-          description: Comma separated subgenre ids.
-          type: string
-        having_deals_in_season:
-          description: A season in which the assets have deals.
-          type: integer
-        season:
-          description: Season year the assets are requested for. When given, each property's enabled assets are resolved from the league it belonged to in that season instead of its current league.
-          type: integer
-      type: object
+      allOf:
+      - $ref: '#/components/schemas/Item'
+      - type: string
+        property: subplatformName
+      - type: string
+        property: platformName
   securitySchemes:
     bearerAuth:
       type: http

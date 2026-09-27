@@ -109,11 +109,14 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    AgencyServicesTypeResource:
+    AgencyServiceTypeCreateRequest:
       properties:
-        id:
-          type: integer
-          example: 1
+        name:
+          type: string
+          example: Type 1
+      type: object
+    AgencyServiceTypeUpdateRequest:
+      properties:
         name:
           type: string
           example: Type 1
@@ -127,14 +130,11 @@ components:
           name:
             type: string
         type: object
-    AgencyServiceTypeUpdateRequest:
+    AgencyServicesTypeResource:
       properties:
-        name:
-          type: string
-          example: Type 1
-      type: object
-    AgencyServiceTypeCreateRequest:
-      properties:
+        id:
+          type: integer
+          example: 1
         name:
           type: string
           example: Type 1

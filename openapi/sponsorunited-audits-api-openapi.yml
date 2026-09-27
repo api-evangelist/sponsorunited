@@ -822,6 +822,106 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    UpdateUserEventsRequest:
+      properties:
+        status:
+          description: New status for the user event
+          type: integer
+        league:
+          description: Apply changes to the entire league
+          type: boolean
+        property:
+          description: Apply changes to the entire property
+          type: boolean
+        scan:
+          description: Apply changes to the entire scan
+          type: boolean
+        review_notes:
+          description: Review notes
+          type: string
+        event:
+          description: Comma-separated event IDs
+          type: string
+        brand_id:
+          description: Brand ID for property/league changes
+          type: integer
+        type:
+          description: Update user-event type
+          type: string
+        eventId:
+          description: Move audits to a different event
+          type: integer
+        teamId:
+          description: Source team ID for a move operation
+          type: integer
+      type: object
+    AuditCopyRequest:
+      required:
+      - new_brand_id
+      properties:
+        new_brand_id:
+          description: ID of the brand to copy the audit to
+          type: integer
+          example: 456
+        item_id:
+          description: Optional new item ID for the copied item value
+          type: integer
+          example: 789
+      type: object
+    AuditBulkReassignBrandRequest:
+      required:
+      - brand_id
+      properties:
+        item_value_ids:
+          description: Array of item value IDs to reassign (optional, reassigns all if not provided)
+          type: array
+          items:
+            type: integer
+        excluded_item_value_ids:
+          description: Item value IDs to exclude (used when item_value_ids is not provided)
+          type: array
+          items:
+            type: integer
+        brand_id:
+          description: Target brand ID to reassign item values to
+          type: integer
+          example: 123
+      type: object
+    SaveUserEventRequest:
+      required:
+      - item_id
+      properties:
+        item_id:
+          description: Item ID
+          type: integer
+        frequency:
+          description: Frequency value
+          type: integer
+        value:
+          description: Amount value
+          type: number
+        description:
+          description: Description/keyword
+          type: string
+        socialMediaValue:
+          description: Social media post URL
+          type: string
+        item_images:
+          type: array
+          items:
+            type: object
+        item_videos:
+          type: array
+          items:
+            type: object
+        audios:
+          type: array
+          items:
+            type: object
+        user_id:
+          description: User ID (requires edit-any-scouting-report permission)
+          type: integer
+      type: object
     ReviewMetadataResource:
       properties:
         brands:
@@ -860,87 +960,6 @@ components:
               name:
                 type: string
             type: object
-      type: object
-    SaveUserEventRequest:
-      required:
-      - item_id
-      properties:
-        item_id:
-          description: Item ID
-          type: integer
-        frequency:
-          description: Frequency value
-          type: integer
-        value:
-          description: Amount value
-          type: number
-        description:
-          description: Description/keyword
-          type: string
-        socialMediaValue:
-          description: Social media post URL
-          type: string
-        item_images:
-          type: array
-          items:
-            type: object
-        item_videos:
-          type: array
-          items:
-            type: object
-        audios:
-          type: array
-          items:
-            type: object
-        user_id:
-          description: User ID (requires edit-any-scouting-report permission)
-          type: integer
-      type: object
-    AuditCopyRequest:
-      required:
-      - new_brand_id
-      properties:
-        new_brand_id:
-          description: ID of the brand to copy the audit to
-          type: integer
-          example: 456
-        item_id:
-          description: Optional new item ID for the copied item value
-          type: integer
-          example: 789
-      type: object
-    UpdateUserEventsRequest:
-      properties:
-        status:
-          description: New status for the user event
-          type: integer
-        league:
-          description: Apply changes to the entire league
-          type: boolean
-        property:
-          description: Apply changes to the entire property
-          type: boolean
-        scan:
-          description: Apply changes to the entire scan
-          type: boolean
-        review_notes:
-          description: Review notes
-          type: string
-        event:
-          description: Comma-separated event IDs
-          type: string
-        brand_id:
-          description: Brand ID for property/league changes
-          type: integer
-        type:
-          description: Update user-event type
-          type: string
-        eventId:
-          description: Move audits to a different event
-          type: integer
-        teamId:
-          description: Source team ID for a move operation
-          type: integer
       type: object
     BulkAddAuditsRequest:
       required:
@@ -995,25 +1014,6 @@ components:
           description: Whether this is a quick-add operation
           type: boolean
           default: true
-      type: object
-    AuditBulkReassignBrandRequest:
-      required:
-      - brand_id
-      properties:
-        item_value_ids:
-          description: Array of item value IDs to reassign (optional, reassigns all if not provided)
-          type: array
-          items:
-            type: integer
-        excluded_item_value_ids:
-          description: Item value IDs to exclude (used when item_value_ids is not provided)
-          type: array
-          items:
-            type: integer
-        brand_id:
-          description: Target brand ID to reassign item values to
-          type: integer
-          example: 123
       type: object
   securitySchemes:
     bearerAuth:

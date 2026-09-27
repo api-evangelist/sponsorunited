@@ -136,65 +136,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    ReportSharingRecipientResource:
-      properties:
-        userName:
-          type: string
-        organizationName:
-          type: string
-        isViewed:
-          type: boolean
-        dateReceived:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        dateOpened:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        sharedByUserName:
-          type:
-          - string
-          - 'null'
-      type: object
-    ReportSharingReportResource:
-      properties:
-        reportName:
-          type: string
-        reportType:
-          type: string
-        isViewed:
-          type: boolean
-        dateReceived:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        dateOpened:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        sharedByUserName:
-          type:
-          - string
-          - 'null'
-      type: object
-    ReportSharingRepresentativeResource:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - agency
-          - brand
-          - property
-      type: object
     ReportSharingSavedReportResource:
       properties:
         report_id:
@@ -243,6 +184,65 @@ components:
           type: integer
         open_count:
           type: integer
+      type: object
+    ReportSharingRepresentativeResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - agency
+          - brand
+          - property
+      type: object
+    ReportSharingReportResource:
+      properties:
+        reportName:
+          type: string
+        reportType:
+          type: string
+        isViewed:
+          type: boolean
+        dateReceived:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        dateOpened:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        sharedByUserName:
+          type:
+          - string
+          - 'null'
+      type: object
+    ReportSharingRecipientResource:
+      properties:
+        userName:
+          type: string
+        organizationName:
+          type: string
+        isViewed:
+          type: boolean
+        dateReceived:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        dateOpened:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        sharedByUserName:
+          type:
+          - string
+          - 'null'
       type: object
   securitySchemes:
     bearerAuth:

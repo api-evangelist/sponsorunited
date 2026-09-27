@@ -144,17 +144,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    RoleOrientation:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          enum:
-          - sell_side
-          - buy_side
-          - student
-      type: object
     RoleOrientationUpdateRequest:
       required:
       - name
@@ -165,6 +154,17 @@ components:
           maxLength: 255
           minLength: 1
           example: buy_side
+      type: object
+    RoleOrientation:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          enum:
+          - sell_side
+          - buy_side
+          - student
       type: object
     RoleOrientationStoreRequest:
       required:

@@ -171,23 +171,23 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    AdminUserSurfaceContextUpdateRequest:
-      required:
-      - context
-      properties:
-        context:
-          description: Freeform administrator-set context for the target user, injected into Surface LLM prompts alongside the user's own context. Formatting (markdown / line breaks) is preserved verbatim. Send null or an empty string to clear it.
-          type:
-          - string
-          - 'null'
-          maxLength: 20000
-      type: object
     AdminOrganizationSurfaceContextUpdateRequest:
       required:
       - context
       properties:
         context:
           description: Freeform administrator-set context for the target organization, injected into Surface LLM prompts for every member alongside the organization's own context. Formatting (markdown / line breaks) is preserved verbatim. Send null or an empty string to clear it.
+          type:
+          - string
+          - 'null'
+          maxLength: 20000
+      type: object
+    AdminUserSurfaceContextUpdateRequest:
+      required:
+      - context
+      properties:
+        context:
+          description: Freeform administrator-set context for the target user, injected into Surface LLM prompts alongside the user's own context. Formatting (markdown / line breaks) is preserved verbatim. Send null or an empty string to clear it.
           type:
           - string
           - 'null'

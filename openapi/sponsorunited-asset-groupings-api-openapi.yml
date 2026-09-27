@@ -147,14 +147,15 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    AssetGroupingRequest:
+    AssetGroupingIndexResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/AssetGroupingResource'
+    AssetGroupingReassignRequest:
       properties:
-        name:
-          type: string
-        icon:
-          type: string
-        media_order:
+        new_grouping:
           type: integer
+          example: 1
       type: object
     AssetGroupingIndexRequest:
       properties:
@@ -166,12 +167,6 @@ components:
         per_page:
           type: integer
           example: 25
-      type: object
-    AssetGroupingReassignRequest:
-      properties:
-        new_grouping:
-          type: integer
-          example: 1
       type: object
     AssetGroupingResource:
       properties:
@@ -186,10 +181,15 @@ components:
         subgroupings_count:
           type: integer
       type: object
-    AssetGroupingIndexResource:
-      type: array
-      items:
-        $ref: '#/components/schemas/AssetGroupingResource'
+    AssetGroupingRequest:
+      properties:
+        name:
+          type: string
+        icon:
+          type: string
+        media_order:
+          type: integer
+      type: object
   securitySchemes:
     bearerAuth:
       type: http

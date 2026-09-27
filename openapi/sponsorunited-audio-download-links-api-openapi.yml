@@ -111,17 +111,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    StoreAudioDownloadLinkRequest:
-      required:
-      - url
-      properties:
-        url:
-          description: Audio download URL
-          type: string
-          format: uri
-          maxLength: 500
-          example: https://example.com/audio/download.mp3
-      type: object
     AudioDownloadLinkResource:
       properties:
         id:
@@ -142,6 +131,17 @@ components:
           type: string
           format: date-time
           example: '2023-01-01T12:00:00.000000Z'
+      type: object
+    StoreAudioDownloadLinkRequest:
+      required:
+      - url
+      properties:
+        url:
+          description: Audio download URL
+          type: string
+          format: uri
+          maxLength: 500
+          example: https://example.com/audio/download.mp3
       type: object
   securitySchemes:
     bearerAuth:

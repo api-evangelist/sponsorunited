@@ -266,11 +266,6 @@ components:
         file:
           $ref: '#/components/schemas/FileUploadResource'
       type: object
-    PartnershipReportCollection:
-      description: List of partnership reports.
-      type: array
-      items:
-        $ref: '#/components/schemas/PartnershipReportResource'
     PartnershipReportWriteRequest:
       properties:
         title:
@@ -412,6 +407,11 @@ components:
               example: 100
           type: object
       type: object
+    PartnershipReportCollection:
+      description: List of partnership reports.
+      type: array
+      items:
+        $ref: '#/components/schemas/PartnershipReportResource'
   securitySchemes:
     bearerAuth:
       type: http

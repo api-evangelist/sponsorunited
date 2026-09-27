@@ -1790,8 +1790,6 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
-  - LinkedIn
-  tags_raw:
   - Linked In
   properties:
   - type: OpenAPI

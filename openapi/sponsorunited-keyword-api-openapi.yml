@@ -141,6 +141,38 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    PositionKeywordRequest:
+      required:
+      - keywords
+      properties:
+        keywords:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+            type: object
+      type: object
+    UpdateKeywordRequest:
+      properties:
+        keyword:
+          type: string
+        image_id:
+          type: integer
+      type: object
+    KeywordShowStoreUpdateResource:
+      properties:
+        id:
+          type: integer
+        keyword:
+          type: string
+        image_id:
+          type: integer
+        position:
+          type: integer
+        image:
+          $ref: '#/components/schemas/Image'
+      type: object
     KeywordIndexResource:
       type: array
       items:
@@ -156,18 +188,6 @@ components:
           image:
             $ref: '#/components/schemas/Image'
         type: object
-    PositionKeywordRequest:
-      required:
-      - keywords
-      properties:
-        keywords:
-          type: array
-          items:
-            properties:
-              id:
-                type: integer
-            type: object
-      type: object
     Image:
       properties:
         id:
@@ -220,26 +240,6 @@ components:
       required:
       - keyword
       - image_id
-      properties:
-        keyword:
-          type: string
-        image_id:
-          type: integer
-      type: object
-    KeywordShowStoreUpdateResource:
-      properties:
-        id:
-          type: integer
-        keyword:
-          type: string
-        image_id:
-          type: integer
-        position:
-          type: integer
-        image:
-          $ref: '#/components/schemas/Image'
-      type: object
-    UpdateKeywordRequest:
       properties:
         keyword:
           type: string

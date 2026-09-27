@@ -147,36 +147,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    ManageMarketCategoryForCountryRequest:
-      required:
-      - level
-      - level_id
-      - supports
-      properties:
-        id:
-          description: ID for update operations
-          type: integer
-        name:
-          description: Name of the market grouping
-          type: string
-        level:
-          description: Territory level (country, continent, generic)
-          type: string
-          example: country
-        level_id:
-          description: ID of the territory at the specified level
-          type: integer
-        supports:
-          description: Configuration for supported territory types
-          type: array
-          items:
-            properties:
-              id:
-                type: integer
-              enabled:
-                type: boolean
-            type: object
-      type: object
     MarketGroupingManagementResource:
       properties:
         id:
@@ -246,6 +216,36 @@ components:
           description: Last update timestamp
           type: string
           format: date-time
+      type: object
+    ManageMarketCategoryForCountryRequest:
+      required:
+      - level
+      - level_id
+      - supports
+      properties:
+        id:
+          description: ID for update operations
+          type: integer
+        name:
+          description: Name of the market grouping
+          type: string
+        level:
+          description: Territory level (country, continent, generic)
+          type: string
+          example: country
+        level_id:
+          description: ID of the territory at the specified level
+          type: integer
+        supports:
+          description: Configuration for supported territory types
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              enabled:
+                type: boolean
+            type: object
       type: object
   securitySchemes:
     bearerAuth:

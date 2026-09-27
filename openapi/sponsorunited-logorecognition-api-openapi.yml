@@ -88,6 +88,18 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    LogoRecognitionIgnoreBrandsRequest:
+      properties:
+        brands:
+          description: Array of brand IDs to ignore in logo recognition
+          type: array
+          items:
+            type: integer
+          example:
+          - 1
+          - 2
+          - 3
+      type: object
     LogoRecognitionImageProcessRequest:
       required:
       - item_images
@@ -108,18 +120,6 @@ components:
                 type: boolean
                 default: false
             type: object
-      type: object
-    LogoRecognitionIgnoreBrandsRequest:
-      properties:
-        brands:
-          description: Array of brand IDs to ignore in logo recognition
-          type: array
-          items:
-            type: integer
-          example:
-          - 1
-          - 2
-          - 3
       type: object
   securitySchemes:
     bearerAuth:

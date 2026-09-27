@@ -31,6 +31,10 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    UserSearchResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/GenericEntity'
     GenericEntity:
       properties:
         id:
@@ -38,10 +42,6 @@ components:
         name:
           type: string
       type: object
-    UserSearchResource:
-      type: array
-      items:
-        $ref: '#/components/schemas/GenericEntity'
     UserSearchRequest:
       required:
       - search

@@ -92,11 +92,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    AuditSynonymCollection:
-      description: List of audit synonyms.
-      type: array
-      items:
-        $ref: '#/components/schemas/AuditSynonymResource'
     AuditSynonymResource:
       properties:
         id:
@@ -113,6 +108,11 @@ components:
         transcription:
           type: string
       type: object
+    AuditSynonymCollection:
+      description: List of audit synonyms.
+      type: array
+      items:
+        $ref: '#/components/schemas/AuditSynonymResource'
   securitySchemes:
     bearerAuth:
       type: http

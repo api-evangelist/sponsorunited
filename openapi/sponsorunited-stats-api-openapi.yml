@@ -299,101 +299,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    StatsMappingsLeaguesRequest:
-      title: Stats Mappings Leagues Request
-      description: Request schema for filtering stats perform leagues by sport and api type
-      properties:
-        sport:
-          description: Filter mappings by sport type
-          type:
-          - string
-          - 'null'
-          example: basketball
-        api:
-          description: Filter mappings by StatsPerform API type
-          type:
-          - string
-          - 'null'
-          enum:
-          - stats_api
-          - sdapi
-          example: stats_api
-      type: object
-    StatsMappingsGetRequest:
-      title: Stats Mappings Get Request
-      description: Request schema for filtering stats perform mappings
-      properties:
-        property_id:
-          description: Filter mappings by property id (suTeamId) mapped with StatsPerform
-          type:
-          - integer
-          - 'null'
-          example: '123'
-        sport:
-          description: Filter mappings by sport type
-          type:
-          - string
-          - 'null'
-          example: basketball
-        league_id:
-          description: Filter mappings by league id
-          type:
-          - string
-          - 'null'
-          example: 2343h343h23
-        league_abbreviation:
-          description: Filter mappings by league abbreviation
-          type:
-          - string
-          - 'null'
-          example: nba
-        league_name:
-          description: Filter mappings by league name (partial match)
-          type:
-          - string
-          - 'null'
-          example: nba
-        team_name:
-          description: Filter mappings by team name (partial match)
-          type:
-          - string
-          - 'null'
-          example: Lakers
-        api:
-          description: Filter mappings by StatsPerform API type
-          type:
-          - string
-          - 'null'
-          enum:
-          - stats_api
-          - sdapi
-          example: stats_api
-      type: object
-    StatsMappingUpdateRequest:
-      title: Stats Mapping Update Request
-      description: Request schema for updating a stats perform mapping
-      required:
-      - su_team_id
-      properties:
-        su_team_id:
-          description: SponsorUnited team/property ID to map to
-          type: integer
-          example: 456
-      type: object
-    StatsMappingsSportsRequest:
-      title: Stats Mappings Sports Request
-      description: Request schema for filtering stats perform requests by api type
-      properties:
-        api:
-          description: Filter mappings by StatsPerform API type
-          type:
-          - string
-          - 'null'
-          enum:
-          - stats_api
-          - sdapi
-          example: stats_api
-      type: object
     StatsPerformJobStatusDto:
       title: Stats Perform Job Status DTO
       description: Data Transfer Object representing the status of Stats Perform import jobs for a property
@@ -440,6 +345,40 @@ components:
           - 'null'
           format: date-time
           example: '2025-12-07T10:25:00Z'
+      type: object
+    StatsMappingsSportsRequest:
+      title: Stats Mappings Sports Request
+      description: Request schema for filtering stats perform requests by api type
+      properties:
+        api:
+          description: Filter mappings by StatsPerform API type
+          type:
+          - string
+          - 'null'
+          enum:
+          - stats_api
+          - sdapi
+          example: stats_api
+      type: object
+    StatsMappingsLeaguesRequest:
+      title: Stats Mappings Leagues Request
+      description: Request schema for filtering stats perform leagues by sport and api type
+      properties:
+        sport:
+          description: Filter mappings by sport type
+          type:
+          - string
+          - 'null'
+          example: basketball
+        api:
+          description: Filter mappings by StatsPerform API type
+          type:
+          - string
+          - 'null'
+          enum:
+          - stats_api
+          - sdapi
+          example: stats_api
       type: object
     StatsMappingDto:
       title: Stats Mapping DTO
@@ -497,6 +436,67 @@ components:
           description: Stats Perform API source identifier
           type: string
           example: SDAPI
+      type: object
+    StatsMappingUpdateRequest:
+      title: Stats Mapping Update Request
+      description: Request schema for updating a stats perform mapping
+      required:
+      - su_team_id
+      properties:
+        su_team_id:
+          description: SponsorUnited team/property ID to map to
+          type: integer
+          example: 456
+      type: object
+    StatsMappingsGetRequest:
+      title: Stats Mappings Get Request
+      description: Request schema for filtering stats perform mappings
+      properties:
+        property_id:
+          description: Filter mappings by property id (suTeamId) mapped with StatsPerform
+          type:
+          - integer
+          - 'null'
+          example: '123'
+        sport:
+          description: Filter mappings by sport type
+          type:
+          - string
+          - 'null'
+          example: basketball
+        league_id:
+          description: Filter mappings by league id
+          type:
+          - string
+          - 'null'
+          example: 2343h343h23
+        league_abbreviation:
+          description: Filter mappings by league abbreviation
+          type:
+          - string
+          - 'null'
+          example: nba
+        league_name:
+          description: Filter mappings by league name (partial match)
+          type:
+          - string
+          - 'null'
+          example: nba
+        team_name:
+          description: Filter mappings by team name (partial match)
+          type:
+          - string
+          - 'null'
+          example: Lakers
+        api:
+          description: Filter mappings by StatsPerform API type
+          type:
+          - string
+          - 'null'
+          enum:
+          - stats_api
+          - sdapi
+          example: stats_api
       type: object
   securitySchemes:
     bearerAuth:

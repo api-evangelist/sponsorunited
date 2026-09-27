@@ -279,6 +279,38 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    ItemValueUpdateRequest:
+      properties:
+        item_id:
+          type: string
+        audit_id:
+          type: string
+        description:
+          type: string
+        frequency:
+          type: string
+        value:
+          type: string
+        item_images:
+          type: string
+        item_videos:
+          type: string
+      type: object
+    ItemAudio:
+      properties:
+        id:
+          type: integer
+        audio_id:
+          type: integer
+        item_value_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
     ItemVideo:
       properties:
         id:
@@ -288,21 +320,6 @@ components:
         item_value_id:
           type: integer
         rank:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
-    ItemAudio:
-      properties:
-        id:
-          type: integer
-        audio_id:
-          type: integer
-        item_value_id:
           type: integer
         created_at:
           type: string
@@ -333,23 +350,6 @@ components:
             items:
               $ref: '#/components/schemas/ItemAudio'
         type: object
-    ItemValueUpdateRequest:
-      properties:
-        item_id:
-          type: string
-        audit_id:
-          type: string
-        description:
-          type: string
-        frequency:
-          type: string
-        value:
-          type: string
-        item_images:
-          type: string
-        item_videos:
-          type: string
-      type: object
     ItemImage:
       properties:
         id:

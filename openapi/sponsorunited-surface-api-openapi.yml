@@ -397,12 +397,8 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    SurfaceUsageRecordResource:
+    SurfaceUsageResource:
       properties:
-        allowed:
-          description: Whether the user is allowed to submit the prompt
-          type: boolean
-          example: true
         usage:
           properties:
             limit:
@@ -440,8 +436,12 @@ components:
               example: null
           type: object
       type: object
-    SurfaceUsageResource:
+    SurfaceUsageRecordResource:
       properties:
+        allowed:
+          description: Whether the user is allowed to submit the prompt
+          type: boolean
+          example: true
         usage:
           properties:
             limit:

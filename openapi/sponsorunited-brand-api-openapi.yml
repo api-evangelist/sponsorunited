@@ -891,6 +891,15 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
+      type: object
+    CompanyResource:
+      description: Brand details with related data (agencies, organizations, primary/secondary profiles)
+      type: object
     Company:
       properties:
         id:
@@ -961,9 +970,6 @@ components:
           type: string
           format: date-time
       type: object
-    CompanyResource:
-      description: Brand details with related data (agencies, organizations, primary/secondary profiles)
-      type: object
     CompanyIndexRequest:
       properties:
         order_by:
@@ -988,12 +994,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Company'
-    ErrorResource:
-      properties:
-        error:
-          type: string
-          example: An error occurred
-      type: object
   securitySchemes:
     bearerAuth:
       type: http

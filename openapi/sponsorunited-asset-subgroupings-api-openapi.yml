@@ -194,28 +194,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    AssetSubgroupingIndexResource:
-      properties:
-        groupings:
-          type: object
-          example:
-          - tag1
-          - tag2
-          - tag3
-        subgroupings:
-          $ref: '#/components/schemas/AssetSubgroupingResource'
-      type: object
-    AssetSubgroupingStoreRequest:
-      properties:
-        name:
-          type: string
-        asset_grouping_id:
-          type: integer
-        media_order:
-          type: numeric
-        icon:
-          type: string
-      type: object
     AssetSubgroupingIntentResource:
       properties:
         id:
@@ -235,6 +213,17 @@ components:
         audits_count:
           type: integer
       type: object
+    AssetSubgroupingIndexResource:
+      properties:
+        groupings:
+          type: object
+          example:
+          - tag1
+          - tag2
+          - tag3
+        subgroupings:
+          $ref: '#/components/schemas/AssetSubgroupingResource'
+      type: object
     AssetSubgroupingUpdateRequest:
       properties:
         name:
@@ -242,11 +231,6 @@ components:
         asset_grouping_id:
           type: integer
         icon:
-          type: string
-      type: object
-    AssetSubgroupingTagRequest:
-      properties:
-        new_tag:
           type: string
       type: object
     AssetSubgroupingResource:
@@ -263,6 +247,22 @@ components:
           type: integer
         grouping:
           $ref: '#/components/schemas/AssetGroupingResource'
+      type: object
+    AssetSubgroupingTagRequest:
+      properties:
+        new_tag:
+          type: string
+      type: object
+    AssetSubgroupingStoreRequest:
+      properties:
+        name:
+          type: string
+        asset_grouping_id:
+          type: integer
+        media_order:
+          type: numeric
+        icon:
+          type: string
       type: object
     AssetGroupingResource:
       properties:
