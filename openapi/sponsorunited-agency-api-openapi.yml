@@ -136,20 +136,45 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    ErrorResource:
-      properties:
-        error:
-          type: string
-          example: An error occurred
-      type: object
-    AgencyLightResource:
+    OrganizationSlim:
       properties:
         id:
           type: integer
         name:
           type: string
+        type:
+          type: integer
+          example: agency
         logo:
           type: string
+      type: object
+    AgencyShowStoreUpdateResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Agency'
+      - properties:
+          organizations:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrganizationSlim'
+        type: object
+      - properties:
+          companies:
+            type: array
+            items:
+              $ref: '#/components/schemas/CompanySlim'
+        type: object
+      - properties:
+          properties:
+            type: array
+            items:
+              $ref: '#/components/schemas/PropertySlim'
+        type: object
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
       type: object
     AgencyStoreRequest:
       required:
@@ -234,108 +259,6 @@ components:
                   type: string
               type: object
         type: object
-    Agency:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        synopsis:
-          type: string
-        logo:
-          type: string
-        no_of_employees:
-          type: integer
-        corporate_phone:
-          type: string
-        website:
-          type: string
-        linkedin:
-          type: string
-        linkedin_id_url:
-          type: string
-        linkedin_employees:
-          type: string
-        facebook:
-          type: string
-        twitter:
-          type: string
-        instagram:
-          type: string
-        twitch:
-          type: string
-        tiktok:
-          type: string
-        youtube:
-          type: string
-        feed_url:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
-    AgencyShowStoreUpdateResource:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Agency'
-      - properties:
-          organizations:
-            type: array
-            items:
-              $ref: '#/components/schemas/OrganizationSlim'
-        type: object
-      - properties:
-          companies:
-            type: array
-            items:
-              $ref: '#/components/schemas/CompanySlim'
-        type: object
-      - properties:
-          properties:
-            type: array
-            items:
-              $ref: '#/components/schemas/PropertySlim'
-        type: object
-    OrganizationSlim:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        type:
-          type: integer
-          example: agency
-        logo:
-          type: string
-      type: object
-    CompanySlim:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        is_aor:
-          type: integer
-        services:
-          type: string
-      type: object
-    PropertySlim:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        is_aor:
-          type: integer
-        services:
-          type: string
-      type: object
     AgencyUpdateRequest:
       required:
       - name
@@ -419,6 +342,83 @@ components:
                   type: string
               type: object
         type: object
+    AgencyLightResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        logo:
+          type: string
+      type: object
+    CompanySlim:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        is_aor:
+          type: integer
+        services:
+          type: string
+      type: object
+    PropertySlim:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        is_aor:
+          type: integer
+        services:
+          type: string
+      type: object
+    Agency:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        logo:
+          type: string
+        no_of_employees:
+          type: integer
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        feed_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
   securitySchemes:
     bearerAuth:
       type: http

@@ -97,6 +97,11 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    InfographicsCollection:
+      description: List of infographics.
+      type: array
+      items:
+        $ref: '#/components/schemas/InfographicsResource'
     InfographicsResource:
       properties:
         id:
@@ -206,11 +211,6 @@ components:
           type: string
           example: 1,2,3
       type: object
-    InfographicsCollection:
-      description: List of infographics.
-      type: array
-      items:
-        $ref: '#/components/schemas/InfographicsResource'
   securitySchemes:
     bearerAuth:
       type: http

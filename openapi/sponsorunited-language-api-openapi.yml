@@ -47,8 +47,11 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    SuLanguageResource:
+    SuLanguage:
       properties:
+        id:
+          type: integer
+          example: '1'
         domain:
           type: string
           example: spend_tracker
@@ -59,10 +62,6 @@ components:
           type: string
           example: lorem ipsum
       type: object
-    SuLanguageCollection:
-      type: array
-      items:
-        $ref: '#/components/schemas/SuLanguageResource'
     SuLanguageRequest:
       required:
       - fields
@@ -72,11 +71,12 @@ components:
           items:
             $ref: '#/components/schemas/SuLanguage'
       type: object
-    SuLanguage:
+    SuLanguageCollection:
+      type: array
+      items:
+        $ref: '#/components/schemas/SuLanguageResource'
+    SuLanguageResource:
       properties:
-        id:
-          type: integer
-          example: '1'
         domain:
           type: string
           example: spend_tracker

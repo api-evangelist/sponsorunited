@@ -121,12 +121,30 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    BrandSynonymResource:
+      properties:
+        id:
+          type: integer
+        brand_id:
+          type: integer
+        synonym:
+          type: string
+      type: object
     BrandSynonymUpdateRequest:
       required:
       - synonym
       type: object
       allOf:
       - properties:
+          synonym:
+            type: string
+        type: object
+    BrandSynonymIndexResource:
+      type: array
+      items:
+        properties:
+          id:
+            type: integer
           synonym:
             type: string
         type: object
@@ -141,24 +159,6 @@ components:
           synonym:
             type: string
         type: object
-    BrandSynonymIndexResource:
-      type: array
-      items:
-        properties:
-          id:
-            type: integer
-          synonym:
-            type: string
-        type: object
-    BrandSynonymResource:
-      properties:
-        id:
-          type: integer
-        brand_id:
-          type: integer
-        synonym:
-          type: string
-      type: object
   securitySchemes:
     bearerAuth:
       type: http

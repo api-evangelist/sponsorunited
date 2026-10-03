@@ -1197,6 +1197,76 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    PersonProfileSocialDetail:
+      properties:
+        id:
+          type: integer
+        person_profile_id:
+          type: integer
+        linkedin_profile_url:
+          type: string
+        facebook_profile_url:
+          type: string
+        twitter_profile_url:
+          type: string
+        instagram_profile_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    Role:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    ProfileFieldMfaResource:
+      description: MFA field validation response
+      properties:
+        field:
+          description: Field being validated
+          type: string
+        valid:
+          description: Whether the field is valid
+          type: boolean
+        message:
+          description: Validation message
+          type: string
+      type: object
+    UserRepresentativeResource:
+      description: User representative information
+      properties:
+        id:
+          description: Representative ID
+          type: integer
+        is_main:
+          description: Whether this is the main representative
+          type: boolean
+        name:
+          description: Representative name
+          type: string
+        representative_type:
+          description: Type of representative
+          type: string
+      type: object
     PersonProfile:
       properties:
         id:
@@ -1253,161 +1323,10 @@ components:
           type: string
           format: date-time
       type: object
-    UserAllRequest:
+    ProfileMfaUpdateResource:
       properties:
-        name:
-          description: Filter by user name
-          type: string
-        role:
-          description: Filter by role IDs
-          type: array
-          items:
-            type: integer
-        organization:
-          description: Filter by organization IDs
-          type: array
-          items:
-            type: integer
-        contract_status:
-          description: Filter by contract status
-          type: array
-          items:
-            type: string
-        external:
-          description: Filter by external status (0 or 1)
+        mfa_reference:
           type: integer
-          enum:
-          - 0
-          - 1
-        active:
-          description: Filter by active status (0 or 1)
-          type: integer
-          enum:
-          - 0
-          - 1
-        order_by:
-          description: Field to order results by
-          type: string
-        order:
-          description: Sort order direction
-          type: string
-          enum:
-          - asc
-          - desc
-        page:
-          description: Page number for pagination
-          type: integer
-      type: object
-    UserIntercomSyncRequest:
-      properties:
-        user_ids:
-          description: Array of user IDs to sync. If not provided, all users will be synced.
-          type: array
-          items:
-            type: integer
-      type: object
-    UserRepresentativeResource:
-      description: User representative information
-      properties:
-        id:
-          description: Representative ID
-          type: integer
-        is_main:
-          description: Whether this is the main representative
-          type: boolean
-        name:
-          description: Representative name
-          type: string
-        representative_type:
-          description: Type of representative
-          type: string
-      type: object
-    PersonProfileSocialDetail:
-      properties:
-        id:
-          type: integer
-        person_profile_id:
-          type: integer
-        linkedin_profile_url:
-          type: string
-        facebook_profile_url:
-          type: string
-        twitter_profile_url:
-          type: string
-        instagram_profile_url:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
-    UserSettingUpdateRequest:
-      required:
-      - payload
-      properties:
-        payload:
-          description: Setting payload data
-          type: object
-        userAgent:
-          description: Browser user agent string
-          type: string
-      type: object
-    PersonProfileContactDetail:
-      properties:
-        id:
-          type: integer
-        person_profile_id:
-          type: integer
-        primary_email:
-          type: string
-        secondary_email:
-          type: string
-        previous_primary_email_status:
-          type: string
-        previous_primary_email_status_updated_at:
-          type: string
-          format: date-time
-        primary_email_status:
-          type: string
-        primary_email_status_updated_at:
-          type: string
-          format: date-time
-        manual_primary_email_status:
-          type: string
-        manual_primary_email_status_updated_at:
-          type: string
-          format: date-time
-        mail_code:
-          type: string
-        phone:
-          type: string
-        phone_country:
-          type: string
-        phone_number:
-          type: string
-        phone_extension:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
-    ValidateUserEmailRequest:
-      required:
-      - email
-      properties:
-        email:
-          type: string
       type: object
     ProfilePhoneCheckResource:
       properties:
@@ -1420,78 +1339,16 @@ components:
         phone_number:
           type: string
       type: object
-    User:
+    UserSettingUpdateRequest:
+      required:
+      - payload
       properties:
-        id:
-          type: integer
-        email:
+        payload:
+          description: Setting payload data
+          type: object
+        userAgent:
+          description: Browser user agent string
           type: string
-        currency:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-        last_active_at:
-          type: string
-          format: date-time
-        is_external:
-          type: boolean
-        verified:
-          type: integer
-        genuine:
-          type: integer
-        hubspot_id:
-          type: integer
-        hubspot_synced_on:
-          type: string
-          format: date-time
-        force_new_password:
-          type: integer
-        credentials_sent_at:
-          type: string
-          format: date-time
-      type: object
-    UserSalesforceIntegrationResource:
-      description: User Salesforce integration status and configuration
-      properties:
-        has_set_salesforce_integration:
-          description: Whether Salesforce integration is configured
-          type: boolean
-        access_token:
-          description: Salesforce access token
-          type:
-          - string
-          - 'null'
-        export_contact:
-          description: Whether contact export is enabled
-          type: boolean
-        export_lead:
-          description: Whether lead export is enabled
-          type: boolean
-        user_monthly_limit:
-          description: User's monthly export limit
-          type: integer
-        user_annual_limit:
-          description: User's annual export limit
-          type: integer
-        monthly_limit:
-          description: Organization monthly limit
-          type: integer
-        annual_limit:
-          description: Annual balance remaining
-          type: integer
-        authorization_url:
-          description: Salesforce OAuth authorization URL
-          type: string
-        should_alert_download_limits:
-          description: Whether to show download limit alerts
-          type: boolean
       type: object
     Agency:
       properties:
@@ -1539,172 +1396,14 @@ components:
           type: string
           format: date-time
       type: object
-    UserForReportSharingResource:
-      properties:
-        id:
-          description: API resource for a user in the report-sharing selection list.
-          type: integer
-        userName:
-          type: string
-        email:
-          type:
-          - string
-          - 'null'
-        jobTitle:
-          type:
-          - string
-          - 'null'
-        roleOrientation:
-          type:
-          - string
-          - 'null'
-        userJobRole:
-          type:
-          - string
-          - 'null'
-        userRole:
-          type:
-          - string
-          - 'null'
-        organization:
-          type:
-          - string
-          - 'null'
-        organizationType:
-          type:
-          - string
-          - 'null'
-        organizationProduct:
-          type:
-          - string
-          - 'null'
-        organizationAccountManager:
-          type:
-          - string
-          - 'null'
-        representatives:
-          type:
-          - string
-          - 'null'
-        representativesFull:
-          type: array
-          items:
-            type: string
-        representativesCount:
-          type: integer
-        leagueAndPlatform:
-          type:
-          - string
-          - 'null'
-        leaguesFull:
-          type: array
-          items:
-            type: string
-        leaguesCount:
-          type: integer
-        subcategory:
-          type:
-          - string
-          - 'null'
-        subcategoriesFull:
-          type: array
-          items:
-            type: string
-        subcategoriesCount:
-          type: integer
-        genre:
-          type:
-          - string
-          - 'null'
-        subgenre:
-          type:
-          - string
-          - 'null'
-        category:
-          type:
-          - string
-          - 'null'
-        lastActivity:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        reportsReceived:
-          type: integer
-        lastReceivedDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        reportsOpened:
-          type: integer
-        lastOpenedDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      type: object
-    ProfileFieldMfaResource:
-      description: MFA field validation response
-      properties:
-        field:
-          description: Field being validated
-          type: string
-        valid:
-          description: Whether the field is valid
-          type: boolean
-        message:
-          description: Validation message
-          type: string
-      type: object
-    UserSyncStatusResource:
+    RoleOrientationResource:
       properties:
         id:
           type: integer
           example: 1
-        user_id:
-          type: integer
-          example: 123
-        status:
-          type:
-          - string
-          - 'null'
-          example: success
-      type: object
-    DealManagerReassignRequest:
-      required:
-      - to_user_id
-      properties:
-        to_user_id:
-          description: Id of the user that will receive the Deal Manager profiles and contacts.
-          type: integer
-      type: object
-    Role:
-      properties:
-        id:
-          type: integer
         name:
           type: string
-        display_name:
-          type: string
-        description:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
-    ValidateUserPhoneNumberRequest:
-      required:
-      - phone_country
-      - phone_number
-      properties:
-        phone_country:
-          type: string
-        phone_number:
-          type: string
+          example: sell_side
       type: object
     UserAccessResource:
       description: User access permissions by entity type
@@ -1725,81 +1424,13 @@ components:
           items:
             type: integer
       type: object
-    Property:
+    User:
       properties:
         id:
-          type: integer
-        parent_id:
-          type: integer
-        type_id:
-          type: integer
-        uuid:
-          type: integer
-        division_id:
-          type: integer
-        sport_id:
-          type: integer
-        name:
-          type: string
-        synopsis:
-          type: string
-        alias:
-          type: string
-        logo:
-          type: string
-        cover:
-          type: string
-        is_continuous:
-          type: integer
-        league_level_property:
-          type: integer
-        no_of_employees:
           type: integer
         email:
           type: string
-        website_url:
-          type: string
-        linkedin_url:
-          type: string
-        linkedin_id_url:
-          type: string
-        facebook_url:
-          type: string
-        twitter_url:
-          type: string
-        instagram_url:
-          type: string
-        twitch_url:
-          type: string
-        tiktok_url:
-          type: string
-        youtube_url:
-          type: string
-        exclude_from_social_scan:
-          type: integer
-        inactive:
-          type: integer
-        market:
-          type: string
-        state:
-          type: string
-        city:
-          type: string
-        geolocation:
-          type: string
-        corporate_phone:
-          type: string
-        linkedin_employees:
-          type: string
-        targeted_prospects_feed_url:
-          type: string
-        top_sponsorship_headlines_feed_url:
-          type: string
-        headlines_feed_url:
-          type: string
-        capacity:
-          type: string
-        venue_uuid:
+        currency:
           type: string
         created_at:
           type: string
@@ -1810,134 +1441,23 @@ components:
         deleted_at:
           type: string
           format: date-time
-      type: object
-    Company:
-      properties:
-        id:
-          type: integer
-        parent_company_id:
-          type: integer
-        subcategory_id:
-          type: integer
-        categories_id:
-          type: integer
-        name:
+        last_active_at:
           type: string
-        synopsis:
-          type: string
-        corporate_phone:
-          type: string
-        website:
-          type: string
-        linkedin:
-          type: string
-        linkedin_id_url:
-          type: string
-        linkedin_employees:
-          type: string
-        facebook:
-          type: string
-        twitter:
-          type: string
-        instagram:
-          type: string
-        twitch:
-          type: string
-        tiktok:
-          type: string
-        youtube:
-          type: string
-        exclude_from_social_scan:
+          format: date-time
+        is_external:
           type: boolean
-        exclude_from_transcribe:
-          type: boolean
-        feed_url:
-          type: string
-        statistics:
-          type: string
-        no_of_employees:
-          type: string
-        priority_markets:
-          type: string
-        parent_company:
-          type: string
-        ad_agency:
-          type: string
-        existing:
-          type: string
-        owned_by:
-          type: string
-        approved:
-          type: boolean
-        approved_by:
-          type: string
-        created_at:
+        verified:
+          type: integer
+        genuine:
+          type: integer
+        hubspot_id:
+          type: integer
+        hubspot_synced_on:
           type: string
           format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
-    Organization:
-      properties:
-        id:
+        force_new_password:
           type: integer
-        name:
-          type: string
-        logo:
-          type: string
-        mfa_enabled:
-          type: integer
-        intercom_company_id:
-          type: string
-        intercom_company_company_id:
-          type: string
-        contract_status_id:
-          type: integer
-        contract_payment_type_id:
-          type: integer
-        contract_monthly_spend:
-          type: integer
-        contract_file_url:
-          type: string
-        contract_onboarding_date:
-          type: string
-          format: date-time
-        contract_start_date:
-          type: string
-          format: date-time
-        contract_end_date:
-          type: string
-          format: date-time
-        contract_auto_renew:
-          type: integer
-        product_id:
-          type: integer
-        sales_user_id:
-          type: integer
-        salesforce_id:
-          type: string
-        account_manager_id:
-          type: integer
-        default_user_subscription_plan_id:
-          type: string
-        default_user_subscription_product_name:
-          type: string
-        default_user_subscription_cancel_date:
-          type: string
-          format: date-time
-        user_email_domain:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
+        credentials_sent_at:
           type: string
           format: date-time
       type: object
@@ -1946,239 +1466,6 @@ components:
       - mfa_preference
       properties:
         mfa_preference:
-          type: integer
-      type: object
-    UserCreateRequest:
-      required:
-      - name
-      - email
-      - password
-      - role
-      properties:
-        name:
-          description: User's full name
-          type: string
-        email:
-          description: User's email address
-          type: string
-          format: email
-        password:
-          description: Password (min 8 chars, mixed case, letters, symbols)
-          type: string
-          format: password
-        role:
-          description: Role ID to assign to user
-          type: integer
-        person_profile_job_role_id:
-          description: Job role ID from person profiles
-          type: integer
-        job_title:
-          description: User's job title
-          type: string
-        linkedin_url:
-          description: LinkedIn profile URL
-          type: string
-        facebook_url:
-          description: Facebook profile URL
-          type: string
-        twitter_url:
-          description: Twitter/X profile URL
-          type: string
-        instagram_url:
-          description: Instagram profile URL
-          type: string
-        organizations:
-          description: Organization IDs to associate
-          type: array
-          items:
-            type: integer
-        permissions:
-          description: Permission strings to assign
-          type: array
-          items:
-            type: string
-        is_external:
-          description: Whether user is external
-          type: boolean
-        force_new_password:
-          description: Force password change on first login
-          type: boolean
-        send_credentials:
-          description: Send credentials email to user
-          type: boolean
-        template:
-          description: Email template to use for credentials
-          type: string
-        role_orientation_id:
-          description: Role orientation ID (1=sell_side, 2=buy_side, 3=student)
-          type: integer
-      type: object
-    UserResource:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/User'
-      - properties:
-          roles:
-            type: array
-            items:
-              $ref: '#/components/schemas/Role'
-          teams:
-            type: array
-            items:
-              $ref: '#/components/schemas/Property'
-          agencies:
-            type: array
-            items:
-              $ref: '#/components/schemas/Agency'
-          brands:
-            type: array
-            items:
-              $ref: '#/components/schemas/Company'
-          organization:
-            type: array
-            items:
-              $ref: '#/components/schemas/Organization'
-          person_profile:
-            type: object
-            allOf:
-            - $ref: '#/components/schemas/PersonProfile'
-            - properties:
-                contact_details:
-                  $ref: '#/components/schemas/PersonProfileContactDetail'
-                social_details:
-                  $ref: '#/components/schemas/PersonProfileSocialDetail'
-              type: object
-          user_permissions:
-            type: array
-            items: {}
-          role_orientation:
-            oneOf:
-            - $ref: '#/components/schemas/RoleOrientationResource'
-        type: object
-    UserForReportSharingRequest:
-      properties:
-        role_orientation:
-          description: Filter by role orientation IDs. Array or comma-separated string.
-        user_job_role:
-          description: Filter by person profile job role IDs. Array or comma-separated string.
-        user_role:
-          description: Filter by user role IDs. Array or comma-separated string.
-        organization:
-          description: Filter by organization IDs. Array or comma-separated string.
-        organization_type:
-          description: Filter by organization type IDs. Array or comma-separated string.
-        organization_product:
-          description: Filter by organization product IDs. Array or comma-separated string.
-        organization_account_manager:
-          description: Filter by organization account manager user IDs. Array or comma-separated string.
-        representative:
-          description: Filter by representative IDs. Array or comma-separated string.
-        league:
-          description: Filter by league IDs (property/team representatives). Array or comma-separated string.
-        subcategory:
-          description: Filter by subcategory IDs ({company} representatives). Array or comma-separated string.
-        genre:
-          description: Filter by genre IDs (via property/team representative leagues). Array or comma-separated string.
-        subgenre:
-          description: Filter by subgenre IDs (via property/team representative leagues). Array or comma-separated string.
-        category:
-          description: Filter by category IDs (via {company} representative subcategories). Array or comma-separated string.
-        user_name:
-          description: Search by user name (partial match).
-          type: string
-        job_title:
-          description: Search by job title (partial match).
-          type: string
-        last_activity_from:
-          description: Filter by last activity on or after this date.
-          type: string
-          format: date-time
-        last_activity_to:
-          description: Filter by last activity on or before this date.
-          type: string
-          format: date-time
-        reports_received_min:
-          description: Filter by minimum number of reports received.
-          type: integer
-        last_received_date_from:
-          description: Filter by last received report date on or after this date.
-          type: string
-          format: date-time
-        last_received_date_to:
-          description: Filter by last received report date on or before this date.
-          type: string
-          format: date-time
-        reports_opened_min:
-          description: Filter by minimum number of reports opened.
-          type: integer
-        last_opened_date_from:
-          description: Filter by last opened report date on or after this date.
-          type: string
-          format: date-time
-        last_opened_date_to:
-          description: Filter by last opened report date on or before this date.
-          type: string
-          format: date-time
-        page:
-          description: Page number for pagination
-          type: integer
-        per_page:
-          description: Items per page (max 1000)
-          type: integer
-          maximum: 1000
-      type: object
-    UserSettingCreateRequest:
-      required:
-      - type
-      - payload
-      properties:
-        type:
-          description: Setting type identifier
-          type: string
-        payload:
-          description: Setting payload data
-          type: object
-        userAgent:
-          description: Browser user agent string
-          type: string
-      type: object
-    ProfileMfaUpdateResource:
-      properties:
-        mfa_reference:
-          type: integer
-      type: object
-    RoleOrientationResource:
-      properties:
-        id:
-          type: integer
-          example: 1
-        name:
-          type: string
-          example: sell_side
-      type: object
-    UserEventCreateOrUpdateRequest:
-      required:
-      - status
-      properties:
-        status:
-          description: Event status code
-          type: integer
-        type:
-          description: Event type code
-          type: integer
-        due_date:
-          description: Event due date
-          type: string
-          format: date-time
-        attended_date:
-          description: Date event was attended
-          type: string
-          format: date-time
-        initial_note:
-          description: Initial note for the event
-          type: string
-        new_user_id:
-          description: New user ID to reassign event to
           type: integer
       type: object
     UserMeResponse:
@@ -2353,6 +1640,719 @@ components:
             - string
             - 'null'
         type: object
+    UserCreateRequest:
+      required:
+      - name
+      - email
+      - password
+      - role
+      properties:
+        name:
+          description: User's full name
+          type: string
+        email:
+          description: User's email address
+          type: string
+          format: email
+        password:
+          description: Password (min 8 chars, mixed case, letters, symbols)
+          type: string
+          format: password
+        role:
+          description: Role ID to assign to user
+          type: integer
+        person_profile_job_role_id:
+          description: Job role ID from person profiles
+          type: integer
+        job_title:
+          description: User's job title
+          type: string
+        linkedin_url:
+          description: LinkedIn profile URL
+          type: string
+        facebook_url:
+          description: Facebook profile URL
+          type: string
+        twitter_url:
+          description: Twitter/X profile URL
+          type: string
+        instagram_url:
+          description: Instagram profile URL
+          type: string
+        organizations:
+          description: Organization IDs to associate
+          type: array
+          items:
+            type: integer
+        permissions:
+          description: Permission strings to assign
+          type: array
+          items:
+            type: string
+        is_external:
+          description: Whether user is external
+          type: boolean
+        force_new_password:
+          description: Force password change on first login
+          type: boolean
+        send_credentials:
+          description: Send credentials email to user
+          type: boolean
+        template:
+          description: Email template to use for credentials
+          type: string
+        role_orientation_id:
+          description: Role orientation ID (1=sell_side, 2=buy_side, 3=student)
+          type: integer
+      type: object
+    UserAllRequest:
+      properties:
+        name:
+          description: Filter by user name
+          type: string
+        role:
+          description: Filter by role IDs
+          type: array
+          items:
+            type: integer
+        organization:
+          description: Filter by organization IDs
+          type: array
+          items:
+            type: integer
+        contract_status:
+          description: Filter by contract status
+          type: array
+          items:
+            type: string
+        external:
+          description: Filter by external status (0 or 1)
+          type: integer
+          enum:
+          - 0
+          - 1
+        active:
+          description: Filter by active status (0 or 1)
+          type: integer
+          enum:
+          - 0
+          - 1
+        order_by:
+          description: Field to order results by
+          type: string
+        order:
+          description: Sort order direction
+          type: string
+          enum:
+          - asc
+          - desc
+        page:
+          description: Page number for pagination
+          type: integer
+      type: object
+    Company:
+      properties:
+        id:
+          type: integer
+        parent_company_id:
+          type: integer
+        subcategory_id:
+          type: integer
+        categories_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        exclude_from_social_scan:
+          type: boolean
+        exclude_from_transcribe:
+          type: boolean
+        feed_url:
+          type: string
+        statistics:
+          type: string
+        no_of_employees:
+          type: string
+        priority_markets:
+          type: string
+        parent_company:
+          type: string
+        ad_agency:
+          type: string
+        existing:
+          type: string
+        owned_by:
+          type: string
+        approved:
+          type: boolean
+        approved_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UserEventCreateOrUpdateRequest:
+      required:
+      - status
+      properties:
+        status:
+          description: Event status code
+          type: integer
+        type:
+          description: Event type code
+          type: integer
+        due_date:
+          description: Event due date
+          type: string
+          format: date-time
+        attended_date:
+          description: Date event was attended
+          type: string
+          format: date-time
+        initial_note:
+          description: Initial note for the event
+          type: string
+        new_user_id:
+          description: New user ID to reassign event to
+          type: integer
+      type: object
+    Property:
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        type_id:
+          type: integer
+        uuid:
+          type: integer
+        division_id:
+          type: integer
+        sport_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        alias:
+          type: string
+        logo:
+          type: string
+        cover:
+          type: string
+        is_continuous:
+          type: integer
+        league_level_property:
+          type: integer
+        no_of_employees:
+          type: integer
+        email:
+          type: string
+        website_url:
+          type: string
+        linkedin_url:
+          type: string
+        linkedin_id_url:
+          type: string
+        facebook_url:
+          type: string
+        twitter_url:
+          type: string
+        instagram_url:
+          type: string
+        twitch_url:
+          type: string
+        tiktok_url:
+          type: string
+        youtube_url:
+          type: string
+        exclude_from_social_scan:
+          type: integer
+        inactive:
+          type: integer
+        market:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        geolocation:
+          type: string
+        corporate_phone:
+          type: string
+        linkedin_employees:
+          type: string
+        targeted_prospects_feed_url:
+          type: string
+        top_sponsorship_headlines_feed_url:
+          type: string
+        headlines_feed_url:
+          type: string
+        capacity:
+          type: string
+        venue_uuid:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UserSyncStatusResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 123
+        status:
+          type:
+          - string
+          - 'null'
+          example: success
+      type: object
+    DealManagerReassignRequest:
+      required:
+      - to_user_id
+      properties:
+        to_user_id:
+          description: Id of the user that will receive the Deal Manager profiles and contacts.
+          type: integer
+      type: object
+    UserIntercomSyncRequest:
+      properties:
+        user_ids:
+          description: Array of user IDs to sync. If not provided, all users will be synced.
+          type: array
+          items:
+            type: integer
+      type: object
+    PersonProfileContactDetail:
+      properties:
+        id:
+          type: integer
+        person_profile_id:
+          type: integer
+        primary_email:
+          type: string
+        secondary_email:
+          type: string
+        previous_primary_email_status:
+          type: string
+        previous_primary_email_status_updated_at:
+          type: string
+          format: date-time
+        primary_email_status:
+          type: string
+        primary_email_status_updated_at:
+          type: string
+          format: date-time
+        manual_primary_email_status:
+          type: string
+        manual_primary_email_status_updated_at:
+          type: string
+          format: date-time
+        mail_code:
+          type: string
+        phone:
+          type: string
+        phone_country:
+          type: string
+        phone_number:
+          type: string
+        phone_extension:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    Organization:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        logo:
+          type: string
+        mfa_enabled:
+          type: integer
+        intercom_company_id:
+          type: string
+        intercom_company_company_id:
+          type: string
+        contract_status_id:
+          type: integer
+        contract_payment_type_id:
+          type: integer
+        contract_monthly_spend:
+          type: integer
+        contract_file_url:
+          type: string
+        contract_onboarding_date:
+          type: string
+          format: date-time
+        contract_start_date:
+          type: string
+          format: date-time
+        contract_end_date:
+          type: string
+          format: date-time
+        contract_auto_renew:
+          type: integer
+        product_id:
+          type: integer
+        sales_user_id:
+          type: integer
+        salesforce_id:
+          type: string
+        account_manager_id:
+          type: integer
+        default_user_subscription_plan_id:
+          type: string
+        default_user_subscription_product_name:
+          type: string
+        default_user_subscription_cancel_date:
+          type: string
+          format: date-time
+        user_email_domain:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UserForReportSharingRequest:
+      properties:
+        role_orientation:
+          description: Filter by role orientation IDs. Array or comma-separated string.
+        user_job_role:
+          description: Filter by person profile job role IDs. Array or comma-separated string.
+        user_role:
+          description: Filter by user role IDs. Array or comma-separated string.
+        organization:
+          description: Filter by organization IDs. Array or comma-separated string.
+        organization_type:
+          description: Filter by organization type IDs. Array or comma-separated string.
+        organization_product:
+          description: Filter by organization product IDs. Array or comma-separated string.
+        organization_account_manager:
+          description: Filter by organization account manager user IDs. Array or comma-separated string.
+        representative:
+          description: Filter by representative IDs. Array or comma-separated string.
+        league:
+          description: Filter by league IDs (property/team representatives). Array or comma-separated string.
+        subcategory:
+          description: Filter by subcategory IDs ({company} representatives). Array or comma-separated string.
+        genre:
+          description: Filter by genre IDs (via property/team representative leagues). Array or comma-separated string.
+        subgenre:
+          description: Filter by subgenre IDs (via property/team representative leagues). Array or comma-separated string.
+        category:
+          description: Filter by category IDs (via {company} representative subcategories). Array or comma-separated string.
+        user_name:
+          description: Search by user name (partial match).
+          type: string
+        job_title:
+          description: Search by job title (partial match).
+          type: string
+        last_activity_from:
+          description: Filter by last activity on or after this date.
+          type: string
+          format: date-time
+        last_activity_to:
+          description: Filter by last activity on or before this date.
+          type: string
+          format: date-time
+        reports_received_min:
+          description: Filter by minimum number of reports received.
+          type: integer
+        last_received_date_from:
+          description: Filter by last received report date on or after this date.
+          type: string
+          format: date-time
+        last_received_date_to:
+          description: Filter by last received report date on or before this date.
+          type: string
+          format: date-time
+        reports_opened_min:
+          description: Filter by minimum number of reports opened.
+          type: integer
+        last_opened_date_from:
+          description: Filter by last opened report date on or after this date.
+          type: string
+          format: date-time
+        last_opened_date_to:
+          description: Filter by last opened report date on or before this date.
+          type: string
+          format: date-time
+        page:
+          description: Page number for pagination
+          type: integer
+        per_page:
+          description: Items per page (max 1000)
+          type: integer
+          maximum: 1000
+      type: object
+    UserSettingCreateRequest:
+      required:
+      - type
+      - payload
+      properties:
+        type:
+          description: Setting type identifier
+          type: string
+        payload:
+          description: Setting payload data
+          type: object
+        userAgent:
+          description: Browser user agent string
+          type: string
+      type: object
+    UserForReportSharingResource:
+      properties:
+        id:
+          description: API resource for a user in the report-sharing selection list.
+          type: integer
+        userName:
+          type: string
+        email:
+          type:
+          - string
+          - 'null'
+        jobTitle:
+          type:
+          - string
+          - 'null'
+        roleOrientation:
+          type:
+          - string
+          - 'null'
+        userJobRole:
+          type:
+          - string
+          - 'null'
+        userRole:
+          type:
+          - string
+          - 'null'
+        organization:
+          type:
+          - string
+          - 'null'
+        organizationType:
+          type:
+          - string
+          - 'null'
+        organizationProduct:
+          type:
+          - string
+          - 'null'
+        organizationAccountManager:
+          type:
+          - string
+          - 'null'
+        representatives:
+          type:
+          - string
+          - 'null'
+        representativesFull:
+          type: array
+          items:
+            type: string
+        representativesCount:
+          type: integer
+        leagueAndPlatform:
+          type:
+          - string
+          - 'null'
+        leaguesFull:
+          type: array
+          items:
+            type: string
+        leaguesCount:
+          type: integer
+        subcategory:
+          type:
+          - string
+          - 'null'
+        subcategoriesFull:
+          type: array
+          items:
+            type: string
+        subcategoriesCount:
+          type: integer
+        genre:
+          type:
+          - string
+          - 'null'
+        subgenre:
+          type:
+          - string
+          - 'null'
+        category:
+          type:
+          - string
+          - 'null'
+        lastActivity:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        reportsReceived:
+          type: integer
+        lastReceivedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        reportsOpened:
+          type: integer
+        lastOpenedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      type: object
+    UserResource:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - properties:
+          roles:
+            type: array
+            items:
+              $ref: '#/components/schemas/Role'
+          teams:
+            type: array
+            items:
+              $ref: '#/components/schemas/Property'
+          agencies:
+            type: array
+            items:
+              $ref: '#/components/schemas/Agency'
+          brands:
+            type: array
+            items:
+              $ref: '#/components/schemas/Company'
+          organization:
+            type: array
+            items:
+              $ref: '#/components/schemas/Organization'
+          person_profile:
+            type: object
+            allOf:
+            - $ref: '#/components/schemas/PersonProfile'
+            - properties:
+                contact_details:
+                  $ref: '#/components/schemas/PersonProfileContactDetail'
+                social_details:
+                  $ref: '#/components/schemas/PersonProfileSocialDetail'
+              type: object
+          user_permissions:
+            type: array
+            items: {}
+          role_orientation:
+            oneOf:
+            - $ref: '#/components/schemas/RoleOrientationResource'
+        type: object
+    UserSalesforceIntegrationResource:
+      description: User Salesforce integration status and configuration
+      properties:
+        has_set_salesforce_integration:
+          description: Whether Salesforce integration is configured
+          type: boolean
+        access_token:
+          description: Salesforce access token
+          type:
+          - string
+          - 'null'
+        export_contact:
+          description: Whether contact export is enabled
+          type: boolean
+        export_lead:
+          description: Whether lead export is enabled
+          type: boolean
+        user_monthly_limit:
+          description: User's monthly export limit
+          type: integer
+        user_annual_limit:
+          description: User's annual export limit
+          type: integer
+        monthly_limit:
+          description: Organization monthly limit
+          type: integer
+        annual_limit:
+          description: Annual balance remaining
+          type: integer
+        authorization_url:
+          description: Salesforce OAuth authorization URL
+          type: string
+        should_alert_download_limits:
+          description: Whether to show download limit alerts
+          type: boolean
+      type: object
+    ValidateUserEmailRequest:
+      required:
+      - email
+      properties:
+        email:
+          type: string
+      type: object
+    ValidateUserPhoneNumberRequest:
+      required:
+      - phone_country
+      - phone_number
+      properties:
+        phone_country:
+          type: string
+        phone_number:
+          type: string
+      type: object
   securitySchemes:
     bearerAuth:
       type: http

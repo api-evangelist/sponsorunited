@@ -275,22 +275,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    SavedReportStoreRequest:
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-          example: spend-categories|spend-major-assets|spend-deal-builder|spend-comparison|categories|markets|leagues|assets|properties-comparison|brands-comparison|trending-topics|smart-search-results|proposal-evaluator|smart-lists-contacts
-        url:
-          type: string
-        payload:
-          description: Report state, persisted as sent. Its shape depends on `type`, and the server reads type-specific keys from it to resolve the report thumbnail. For `trending-topics`, `seasons` is a comma-separated list of four-digit years and `search_term` a comma-separated list of terms.
-          type: object
-          example:
-            seasons: 2023,2024
-            search_term: nike,adidas
-      type: object
     SavedReportLightResource:
       properties:
         id:
@@ -309,6 +293,11 @@ components:
           type: string
           format: date-time
       type: object
+    SavedReportUpdateRequest:
+      properties:
+        name:
+          type: string
+      type: object
     SavedReportShareRequest:
       required:
       - user_ids
@@ -319,29 +308,6 @@ components:
           items:
             type: integer
           minItems: 1
-      type: object
-    SavedReportResource:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        type:
-          type: string
-        url:
-          type: string
-        payload:
-          type: string
-        is_viewed:
-          type: boolean
-        source_user_id:
-          type: integer
-        source_report_id:
-          type: integer
       type: object
     SavedReportLightCollection:
       properties:
@@ -382,10 +348,44 @@ components:
               type: integer
           type: object
       type: object
-    SavedReportUpdateRequest:
+    SavedReportStoreRequest:
       properties:
         name:
           type: string
+        type:
+          type: string
+          example: spend-categories|spend-major-assets|spend-deal-builder|spend-comparison|categories|markets|leagues|assets|properties-comparison|brands-comparison|trending-topics|smart-search-results|proposal-evaluator|smart-lists-contacts
+        url:
+          type: string
+        payload:
+          description: Report state, persisted as sent. Its shape depends on `type`, and the server reads type-specific keys from it to resolve the report thumbnail. For `trending-topics`, `seasons` is a comma-separated list of four-digit years and `search_term` a comma-separated list of terms.
+          type: object
+          example:
+            seasons: 2023,2024
+            search_term: nike,adidas
+      type: object
+    SavedReportResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          type: string
+        url:
+          type: string
+        payload:
+          type: string
+        is_viewed:
+          type: boolean
+        source_user_id:
+          type: integer
+        source_report_id:
+          type: integer
       type: object
   securitySchemes:
     bearerAuth:

@@ -897,9 +897,30 @@ components:
           type: string
           example: An error occurred
       type: object
-    CompanyResource:
-      description: Brand details with related data (agencies, organizations, primary/secondary profiles)
+    CompanyIndexRequest:
+      properties:
+        order_by:
+          type: string
+        order:
+          type: string
+        only_unapproved:
+          type: boolean
+        name:
+          type: string
+        categories:
+          type: string
+          example: 1,2,3
+        subcategories:
+          type: string
+          example: 1,2,3
+        markets:
+          type: string
+          example: 1,2,3
       type: object
+    CompanyIndexResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/Company'
     Company:
       properties:
         id:
@@ -970,30 +991,9 @@ components:
           type: string
           format: date-time
       type: object
-    CompanyIndexRequest:
-      properties:
-        order_by:
-          type: string
-        order:
-          type: string
-        only_unapproved:
-          type: boolean
-        name:
-          type: string
-        categories:
-          type: string
-          example: 1,2,3
-        subcategories:
-          type: string
-          example: 1,2,3
-        markets:
-          type: string
-          example: 1,2,3
+    CompanyResource:
+      description: Brand details with related data (agencies, organizations, primary/secondary profiles)
       type: object
-    CompanyIndexResource:
-      type: array
-      items:
-        $ref: '#/components/schemas/Company'
   securitySchemes:
     bearerAuth:
       type: http

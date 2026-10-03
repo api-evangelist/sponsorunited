@@ -160,19 +160,6 @@ components:
         image_id:
           type: integer
       type: object
-    KeywordShowStoreUpdateResource:
-      properties:
-        id:
-          type: integer
-        keyword:
-          type: string
-        image_id:
-          type: integer
-        position:
-          type: integer
-        image:
-          $ref: '#/components/schemas/Image'
-      type: object
     KeywordIndexResource:
       type: array
       items:
@@ -188,6 +175,16 @@ components:
           image:
             $ref: '#/components/schemas/Image'
         type: object
+    StoreKeywordRequest:
+      required:
+      - keyword
+      - image_id
+      properties:
+        keyword:
+          type: string
+        image_id:
+          type: integer
+      type: object
     Image:
       properties:
         id:
@@ -236,15 +233,18 @@ components:
           type: string
           format: date-time
       type: object
-    StoreKeywordRequest:
-      required:
-      - keyword
-      - image_id
+    KeywordShowStoreUpdateResource:
       properties:
+        id:
+          type: integer
         keyword:
           type: string
         image_id:
           type: integer
+        position:
+          type: integer
+        image:
+          $ref: '#/components/schemas/Image'
       type: object
   securitySchemes:
     bearerAuth:

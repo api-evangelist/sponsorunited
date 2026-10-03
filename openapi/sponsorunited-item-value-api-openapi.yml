@@ -279,6 +279,52 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    ItemValue:
+      properties:
+        id:
+          type: integer
+        item_id:
+          type: integer
+        audit_id:
+          type: integer
+        value:
+          type: integer
+        social_media_type:
+          type: integer
+        social_media_value:
+          type: string
+        frequency:
+          type: integer
+        description:
+          type: string
+        retained_at:
+          type: string
+          format: date-time
+        issued_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    ItemAudio:
+      properties:
+        id:
+          type: integer
+        audio_id:
+          type: integer
+        item_value_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
     ItemValueUpdateRequest:
       properties:
         item_id:
@@ -296,13 +342,15 @@ components:
         item_videos:
           type: string
       type: object
-    ItemAudio:
+    ItemVideo:
       properties:
         id:
           type: integer
-        audio_id:
+        video_id:
           type: integer
         item_value_id:
+          type: integer
+        rank:
           type: integer
         created_at:
           type: string
@@ -311,11 +359,11 @@ components:
           type: string
           format: date-time
       type: object
-    ItemVideo:
+    ItemImage:
       properties:
         id:
           type: integer
-        video_id:
+        image_id:
           type: integer
         item_value_id:
           type: integer
@@ -350,54 +398,6 @@ components:
             items:
               $ref: '#/components/schemas/ItemAudio'
         type: object
-    ItemImage:
-      properties:
-        id:
-          type: integer
-        image_id:
-          type: integer
-        item_value_id:
-          type: integer
-        rank:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
-    ItemValue:
-      properties:
-        id:
-          type: integer
-        item_id:
-          type: integer
-        audit_id:
-          type: integer
-        value:
-          type: integer
-        social_media_type:
-          type: integer
-        social_media_value:
-          type: string
-        frequency:
-          type: integer
-        description:
-          type: string
-        retained_at:
-          type: string
-          format: date-time
-        issued_at:
-          type: string
-          format: date-time
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
   securitySchemes:
     bearerAuth:
       type: http

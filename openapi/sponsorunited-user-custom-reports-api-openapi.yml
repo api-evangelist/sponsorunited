@@ -200,15 +200,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    UserCustomReportRenameRequest:
-      required:
-      - name
-      properties:
-        name:
-          description: New report name
-          type: string
-          maxLength: 255
-      type: object
     UserCustomReportResource:
       properties:
         id:
@@ -238,6 +229,15 @@ components:
           - boolean
           - 'null'
           example: false
+      type: object
+    UserCustomReportRenameRequest:
+      required:
+      - name
+      properties:
+        name:
+          description: New report name
+          type: string
+          maxLength: 255
       type: object
   securitySchemes:
     bearerAuth:

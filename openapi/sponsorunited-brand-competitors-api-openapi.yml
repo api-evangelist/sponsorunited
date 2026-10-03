@@ -307,15 +307,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    ApproveBrandCompetitorReviewItemRequest:
-      required:
-      - resolution_brand_id
-      properties:
-        resolution_brand_id:
-          description: ID of the existing brand (companies.id) to link as competitor.
-          type: integer
-          example: 4711
-      type: object
     RejectBrandCompetitorReviewItemRequest:
       required:
       - rejection_reason
@@ -496,6 +487,15 @@ components:
           - string
           - 'null'
           example: v1
+      type: object
+    ApproveBrandCompetitorReviewItemRequest:
+      required:
+      - resolution_brand_id
+      properties:
+        resolution_brand_id:
+          description: ID of the existing brand (companies.id) to link as competitor.
+          type: integer
+          example: 4711
       type: object
   securitySchemes:
     bearerAuth:

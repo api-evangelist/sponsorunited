@@ -397,44 +397,16 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    SurfaceUsageResource:
+    SurfaceUserContextUpdateRequest:
+      required:
+      - context
       properties:
-        usage:
-          properties:
-            limit:
-              description: Monthly prompt limit (0 = unlimited)
-              type: integer
-              example: 500
-            used:
-              description: Prompts used this month
-              type: integer
-              example: 47
-            remaining:
-              description: Prompts remaining this month
-              type: integer
-              example: 453
-            limit_type:
-              description: Whether limit applies per user or per organization
-              type: string
-              enum:
-              - user
-              - organization
-              example: user
-            reset_date:
-              description: First day of next month when usage resets
-              type: string
-              format: date
-              example: '2026-05-01'
-            threshold_warning:
-              description: Non-null only on first crossing of 75% or 100% threshold
-              type:
-              - string
-              - 'null'
-              enum:
-              - '75'
-              - '100'
-              example: null
-          type: object
+        context:
+          description: Freeform user context injected into Surface LLM prompts. Formatting (markdown / line breaks) is preserved verbatim. Send null or an empty string to clear it.
+          type:
+          - string
+          - 'null'
+          maxLength: 20000
       type: object
     SurfaceUsageRecordResource:
       properties:
@@ -490,16 +462,44 @@ components:
           - 'null'
           maxLength: 20000
       type: object
-    SurfaceUserContextUpdateRequest:
-      required:
-      - context
+    SurfaceUsageResource:
       properties:
-        context:
-          description: Freeform user context injected into Surface LLM prompts. Formatting (markdown / line breaks) is preserved verbatim. Send null or an empty string to clear it.
-          type:
-          - string
-          - 'null'
-          maxLength: 20000
+        usage:
+          properties:
+            limit:
+              description: Monthly prompt limit (0 = unlimited)
+              type: integer
+              example: 500
+            used:
+              description: Prompts used this month
+              type: integer
+              example: 47
+            remaining:
+              description: Prompts remaining this month
+              type: integer
+              example: 453
+            limit_type:
+              description: Whether limit applies per user or per organization
+              type: string
+              enum:
+              - user
+              - organization
+              example: user
+            reset_date:
+              description: First day of next month when usage resets
+              type: string
+              format: date
+              example: '2026-05-01'
+            threshold_warning:
+              description: Non-null only on first crossing of 75% or 100% threshold
+              type:
+              - string
+              - 'null'
+              enum:
+              - '75'
+              - '100'
+              example: null
+          type: object
       type: object
   securitySchemes:
     bearerAuth:

@@ -136,6 +136,29 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    ReportSharingRecipientResource:
+      properties:
+        userName:
+          type: string
+        organizationName:
+          type: string
+        isViewed:
+          type: boolean
+        dateReceived:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        dateOpened:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        sharedByUserName:
+          type:
+          - string
+          - 'null'
+      type: object
     ReportSharingSavedReportResource:
       properties:
         report_id:
@@ -203,29 +226,6 @@ components:
         reportName:
           type: string
         reportType:
-          type: string
-        isViewed:
-          type: boolean
-        dateReceived:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        dateOpened:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        sharedByUserName:
-          type:
-          - string
-          - 'null'
-      type: object
-    ReportSharingRecipientResource:
-      properties:
-        userName:
-          type: string
-        organizationName:
           type: string
         isViewed:
           type: boolean

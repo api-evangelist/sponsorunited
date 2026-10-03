@@ -556,340 +556,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PersonProfile:
-      properties:
-        id:
-          type: integer
-        user_id:
-          type: integer
-        avatar_id:
-          type:
-          - integer
-          - 'null'
-        person_profile_job_role_id:
-          type:
-          - integer
-          - 'null'
-        market_id:
-          type:
-          - integer
-          - 'null'
-        name:
-          type: string
-        job_title:
-          type:
-          - string
-          - 'null'
-        location:
-          type:
-          - string
-          - 'null'
-        school:
-          type:
-          - string
-          - 'null'
-        info:
-          type:
-          - string
-          - 'null'
-        suggested:
-          type:
-          - integer
-          - 'null'
-        previous_suggested:
-          type:
-          - integer
-          - 'null'
-        approved:
-          type: boolean
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
-    OrganizationSyncPropertyTypeRequest:
-      properties:
-        property_types:
-          type: string
-          example: 1,2,3
-      type: object
-    OrganizationEvalProposalSaveRequest:
-      properties:
-        eval_deep_mode_limit:
-          type: integer
-          example: '1'
-      type: object
-    OrganizationContractResource:
-      properties:
-        contract_status_id:
-          type: integer
-        contract_payment_type_id:
-          type: integer
-        contract_monthly_spend:
-          type: integer
-        contract_file_url:
-          type: string
-        contract_onboarding_date:
-          type: string
-        contract_start_date:
-          type: string
-        contract_end_date:
-          type: string
-        contract_auto_renew:
-          type: integer
-        max_user_seats:
-          description: Seat cap for org-admin user management. `null` means the feature is disabled, `-1` means unlimited seats, a positive value is the number of active users allowed.
-          type:
-          - integer
-          - 'null'
-          minimum: -1
-        sales_user_id:
-          type: integer
-        salesforce_id:
-          type: string
-        account_manager_id:
-          type: integer
-        default_user_subscription_plan_id:
-          type: string
-        default_user_subscription_product_name:
-          type: string
-        default_user_subscription_cancel_date:
-          type: string
-        user_email_domain:
-          type: string
-        billable:
-          type: array
-          items: {}
-        sales_user:
-          allOf:
-          - $ref: '#/components/schemas/User'
-          - $ref: '#/components/schemas/PersonProfile'
-        account_manager:
-          allOf:
-          - $ref: '#/components/schemas/User'
-          - $ref: '#/components/schemas/PersonProfile'
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserOrganizationResource'
-        surface_monthly_limit:
-          type: integer
-          example: 500
-        surface_limit_type:
-          type: string
-          enum:
-          - user
-          - organization
-          example: organization
-        surface_monthly_balance:
-          type: string
-          example: 47/500
-      type: object
-    OrganizationSyncMarketsResource:
-      properties:
-        id:
-          type: integer
-          example: 3
-        country_id:
-          type: integer
-          example: 1
-        region_id:
-          type: integer
-          example: 2
-        subregion_id:
-          type: integer
-          example: 3
-        name:
-          type: string
-          example: Ontario
-        market_category_id:
-          type: integer
-          example: 5
-        created_at:
-          type: string
-          example: '2017-08-17T15:12:45.000000Z'
-        updated_at:
-          type: string
-          example: '2017-08-17T15:12:45.000000Z'
-        deleted_at:
-          type: string
-          example: '2017-08-17T15:12:45.000000Z'
-      type: object
-    OrganizationSyncStatusResource:
-      properties:
-        id:
-          type: integer
-          example: 1
-        organization_id:
-          type: integer
-          example: 123
-        status:
-          type:
-          - string
-          - 'null'
-          example: success
-      type: object
-    OrganizationUpdateRequest:
-      required:
-      - name
-      - organization_type_id
-      - product_id
-      - representatives
-      - representative_id
-      - representative_type
-      properties:
-        name:
-          type: string
-          example: Acme Sports
-        organization_type_id:
-          type: integer
-          example: 1
-        product_id:
-          type: integer
-          example: 1
-        mfa_enabled:
-          type: boolean
-          example: false
-        contract_status_id:
-          type: integer
-        representative_id:
-          type: integer
-          example: 12362
-        representative_type:
-          type: string
-          enum:
-          - brand
-          - property
-          - agency
-          example: property
-        representatives:
-          type: array
-          items:
-            required:
-            - representative_id
-            - representative_type
-            - is_main
-            properties:
-              representative_id:
-                type: integer
-                example: 12362
-              representative_type:
-                type: string
-                enum:
-                - brand
-                - property
-                - agency
-                example: property
-              is_main:
-                type: integer
-                enum:
-                - 0
-                - 1
-                example: 1
-            type: object
-        users:
-          type: array
-          items:
-            type: integer
-        teams:
-          type: array
-          items:
-            type: integer
-        agencies:
-          type: array
-          items:
-            type: integer
-        companies:
-          type: array
-          items:
-            type: integer
-        market_access:
-          description: Array or comma-separated list of market IDs
-          example: 336,420,337
-        property_type_access:
-          description: Array or comma-separated list of property-type IDs
-          example: 1,5,833
-        organization_limit_access_type_id:
-          description: Access-limiting mode (FK to organization_limit_access_types). The 'none' row id or null both mean no restriction.
-          type:
-          - integer
-          - 'null'
-          example: 2
-        subcategory_access:
-          description: Array or comma-separated list of subcategory IDs
-          example: 14,27
-      type: object
-    StoreOrganizationTypeRequest:
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        properties:
-          type: boolean
-        brands:
-          type: boolean
-        agencies:
-          type: boolean
-      type: object
-    User:
-      properties:
-        id:
-          type: integer
-        email:
-          type: string
-        currency:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-        last_active_at:
-          type: string
-          format: date-time
-        is_external:
-          type: boolean
-        verified:
-          type: integer
-        genuine:
-          type: integer
-        hubspot_id:
-          type: integer
-        hubspot_synced_on:
-          type: string
-          format: date-time
-        force_new_password:
-          type: integer
-        credentials_sent_at:
-          type: string
-          format: date-time
-      type: object
-    UserOrganizationBrandsResource:
-      properties:
-        id:
-          type: integer
-        name:
-          type: integer
-      type: object
-    OrganizationSubcategoryAccessResource:
-      properties:
-        id:
-          type: integer
-          example: 14
-        name:
-          type: string
-          example: Banking
-      type: object
     Role:
       properties:
         id:
@@ -906,57 +572,6 @@ components:
         updated_at:
           type: string
           format: date-time
-      type: object
-    UserOrganizationPropertiesResource:
-      properties:
-        id:
-          type: integer
-        name:
-          type: integer
-      type: object
-    SaveSalesforceRequest:
-      properties:
-        client_id:
-          type: string
-        client_secret:
-          type: string
-        url:
-          type: string
-      type: object
-    OrganizationUsersResource:
-      properties:
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserOrganizationResource'
-        organization_user_count:
-          description: Total number of users matching the current filters
-          type: integer
-        surface_monthly_prompts:
-          description: Surface AI prompts used by this user in the current month
-          type: integer
-      type: object
-    UserOrganizationAgenciesResource:
-      properties:
-        id:
-          type: integer
-        name:
-          type: integer
-      type: object
-    UpdateOrganizationTypeRequest:
-      required:
-      - name
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        properties:
-          type: boolean
-        brands:
-          type: boolean
-        agencies:
-          type: boolean
       type: object
     OrganizationUpdateContractRequest:
       properties:
@@ -1076,42 +691,6 @@ components:
               example: organization
           type: object
       type: object
-    OrganizationIntercomSyncRequest:
-      properties:
-        organization_ids:
-          description: Array of organization IDs to sync. If not provided, all organizations will be synced.
-          type: array
-          items:
-            type: integer
-      type: object
-    OrganizationAccessResource:
-      properties:
-        property_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrganizationSyncPropertyTypeResource'
-        markets:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrganizationSyncMarketsResource'
-        limit_access_type:
-          oneOf:
-          - $ref: '#/components/schemas/OrganizationLimitAccessTypeResource'
-          description: The organization's access-limiting mode, or null when no restriction.
-        subcategories:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrganizationSubcategoryAccessResource'
-      type: object
-    CredentialsSalesforceResource:
-      properties:
-        client_id:
-          type: integer
-        client_secret:
-          type: string
-        url:
-          type: string
-      type: object
     OrganizationLimitAccessTypeResource:
       properties:
         id:
@@ -1124,6 +703,172 @@ components:
         slug:
           type: string
           example: spnd_agency
+      type: object
+    OrganizationType:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        properties:
+          type: boolean
+        brands:
+          type: boolean
+        agencies:
+          type: boolean
+      type: object
+    UserOrganizationPropertiesResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: integer
+      type: object
+    OrganizationUpdateRequest:
+      required:
+      - name
+      - organization_type_id
+      - product_id
+      - representatives
+      - representative_id
+      - representative_type
+      properties:
+        name:
+          type: string
+          example: Acme Sports
+        organization_type_id:
+          type: integer
+          example: 1
+        product_id:
+          type: integer
+          example: 1
+        mfa_enabled:
+          type: boolean
+          example: false
+        contract_status_id:
+          type: integer
+        representative_id:
+          type: integer
+          example: 12362
+        representative_type:
+          type: string
+          enum:
+          - brand
+          - property
+          - agency
+          example: property
+        representatives:
+          type: array
+          items:
+            required:
+            - representative_id
+            - representative_type
+            - is_main
+            properties:
+              representative_id:
+                type: integer
+                example: 12362
+              representative_type:
+                type: string
+                enum:
+                - brand
+                - property
+                - agency
+                example: property
+              is_main:
+                type: integer
+                enum:
+                - 0
+                - 1
+                example: 1
+            type: object
+        users:
+          type: array
+          items:
+            type: integer
+        teams:
+          type: array
+          items:
+            type: integer
+        agencies:
+          type: array
+          items:
+            type: integer
+        companies:
+          type: array
+          items:
+            type: integer
+        market_access:
+          description: Array or comma-separated list of market IDs
+          example: 336,420,337
+        property_type_access:
+          description: Array or comma-separated list of property-type IDs
+          example: 1,5,833
+        organization_limit_access_type_id:
+          description: Access-limiting mode (FK to organization_limit_access_types). The 'none' row id or null both mean no restriction.
+          type:
+          - integer
+          - 'null'
+          example: 2
+        subcategory_access:
+          description: Array or comma-separated list of subcategory IDs
+          example: 14,27
+      type: object
+    PersonProfile:
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        avatar_id:
+          type:
+          - integer
+          - 'null'
+        person_profile_job_role_id:
+          type:
+          - integer
+          - 'null'
+        market_id:
+          type:
+          - integer
+          - 'null'
+        name:
+          type: string
+        job_title:
+          type:
+          - string
+          - 'null'
+        location:
+          type:
+          - string
+          - 'null'
+        school:
+          type:
+          - string
+          - 'null'
+        info:
+          type:
+          - string
+          - 'null'
+        suggested:
+          type:
+          - integer
+          - 'null'
+        previous_suggested:
+          type:
+          - integer
+          - 'null'
+        approved:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
       type: object
     UserOrganizationResource:
       properties:
@@ -1171,89 +916,14 @@ components:
                 items: {}
             type: object
       type: object
-    OrganizationIndexRequest:
-      properties:
-        per_page:
-          type: integer
-          example: '25'
-        order_by:
-          type: string
-          example: name,types,contract_statuses,contract_payment_types,sales_account,account_manager,contract_onboarding_date,contract_start_date,contract_end_date,contract_auto_renew,properties_count,agencies_count,companies_count,users_count
-        order:
-          type: string
-          example: asc
-        name:
-          type: string
-          example: John
-        types:
-          type: string
-          example: 1,2,3
-        contract_statuses:
-          type: string
-          example: 1,2,3
-        contract_payment_types:
-          type: string
-          example: 1,2,3
-        contract_auto_renew:
-          type: string
-          example: 0,1
-        sales_account:
-          type: string
-          example: John
-        account_manager:
-          type: string
-          example: John
-      type: object
-    OrganizationType:
+    OrganizationSubcategoryAccessResource:
       properties:
         id:
           type: integer
+          example: 14
         name:
           type: string
-        properties:
-          type: boolean
-        brands:
-          type: boolean
-        agencies:
-          type: boolean
-      type: object
-    ProductType:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-      type: object
-    OrganizationTypeIndexResource:
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 1
-        name:
-          type: string
-          example: Mixed Agency
-        properties:
-          type: boolean
-          example: true
-        brands:
-          type: boolean
-          example: false
-        agencies:
-          type: boolean
-          example: false
-        organizations_count:
-          type: integer
-          format: int64
-          example: 1
-        product_type:
-          $ref: '#/components/schemas/ProductType'
-      type: object
-    OrganizationSyncMarketsRequest:
-      properties:
-        markets:
-          type: string
-          example: 1,2,3
+          example: Banking
       type: object
     OrganizationSyncPropertyTypeResource:
       properties:
@@ -1311,6 +981,336 @@ components:
         deleted_at:
           type: string
           example: '2017-05-08T22:03:49.000000Z'
+      type: object
+    OrganizationSyncMarketsRequest:
+      properties:
+        markets:
+          type: string
+          example: 1,2,3
+      type: object
+    User:
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        currency:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+        last_active_at:
+          type: string
+          format: date-time
+        is_external:
+          type: boolean
+        verified:
+          type: integer
+        genuine:
+          type: integer
+        hubspot_id:
+          type: integer
+        hubspot_synced_on:
+          type: string
+          format: date-time
+        force_new_password:
+          type: integer
+        credentials_sent_at:
+          type: string
+          format: date-time
+      type: object
+    OrganizationSyncMarketsResource:
+      properties:
+        id:
+          type: integer
+          example: 3
+        country_id:
+          type: integer
+          example: 1
+        region_id:
+          type: integer
+          example: 2
+        subregion_id:
+          type: integer
+          example: 3
+        name:
+          type: string
+          example: Ontario
+        market_category_id:
+          type: integer
+          example: 5
+        created_at:
+          type: string
+          example: '2017-08-17T15:12:45.000000Z'
+        updated_at:
+          type: string
+          example: '2017-08-17T15:12:45.000000Z'
+        deleted_at:
+          type: string
+          example: '2017-08-17T15:12:45.000000Z'
+      type: object
+    OrganizationIndexRequest:
+      properties:
+        per_page:
+          type: integer
+          example: '25'
+        order_by:
+          type: string
+          example: name,types,contract_statuses,contract_payment_types,sales_account,account_manager,contract_onboarding_date,contract_start_date,contract_end_date,contract_auto_renew,properties_count,agencies_count,companies_count,users_count
+        order:
+          type: string
+          example: asc
+        name:
+          type: string
+          example: John
+        types:
+          type: string
+          example: 1,2,3
+        contract_statuses:
+          type: string
+          example: 1,2,3
+        contract_payment_types:
+          type: string
+          example: 1,2,3
+        contract_auto_renew:
+          type: string
+          example: 0,1
+        sales_account:
+          type: string
+          example: John
+        account_manager:
+          type: string
+          example: John
+      type: object
+    ProductType:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
+    OrganizationContractResource:
+      properties:
+        contract_status_id:
+          type: integer
+        contract_payment_type_id:
+          type: integer
+        contract_monthly_spend:
+          type: integer
+        contract_file_url:
+          type: string
+        contract_onboarding_date:
+          type: string
+        contract_start_date:
+          type: string
+        contract_end_date:
+          type: string
+        contract_auto_renew:
+          type: integer
+        max_user_seats:
+          description: Seat cap for org-admin user management. `null` means the feature is disabled, `-1` means unlimited seats, a positive value is the number of active users allowed.
+          type:
+          - integer
+          - 'null'
+          minimum: -1
+        sales_user_id:
+          type: integer
+        salesforce_id:
+          type: string
+        account_manager_id:
+          type: integer
+        default_user_subscription_plan_id:
+          type: string
+        default_user_subscription_product_name:
+          type: string
+        default_user_subscription_cancel_date:
+          type: string
+        user_email_domain:
+          type: string
+        billable:
+          type: array
+          items: {}
+        sales_user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          - $ref: '#/components/schemas/PersonProfile'
+        account_manager:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          - $ref: '#/components/schemas/PersonProfile'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserOrganizationResource'
+        surface_monthly_limit:
+          type: integer
+          example: 500
+        surface_limit_type:
+          type: string
+          enum:
+          - user
+          - organization
+          example: organization
+        surface_monthly_balance:
+          type: string
+          example: 47/500
+      type: object
+    OrganizationSyncStatusResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        organization_id:
+          type: integer
+          example: 123
+        status:
+          type:
+          - string
+          - 'null'
+          example: success
+      type: object
+    OrganizationUsersResource:
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserOrganizationResource'
+        organization_user_count:
+          description: Total number of users matching the current filters
+          type: integer
+        surface_monthly_prompts:
+          description: Surface AI prompts used by this user in the current month
+          type: integer
+      type: object
+    SaveSalesforceRequest:
+      properties:
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        url:
+          type: string
+      type: object
+    UpdateOrganizationTypeRequest:
+      required:
+      - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        properties:
+          type: boolean
+        brands:
+          type: boolean
+        agencies:
+          type: boolean
+      type: object
+    OrganizationTypeIndexResource:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Mixed Agency
+        properties:
+          type: boolean
+          example: true
+        brands:
+          type: boolean
+          example: false
+        agencies:
+          type: boolean
+          example: false
+        organizations_count:
+          type: integer
+          format: int64
+          example: 1
+        product_type:
+          $ref: '#/components/schemas/ProductType'
+      type: object
+    CredentialsSalesforceResource:
+      properties:
+        client_id:
+          type: integer
+        client_secret:
+          type: string
+        url:
+          type: string
+      type: object
+    StoreOrganizationTypeRequest:
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        properties:
+          type: boolean
+        brands:
+          type: boolean
+        agencies:
+          type: boolean
+      type: object
+    OrganizationSyncPropertyTypeRequest:
+      properties:
+        property_types:
+          type: string
+          example: 1,2,3
+      type: object
+    UserOrganizationAgenciesResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: integer
+      type: object
+    OrganizationAccessResource:
+      properties:
+        property_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationSyncPropertyTypeResource'
+        markets:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationSyncMarketsResource'
+        limit_access_type:
+          oneOf:
+          - $ref: '#/components/schemas/OrganizationLimitAccessTypeResource'
+          description: The organization's access-limiting mode, or null when no restriction.
+        subcategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationSubcategoryAccessResource'
+      type: object
+    OrganizationIntercomSyncRequest:
+      properties:
+        organization_ids:
+          description: Array of organization IDs to sync. If not provided, all organizations will be synced.
+          type: array
+          items:
+            type: integer
+      type: object
+    UserOrganizationBrandsResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: integer
+      type: object
+    OrganizationEvalProposalSaveRequest:
+      properties:
+        eval_deep_mode_limit:
+          type: integer
+          example: '1'
       type: object
   securitySchemes:
     bearerAuth:

@@ -153,6 +153,15 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    ScoutingYoutubeLinkStoreRequest:
+      required:
+      - youtube_url
+      properties:
+        youtube_url:
+          description: YouTube URL
+          type: string
+          example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+      type: object
     ScoutingYoutubeLinkUpdateRequest:
       required:
       - youtube_url
@@ -191,15 +200,6 @@ components:
           type: string
           format: date-time
           example: null
-      type: object
-    ScoutingYoutubeLinkStoreRequest:
-      required:
-      - youtube_url
-      properties:
-        youtube_url:
-          description: YouTube URL
-          type: string
-          example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
       type: object
   securitySchemes:
     bearerAuth:

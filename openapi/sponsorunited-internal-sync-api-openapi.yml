@@ -274,6 +274,21 @@ components:
           - 'null'
           example: Nike
       type: object
+    PropertySyncEntity:
+      properties:
+        id:
+          type: integer
+          example: 42
+        name:
+          type: string
+          example: New England Patriots
+        league_id:
+          description: League the property belongs to. Consumers map property -> league to resolve league-scoped reference data offline.
+          type:
+          - integer
+          - 'null'
+          example: 7
+      type: object
     GenericEntity:
       properties:
         id:
@@ -322,21 +337,6 @@ components:
           - frequency
           - amount
           example: frequency
-      type: object
-    PropertySyncEntity:
-      properties:
-        id:
-          type: integer
-          example: 42
-        name:
-          type: string
-          example: New England Patriots
-        league_id:
-          description: League the property belongs to. Consumers map property -> league to resolve league-scoped reference data offline.
-          type:
-          - integer
-          - 'null'
-          example: 7
       type: object
   securitySchemes:
     bearerAuth:

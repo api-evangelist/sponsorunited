@@ -109,16 +109,7 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    AgencyServiceCreateRequest:
-      properties:
-        name:
-          type: string
-          example: Type 1
-        service_type_id:
-          type: integer
-          example: '1'
-      type: object
-    AgencyServicesResource:
+    AgencyServicesTypeResource:
       properties:
         id:
           type: integer
@@ -126,19 +117,6 @@ components:
         name:
           type: string
           example: Type 1
-        service_type:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgencyServicesTypeResource'
-      type: object
-    AgencyServiceUpdateRequest:
-      properties:
-        name:
-          type: string
-          example: Type 1
-        service_type_id:
-          type: integer
-          example: '1'
       type: object
     AgencyServicesIndexResource:
       type: array
@@ -153,7 +131,7 @@ components:
             items:
               $ref: '#/components/schemas/AgencyServicesTypeResource'
         type: object
-    AgencyServicesTypeResource:
+    AgencyServicesResource:
       properties:
         id:
           type: integer
@@ -161,6 +139,28 @@ components:
         name:
           type: string
           example: Type 1
+        service_type:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgencyServicesTypeResource'
+      type: object
+    AgencyServiceCreateRequest:
+      properties:
+        name:
+          type: string
+          example: Type 1
+        service_type_id:
+          type: integer
+          example: '1'
+      type: object
+    AgencyServiceUpdateRequest:
+      properties:
+        name:
+          type: string
+          example: Type 1
+        service_type_id:
+          type: integer
+          example: '1'
       type: object
   securitySchemes:
     bearerAuth:

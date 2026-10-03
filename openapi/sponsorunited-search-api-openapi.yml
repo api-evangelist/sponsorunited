@@ -208,34 +208,76 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    SearchIndexedResource:
+    SearchEntityRequest:
       properties:
-        items:
-          type: array
-          items:
-            description: Shape varies by indexed entity; only the core fields are guaranteed, the rest depend on the matched model and requested relationships.
-            properties:
-              id:
-                type: integer
-              name:
-                type: string
-              type:
-                description: Set only for company/team/agency/contact entities; absent for all other indexed types.
-                type:
-                - string
-                - 'null'
-              ulid:
-                type: string
-              logo:
-                type:
-                - string
-                - 'null'
-              is_primary_profile:
-                type: boolean
-            type: object
-        total:
+        name:
+          type: string
+      type: object
+    GenericEntity:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
+    SearchByIdGroupedResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/GenericEntity'
+    LocationForSmartSearchOnBrandsDownloadRequest:
+      properties:
+        brand:
+          type: string
+        city:
+          type: string
+        locatated_in_market:
+          type: string
+        order_by:
+          type: string
+        order_direction:
+          type: string
+      type: object
+    LocationForSmartSearchOnBrandsShowResource:
+      properties:
+        company_id:
+          type: integer
+        company_logo:
+          type: string
+        company_name:
+          type: string
+        subcategory_id:
+          type: integer
+        subcategory_name:
+          type: string
+        category_id:
+          type: integer
+        category_name:
+          type: string
+        street:
+          type: string
+        is_hq:
+          type: integer
+        city_name:
+          type: string
+        city_id:
+          type: integer
+        state_name:
+          type: string
+        state_id:
+          type: integer
+        county_name:
+          type: string
+        county_id:
+          type: integer
+        country_name:
+          type: string
+        country_id:
           type: integer
       type: object
+    SearchEntityResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/GenericEntity'
     SearchIndexedRequest:
       required:
       - search_term
@@ -328,27 +370,6 @@ components:
           description: Comma separated state ids.
           type: string
       type: object
-    LocationForSmartSearchOnBrandsDownloadRequest:
-      properties:
-        brand:
-          type: string
-        city:
-          type: string
-        locatated_in_market:
-          type: string
-        order_by:
-          type: string
-        order_direction:
-          type: string
-      type: object
-    SearchByIdGroupedResource:
-      type: array
-      items:
-        $ref: '#/components/schemas/GenericEntity'
-    SearchEntityResource:
-      type: array
-      items:
-        $ref: '#/components/schemas/GenericEntity'
     LocationForSmartSearchOnBrandsShowRequest:
       properties:
         located_in_market:
@@ -400,54 +421,33 @@ components:
           description: Number of items per page.
           type: integer
       type: object
-    LocationForSmartSearchOnBrandsShowResource:
+    SearchIndexedResource:
       properties:
-        company_id:
+        items:
+          type: array
+          items:
+            description: Shape varies by indexed entity; only the core fields are guaranteed, the rest depend on the matched model and requested relationships.
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              type:
+                description: Set only for company/team/agency/contact entities; absent for all other indexed types.
+                type:
+                - string
+                - 'null'
+              ulid:
+                type: string
+              logo:
+                type:
+                - string
+                - 'null'
+              is_primary_profile:
+                type: boolean
+            type: object
+        total:
           type: integer
-        company_logo:
-          type: string
-        company_name:
-          type: string
-        subcategory_id:
-          type: integer
-        subcategory_name:
-          type: string
-        category_id:
-          type: integer
-        category_name:
-          type: string
-        street:
-          type: string
-        is_hq:
-          type: integer
-        city_name:
-          type: string
-        city_id:
-          type: integer
-        state_name:
-          type: string
-        state_id:
-          type: integer
-        county_name:
-          type: string
-        county_id:
-          type: integer
-        country_name:
-          type: string
-        country_id:
-          type: integer
-      type: object
-    GenericEntity:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-      type: object
-    SearchEntityRequest:
-      properties:
-        name:
-          type: string
       type: object
   securitySchemes:
     bearerAuth:

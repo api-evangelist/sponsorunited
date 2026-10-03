@@ -194,6 +194,42 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    AssetSubgroupingIndexResource:
+      properties:
+        groupings:
+          type: object
+          example:
+          - tag1
+          - tag2
+          - tag3
+        subgroupings:
+          $ref: '#/components/schemas/AssetSubgroupingResource'
+      type: object
+    AssetSubgroupingTagRequest:
+      properties:
+        new_tag:
+          type: string
+      type: object
+    AssetSubgroupingStoreRequest:
+      properties:
+        name:
+          type: string
+        asset_grouping_id:
+          type: integer
+        media_order:
+          type: numeric
+        icon:
+          type: string
+      type: object
+    AssetSubgroupingUpdateRequest:
+      properties:
+        name:
+          type: string
+        asset_grouping_id:
+          type: integer
+        icon:
+          type: string
+      type: object
     AssetSubgroupingIntentResource:
       properties:
         id:
@@ -213,25 +249,18 @@ components:
         audits_count:
           type: integer
       type: object
-    AssetSubgroupingIndexResource:
+    AssetGroupingResource:
       properties:
-        groupings:
-          type: object
-          example:
-          - tag1
-          - tag2
-          - tag3
-        subgroupings:
-          $ref: '#/components/schemas/AssetSubgroupingResource'
-      type: object
-    AssetSubgroupingUpdateRequest:
-      properties:
+        id:
+          type: integer
         name:
           type: string
-        asset_grouping_id:
-          type: integer
         icon:
           type: string
+        media_order:
+          type: integer
+        subgroupings_count:
+          type: integer
       type: object
     AssetSubgroupingResource:
       properties:
@@ -247,35 +276,6 @@ components:
           type: integer
         grouping:
           $ref: '#/components/schemas/AssetGroupingResource'
-      type: object
-    AssetSubgroupingTagRequest:
-      properties:
-        new_tag:
-          type: string
-      type: object
-    AssetSubgroupingStoreRequest:
-      properties:
-        name:
-          type: string
-        asset_grouping_id:
-          type: integer
-        media_order:
-          type: numeric
-        icon:
-          type: string
-      type: object
-    AssetGroupingResource:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        icon:
-          type: string
-        media_order:
-          type: integer
-        subgroupings_count:
-          type: integer
       type: object
   securitySchemes:
     bearerAuth:

@@ -222,14 +222,14 @@ paths:
           description: Validation error
 components:
   schemas:
-    SendPinResponse:
+    ForgotPasswordRequest:
+      required:
+      - email
       properties:
-        retries_left:
-          description: Number of PIN verification attempts remaining
-          type: integer
-        message:
-          description: Status message
+        email:
+          description: Email address for password reset
           type: string
+          format: email
       type: object
     EnrollResponse:
       properties:
@@ -238,6 +238,45 @@ components:
           type: boolean
         message:
           description: Enrollment result message
+          type: string
+      type: object
+    EmailExistsResponse:
+      properties:
+        exists:
+          description: Whether the email exists in the system
+          type: boolean
+      type: object
+    VerifyLoginRequest:
+      required:
+      - pin
+      properties:
+        pin:
+          description: 6-digit verification PIN
+          type: string
+      type: object
+    ResetPasswordResponse:
+      properties:
+        status:
+          description: Status indicator (ok or error)
+          type: string
+        error:
+          description: Error details (only present on failure)
+          properties:
+            type:
+              description: Error type code
+              type: string
+            message:
+              description: Human-readable error message
+              type: string
+          type: object
+      type: object
+    VerifyUserResponse:
+      properties:
+        success:
+          description: Whether the verification was successful
+          type: boolean
+        message:
+          description: Verification result message
           type: string
       type: object
     ForgotPasswordResponse:
@@ -249,28 +288,28 @@ components:
           description: Status message
           type: string
       type: object
-    ResetPasswordRequest:
+    LoginRequest:
       required:
-      - token
       - email
       - password
-      - password_confirmation
       properties:
-        token:
-          description: Password reset token from email
-          type: string
         email:
-          description: User's email address
           type: string
           format: email
         password:
-          description: New password (min 8 chars, mixed case, with symbols)
           type: string
           format: password
-        password_confirmation:
-          description: Password confirmation
+        remember_me:
+          type: boolean
+      type: object
+    SendPinResponse:
+      properties:
+        retries_left:
+          description: Number of PIN verification attempts remaining
+          type: integer
+        message:
+          description: Status message
           type: string
-          format: password
       type: object
     LoginResource:
       required:
@@ -299,44 +338,28 @@ components:
           description: Password reset token (when force_new_password is set)
           type: string
       type: object
-    VerifyLoginRequest:
+    ResetPasswordRequest:
       required:
-      - pin
-      properties:
-        pin:
-          description: 6-digit verification PIN
-          type: string
-      type: object
-    ForgotPasswordRequest:
-      required:
+      - token
       - email
+      - password
+      - password_confirmation
       properties:
+        token:
+          description: Password reset token from email
+          type: string
         email:
-          description: Email address for password reset
+          description: User's email address
           type: string
           format: email
-      type: object
-    EmailExistsResponse:
-      properties:
-        exists:
-          description: Whether the email exists in the system
-          type: boolean
-      type: object
-    ResetPasswordResponse:
-      properties:
-        status:
-          description: Status indicator (ok or error)
+        password:
+          description: New password (min 8 chars, mixed case, with symbols)
           type: string
-        error:
-          description: Error details (only present on failure)
-          properties:
-            type:
-              description: Error type code
-              type: string
-            message:
-              description: Human-readable error message
-              type: string
-          type: object
+          format: password
+        password_confirmation:
+          description: Password confirmation
+          type: string
+          format: password
       type: object
     EnrollRequest:
       required:
@@ -354,29 +377,6 @@ components:
           description: User's email address
           type: string
           format: email
-      type: object
-    VerifyUserResponse:
-      properties:
-        success:
-          description: Whether the verification was successful
-          type: boolean
-        message:
-          description: Verification result message
-          type: string
-      type: object
-    LoginRequest:
-      required:
-      - email
-      - password
-      properties:
-        email:
-          type: string
-          format: email
-        password:
-          type: string
-          format: password
-        remember_me:
-          type: boolean
       type: object
   securitySchemes:
     bearerAuth:

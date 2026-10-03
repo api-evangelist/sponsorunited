@@ -59,6 +59,13 @@ components:
         name:
           type: string
       type: object
+    TagUpdateRequest:
+      properties:
+        old_tag:
+          type: string
+        new_tag:
+          type: string
+      type: object
     TagIndexRequest:
       properties:
         search:
@@ -69,13 +76,6 @@ components:
         id:
           type: integer
         name:
-          type: string
-      type: object
-    TagUpdateRequest:
-      properties:
-        old_tag:
-          type: string
-        new_tag:
           type: string
       type: object
   securitySchemes:

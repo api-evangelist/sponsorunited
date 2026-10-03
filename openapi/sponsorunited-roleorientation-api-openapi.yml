@@ -155,17 +155,6 @@ components:
           minLength: 1
           example: buy_side
       type: object
-    RoleOrientation:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          enum:
-          - sell_side
-          - buy_side
-          - student
-      type: object
     RoleOrientationStoreRequest:
       required:
       - name
@@ -176,6 +165,17 @@ components:
           maxLength: 255
           minLength: 1
           example: sell_side
+      type: object
+    RoleOrientation:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          enum:
+          - sell_side
+          - buy_side
+          - student
       type: object
   securitySchemes:
     bearerAuth:

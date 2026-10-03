@@ -299,53 +299,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    StatsPerformJobStatusDto:
-      title: Stats Perform Job Status DTO
-      description: Data Transfer Object representing the status of Stats Perform import jobs for a property
-      properties:
-        queuedCount:
-          description: Number of jobs waiting in queue
-          type: integer
-          example: 5
-        executingCount:
-          description: Number of jobs currently executing
-          type: integer
-          example: 1
-        finishedCount:
-          description: Number of successfully completed jobs
-          type: integer
-          example: 24
-        failedCount:
-          description: Number of failed jobs
-          type: integer
-          example: 0
-        retryingCount:
-          description: Number of jobs being retried
-          type: integer
-          example: 0
-        totalCount:
-          description: Total number of jobs
-          type: integer
-          example: 30
-        hasActiveJobs:
-          description: Whether there are any active (queued, executing, or retrying) jobs
-          type: boolean
-          example: true
-        lastUpdated:
-          description: Timestamp of the most recently updated job
-          type:
-          - string
-          - 'null'
-          format: date-time
-          example: '2025-12-07T10:30:00Z'
-        oldestActiveJob:
-          description: Timestamp of the oldest active job
-          type:
-          - string
-          - 'null'
-          format: date-time
-          example: '2025-12-07T10:25:00Z'
-      type: object
     StatsMappingsSportsRequest:
       title: Stats Mappings Sports Request
       description: Request schema for filtering stats perform requests by api type
@@ -360,25 +313,16 @@ components:
           - sdapi
           example: stats_api
       type: object
-    StatsMappingsLeaguesRequest:
-      title: Stats Mappings Leagues Request
-      description: Request schema for filtering stats perform leagues by sport and api type
+    StatsMappingUpdateRequest:
+      title: Stats Mapping Update Request
+      description: Request schema for updating a stats perform mapping
+      required:
+      - su_team_id
       properties:
-        sport:
-          description: Filter mappings by sport type
-          type:
-          - string
-          - 'null'
-          example: basketball
-        api:
-          description: Filter mappings by StatsPerform API type
-          type:
-          - string
-          - 'null'
-          enum:
-          - stats_api
-          - sdapi
-          example: stats_api
+        su_team_id:
+          description: SponsorUnited team/property ID to map to
+          type: integer
+          example: 456
       type: object
     StatsMappingDto:
       title: Stats Mapping DTO
@@ -437,16 +381,72 @@ components:
           type: string
           example: SDAPI
       type: object
-    StatsMappingUpdateRequest:
-      title: Stats Mapping Update Request
-      description: Request schema for updating a stats perform mapping
-      required:
-      - su_team_id
+    StatsMappingsLeaguesRequest:
+      title: Stats Mappings Leagues Request
+      description: Request schema for filtering stats perform leagues by sport and api type
       properties:
-        su_team_id:
-          description: SponsorUnited team/property ID to map to
+        sport:
+          description: Filter mappings by sport type
+          type:
+          - string
+          - 'null'
+          example: basketball
+        api:
+          description: Filter mappings by StatsPerform API type
+          type:
+          - string
+          - 'null'
+          enum:
+          - stats_api
+          - sdapi
+          example: stats_api
+      type: object
+    StatsPerformJobStatusDto:
+      title: Stats Perform Job Status DTO
+      description: Data Transfer Object representing the status of Stats Perform import jobs for a property
+      properties:
+        queuedCount:
+          description: Number of jobs waiting in queue
           type: integer
-          example: 456
+          example: 5
+        executingCount:
+          description: Number of jobs currently executing
+          type: integer
+          example: 1
+        finishedCount:
+          description: Number of successfully completed jobs
+          type: integer
+          example: 24
+        failedCount:
+          description: Number of failed jobs
+          type: integer
+          example: 0
+        retryingCount:
+          description: Number of jobs being retried
+          type: integer
+          example: 0
+        totalCount:
+          description: Total number of jobs
+          type: integer
+          example: 30
+        hasActiveJobs:
+          description: Whether there are any active (queued, executing, or retrying) jobs
+          type: boolean
+          example: true
+        lastUpdated:
+          description: Timestamp of the most recently updated job
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2025-12-07T10:30:00Z'
+        oldestActiveJob:
+          description: Timestamp of the oldest active job
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2025-12-07T10:25:00Z'
       type: object
     StatsMappingsGetRequest:
       title: Stats Mappings Get Request

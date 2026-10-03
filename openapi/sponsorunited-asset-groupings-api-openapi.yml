@@ -147,6 +147,15 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    AssetGroupingRequest:
+      properties:
+        name:
+          type: string
+        icon:
+          type: string
+        media_order:
+          type: integer
+      type: object
     AssetGroupingIndexResource:
       type: array
       items:
@@ -179,15 +188,6 @@ components:
         media_order:
           type: integer
         subgroupings_count:
-          type: integer
-      type: object
-    AssetGroupingRequest:
-      properties:
-        name:
-          type: string
-        icon:
-          type: string
-        media_order:
           type: integer
       type: object
   securitySchemes:

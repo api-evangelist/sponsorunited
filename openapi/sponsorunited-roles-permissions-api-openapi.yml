@@ -143,13 +143,49 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    PermissionsGroupedByLabel:
+    Role:
       properties:
-        Label Name:
-          description: The name of the label under which several permissions are grouped.
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    UpdateRoleRequest:
+      properties:
+        display_name:
+          type: string
+        description:
+          type: string
+        permissions:
+          type: string
+          example: 1,2,3
+        allow:
+          description: When present and true, it will attach one or more permissions to the role.
+          type: boolean
+      type: object
+    RoleIndexResource:
+      properties:
+        roles:
           type: array
           items:
-            $ref: '#/components/schemas/Permission'
+            allOf:
+            - $ref: '#/components/schemas/Role'
+            - properties:
+                permissions:
+                  $ref: '#/components/schemas/PermissionsGroupedByLabel'
+              type: object
+        all_permissions:
+          $ref: '#/components/schemas/PermissionsGroupedByLabel'
       type: object
     Permission:
       properties:
@@ -168,19 +204,37 @@ components:
           type: string
           format: date-time
       type: object
-    RoleIndexResource:
+    PermissionsGroupedByLabel:
       properties:
-        roles:
+        Label Name:
+          description: The name of the label under which several permissions are grouped.
           type: array
           items:
-            allOf:
-            - $ref: '#/components/schemas/Role'
-            - properties:
-                permissions:
-                  $ref: '#/components/schemas/PermissionsGroupedByLabel'
-              type: object
-        all_permissions:
-          $ref: '#/components/schemas/PermissionsGroupedByLabel'
+            $ref: '#/components/schemas/Permission'
+      type: object
+    PermissionShowResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    PermissionUpdateRequest:
+      properties:
+        display_name:
+          type: string
+        description:
+          type: string
       type: object
     RoleStoreUpdateResource:
       properties:
@@ -211,60 +265,6 @@ components:
         role_level:
           type: integer
           example: 40
-      type: object
-    UpdateRoleRequest:
-      properties:
-        display_name:
-          type: string
-        description:
-          type: string
-        permissions:
-          type: string
-          example: 1,2,3
-        allow:
-          description: When present and true, it will attach one or more permissions to the role.
-          type: boolean
-      type: object
-    PermissionShowResource:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        display_name:
-          type: string
-        description:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
-    Role:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        display_name:
-          type: string
-        description:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
-    PermissionUpdateRequest:
-      properties:
-        display_name:
-          type: string
-        description:
-          type: string
       type: object
   securitySchemes:
     bearerAuth:

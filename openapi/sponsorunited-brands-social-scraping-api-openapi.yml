@@ -181,26 +181,55 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    BrandLatestSocialScrapingSessionResource:
+    BrandSocialScrapingSessionPropertiesResource:
       properties:
         id:
           type: integer
-        user_id:
+        ulid:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        logo_id:
           type: integer
-        brand_id:
+        logo:
+          type: string
+        league_id:
+          type: string
+        league:
+          type: string
+        is_continuous:
+          type: boolean
+        posts_count:
           type: integer
-        platform:
-          type: string
-        handle:
-          type: string
-        before:
-          type: string
-        after:
-          type: string
-        status:
-          type: string
-        error:
-          type: string
+        posts:
+          type: array
+          items:
+            properties:
+              _id:
+                type: string
+              entityType:
+                type: string
+              entityId:
+                type: integer
+              platform:
+                type: string
+              postId:
+                type: string
+              created_at:
+                type: string
+              text:
+                type: string
+              socialScrapingSessionId:
+                type: integer
+              matchedEntities:
+                type: array
+                items:
+                  type: integer
+              stats:
+                type: object
+            type: object
       type: object
     BrandSocialScrapingSessionsResource:
       properties:
@@ -261,56 +290,6 @@ components:
                     ? ''
                     : type: string
                   type: object
-            type: object
-      type: object
-    BrandSocialScrapingSessionPropertiesResource:
-      properties:
-        id:
-          type: integer
-        ulid:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-        logo_id:
-          type: integer
-        logo:
-          type: string
-        league_id:
-          type: string
-        league:
-          type: string
-        is_continuous:
-          type: boolean
-        posts_count:
-          type: integer
-        posts:
-          type: array
-          items:
-            properties:
-              _id:
-                type: string
-              entityType:
-                type: string
-              entityId:
-                type: integer
-              platform:
-                type: string
-              postId:
-                type: string
-              created_at:
-                type: string
-              text:
-                type: string
-              socialScrapingSessionId:
-                type: integer
-              matchedEntities:
-                type: array
-                items:
-                  type: integer
-              stats:
-                type: object
             type: object
       type: object
     Company:
@@ -382,6 +361,27 @@ components:
         deleted_at:
           type: string
           format: date-time
+      type: object
+    BrandLatestSocialScrapingSessionResource:
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        brand_id:
+          type: integer
+        platform:
+          type: string
+        handle:
+          type: string
+        before:
+          type: string
+        after:
+          type: string
+        status:
+          type: string
+        error:
+          type: string
       type: object
   securitySchemes:
     bearerAuth:
