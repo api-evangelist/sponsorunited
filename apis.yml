@@ -1790,6 +1790,8 @@ apis:
   humanURL: https://www.sponsorunited.com/platform
   baseURL: https://api.sponsorunited.com
   tags:
+  - LinkedIn
+  tags_raw:
   - Linked In
   properties:
   - type: OpenAPI
@@ -1810,6 +1812,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/sponsorunited-capability-edges.yml
+  name: SponsorUnited Business Capability Map
 - type: Overlay
   url: overlays/sponsorunited-api-overlay.yaml
 - type: AgentSkill
