@@ -195,6 +195,24 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    UploadImageFromUrlRequest:
+      title: Upload Image From URL Request
+      description: Request schema for uploading an image from a URL to S3
+      required:
+      - url
+      properties:
+        url:
+          description: The URL of the image to upload
+          type: string
+          format: url
+          example: https://example.com/image.png
+        type:
+          description: The upload type category
+          type:
+          - string
+          - 'null'
+          example: generic
+      type: object
     CropImageRequest:
       title: Crop Image Request
       description: Request schema for cropping an image
@@ -221,24 +239,6 @@ components:
           type:
           - integer
           - 'null'
-      type: object
-    UploadImageFromUrlRequest:
-      title: Upload Image From URL Request
-      description: Request schema for uploading an image from a URL to S3
-      required:
-      - url
-      properties:
-        url:
-          description: The URL of the image to upload
-          type: string
-          format: url
-          example: https://example.com/image.png
-        type:
-          description: The upload type category
-          type:
-          - string
-          - 'null'
-          example: generic
       type: object
   securitySchemes:
     bearerAuth:

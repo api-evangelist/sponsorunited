@@ -118,19 +118,15 @@ components:
           type: string
           example: Type 1
       type: object
-    AgencyServicesIndexResource:
-      type: array
-      items:
-        properties:
-          id:
-            type: integer
-          name:
-            type: string
-          service_type:
-            type: array
-            items:
-              $ref: '#/components/schemas/AgencyServicesTypeResource'
-        type: object
+    AgencyServiceUpdateRequest:
+      properties:
+        name:
+          type: string
+          example: Type 1
+        service_type_id:
+          type: integer
+          example: '1'
+      type: object
     AgencyServicesResource:
       properties:
         id:
@@ -144,16 +140,20 @@ components:
           items:
             $ref: '#/components/schemas/AgencyServicesTypeResource'
       type: object
+    AgencyServicesIndexResource:
+      type: array
+      items:
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+          service_type:
+            type: array
+            items:
+              $ref: '#/components/schemas/AgencyServicesTypeResource'
+        type: object
     AgencyServiceCreateRequest:
-      properties:
-        name:
-          type: string
-          example: Type 1
-        service_type_id:
-          type: integer
-          example: '1'
-      type: object
-    AgencyServiceUpdateRequest:
       properties:
         name:
           type: string

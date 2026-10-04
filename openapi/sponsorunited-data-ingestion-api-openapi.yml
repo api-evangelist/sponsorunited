@@ -208,6 +208,51 @@ paths:
       - apiKey: []
 components:
   schemas:
+    IngestionTaskResource:
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        task_type:
+          type: string
+        status:
+          type: string
+        ingestion_task_id:
+          type:
+          - string
+          - 'null'
+        task_options:
+          type:
+          - object
+          - 'null'
+        result_payload:
+          type:
+          - object
+          - 'null'
+        error_code:
+          type:
+          - string
+          - 'null'
+        error_message:
+          type:
+          - string
+          - 'null'
+        completed_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        created_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        updated_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      type: object
     IngestionWebhookRequest:
       required:
       - request_id
@@ -257,51 +302,6 @@ components:
             message:
               type: string
           type: object
-      type: object
-    IngestionTaskResource:
-      properties:
-        uuid:
-          type: string
-          format: uuid
-        task_type:
-          type: string
-        status:
-          type: string
-        ingestion_task_id:
-          type:
-          - string
-          - 'null'
-        task_options:
-          type:
-          - object
-          - 'null'
-        result_payload:
-          type:
-          - object
-          - 'null'
-        error_code:
-          type:
-          - string
-          - 'null'
-        error_message:
-          type:
-          - string
-          - 'null'
-        completed_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        created_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        updated_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
       type: object
     IngestionJobResource:
       properties:

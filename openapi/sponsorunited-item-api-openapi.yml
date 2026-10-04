@@ -357,87 +357,6 @@ components:
           type: string
           format: date-time
       type: object
-    AssetResource:
-      properties:
-        id:
-          description: Asset ID
-          type: integer
-        name:
-          description: Asset name
-          type: string
-        description:
-          description: Asset description
-          type:
-          - string
-          - 'null'
-        default_rank:
-          description: Default rank for the asset
-          type: integer
-        item_platform_id:
-          description: Platform ID
-          type: integer
-        item_subplatform_id:
-          description: Subplatform ID
-          type: integer
-        item_grouping_id:
-          description: Grouping ID
-          type: integer
-        hasFrequency:
-          description: Whether the asset has frequency
-          type: boolean
-        hasDescription:
-          description: Whether the asset has description
-          type: boolean
-        hasImages:
-          description: Whether the asset has images
-          type: boolean
-        hasVideos:
-          description: Whether the asset has videos
-          type: boolean
-        hasSocialMediaValue:
-          description: Whether the asset has social media value
-          type: boolean
-        hasAmount:
-          description: Whether the asset has amount
-          type: boolean
-        is_premium:
-          description: Whether the asset is premium
-          type: boolean
-        isSponsor:
-          description: Whether the asset is sponsor
-          type: boolean
-        isTv:
-          description: Whether the asset is TV
-          type: boolean
-        isRadio:
-          description: Whether the asset is radio
-          type: boolean
-        isVendor:
-          description: Whether the asset is vendor
-          type: boolean
-        isSocial:
-          description: Whether the asset is social
-          type: boolean
-        isDigital:
-          description: Whether the asset is digital
-          type: boolean
-        isPrint:
-          description: Whether the asset is print
-          type: boolean
-        isOutOfHome:
-          description: Whether the asset is out of home
-          type: boolean
-        definition:
-          description: Asset definition name
-          type:
-          - string
-          - 'null'
-        synonyms:
-          description: Array of synonym strings
-          type: array
-          items:
-            type: string
-      type: object
     AssetStoreUpdateRequest:
       required:
       - name
@@ -531,6 +450,87 @@ components:
         season:
           description: Season year the assets are requested for. When given, each property's enabled assets are resolved from the league it belonged to in that season instead of its current league.
           type: integer
+      type: object
+    AssetResource:
+      properties:
+        id:
+          description: Asset ID
+          type: integer
+        name:
+          description: Asset name
+          type: string
+        description:
+          description: Asset description
+          type:
+          - string
+          - 'null'
+        default_rank:
+          description: Default rank for the asset
+          type: integer
+        item_platform_id:
+          description: Platform ID
+          type: integer
+        item_subplatform_id:
+          description: Subplatform ID
+          type: integer
+        item_grouping_id:
+          description: Grouping ID
+          type: integer
+        hasFrequency:
+          description: Whether the asset has frequency
+          type: boolean
+        hasDescription:
+          description: Whether the asset has description
+          type: boolean
+        hasImages:
+          description: Whether the asset has images
+          type: boolean
+        hasVideos:
+          description: Whether the asset has videos
+          type: boolean
+        hasSocialMediaValue:
+          description: Whether the asset has social media value
+          type: boolean
+        hasAmount:
+          description: Whether the asset has amount
+          type: boolean
+        is_premium:
+          description: Whether the asset is premium
+          type: boolean
+        isSponsor:
+          description: Whether the asset is sponsor
+          type: boolean
+        isTv:
+          description: Whether the asset is TV
+          type: boolean
+        isRadio:
+          description: Whether the asset is radio
+          type: boolean
+        isVendor:
+          description: Whether the asset is vendor
+          type: boolean
+        isSocial:
+          description: Whether the asset is social
+          type: boolean
+        isDigital:
+          description: Whether the asset is digital
+          type: boolean
+        isPrint:
+          description: Whether the asset is print
+          type: boolean
+        isOutOfHome:
+          description: Whether the asset is out of home
+          type: boolean
+        definition:
+          description: Asset definition name
+          type:
+          - string
+          - 'null'
+        synonyms:
+          description: Array of synonym strings
+          type: array
+          items:
+            type: string
       type: object
   securitySchemes:
     bearerAuth:

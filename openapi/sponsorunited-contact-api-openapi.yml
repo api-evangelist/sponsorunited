@@ -759,220 +759,225 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    ContactEmailStatusFileResource:
-      type: array
-      items:
-        properties:
-          email:
-            type: string
-          email_status:
-            type: string
-        type: object
-    AsyncEmployeeFilteringResource:
-      title: AsyncEmployeeFilteringResource
-      description: Response when AI filtering is being processed asynchronously (HTTP 202 Accepted)
+    ContactLinkedinScrapedDataResource:
+      title: ContactLinkedinScrapedDataResource
+      required:
+      - name
+      - position
+      - profile_picture
+      - location
+      - linkedin
+      - twitter
+      - work_phone
+      - email
+      - email_status
+      - linkedin_data
       properties:
-        entity_type:
-          description: Type of entity
+        name:
           type: string
-          example: agency
-        entity_id:
-          description: ID of the entity
-          type: integer
-          example: 123
-        new_employees_pending:
-          description: Number of new employees pending AI filtering
-          type: integer
-          example: 10
-        employees:
-          description: Employees that already exist in the system (returned immediately)
+          example: John Doe
+        position:
+          type: string
+          example: Software Engineer
+        company_name:
+          type: string
+          example: Company Inc.
+        company_url:
+          type: string
+          example: https://company.com
+        profile_picture:
+          type: string
+          example: https://image.com/johndoe.jpg
+        location:
+          type: string
+          example: New York, USA
+        linkedin:
+          type: string
+          example: https://www.linkedin.com/in/johndoe/
+        twitter:
+          type: string
+          example: https://twitter.com/johndoe/
+        work_phone:
+          type: string
+          example: '+1234567890'
+        email:
+          type: string
+          example: john.doe@email.com
+        email_status:
+          type: string
+          example: valid
+        current_jobs:
           type: array
           items:
             properties:
-              profile_url:
+              companyUrl:
                 type: string
-                example: https://www.linkedin.com/in/johndoe/
-              full_name:
+                example: https://www.linkedin.com/company/123456/
+              companyName:
                 type: string
-                example: John Doe
-              profile_image_url:
-                type:
-                - string
-                - 'null'
-              department:
-                type:
-                - string
-                - 'null'
-              existing_contact_url:
-                type:
-                - string
-                - 'null'
+                example: Company Inc.
+              logoUrl:
+                type: string
+                example: https://image.com/company.jpg
+              jobTitle:
+                type: string
+                example: Software Engineer
+              dateRange:
+                type: string
+                example: Aug 2022 - Present
+              startedSince:
+                type: string
+                example: '2022-08-01'
+              isCurrent:
+                type: boolean
+                example: true
+              duration:
+                type: string
+                example: 1 yr 8 mos
+              description:
+                type: string
+              location:
+                type: string
+                example: New York, USA
             type: object
-        message:
-          description: Message informing user about async processing
-          type: string
-          example: AI filtering is taking longer than expected. You will be notified when processing completes.
+        linkedin_data:
+          description: Data fetched from Linkedin, with jobs, schools, skills, general data etc.
+          type: array
+          items:
+            type: string
       type: object
+    ContactEmailStatusFileMetadataResource:
+      properties:
+        users:
+          type: array
+          items:
+            allOf:
+            - properties:
+                id:
+                  type: integer
+                text:
+                  type: string
+              type: object
+      type: object
+    ContactCreateSaleRequest:
+      required:
+      - person_profile_ids
+      - sale_list_id
+      properties:
+        person_profile_ids:
+          type: array
+          items:
+            type: integer
+        sale_list_id:
+          type: integer
+        source_entity_type:
+          type:
+          - string
+          - 'null'
+          enum:
+          - brand
+          - property
+          - agency
+      type: object
+    ContactSearchByEmailResource:
+      type: array
+      items:
+        allOf:
+        - anyOf:
+          - $ref: '#/components/schemas/AgencyContact'
+          - $ref: '#/components/schemas/PropertyContact'
+          - $ref: '#/components/schemas/BrandContact'
+        - properties:
+            contact_type:
+              type: string
+            related_entity_id:
+              type: integer
+            related_entity_name:
+              type: string
+            related_entity_logo:
+              type: string
+          type: object
+    SaleContactIndexResource:
+      type: array
+      items:
+        properties:
+          id:
+            type: integer
+          sale_id:
+            type: integer
+          company_id:
+            type: integer
+          name:
+            type: string
+          position:
+            type: string
+          suggested:
+            type: integer
+          previous_suggested:
+            type: integer
+          approved:
+            type: boolean
+          notes:
+            type: string
+          birthday:
+            type: string
+            deprecated: true
+          profile_picture:
+            type: string
+          work_phone:
+            type: string
+          work_phone_ext:
+            type: string
+          email:
+            type: string
+          previous_email_status:
+            type: string
+          previous_email_status_updated_at:
+            type: string
+            format: date-time
+          email_status:
+            type: string
+          email_status_updated_at:
+            type: string
+            format: date-time
+          mail_code:
+            type: string
+          linkedin:
+            description: Linkedin profile url
+            type: string
+          facebook:
+            description: Facebook profile url
+            type: string
+          twitter:
+            description: Twitter profile url
+            type: string
+          instagram:
+            description: Instagram profile url
+            type: string
+          synopsys:
+            type: string
+            deprecated: true
+          contact_status_id:
+            type: integer
+          created_at:
+            type: string
+            format: date-time
+          updated_at:
+            type: string
+            format: date-time
+          deleted_at:
+            type: string
+            format: date-time
+          linkedin_data:
+            $ref: '#/components/schemas/ContactLinkedinData'
+        type: object
+      allOf:
+      - $ref: '#/components/schemas/PropertyContact'
     PropertyContactIndexResource:
       type: array
       items: {}
       allOf:
       - $ref: '#/components/schemas/PropertyContact'
-    SaleContactShowStoreUpdateResource:
-      properties:
-        id:
-          type: integer
-        sale_id:
-          type: integer
-        company_id:
-          type: integer
-        contact_status_id:
-          type: integer
-        name:
-          type: string
-        position:
-          type: string
-        suggested:
-          type: integer
-        previous_suggested:
-          type: integer
-        approved:
-          type: boolean
-        notes:
-          type: string
-        birthday:
-          type: string
-          deprecated: true
-        profile_picture:
-          type: string
-        work_phone:
-          type: string
-        work_phone_ext:
-          type: string
-        email:
-          type: string
-        previous_email_status:
-          type: string
-        previous_email_status_updated_at:
-          type: string
-          format: date-time
-        email_status:
-          type: string
-        email_status_updated_at:
-          type: string
-          format: date-time
-        mail_code:
-          type: string
-        linkedin:
-          description: Linkedin profile url
-          type: string
-        facebook:
-          description: Facebook profile url
-          type: string
-        twitter:
-          description: Twitter profile url
-          type: string
-        instagram:
-          description: Instagram profile url
-          type: string
-        synopsys:
-          type: string
-          deprecated: true
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-        linkedin_data:
-          $ref: '#/components/schemas/ContactLinkedinData'
-      type: object
-    BrandContactShowStoreUpdateResource:
-      properties:
-        id:
-          type: integer
-        company_id:
-          type: integer
-        name:
-          type: string
-        position:
-          type: string
-        suggested:
-          type: integer
-        previous_suggested:
-          type: integer
-        approved:
-          type: boolean
-        notes:
-          type: string
-        birthday:
-          type: string
-          deprecated: true
-        profile_picture:
-          type: string
-        work_phone:
-          type: string
-        work_phone_ext:
-          type: string
-        email:
-          type: string
-        previous_email_status:
-          type: string
-        previous_email_status_updated_at:
-          type: string
-          format: date-time
-        email_status:
-          type: string
-        email_status_updated_at:
-          type: string
-          format: date-time
-        mail_code:
-          type: string
-        linkedin:
-          description: Linkedin profile url
-          type: string
-        facebook:
-          description: Facebook profile url
-          type: string
-        twitter:
-          description: Twitter profile url
-          type: string
-        instagram:
-          description: Instagram profile url
-          type: string
-        synopsys:
-          type: string
-          deprecated: true
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-        tasks:
-          type: array
-          items:
-            properties:
-              id:
-                type: integer
-              url:
-                type: string
-            type: object
-        linkedin_data:
-          $ref: '#/components/schemas/ContactLinkedinData'
-      type: object
-    ErrorResource:
-      properties:
-        error:
-          type: string
-          example: An error occurred
-      type: object
     PropertyContact:
       properties:
         id:
@@ -1065,148 +1070,132 @@ components:
                   type: object
             type: object
       type: object
-    ContactCreateSaleRequest:
-      required:
-      - person_profile_ids
-      - sale_list_id
+    BrandContactIndexResource:
+      type: array
+      items: {}
+      allOf:
+      - $ref: '#/components/schemas/PropertyContact'
+    LinkedinEmployeeSearchResource:
+      title: LinkedinEmployeeSearchResource
+      description: LinkedIn employee search results with contact links, including both new and existing employees
       properties:
-        person_profile_ids:
+        employees:
+          description: Array of employees found in the search
           type: array
           items:
-            type: integer
-        sale_list_id:
-          type: integer
-        source_entity_type:
-          type:
-          - string
-          - 'null'
-          enum:
-          - brand
-          - property
-          - agency
+            required:
+            - profile_url
+            - full_name
+            properties:
+              profile_url:
+                description: LinkedIn profile URL
+                type: string
+                example: https://www.linkedin.com/in/johndoe/
+              full_name:
+                description: Full name of the employee
+                type: string
+                example: John Doe
+              profile_image_url:
+                description: Profile image URL
+                type:
+                - string
+                - 'null'
+                example: https://media.licdn.com/profile.jpg
+              department:
+                description: Department of the employee (only for new employees filtered by AI)
+                type:
+                - string
+                - 'null'
+                example: Accounting
+              existing_contact_url:
+                description: Frontend URL to view the existing contact for THIS entity (only if contact is linked to the current entity)
+                type:
+                - string
+                - 'null'
+                example: http://localhost:4200/profile/property/1032?highlight=27901
+            type: object
+        message:
+          description: Message informing the user how many new profiles are being processed and that they will receive a notification when complete
+          type: string
+          example: The number of new profiles being processed is 3. You will receive a notification when completed.
       type: object
-    ContactLinkedinScrapedDataResource:
-      title: ContactLinkedinScrapedDataResource
-      required:
-      - name
-      - position
-      - profile_picture
-      - location
-      - linkedin
-      - twitter
-      - work_phone
-      - email
-      - email_status
-      - linkedin_data
+    BrandContactShowStoreUpdateResource:
       properties:
+        id:
+          type: integer
+        company_id:
+          type: integer
         name:
           type: string
-          example: John Doe
         position:
           type: string
-          example: Software Engineer
-        company_name:
+        suggested:
+          type: integer
+        previous_suggested:
+          type: integer
+        approved:
+          type: boolean
+        notes:
           type: string
-          example: Company Inc.
-        company_url:
+        birthday:
           type: string
-          example: https://company.com
+          deprecated: true
         profile_picture:
           type: string
-          example: https://image.com/johndoe.jpg
-        location:
-          type: string
-          example: New York, USA
-        linkedin:
-          type: string
-          example: https://www.linkedin.com/in/johndoe/
-        twitter:
-          type: string
-          example: https://twitter.com/johndoe/
         work_phone:
           type: string
-          example: '+1234567890'
+        work_phone_ext:
+          type: string
         email:
           type: string
-          example: john.doe@email.com
+        previous_email_status:
+          type: string
+        previous_email_status_updated_at:
+          type: string
+          format: date-time
         email_status:
           type: string
-          example: valid
-        current_jobs:
+        email_status_updated_at:
+          type: string
+          format: date-time
+        mail_code:
+          type: string
+        linkedin:
+          description: Linkedin profile url
+          type: string
+        facebook:
+          description: Facebook profile url
+          type: string
+        twitter:
+          description: Twitter profile url
+          type: string
+        instagram:
+          description: Instagram profile url
+          type: string
+        synopsys:
+          type: string
+          deprecated: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+        tasks:
           type: array
           items:
             properties:
-              companyUrl:
+              id:
+                type: integer
+              url:
                 type: string
-                example: https://www.linkedin.com/company/123456/
-              companyName:
-                type: string
-                example: Company Inc.
-              logoUrl:
-                type: string
-                example: https://image.com/company.jpg
-              jobTitle:
-                type: string
-                example: Software Engineer
-              dateRange:
-                type: string
-                example: Aug 2022 - Present
-              startedSince:
-                type: string
-                example: '2022-08-01'
-              isCurrent:
-                type: boolean
-                example: true
-              duration:
-                type: string
-                example: 1 yr 8 mos
-              description:
-                type: string
-              location:
-                type: string
-                example: New York, USA
             type: object
         linkedin_data:
-          description: Data fetched from Linkedin, with jobs, schools, skills, general data etc.
-          type: array
-          items:
-            type: string
+          $ref: '#/components/schemas/ContactLinkedinData'
       type: object
-    ContactIndexRequest:
-      properties:
-        brands:
-          type: boolean
-      type: object
-    ContactLinkedinScrapeShowRequest:
-      title: ContactLinkedinScrapeShowRequest
-      required:
-      - urls
-      properties:
-        urls:
-          type: array
-          items:
-            type: string
-          maxItems: 10
-          minItems: 1
-      type: object
-    ContactSearchByEmailResource:
-      type: array
-      items:
-        allOf:
-        - anyOf:
-          - $ref: '#/components/schemas/AgencyContact'
-          - $ref: '#/components/schemas/PropertyContact'
-          - $ref: '#/components/schemas/BrandContact'
-        - properties:
-            contact_type:
-              type: string
-            related_entity_id:
-              type: integer
-            related_entity_name:
-              type: string
-            related_entity_logo:
-              type: string
-          type: object
     AgencyContactShowStoreUpdateResource:
       properties:
         id:
@@ -1299,51 +1288,6 @@ components:
         linkedin_data:
           $ref: '#/components/schemas/ContactLinkedinData'
       type: object
-    ContactEmailStatusFileMetadataResource:
-      properties:
-        users:
-          type: array
-          items:
-            allOf:
-            - properties:
-                id:
-                  type: integer
-                text:
-                  type: string
-              type: object
-      type: object
-    UpdateContactEmailStatusRequest:
-      required:
-      - id
-      - email_status
-      - email_status_updated
-      properties:
-        id:
-          type: integer
-        email_status:
-          type: string
-        email_status_updated:
-          type: boolean
-      type: object
-    ContactLinkedinData:
-      properties:
-        id:
-          type: integer
-        person_profile_id:
-          type: integer
-        type:
-          type: string
-          example: agency|company|property
-        data:
-          description: JSON data fetched from Linkedin, with jobs, schools, skills, general data etc.
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
     ReportBadEmailRequest:
       required:
       - person_profile_id
@@ -1363,6 +1307,154 @@ components:
           - agency
           - brand
           - property
+      type: object
+    ContactSearchByEmailRequest:
+      properties:
+        email:
+          type: string
+        should_skip_sale_contacts:
+          type: boolean
+      type: object
+    UpdateContactRequest:
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        companies:
+          description: Only for Agency contacts. An array with companies associated with the agency contact.
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+            type: object
+        properties:
+          description: Only for Agency contacts. An array with properties associated with the agency contact.
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+            type: object
+        position:
+          type: string
+        profile_picture:
+          type: string
+        work_phone:
+          type: string
+        work_phone_ext:
+          type: string
+        email_status:
+          type: string
+        email_status_updated:
+          type: boolean
+        manual_email_status:
+          type: string
+        manual_email_status_updated_at:
+          type: string
+          format: date-time
+        linkedin:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        notes:
+          type: string
+        suggested:
+          type: boolean
+        previous_suggested:
+          type: boolean
+        linkedin_data:
+          type: object
+        contact_status_id:
+          type: integer
+      type: object
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
+      type: object
+    SaleContactShowStoreUpdateResource:
+      properties:
+        id:
+          type: integer
+        sale_id:
+          type: integer
+        company_id:
+          type: integer
+        contact_status_id:
+          type: integer
+        name:
+          type: string
+        position:
+          type: string
+        suggested:
+          type: integer
+        previous_suggested:
+          type: integer
+        approved:
+          type: boolean
+        notes:
+          type: string
+        birthday:
+          type: string
+          deprecated: true
+        profile_picture:
+          type: string
+        work_phone:
+          type: string
+        work_phone_ext:
+          type: string
+        email:
+          type: string
+        previous_email_status:
+          type: string
+        previous_email_status_updated_at:
+          type: string
+          format: date-time
+        email_status:
+          type: string
+        email_status_updated_at:
+          type: string
+          format: date-time
+        mail_code:
+          type: string
+        linkedin:
+          description: Linkedin profile url
+          type: string
+        facebook:
+          description: Facebook profile url
+          type: string
+        twitter:
+          description: Twitter profile url
+          type: string
+        instagram:
+          description: Instagram profile url
+          type: string
+        synopsys:
+          type: string
+          deprecated: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+        linkedin_data:
+          $ref: '#/components/schemas/ContactLinkedinData'
       type: object
     AgencyContact:
       properties:
@@ -1456,12 +1548,17 @@ components:
         linkedin_data:
           $ref: '#/components/schemas/ContactLinkedinData'
       type: object
-    ContactSearchByEmailRequest:
+    ContactLinkedinScrapeShowRequest:
+      title: ContactLinkedinScrapeShowRequest
+      required:
+      - urls
       properties:
-        email:
-          type: string
-        should_skip_sale_contacts:
-          type: boolean
+        urls:
+          type: array
+          items:
+            type: string
+          maxItems: 10
+          minItems: 1
       type: object
     ContactEmailStatusFileIndexResource:
       type: array
@@ -1476,318 +1573,6 @@ components:
           created_at:
             type: string
         type: object
-    BadEmailReportResource:
-      properties:
-        id:
-          type: integer
-        contact_id:
-          type: integer
-        status:
-          type: string
-        reported_email:
-          type: string
-        resolved_email:
-          type:
-          - string
-          - 'null'
-        resolved_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        created_at:
-          type: string
-          format: date-time
-      type: object
-    ContactDeleteSaleRequest:
-      required:
-      - sale_list_id
-      properties:
-        sale_list_id:
-          type: integer
-        person_profile_ids:
-          description: Explicit person_profile IDs to remove. Mutually exclusive with excluded_person_profile_ids.
-          type: array
-          items:
-            type: integer
-        excluded_person_profile_ids:
-          description: Remove every contact on the list except these. Mutually exclusive with person_profile_ids.
-          type: array
-          items:
-            type: integer
-      type: object
-    PropertyContactShowStoreUpdateResource:
-      properties:
-        id:
-          type: integer
-        team_id:
-          type: integer
-        name:
-          type: string
-        position:
-          type: string
-        suggested:
-          type: integer
-        previous_suggested:
-          type: integer
-        approved:
-          type: boolean
-        notes:
-          type: string
-        birthday:
-          type: string
-          deprecated: true
-        profile_picture:
-          type: string
-        work_phone:
-          type: string
-        work_phone_ext:
-          type: string
-        email:
-          type: string
-        previous_email_status:
-          type: string
-        previous_email_status_updated_at:
-          type: string
-          format: date-time
-        email_status:
-          type: string
-        email_status_updated_at:
-          type: string
-          format: date-time
-        mail_code:
-          type: string
-        linkedin:
-          description: Linkedin profile url
-          type: string
-        facebook:
-          description: Facebook profile url
-          type: string
-        twitter:
-          description: Twitter profile url
-          type: string
-        instagram:
-          description: Instagram profile url
-          type: string
-        synopsys:
-          type: string
-          deprecated: true
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-        tasks:
-          type: array
-          items:
-            properties:
-              id:
-                type: integer
-              url:
-                type: string
-            type: object
-        linkedin_data:
-          $ref: '#/components/schemas/ContactLinkedinData'
-      type: object
-    SaleContactIndexResource:
-      type: array
-      items:
-        properties:
-          id:
-            type: integer
-          sale_id:
-            type: integer
-          company_id:
-            type: integer
-          name:
-            type: string
-          position:
-            type: string
-          suggested:
-            type: integer
-          previous_suggested:
-            type: integer
-          approved:
-            type: boolean
-          notes:
-            type: string
-          birthday:
-            type: string
-            deprecated: true
-          profile_picture:
-            type: string
-          work_phone:
-            type: string
-          work_phone_ext:
-            type: string
-          email:
-            type: string
-          previous_email_status:
-            type: string
-          previous_email_status_updated_at:
-            type: string
-            format: date-time
-          email_status:
-            type: string
-          email_status_updated_at:
-            type: string
-            format: date-time
-          mail_code:
-            type: string
-          linkedin:
-            description: Linkedin profile url
-            type: string
-          facebook:
-            description: Facebook profile url
-            type: string
-          twitter:
-            description: Twitter profile url
-            type: string
-          instagram:
-            description: Instagram profile url
-            type: string
-          synopsys:
-            type: string
-            deprecated: true
-          contact_status_id:
-            type: integer
-          created_at:
-            type: string
-            format: date-time
-          updated_at:
-            type: string
-            format: date-time
-          deleted_at:
-            type: string
-            format: date-time
-          linkedin_data:
-            $ref: '#/components/schemas/ContactLinkedinData'
-        type: object
-      allOf:
-      - $ref: '#/components/schemas/PropertyContact'
-    BrandContactIndexResource:
-      type: array
-      items: {}
-      allOf:
-      - $ref: '#/components/schemas/PropertyContact'
-    StoreContactRequest:
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        email:
-          type: string
-          format: email
-        companies:
-          description: Only for Agency contacts. An array with companies associated with the agency contact.
-          type: array
-          items:
-            properties:
-              id:
-                type: integer
-              name:
-                type: string
-            type: object
-        properties:
-          description: Only for Agency contacts. An array with properties associated with the agency contact.
-          type: array
-          items:
-            properties:
-              id:
-                type: integer
-              name:
-                type: string
-            type: object
-        position:
-          type: string
-        profile_picture:
-          type: string
-        work_phone:
-          type: string
-        work_phone_ext:
-          type: string
-        email_status:
-          type: string
-        email_status_updated:
-          type: boolean
-        manual_email_status:
-          type: string
-        manual_email_status_updated_at:
-          type: string
-          format: date-time
-        linkedin:
-          type: string
-        facebook:
-          type: string
-        twitter:
-          type: string
-        instagram:
-          type: string
-        notes:
-          type: string
-        suggested:
-          type: boolean
-        previous_suggested:
-          type: boolean
-        linkedin_data:
-          type: object
-        contact_status_id:
-          type: integer
-      type: object
-    LinkedinEmployeeSearchResource:
-      title: LinkedinEmployeeSearchResource
-      description: LinkedIn employee search results with contact links, including both new and existing employees
-      properties:
-        employees:
-          description: Array of employees found in the search
-          type: array
-          items:
-            required:
-            - profile_url
-            - full_name
-            properties:
-              profile_url:
-                description: LinkedIn profile URL
-                type: string
-                example: https://www.linkedin.com/in/johndoe/
-              full_name:
-                description: Full name of the employee
-                type: string
-                example: John Doe
-              profile_image_url:
-                description: Profile image URL
-                type:
-                - string
-                - 'null'
-                example: https://media.licdn.com/profile.jpg
-              department:
-                description: Department of the employee (only for new employees filtered by AI)
-                type:
-                - string
-                - 'null'
-                example: Accounting
-              existing_contact_url:
-                description: Frontend URL to view the existing contact for THIS entity (only if contact is linked to the current entity)
-                type:
-                - string
-                - 'null'
-                example: http://localhost:4200/profile/property/1032?highlight=27901
-            type: object
-        message:
-          description: Message informing the user how many new profiles are being processed and that they will receive a notification when complete
-          type: string
-          example: The number of new profiles being processed is 3. You will receive a notification when completed.
-      type: object
-    AgencyContactIndexResource:
-      type: array
-      items: {}
-      allOf:
-      - $ref: '#/components/schemas/PropertyContact'
     BrandContact:
       properties:
         id:
@@ -1889,7 +1674,127 @@ components:
                   type: object
             type: object
       type: object
-    UpdateContactRequest:
+    ContactIndexRequest:
+      properties:
+        brands:
+          type: boolean
+      type: object
+    PropertyContactShowStoreUpdateResource:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        position:
+          type: string
+        suggested:
+          type: integer
+        previous_suggested:
+          type: integer
+        approved:
+          type: boolean
+        notes:
+          type: string
+        birthday:
+          type: string
+          deprecated: true
+        profile_picture:
+          type: string
+        work_phone:
+          type: string
+        work_phone_ext:
+          type: string
+        email:
+          type: string
+        previous_email_status:
+          type: string
+        previous_email_status_updated_at:
+          type: string
+          format: date-time
+        email_status:
+          type: string
+        email_status_updated_at:
+          type: string
+          format: date-time
+        mail_code:
+          type: string
+        linkedin:
+          description: Linkedin profile url
+          type: string
+        facebook:
+          description: Facebook profile url
+          type: string
+        twitter:
+          description: Twitter profile url
+          type: string
+        instagram:
+          description: Instagram profile url
+          type: string
+        synopsys:
+          type: string
+          deprecated: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+        tasks:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              url:
+                type: string
+            type: object
+        linkedin_data:
+          $ref: '#/components/schemas/ContactLinkedinData'
+      type: object
+    ContactDeleteSaleRequest:
+      required:
+      - sale_list_id
+      properties:
+        sale_list_id:
+          type: integer
+        person_profile_ids:
+          description: Explicit person_profile IDs to remove. Mutually exclusive with excluded_person_profile_ids.
+          type: array
+          items:
+            type: integer
+        excluded_person_profile_ids:
+          description: Remove every contact on the list except these. Mutually exclusive with person_profile_ids.
+          type: array
+          items:
+            type: integer
+      type: object
+    ContactLinkedinData:
+      properties:
+        id:
+          type: integer
+        person_profile_id:
+          type: integer
+        type:
+          type: string
+          example: agency|company|property
+        data:
+          description: JSON data fetched from Linkedin, with jobs, schools, skills, general data etc.
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    StoreContactRequest:
+      required:
+      - name
       properties:
         name:
           type: string
@@ -1952,6 +1857,11 @@ components:
         contact_status_id:
           type: integer
       type: object
+    AgencyContactIndexResource:
+      type: array
+      items: {}
+      allOf:
+      - $ref: '#/components/schemas/PropertyContact'
     ContactInformationCheckResource:
       oneOf:
       - required:
@@ -2005,12 +1915,6 @@ components:
                   example: 01HXYZ1234567890
               type: object
         type: object
-    ContactEmailStatusFileRequest:
-      properties:
-        email_statuses:
-          type: string
-          format: binary
-      type: object
     ContactSearchBySchoolRequest:
       properties:
         contact_type:
@@ -2018,17 +1922,113 @@ components:
         school_name:
           type: string
       type: object
+    AsyncEmployeeFilteringResource:
+      title: AsyncEmployeeFilteringResource
+      description: Response when AI filtering is being processed asynchronously (HTTP 202 Accepted)
+      properties:
+        entity_type:
+          description: Type of entity
+          type: string
+          example: agency
+        entity_id:
+          description: ID of the entity
+          type: integer
+          example: 123
+        new_employees_pending:
+          description: Number of new employees pending AI filtering
+          type: integer
+          example: 10
+        employees:
+          description: Employees that already exist in the system (returned immediately)
+          type: array
+          items:
+            properties:
+              profile_url:
+                type: string
+                example: https://www.linkedin.com/in/johndoe/
+              full_name:
+                type: string
+                example: John Doe
+              profile_image_url:
+                type:
+                - string
+                - 'null'
+              department:
+                type:
+                - string
+                - 'null'
+              existing_contact_url:
+                type:
+                - string
+                - 'null'
+            type: object
+        message:
+          description: Message informing user about async processing
+          type: string
+          example: AI filtering is taking longer than expected. You will be notified when processing completes.
+      type: object
+    UpdateContactEmailStatusRequest:
+      required:
+      - id
+      - email_status
+      - email_status_updated
+      properties:
+        id:
+          type: integer
+        email_status:
+          type: string
+        email_status_updated:
+          type: boolean
+      type: object
+    ContactEmailStatusFileRequest:
+      properties:
+        email_statuses:
+          type: string
+          format: binary
+      type: object
+    BadEmailReportResource:
+      properties:
+        id:
+          type: integer
+        contact_id:
+          type: integer
+        status:
+          type: string
+        reported_email:
+          type: string
+        resolved_email:
+          type:
+          - string
+          - 'null'
+        resolved_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+      type: object
+    ContactEmailStatusFileResource:
+      type: array
+      items:
+        properties:
+          email:
+            type: string
+          email_status:
+            type: string
+        type: object
   parameters:
-    ContactEmailStatusFileIndexRequest-order-direction:
-      name: order
-      in: query
-      schema:
-        type: string
     ContactEmailStatusFileIndexRequest-page:
       name: page
       in: query
       schema:
         type: integer
+    ContactEmailStatusFileIndexRequest-order-direction:
+      name: order
+      in: query
+      schema:
+        type: string
     ContactEmailStatusFileIndexRequest-order-by:
       name: order_by
       in: query

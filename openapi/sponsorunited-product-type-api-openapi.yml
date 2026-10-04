@@ -34,6 +34,13 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    ProductType:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
     OrganizationType:
       properties:
         id:
@@ -46,13 +53,6 @@ components:
           type: boolean
         agencies:
           type: boolean
-      type: object
-    ProductType:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
       type: object
   securitySchemes:
     bearerAuth:

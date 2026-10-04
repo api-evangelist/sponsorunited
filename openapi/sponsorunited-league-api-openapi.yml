@@ -1082,39 +1082,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    LeagueUpdateSocialScrapingSettingsRequest:
-      properties:
-        twitter:
-          oneOf:
-          - $ref: '#/components/schemas/LeagueSocialScrapingPlatformSettings'
-        facebook:
-          oneOf:
-          - $ref: '#/components/schemas/LeagueSocialScrapingPlatformSettings'
-        instagram:
-          oneOf:
-          - $ref: '#/components/schemas/LeagueSocialScrapingPlatformSettings'
-        tiktok:
-          oneOf:
-          - $ref: '#/components/schemas/LeagueSocialScrapingPlatformSettings'
-      type: object
-    LeagueSocialScrapingPlatformSettings:
-      properties:
-        enabled:
-          description: Whether scraping is enabled for the platform.
-          type: boolean
-        frequency_value:
-          description: How often to scrape, paired with frequency_unit.
-          type: integer
-        frequency_unit:
-          description: Unit for the scraping frequency.
-          type: string
-        week_day:
-          description: Day of week scraping runs on.
-          type: string
-        end_day_offset:
-          description: Offset, in days, applied to the scraping window end.
-          type: integer
-      type: object
     LeagueStoreRequest:
       properties:
         name:
@@ -1224,6 +1191,39 @@ components:
           - string
           - 'null'
           maxLength: 255
+      type: object
+    LeagueUpdateSocialScrapingSettingsRequest:
+      properties:
+        twitter:
+          oneOf:
+          - $ref: '#/components/schemas/LeagueSocialScrapingPlatformSettings'
+        facebook:
+          oneOf:
+          - $ref: '#/components/schemas/LeagueSocialScrapingPlatformSettings'
+        instagram:
+          oneOf:
+          - $ref: '#/components/schemas/LeagueSocialScrapingPlatformSettings'
+        tiktok:
+          oneOf:
+          - $ref: '#/components/schemas/LeagueSocialScrapingPlatformSettings'
+      type: object
+    LeagueSocialScrapingPlatformSettings:
+      properties:
+        enabled:
+          description: Whether scraping is enabled for the platform.
+          type: boolean
+        frequency_value:
+          description: How often to scrape, paired with frequency_unit.
+          type: integer
+        frequency_unit:
+          description: Unit for the scraping frequency.
+          type: string
+        week_day:
+          description: Day of week scraping runs on.
+          type: string
+        end_day_offset:
+          description: Offset, in days, applied to the scraping window end.
+          type: integer
       type: object
     LeagueUpdateRequest:
       properties:

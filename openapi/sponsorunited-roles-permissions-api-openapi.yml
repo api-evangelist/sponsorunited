@@ -143,7 +143,52 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    Role:
+    RoleStoreUpdateResource:
+      properties:
+        role:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/Role'
+          - properties:
+              permissions:
+                $ref: '#/components/schemas/PermissionsGroupedByLabel'
+            type: object
+        all_permissions:
+          $ref: '#/components/schemas/PermissionsGroupedByLabel'
+      type: object
+    PermissionsGroupedByLabel:
+      properties:
+        Label Name:
+          description: The name of the label under which several permissions are grouped.
+          type: array
+          items:
+            $ref: '#/components/schemas/Permission'
+      type: object
+    PermissionUpdateRequest:
+      properties:
+        display_name:
+          type: string
+        description:
+          type: string
+      type: object
+    PermissionShowResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    Permission:
       properties:
         id:
           type: integer
@@ -187,68 +232,6 @@ components:
         all_permissions:
           $ref: '#/components/schemas/PermissionsGroupedByLabel'
       type: object
-    Permission:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        display_name:
-          type: string
-        description:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
-    PermissionsGroupedByLabel:
-      properties:
-        Label Name:
-          description: The name of the label under which several permissions are grouped.
-          type: array
-          items:
-            $ref: '#/components/schemas/Permission'
-      type: object
-    PermissionShowResource:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        display_name:
-          type: string
-        description:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
-    PermissionUpdateRequest:
-      properties:
-        display_name:
-          type: string
-        description:
-          type: string
-      type: object
-    RoleStoreUpdateResource:
-      properties:
-        role:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/Role'
-          - properties:
-              permissions:
-                $ref: '#/components/schemas/PermissionsGroupedByLabel'
-            type: object
-        all_permissions:
-          $ref: '#/components/schemas/PermissionsGroupedByLabel'
-      type: object
     StoreRoleRequest:
       required:
       - name
@@ -265,6 +248,23 @@ components:
         role_level:
           type: integer
           example: 40
+      type: object
+    Role:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
       type: object
   securitySchemes:
     bearerAuth:

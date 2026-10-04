@@ -841,58 +841,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    League:
-      properties:
-        id:
-          type: integer
-        uuid:
-          type: string
-        genere_id:
-          type: integer
-        subgenere_id:
-          type: integer
-        label_id:
-          type: integer
-        type:
-          type: string
-        is_continuous:
-          type: integer
-        sport_id:
-          type: integer
-        owner_id:
-          type: integer
-        scouting_priority:
-          type: integer
-        platforms_scouted:
-          type: integer
-        times_scouted_per_year:
-          type: integer
-        name:
-          type: string
-        short_name:
-          type: string
-        currency:
-          type: string
-        governing_body:
-          type: string
-        grouping:
-          type: string
-        website_url:
-          type: string
-        notes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Note'
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
     PropertyResource:
       type: object
       allOf:
@@ -1012,99 +960,27 @@ components:
             items:
               $ref: '#/components/schemas/LocationResource'
         type: object
-    TeamFacebookHandle:
+    LocationResource:
       properties:
         id:
           type: integer
-        team_id:
-          type: integer
-        name:
-          type: string
-        is_main:
-          type: integer
-        followers_scraping_enabled:
-          type: integer
-      type: object
-    TeamInstagramHandle:
-      properties:
-        id:
-          type: integer
-        team_id:
-          type: integer
-        name:
-          type: string
-        is_main:
-          type: integer
-        followers_scraping_enabled:
-          type: integer
-      type: object
-    Genre:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        display_column:
-          type: string
-        display_order:
-          type: string
-        zilliz_id:
+        is_us_hq:
+          description: Omitted from the response when the owning property is an individual (athlete / influencer).
           type:
-          - integer
+          - boolean
           - 'null'
-        created_at:
+        street:
           type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
-    Sport:
-      properties:
-        id:
+        city_id:
           type: integer
-        name:
+        zip:
           type: string
-        created_at:
+        phone:
           type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-      type: object
-    LocationLabelResource:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        slug:
-          type: string
-      type: object
-    Subgenere:
-      properties:
-        id:
-          type: integer
-        genre_id:
-          type: integer
-        name:
-          type: string
-        zilliz_id:
-          type:
-          - integer
-          - 'null'
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
+        label:
+          oneOf:
+          - $ref: '#/components/schemas/LocationLabelResource'
+          description: Present only when this location is serialized in the context of an individual property; resolved from the `location_properties.label_id` pivot.
       type: object
     PropertyLightResource:
       properties:
@@ -1159,132 +1035,6 @@ components:
             $ref: '#/components/schemas/Market'
         inactive:
           type: boolean
-      type: object
-    TeamHashtag:
-      properties:
-        id:
-          type: integer
-        team_id:
-          type: integer
-        name:
-          type: string
-      type: object
-    ErrorResource:
-      properties:
-        error:
-          type: string
-          example: An error occurred
-      type: object
-    TeamTiktokHandle:
-      properties:
-        id:
-          type: integer
-        team_id:
-          type: integer
-        name:
-          type: string
-        uid:
-          type: string
-        is_main:
-          type: integer
-        followers_scraping_enabled:
-          type: integer
-      type: object
-    Company:
-      properties:
-        id:
-          type: integer
-        parent_company_id:
-          type: integer
-        subcategory_id:
-          type: integer
-        categories_id:
-          type: integer
-        name:
-          type: string
-        synopsis:
-          type: string
-        corporate_phone:
-          type: string
-        website:
-          type: string
-        linkedin:
-          type: string
-        linkedin_id_url:
-          type: string
-        linkedin_employees:
-          type: string
-        facebook:
-          type: string
-        twitter:
-          type: string
-        instagram:
-          type: string
-        twitch:
-          type: string
-        tiktok:
-          type: string
-        youtube:
-          type: string
-        exclude_from_social_scan:
-          type: boolean
-        exclude_from_transcribe:
-          type: boolean
-        feed_url:
-          type: string
-        statistics:
-          type: string
-        no_of_employees:
-          type: string
-        priority_markets:
-          type: string
-        parent_company:
-          type: string
-        ad_agency:
-          type: string
-        existing:
-          type: string
-        owned_by:
-          type: string
-        approved:
-          type: boolean
-        approved_by:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
-    Market:
-      properties:
-        id:
-          type: integer
-        country_id:
-          type: integer
-        region_id:
-          type: integer
-        subregion_id:
-          type: integer
-        name:
-          type: string
-        market_category_id:
-          type: integer
-        market_grouping_id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
       type: object
     Property:
       properties:
@@ -1372,6 +1122,244 @@ components:
           type: string
           format: date-time
       type: object
+    TeamFacebookHandle:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        is_main:
+          type: integer
+        followers_scraping_enabled:
+          type: integer
+      type: object
+    Market:
+      properties:
+        id:
+          type: integer
+        country_id:
+          type: integer
+        region_id:
+          type: integer
+        subregion_id:
+          type: integer
+        name:
+          type: string
+        market_category_id:
+          type: integer
+        market_grouping_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    TeamHashtag:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+      type: object
+    TeamInstagramHandle:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        is_main:
+          type: integer
+        followers_scraping_enabled:
+          type: integer
+      type: object
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
+      type: object
+    TeamTwitchHandle:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        is_main:
+          type: integer
+        followers_scraping_enabled:
+          type: integer
+      type: object
+    Company:
+      properties:
+        id:
+          type: integer
+        parent_company_id:
+          type: integer
+        subcategory_id:
+          type: integer
+        categories_id:
+          type: integer
+        name:
+          type: string
+        synopsis:
+          type: string
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        exclude_from_social_scan:
+          type: boolean
+        exclude_from_transcribe:
+          type: boolean
+        feed_url:
+          type: string
+        statistics:
+          type: string
+        no_of_employees:
+          type: string
+        priority_markets:
+          type: string
+        parent_company:
+          type: string
+        ad_agency:
+          type: string
+        existing:
+          type: string
+        owned_by:
+          type: string
+        approved:
+          type: boolean
+        approved_by:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    League:
+      properties:
+        id:
+          type: integer
+        uuid:
+          type: string
+        genere_id:
+          type: integer
+        subgenere_id:
+          type: integer
+        label_id:
+          type: integer
+        type:
+          type: string
+        is_continuous:
+          type: integer
+        sport_id:
+          type: integer
+        owner_id:
+          type: integer
+        scouting_priority:
+          type: integer
+        platforms_scouted:
+          type: integer
+        times_scouted_per_year:
+          type: integer
+        name:
+          type: string
+        short_name:
+          type: string
+        currency:
+          type: string
+        governing_body:
+          type: string
+        grouping:
+          type: string
+        website_url:
+          type: string
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    OrganizationSlim:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: integer
+          example: agency
+        logo:
+          type: string
+      type: object
+    Genre:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_column:
+          type: string
+        display_order:
+          type: string
+        zilliz_id:
+          type:
+          - integer
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
     Note:
       properties:
         id:
@@ -1394,39 +1382,90 @@ components:
           type: string
           format: date-time
       type: object
-    LocationResource:
-      properties:
-        id:
-          type: integer
-        is_us_hq:
-          description: Omitted from the response when the owning property is an individual (athlete / influencer).
-          type:
-          - boolean
-          - 'null'
-        street:
-          type: string
-        city_id:
-          type: integer
-        zip:
-          type: string
-        phone:
-          type: string
-        label:
-          oneOf:
-          - $ref: '#/components/schemas/LocationLabelResource'
-          description: Present only when this location is serialized in the context of an individual property; resolved from the `location_properties.label_id` pivot.
-      type: object
-    OrganizationSlim:
+    Sport:
       properties:
         id:
           type: integer
         name:
           type: string
-        type:
-          type: integer
-          example: agency
-        logo:
+        created_at:
           type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    TeamTwitterHandle:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        is_main:
+          type: integer
+        followers_scraping_enabled:
+          type: integer
+      type: object
+    TeamYoutubeHandle:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        is_main:
+          type: integer
+        followers_scraping_enabled:
+          type: integer
+      type: object
+    Subgenere:
+      properties:
+        id:
+          type: integer
+        genre_id:
+          type: integer
+        name:
+          type: string
+        zilliz_id:
+          type:
+          - integer
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    LocationLabelResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+      type: object
+    TeamTiktokHandle:
+      properties:
+        id:
+          type: integer
+        team_id:
+          type: integer
+        name:
+          type: string
+        uid:
+          type: string
+        is_main:
+          type: integer
+        followers_scraping_enabled:
+          type: integer
       type: object
     PropertyShowSocialResource:
       properties:
@@ -1548,45 +1587,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TeamYoutubeHandle'
-      type: object
-    TeamTwitterHandle:
-      properties:
-        id:
-          type: integer
-        team_id:
-          type: integer
-        name:
-          type: string
-        is_main:
-          type: integer
-        followers_scraping_enabled:
-          type: integer
-      type: object
-    TeamTwitchHandle:
-      properties:
-        id:
-          type: integer
-        team_id:
-          type: integer
-        name:
-          type: string
-        is_main:
-          type: integer
-        followers_scraping_enabled:
-          type: integer
-      type: object
-    TeamYoutubeHandle:
-      properties:
-        id:
-          type: integer
-        team_id:
-          type: integer
-        name:
-          type: string
-        is_main:
-          type: integer
-        followers_scraping_enabled:
-          type: integer
       type: object
   securitySchemes:
     bearerAuth:

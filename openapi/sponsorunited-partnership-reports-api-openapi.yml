@@ -208,55 +208,11 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    PartnershipReportWriteRequest:
-      properties:
-        title:
-          type: string
-          example: Partnership Report Title
-        description:
-          type: string
-          example: Partnership Report Description
-        report_file_id:
-          type: integer
-          example: '1'
-        report_external_url:
-          type: string
-          example: https://www.example.com
-        thumbnail_url:
-          type: string
-          example: https://www.example.com
-        resized_url:
-          type: string
-          example: https://www.example.com
-        original_url:
-          type: string
-          example: https://www.example.com
-        published_at:
-          type: string
-          example: '2021-01-01'
-        tags:
-          type: array
-          items:
-            oneOf:
-            - type: integer
-            - type: string
-          example: '[1, ''test'', 2]'
-        brands:
-          type: array
-          items:
-            type: integer
-          example: '[1,2,3]'
-        properties:
-          type: array
-          items:
-            type: integer
-          example: '[1,2,3]'
-        agencies:
-          type: array
-          items:
-            type: integer
-          example: '[1,2,3]'
-      type: object
+    PartnershipReportCollection:
+      description: List of partnership reports.
+      type: array
+      items:
+        $ref: '#/components/schemas/PartnershipReportResource'
     PartnershipReportResource:
       properties:
         id:
@@ -314,6 +270,55 @@ components:
             type: object
         file:
           $ref: '#/components/schemas/FileUploadResource'
+      type: object
+    PartnershipReportWriteRequest:
+      properties:
+        title:
+          type: string
+          example: Partnership Report Title
+        description:
+          type: string
+          example: Partnership Report Description
+        report_file_id:
+          type: integer
+          example: '1'
+        report_external_url:
+          type: string
+          example: https://www.example.com
+        thumbnail_url:
+          type: string
+          example: https://www.example.com
+        resized_url:
+          type: string
+          example: https://www.example.com
+        original_url:
+          type: string
+          example: https://www.example.com
+        published_at:
+          type: string
+          example: '2021-01-01'
+        tags:
+          type: array
+          items:
+            oneOf:
+            - type: integer
+            - type: string
+          example: '[1, ''test'', 2]'
+        brands:
+          type: array
+          items:
+            type: integer
+          example: '[1,2,3]'
+        properties:
+          type: array
+          items:
+            type: integer
+          example: '[1,2,3]'
+        agencies:
+          type: array
+          items:
+            type: integer
+          example: '[1,2,3]'
       type: object
     FileUploadResource:
       description: File upload details.
@@ -407,11 +412,6 @@ components:
               example: 100
           type: object
       type: object
-    PartnershipReportCollection:
-      description: List of partnership reports.
-      type: array
-      items:
-        $ref: '#/components/schemas/PartnershipReportResource'
   securitySchemes:
     bearerAuth:
       type: http

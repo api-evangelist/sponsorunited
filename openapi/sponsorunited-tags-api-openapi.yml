@@ -52,13 +52,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    TagIndexResource:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-      type: object
     TagUpdateRequest:
       properties:
         old_tag:
@@ -69,6 +62,13 @@ components:
     TagIndexRequest:
       properties:
         search:
+          type: string
+      type: object
+    TagIndexResource:
+      properties:
+        id:
+          type: integer
+        name:
           type: string
       type: object
     TagResource:

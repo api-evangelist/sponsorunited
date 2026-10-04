@@ -397,6 +397,49 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    SurfaceUsageRecordResource:
+      properties:
+        allowed:
+          description: Whether the user is allowed to submit the prompt
+          type: boolean
+          example: true
+        usage:
+          properties:
+            limit:
+              description: Monthly prompt limit (0 = unlimited)
+              type: integer
+              example: 500
+            used:
+              description: Prompts used this month
+              type: integer
+              example: 47
+            remaining:
+              description: Prompts remaining this month
+              type: integer
+              example: 453
+            limit_type:
+              description: Whether limit applies per user or per organization
+              type: string
+              enum:
+              - user
+              - organization
+              example: user
+            reset_date:
+              description: First day of next month when usage resets
+              type: string
+              format: date
+              example: '2026-05-01'
+            threshold_warning:
+              description: Non-null only on first crossing of 75% or 100% threshold
+              type:
+              - string
+              - 'null'
+              enum:
+              - '75'
+              - '100'
+              example: null
+          type: object
+      type: object
     SurfaceUserContextUpdateRequest:
       required:
       - context
@@ -408,12 +451,8 @@ components:
           - 'null'
           maxLength: 20000
       type: object
-    SurfaceUsageRecordResource:
+    SurfaceUsageResource:
       properties:
-        allowed:
-          description: Whether the user is allowed to submit the prompt
-          type: boolean
-          example: true
         usage:
           properties:
             limit:
@@ -461,45 +500,6 @@ components:
           - string
           - 'null'
           maxLength: 20000
-      type: object
-    SurfaceUsageResource:
-      properties:
-        usage:
-          properties:
-            limit:
-              description: Monthly prompt limit (0 = unlimited)
-              type: integer
-              example: 500
-            used:
-              description: Prompts used this month
-              type: integer
-              example: 47
-            remaining:
-              description: Prompts remaining this month
-              type: integer
-              example: 453
-            limit_type:
-              description: Whether limit applies per user or per organization
-              type: string
-              enum:
-              - user
-              - organization
-              example: user
-            reset_date:
-              description: First day of next month when usage resets
-              type: string
-              format: date
-              example: '2026-05-01'
-            threshold_warning:
-              description: Non-null only on first crossing of 75% or 100% threshold
-              type:
-              - string
-              - 'null'
-              enum:
-              - '75'
-              - '100'
-              example: null
-          type: object
       type: object
   securitySchemes:
     bearerAuth:

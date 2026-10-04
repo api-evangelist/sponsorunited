@@ -163,6 +163,186 @@ paths:
       - apiKeyAuth: []
 components:
   schemas:
+    VortexUserEventUploadsStoreRequest:
+      required:
+      - user_id
+      - event_id
+      - property_id
+      - uploads
+      properties:
+        user_id:
+          description: ID of the scout the session belongs to
+          type: integer
+        event_id:
+          description: Event ID (must pre-exist)
+          type: integer
+        property_id:
+          description: Property / team ID being scouted
+          type: integer
+        uploads:
+          description: Session-level media to attach to the user event (e.g. scouting photos uploaded via POST /api/vortex/upload-image-from-url)
+          type: array
+          items:
+            required:
+            - media_id
+            - media_type
+            properties:
+              media_id:
+                description: Image / Video / Audio ID
+                type: integer
+              media_type:
+                type: string
+                enum:
+                - image
+                - video
+                - audio
+            type: object
+      type: object
+    VortexCreateEventRequest:
+      required:
+      - user_id
+      - hometeam_id
+      - name
+      - event_type
+      - season
+      properties:
+        user_id:
+          description: ID of the user to assign this event to
+          type: integer
+        hometeam_id:
+          description: ID of the home team / property
+          type: integer
+        awayteam_id:
+          description: ID of the away team (defaults to hometeam_id if omitted)
+          type:
+          - integer
+          - 'null'
+        name:
+          description: Event name
+          type: string
+        event_type:
+          description: Type of event
+          type: string
+          enum:
+          - season
+          - single
+          - multi
+          - social
+        season:
+          description: Season year (e.g. 2026)
+          type: integer
+        scheduled:
+          description: ISO 8601 scheduled datetime
+          type:
+          - string
+          - 'null'
+          format: date-time
+        venue_id:
+          description: Venue ID
+          type:
+          - integer
+          - 'null'
+        attended_date:
+          description: When the scout was demonstrably on site — the earliest photo capture time. Falls back to scheduled when omitted.
+          type:
+          - string
+          - 'null'
+          format: date-time
+      type: object
+    Image:
+      properties:
+        id:
+          type: integer
+        storage:
+          type: string
+        folder:
+          type: string
+        original_name:
+          type: string
+        stored_name:
+          type: string
+        needs_check:
+          type: integer
+        blurhash:
+          type: string
+        hammhash:
+          type: string
+        original_url:
+          type: string
+        image_url:
+          type: string
+        resized_image_url:
+          type: string
+        enhanced_image_url:
+          type: string
+        extension:
+          type: string
+        mime_type:
+          type: string
+        exif:
+          type: string
+        file_size:
+          type: string
+        width:
+          type: string
+        height:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    UploadImageFromUrlRequest:
+      title: Upload Image From URL Request
+      description: Request schema for uploading an image from a URL to S3
+      required:
+      - url
+      properties:
+        url:
+          description: The URL of the image to upload
+          type: string
+          format: url
+          example: https://example.com/image.png
+        type:
+          description: The upload type category
+          type:
+          - string
+          - 'null'
+          example: generic
+      type: object
+    VortexUserEventNotesStoreRequest:
+      required:
+      - user_id
+      - event_id
+      - property_id
+      - notes
+      properties:
+        user_id:
+          description: ID of the scout the notes belong to
+          type: integer
+        event_id:
+          description: Event ID (must pre-exist)
+          type: integer
+        property_id:
+          description: Property / team ID being scouted
+          type: integer
+        notes:
+          description: Notes to attach to the user event
+          type: array
+          items:
+            required:
+            - content
+            properties:
+              content:
+                description: Note body
+                type: string
+            type: object
+      type: object
     VortexBulkAddRequest:
       required:
       - user_id
@@ -261,186 +441,6 @@ components:
                 - 'null'
                 format: float
             type: object
-      type: object
-    UploadImageFromUrlRequest:
-      title: Upload Image From URL Request
-      description: Request schema for uploading an image from a URL to S3
-      required:
-      - url
-      properties:
-        url:
-          description: The URL of the image to upload
-          type: string
-          format: url
-          example: https://example.com/image.png
-        type:
-          description: The upload type category
-          type:
-          - string
-          - 'null'
-          example: generic
-      type: object
-    VortexUserEventUploadsStoreRequest:
-      required:
-      - user_id
-      - event_id
-      - property_id
-      - uploads
-      properties:
-        user_id:
-          description: ID of the scout the session belongs to
-          type: integer
-        event_id:
-          description: Event ID (must pre-exist)
-          type: integer
-        property_id:
-          description: Property / team ID being scouted
-          type: integer
-        uploads:
-          description: Session-level media to attach to the user event (e.g. scouting photos uploaded via POST /api/vortex/upload-image-from-url)
-          type: array
-          items:
-            required:
-            - media_id
-            - media_type
-            properties:
-              media_id:
-                description: Image / Video / Audio ID
-                type: integer
-              media_type:
-                type: string
-                enum:
-                - image
-                - video
-                - audio
-            type: object
-      type: object
-    VortexUserEventNotesStoreRequest:
-      required:
-      - user_id
-      - event_id
-      - property_id
-      - notes
-      properties:
-        user_id:
-          description: ID of the scout the notes belong to
-          type: integer
-        event_id:
-          description: Event ID (must pre-exist)
-          type: integer
-        property_id:
-          description: Property / team ID being scouted
-          type: integer
-        notes:
-          description: Notes to attach to the user event
-          type: array
-          items:
-            required:
-            - content
-            properties:
-              content:
-                description: Note body
-                type: string
-            type: object
-      type: object
-    Image:
-      properties:
-        id:
-          type: integer
-        storage:
-          type: string
-        folder:
-          type: string
-        original_name:
-          type: string
-        stored_name:
-          type: string
-        needs_check:
-          type: integer
-        blurhash:
-          type: string
-        hammhash:
-          type: string
-        original_url:
-          type: string
-        image_url:
-          type: string
-        resized_image_url:
-          type: string
-        enhanced_image_url:
-          type: string
-        extension:
-          type: string
-        mime_type:
-          type: string
-        exif:
-          type: string
-        file_size:
-          type: string
-        width:
-          type: string
-        height:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
-    VortexCreateEventRequest:
-      required:
-      - user_id
-      - hometeam_id
-      - name
-      - event_type
-      - season
-      properties:
-        user_id:
-          description: ID of the user to assign this event to
-          type: integer
-        hometeam_id:
-          description: ID of the home team / property
-          type: integer
-        awayteam_id:
-          description: ID of the away team (defaults to hometeam_id if omitted)
-          type:
-          - integer
-          - 'null'
-        name:
-          description: Event name
-          type: string
-        event_type:
-          description: Type of event
-          type: string
-          enum:
-          - season
-          - single
-          - multi
-          - social
-        season:
-          description: Season year (e.g. 2026)
-          type: integer
-        scheduled:
-          description: ISO 8601 scheduled datetime
-          type:
-          - string
-          - 'null'
-          format: date-time
-        venue_id:
-          description: Venue ID
-          type:
-          - integer
-          - 'null'
-        attended_date:
-          description: When the scout was demonstrably on site — the earliest photo capture time. Falls back to scheduled when omitted.
-          type:
-          - string
-          - 'null'
-          format: date-time
       type: object
   securitySchemes:
     bearerAuth:

@@ -275,24 +275,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    SavedReportLightResource:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        type:
-          type: string
-        url:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-      type: object
     SavedReportUpdateRequest:
       properties:
         name:
@@ -308,45 +290,6 @@ components:
           items:
             type: integer
           minItems: 1
-      type: object
-    SavedReportLightCollection:
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SavedReportLightResource'
-        links:
-          properties:
-            first:
-              type: string
-            last:
-              type: string
-            prev:
-              type:
-              - string
-              - 'null'
-            next:
-              type:
-              - string
-              - 'null'
-          type: object
-        meta:
-          properties:
-            current_page:
-              type: integer
-            from:
-              type: integer
-            last_page:
-              type: integer
-            path:
-              type: string
-            per_page:
-              type: integer
-            to:
-              type: integer
-            total:
-              type: integer
-          type: object
       type: object
     SavedReportStoreRequest:
       properties:
@@ -386,6 +329,63 @@ components:
           type: integer
         source_report_id:
           type: integer
+      type: object
+    SavedReportLightResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          type: string
+        url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      type: object
+    SavedReportLightCollection:
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SavedReportLightResource'
+        links:
+          properties:
+            first:
+              type: string
+            last:
+              type: string
+            prev:
+              type:
+              - string
+              - 'null'
+            next:
+              type:
+              - string
+              - 'null'
+          type: object
+        meta:
+          properties:
+            current_page:
+              type: integer
+            from:
+              type: integer
+            last_page:
+              type: integer
+            path:
+              type: string
+            per_page:
+              type: integer
+            to:
+              type: integer
+            total:
+              type: integer
+          type: object
       type: object
   securitySchemes:
     bearerAuth:

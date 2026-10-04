@@ -144,17 +144,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    RoleOrientationUpdateRequest:
-      required:
-      - name
-      properties:
-        name:
-          description: Name of the role orientation
-          type: string
-          maxLength: 255
-          minLength: 1
-          example: buy_side
-      type: object
     RoleOrientationStoreRequest:
       required:
       - name
@@ -165,6 +154,17 @@ components:
           maxLength: 255
           minLength: 1
           example: sell_side
+      type: object
+    RoleOrientationUpdateRequest:
+      required:
+      - name
+      properties:
+        name:
+          description: Name of the role orientation
+          type: string
+          maxLength: 255
+          minLength: 1
+          example: buy_side
       type: object
     RoleOrientation:
       properties:

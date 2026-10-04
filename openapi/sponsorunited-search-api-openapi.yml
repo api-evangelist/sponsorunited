@@ -213,17 +213,6 @@ components:
         name:
           type: string
       type: object
-    GenericEntity:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-      type: object
-    SearchByIdGroupedResource:
-      type: array
-      items:
-        $ref: '#/components/schemas/GenericEntity'
     LocationForSmartSearchOnBrandsDownloadRequest:
       properties:
         brand:
@@ -235,6 +224,39 @@ components:
         order_by:
           type: string
         order_direction:
+          type: string
+      type: object
+    SearchByIdGroupedResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/GenericEntity'
+    LocationForSmartSearchOnBrandsMetadataRequest:
+      required:
+      - brand
+      properties:
+        located_in_market:
+          description: Comma separated located in market ids.
+          type: string
+        market:
+          description: Comma separated market ids.
+          type: string
+        league:
+          description: Comma separated league ids.
+          type: string
+        brand:
+          description: Comma separated brand ids.
+          type: string
+        category:
+          description: Comma separated category ids.
+          type: string
+        subcategory:
+          description: Comma separated subcategory ids.
+          type: string
+        city:
+          description: Comma separated city ids.
+          type: string
+        state:
+          description: Comma separated state ids.
           type: string
       type: object
     LocationForSmartSearchOnBrandsShowResource:
@@ -274,10 +296,22 @@ components:
         country_id:
           type: integer
       type: object
-    SearchEntityResource:
-      type: array
-      items:
-        $ref: '#/components/schemas/GenericEntity'
+    SearchEntityByIdRequest:
+      required:
+      - id
+      properties:
+        id:
+          type: string
+        limit:
+          type: integer
+      type: object
+    GenericEntity:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
     SearchIndexedRequest:
       required:
       - search_term
@@ -332,43 +366,37 @@ components:
         show_secondary_profiles:
           type: boolean
       type: object
-    SearchEntityByIdRequest:
-      required:
-      - id
+    SearchEntityResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/GenericEntity'
+    SearchIndexedResource:
       properties:
-        id:
-          type: string
-        limit:
+        items:
+          type: array
+          items:
+            description: Shape varies by indexed entity; only the core fields are guaranteed, the rest depend on the matched model and requested relationships.
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              type:
+                description: Set only for company/team/agency/contact entities; absent for all other indexed types.
+                type:
+                - string
+                - 'null'
+              ulid:
+                type: string
+              logo:
+                type:
+                - string
+                - 'null'
+              is_primary_profile:
+                type: boolean
+            type: object
+        total:
           type: integer
-      type: object
-    LocationForSmartSearchOnBrandsMetadataRequest:
-      required:
-      - brand
-      properties:
-        located_in_market:
-          description: Comma separated located in market ids.
-          type: string
-        market:
-          description: Comma separated market ids.
-          type: string
-        league:
-          description: Comma separated league ids.
-          type: string
-        brand:
-          description: Comma separated brand ids.
-          type: string
-        category:
-          description: Comma separated category ids.
-          type: string
-        subcategory:
-          description: Comma separated subcategory ids.
-          type: string
-        city:
-          description: Comma separated city ids.
-          type: string
-        state:
-          description: Comma separated state ids.
-          type: string
       type: object
     LocationForSmartSearchOnBrandsShowRequest:
       properties:
@@ -419,34 +447,6 @@ components:
           type: integer
         per_page:
           description: Number of items per page.
-          type: integer
-      type: object
-    SearchIndexedResource:
-      properties:
-        items:
-          type: array
-          items:
-            description: Shape varies by indexed entity; only the core fields are guaranteed, the rest depend on the matched model and requested relationships.
-            properties:
-              id:
-                type: integer
-              name:
-                type: string
-              type:
-                description: Set only for company/team/agency/contact entities; absent for all other indexed types.
-                type:
-                - string
-                - 'null'
-              ulid:
-                type: string
-              logo:
-                type:
-                - string
-                - 'null'
-              is_primary_profile:
-                type: boolean
-            type: object
-        total:
           type: integer
       type: object
   securitySchemes:

@@ -556,22 +556,21 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Role:
+    OrganizationSubcategoryAccessResource:
+      properties:
+        id:
+          type: integer
+          example: 14
+        name:
+          type: string
+          example: Banking
+      type: object
+    UserOrganizationPropertiesResource:
       properties:
         id:
           type: integer
         name:
-          type: string
-        display_name:
-          type: string
-        description:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
+          type: integer
       type: object
     OrganizationUpdateContractRequest:
       properties:
@@ -704,7 +703,288 @@ components:
           type: string
           example: spnd_agency
       type: object
-    OrganizationType:
+    ProductType:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
+    OrganizationSyncStatusResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        organization_id:
+          type: integer
+          example: 123
+        status:
+          type:
+          - string
+          - 'null'
+          example: success
+      type: object
+    Role:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      type: object
+    StoreOrganizationTypeRequest:
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        properties:
+          type: boolean
+        brands:
+          type: boolean
+        agencies:
+          type: boolean
+      type: object
+    UserOrganizationBrandsResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: integer
+      type: object
+    SaveSalesforceRequest:
+      properties:
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        url:
+          type: string
+      type: object
+    OrganizationIndexRequest:
+      properties:
+        per_page:
+          type: integer
+          example: '25'
+        order_by:
+          type: string
+          example: name,types,contract_statuses,contract_payment_types,sales_account,account_manager,contract_onboarding_date,contract_start_date,contract_end_date,contract_auto_renew,properties_count,agencies_count,companies_count,users_count
+        order:
+          type: string
+          example: asc
+        name:
+          type: string
+          example: John
+        types:
+          type: string
+          example: 1,2,3
+        contract_statuses:
+          type: string
+          example: 1,2,3
+        contract_payment_types:
+          type: string
+          example: 1,2,3
+        contract_auto_renew:
+          type: string
+          example: 0,1
+        sales_account:
+          type: string
+          example: John
+        account_manager:
+          type: string
+          example: John
+      type: object
+    OrganizationSyncPropertyTypeRequest:
+      properties:
+        property_types:
+          type: string
+          example: 1,2,3
+      type: object
+    UserOrganizationAgenciesResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: integer
+      type: object
+    PersonProfile:
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        avatar_id:
+          type:
+          - integer
+          - 'null'
+        person_profile_job_role_id:
+          type:
+          - integer
+          - 'null'
+        market_id:
+          type:
+          - integer
+          - 'null'
+        name:
+          type: string
+        job_title:
+          type:
+          - string
+          - 'null'
+        location:
+          type:
+          - string
+          - 'null'
+        school:
+          type:
+          - string
+          - 'null'
+        info:
+          type:
+          - string
+          - 'null'
+        suggested:
+          type:
+          - integer
+          - 'null'
+        previous_suggested:
+          type:
+          - integer
+          - 'null'
+        approved:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
+    OrganizationSyncPropertyTypeResource:
+      properties:
+        id:
+          type: integer
+          example: 1
+        uuid:
+          type: string
+          example: 1bdefe12-6cb2-4d6a-b208-b04602ae79c3
+        genre_id:
+          type: integer
+          example: 1
+        subgenre_id:
+          type: integer
+          example: 1
+        label_id:
+          type: integer
+          example: 1
+        type:
+          type: string
+          example: ''
+        is_continuous:
+          type: integer
+          example: 'null'
+        sport_id:
+          type: integer
+          example: 1
+        owner_id:
+          type: integer
+          example: 1
+        scouting_priority:
+          type: integer
+          example: 4
+        name:
+          type: string
+          example: National Football League
+        short_name:
+          type: string
+          example: NFL
+        governing_body:
+          type: string
+          example: ''
+        grouping:
+          type: string
+          example: ''
+        website_url:
+          type: string
+          example: https://www.nfl.com/
+        created_at:
+          type: string
+          example: '2017-05-08T22:03:49.000000Z'
+        updated_at:
+          type: string
+          example: '2017-05-08T22:03:49.000000Z'
+        deleted_at:
+          type: string
+          example: '2017-05-08T22:03:49.000000Z'
+      type: object
+    OrganizationAccessResource:
+      properties:
+        property_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationSyncPropertyTypeResource'
+        markets:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationSyncMarketsResource'
+        limit_access_type:
+          oneOf:
+          - $ref: '#/components/schemas/OrganizationLimitAccessTypeResource'
+          description: The organization's access-limiting mode, or null when no restriction.
+        subcategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationSubcategoryAccessResource'
+      type: object
+    OrganizationTypeIndexResource:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Mixed Agency
+        properties:
+          type: boolean
+          example: true
+        brands:
+          type: boolean
+          example: false
+        agencies:
+          type: boolean
+          example: false
+        organizations_count:
+          type: integer
+          format: int64
+          example: 1
+        product_type:
+          $ref: '#/components/schemas/ProductType'
+      type: object
+    CredentialsSalesforceResource:
+      properties:
+        client_id:
+          type: integer
+        client_secret:
+          type: string
+        url:
+          type: string
+      type: object
+    UpdateOrganizationTypeRequest:
+      required:
+      - name
       properties:
         id:
           type: integer
@@ -717,12 +997,68 @@ components:
         agencies:
           type: boolean
       type: object
-    UserOrganizationPropertiesResource:
+    OrganizationIntercomSyncRequest:
+      properties:
+        organization_ids:
+          description: Array of organization IDs to sync. If not provided, all organizations will be synced.
+          type: array
+          items:
+            type: integer
+      type: object
+    OrganizationUsersResource:
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserOrganizationResource'
+        organization_user_count:
+          description: Total number of users matching the current filters
+          type: integer
+        surface_monthly_prompts:
+          description: Surface AI prompts used by this user in the current month
+          type: integer
+      type: object
+    OrganizationSyncMarketsRequest:
+      properties:
+        markets:
+          type: string
+          example: 1,2,3
+      type: object
+    OrganizationSyncMarketsResource:
       properties:
         id:
           type: integer
-        name:
+          example: 3
+        country_id:
           type: integer
+          example: 1
+        region_id:
+          type: integer
+          example: 2
+        subregion_id:
+          type: integer
+          example: 3
+        name:
+          type: string
+          example: Ontario
+        market_category_id:
+          type: integer
+          example: 5
+        created_at:
+          type: string
+          example: '2017-08-17T15:12:45.000000Z'
+        updated_at:
+          type: string
+          example: '2017-08-17T15:12:45.000000Z'
+        deleted_at:
+          type: string
+          example: '2017-08-17T15:12:45.000000Z'
+      type: object
+    OrganizationEvalProposalSaveRequest:
+      properties:
+        eval_deep_mode_limit:
+          type: integer
+          example: '1'
       type: object
     OrganizationUpdateRequest:
       required:
@@ -814,287 +1150,6 @@ components:
           description: Array or comma-separated list of subcategory IDs
           example: 14,27
       type: object
-    PersonProfile:
-      properties:
-        id:
-          type: integer
-        user_id:
-          type: integer
-        avatar_id:
-          type:
-          - integer
-          - 'null'
-        person_profile_job_role_id:
-          type:
-          - integer
-          - 'null'
-        market_id:
-          type:
-          - integer
-          - 'null'
-        name:
-          type: string
-        job_title:
-          type:
-          - string
-          - 'null'
-        location:
-          type:
-          - string
-          - 'null'
-        school:
-          type:
-          - string
-          - 'null'
-        info:
-          type:
-          - string
-          - 'null'
-        suggested:
-          type:
-          - integer
-          - 'null'
-        previous_suggested:
-          type:
-          - integer
-          - 'null'
-        approved:
-          type: boolean
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
-    UserOrganizationResource:
-      properties:
-        user:
-          type: object
-          allOf:
-          - properties:
-              id:
-                type: integer
-              name:
-                type: string
-              email:
-                type: string
-              avatar:
-                type: string
-              roles:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Role'
-              is_external:
-                type: string
-              user_permissions:
-                type: array
-                items: {}
-              teams:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserOrganizationPropertiesResource'
-              brands:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserOrganizationBrandsResource'
-              agencies:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserOrganizationAgenciesResource'
-              created_at:
-                type: string
-              last_active_at:
-                type: string
-              deleted_at:
-                type: string
-              billable:
-                type: array
-                items: {}
-            type: object
-      type: object
-    OrganizationSubcategoryAccessResource:
-      properties:
-        id:
-          type: integer
-          example: 14
-        name:
-          type: string
-          example: Banking
-      type: object
-    OrganizationSyncPropertyTypeResource:
-      properties:
-        id:
-          type: integer
-          example: 1
-        uuid:
-          type: string
-          example: 1bdefe12-6cb2-4d6a-b208-b04602ae79c3
-        genre_id:
-          type: integer
-          example: 1
-        subgenre_id:
-          type: integer
-          example: 1
-        label_id:
-          type: integer
-          example: 1
-        type:
-          type: string
-          example: ''
-        is_continuous:
-          type: integer
-          example: 'null'
-        sport_id:
-          type: integer
-          example: 1
-        owner_id:
-          type: integer
-          example: 1
-        scouting_priority:
-          type: integer
-          example: 4
-        name:
-          type: string
-          example: National Football League
-        short_name:
-          type: string
-          example: NFL
-        governing_body:
-          type: string
-          example: ''
-        grouping:
-          type: string
-          example: ''
-        website_url:
-          type: string
-          example: https://www.nfl.com/
-        created_at:
-          type: string
-          example: '2017-05-08T22:03:49.000000Z'
-        updated_at:
-          type: string
-          example: '2017-05-08T22:03:49.000000Z'
-        deleted_at:
-          type: string
-          example: '2017-05-08T22:03:49.000000Z'
-      type: object
-    OrganizationSyncMarketsRequest:
-      properties:
-        markets:
-          type: string
-          example: 1,2,3
-      type: object
-    User:
-      properties:
-        id:
-          type: integer
-        email:
-          type: string
-        currency:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-        last_active_at:
-          type: string
-          format: date-time
-        is_external:
-          type: boolean
-        verified:
-          type: integer
-        genuine:
-          type: integer
-        hubspot_id:
-          type: integer
-        hubspot_synced_on:
-          type: string
-          format: date-time
-        force_new_password:
-          type: integer
-        credentials_sent_at:
-          type: string
-          format: date-time
-      type: object
-    OrganizationSyncMarketsResource:
-      properties:
-        id:
-          type: integer
-          example: 3
-        country_id:
-          type: integer
-          example: 1
-        region_id:
-          type: integer
-          example: 2
-        subregion_id:
-          type: integer
-          example: 3
-        name:
-          type: string
-          example: Ontario
-        market_category_id:
-          type: integer
-          example: 5
-        created_at:
-          type: string
-          example: '2017-08-17T15:12:45.000000Z'
-        updated_at:
-          type: string
-          example: '2017-08-17T15:12:45.000000Z'
-        deleted_at:
-          type: string
-          example: '2017-08-17T15:12:45.000000Z'
-      type: object
-    OrganizationIndexRequest:
-      properties:
-        per_page:
-          type: integer
-          example: '25'
-        order_by:
-          type: string
-          example: name,types,contract_statuses,contract_payment_types,sales_account,account_manager,contract_onboarding_date,contract_start_date,contract_end_date,contract_auto_renew,properties_count,agencies_count,companies_count,users_count
-        order:
-          type: string
-          example: asc
-        name:
-          type: string
-          example: John
-        types:
-          type: string
-          example: 1,2,3
-        contract_statuses:
-          type: string
-          example: 1,2,3
-        contract_payment_types:
-          type: string
-          example: 1,2,3
-        contract_auto_renew:
-          type: string
-          example: 0,1
-        sales_account:
-          type: string
-          example: John
-        account_manager:
-          type: string
-          example: John
-      type: object
-    ProductType:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-      type: object
     OrganizationContractResource:
       properties:
         contract_status_id:
@@ -1161,45 +1216,7 @@ components:
           type: string
           example: 47/500
       type: object
-    OrganizationSyncStatusResource:
-      properties:
-        id:
-          type: integer
-          example: 1
-        organization_id:
-          type: integer
-          example: 123
-        status:
-          type:
-          - string
-          - 'null'
-          example: success
-      type: object
-    OrganizationUsersResource:
-      properties:
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserOrganizationResource'
-        organization_user_count:
-          description: Total number of users matching the current filters
-          type: integer
-        surface_monthly_prompts:
-          description: Surface AI prompts used by this user in the current month
-          type: integer
-      type: object
-    SaveSalesforceRequest:
-      properties:
-        client_id:
-          type: string
-        client_secret:
-          type: string
-        url:
-          type: string
-      type: object
-    UpdateOrganizationTypeRequest:
-      required:
-      - name
+    OrganizationType:
       properties:
         id:
           type: integer
@@ -1212,105 +1229,88 @@ components:
         agencies:
           type: boolean
       type: object
-    OrganizationTypeIndexResource:
+    User:
       properties:
         id:
           type: integer
-          format: int64
-          example: 1
-        name:
+        email:
           type: string
-          example: Mixed Agency
-        properties:
-          type: boolean
-          example: true
-        brands:
-          type: boolean
-          example: false
-        agencies:
-          type: boolean
-          example: false
-        organizations_count:
-          type: integer
-          format: int64
-          example: 1
-        product_type:
-          $ref: '#/components/schemas/ProductType'
-      type: object
-    CredentialsSalesforceResource:
-      properties:
-        client_id:
-          type: integer
-        client_secret:
+        currency:
           type: string
-        url:
+        created_at:
           type: string
-      type: object
-    StoreOrganizationTypeRequest:
-      required:
-      - name
-      properties:
-        name:
+          format: date-time
+        updated_at:
           type: string
-        properties:
-          type: boolean
-        brands:
-          type: boolean
-        agencies:
-          type: boolean
-      type: object
-    OrganizationSyncPropertyTypeRequest:
-      properties:
-        property_types:
+          format: date-time
+        deleted_at:
           type: string
-          example: 1,2,3
-      type: object
-    UserOrganizationAgenciesResource:
-      properties:
-        id:
+          format: date-time
+        last_active_at:
+          type: string
+          format: date-time
+        is_external:
+          type: boolean
+        verified:
           type: integer
-        name:
+        genuine:
           type: integer
-      type: object
-    OrganizationAccessResource:
-      properties:
-        property_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrganizationSyncPropertyTypeResource'
-        markets:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrganizationSyncMarketsResource'
-        limit_access_type:
-          oneOf:
-          - $ref: '#/components/schemas/OrganizationLimitAccessTypeResource'
-          description: The organization's access-limiting mode, or null when no restriction.
-        subcategories:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrganizationSubcategoryAccessResource'
-      type: object
-    OrganizationIntercomSyncRequest:
-      properties:
-        organization_ids:
-          description: Array of organization IDs to sync. If not provided, all organizations will be synced.
-          type: array
-          items:
-            type: integer
-      type: object
-    UserOrganizationBrandsResource:
-      properties:
-        id:
+        hubspot_id:
           type: integer
-        name:
+        hubspot_synced_on:
+          type: string
+          format: date-time
+        force_new_password:
           type: integer
+        credentials_sent_at:
+          type: string
+          format: date-time
       type: object
-    OrganizationEvalProposalSaveRequest:
+    UserOrganizationResource:
       properties:
-        eval_deep_mode_limit:
-          type: integer
-          example: '1'
+        user:
+          type: object
+          allOf:
+          - properties:
+              id:
+                type: integer
+              name:
+                type: string
+              email:
+                type: string
+              avatar:
+                type: string
+              roles:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+              is_external:
+                type: string
+              user_permissions:
+                type: array
+                items: {}
+              teams:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserOrganizationPropertiesResource'
+              brands:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserOrganizationBrandsResource'
+              agencies:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserOrganizationAgenciesResource'
+              created_at:
+                type: string
+              last_active_at:
+                type: string
+              deleted_at:
+                type: string
+              billable:
+                type: array
+                items: {}
+            type: object
       type: object
   securitySchemes:
     bearerAuth:

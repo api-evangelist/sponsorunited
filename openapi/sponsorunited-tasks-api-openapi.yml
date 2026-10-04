@@ -213,11 +213,126 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    TaskStoreRequest:
+      properties:
+        scraping_session_id:
+          type: integer
+        type:
+          type: string
+        entity_id:
+          type: integer
+        entity_type:
+          type: string
+        invalid_data:
+          type: string
+      type: object
     AgencyContactIndexResource:
       type: array
       items: {}
       allOf:
       - $ref: '#/components/schemas/PropertyContact'
+    PropertyContactIndexResource:
+      type: array
+      items: {}
+      allOf:
+      - $ref: '#/components/schemas/PropertyContact'
+    TaskIndexResource:
+      type: array
+      items:
+        allOf:
+        - $ref: '#/components/schemas/Task'
+        - properties:
+            entity_ulid:
+              type: string
+            entity_logo:
+              type: string
+            league_id:
+              type: integer
+            league_name:
+              type: string
+            league_manager_id:
+              type: integer
+            league_manager_name:
+              type: string
+          type: object
+    Task:
+      properties:
+        id:
+          type: integer
+        session_id:
+          type:
+          - integer
+          - 'null'
+        type:
+          type: string
+        entity_id:
+          type: integer
+        entity_ulid:
+          type: string
+        entity_type:
+          type: string
+        invalid_data:
+          type: string
+        reason:
+          type: string
+        assigned_to:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        due_date:
+          type: string
+          format: date-time
+      type: object
+    TaskIndexMetadataResource:
+      properties:
+        type:
+          type: array
+          items:
+            allOf:
+            - properties:
+                text:
+                  type: string
+                name:
+                  type: string
+              type: object
+        entity:
+          type: array
+          items:
+            allOf:
+            - properties:
+                id:
+                  type: integer
+                text:
+                  type: string
+                league_id:
+                  type: integer
+                league_manager_id:
+                  type: integer
+              type: object
+        league:
+          type: array
+          items:
+            allOf:
+            - properties:
+                id:
+                  type: integer
+                text:
+                  type: string
+                league_manager_id:
+                  type: integer
+              type: object
+        league_manager:
+          type: array
+          items:
+            allOf:
+            - properties:
+                id:
+                  type: integer
+                text:
+                  type: string
+              type: object
+      type: object
     PropertyContact:
       properties:
         id:
@@ -310,40 +425,6 @@ components:
                   type: object
             type: object
       type: object
-    Task:
-      properties:
-        id:
-          type: integer
-        session_id:
-          type:
-          - integer
-          - 'null'
-        type:
-          type: string
-        entity_id:
-          type: integer
-        entity_ulid:
-          type: string
-        entity_type:
-          type: string
-        invalid_data:
-          type: string
-        reason:
-          type: string
-        assigned_to:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        due_date:
-          type: string
-          format: date-time
-      type: object
-    PropertyContactIndexResource:
-      type: array
-      items: {}
-      allOf:
-      - $ref: '#/components/schemas/PropertyContact'
     TaskShowStoreUpdateResource:
       type: object
       allOf:
@@ -356,55 +437,29 @@ components:
           league_name:
             type: string
         type: object
-    TaskStoreRequest:
-      properties:
-        scraping_session_id:
-          type: integer
-        type:
-          type: string
-        entity_id:
-          type: integer
-        entity_type:
-          type: string
-        invalid_data:
-          type: string
-      type: object
     BrandContactIndexResource:
       type: array
       items: {}
       allOf:
       - $ref: '#/components/schemas/PropertyContact'
-    TaskIndexResource:
-      type: array
-      items:
-        allOf:
-        - $ref: '#/components/schemas/Task'
-        - properties:
-            entity_ulid:
-              type: string
-            entity_logo:
-              type: string
-            league_id:
-              type: integer
-            league_name:
-              type: string
-            league_manager_id:
-              type: integer
-            league_manager_name:
-              type: string
-          type: object
-    TaskUpdateRequest:
+    ContactLinkedinData:
       properties:
-        session_id:
+        id:
+          type: integer
+        person_profile_id:
           type: integer
         type:
           type: string
-        entity_id:
-          type: integer
-        entity_type:
+          example: agency|company|property
+        data:
+          description: JSON data fetched from Linkedin, with jobs, schools, skills, general data etc.
           type: string
-        invalid_data:
+        created_at:
           type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
       type: object
     ContactTaskIndexResource:
       type: array
@@ -429,73 +484,18 @@ components:
               - $ref: '#/components/schemas/PropertyContactIndexResource'
               - $ref: '#/components/schemas/BrandContactIndexResource'
           type: object
-    TaskIndexMetadataResource:
+    TaskUpdateRequest:
       properties:
-        type:
-          type: array
-          items:
-            allOf:
-            - properties:
-                text:
-                  type: string
-                name:
-                  type: string
-              type: object
-        entity:
-          type: array
-          items:
-            allOf:
-            - properties:
-                id:
-                  type: integer
-                text:
-                  type: string
-                league_id:
-                  type: integer
-                league_manager_id:
-                  type: integer
-              type: object
-        league:
-          type: array
-          items:
-            allOf:
-            - properties:
-                id:
-                  type: integer
-                text:
-                  type: string
-                league_manager_id:
-                  type: integer
-              type: object
-        league_manager:
-          type: array
-          items:
-            allOf:
-            - properties:
-                id:
-                  type: integer
-                text:
-                  type: string
-              type: object
-      type: object
-    ContactLinkedinData:
-      properties:
-        id:
-          type: integer
-        person_profile_id:
+        session_id:
           type: integer
         type:
           type: string
-          example: agency|company|property
-        data:
-          description: JSON data fetched from Linkedin, with jobs, schools, skills, general data etc.
+        entity_id:
+          type: integer
+        entity_type:
           type: string
-        created_at:
+        invalid_data:
           type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
       type: object
   securitySchemes:
     bearerAuth:

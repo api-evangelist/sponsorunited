@@ -147,7 +147,7 @@ components:
               type: string
           type: object
       type: object
-    InfographicsStoreRequest:
+    InfographicsUpdateRequest:
       required:
       - title
       - original_url
@@ -179,7 +179,7 @@ components:
           type: string
           example: 1,2,3
       type: object
-    InfographicsUpdateRequest:
+    InfographicsStoreRequest:
       required:
       - title
       - original_url

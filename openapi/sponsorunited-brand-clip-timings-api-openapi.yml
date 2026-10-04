@@ -63,12 +63,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    ErrorResource:
-      properties:
-        error:
-          type: string
-          example: An error occurred
-      type: object
     BrandClipTimingResource:
       properties:
         start:
@@ -99,6 +93,12 @@ components:
           description: Brand ID
           type: integer
           example: 8851
+      type: object
+    ErrorResource:
+      properties:
+        error:
+          type: string
+          example: An error occurred
       type: object
   securitySchemes:
     bearerAuth:

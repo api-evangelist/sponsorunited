@@ -162,6 +162,47 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    LocationUpdateRequest:
+      properties:
+        is_us_hq:
+          description: Rejected when the location is currently linked to any individual property.
+          type: boolean
+        street:
+          type: string
+        city_id:
+          type: integer
+        zip:
+          type: string
+        phone:
+          type: string
+      type: object
+    LocationLabelResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+      type: object
+    LocationStoreRequest:
+      properties:
+        is_us_hq:
+          description: Rejected when the location is being attached to an individual property.
+          type: boolean
+        street:
+          type: string
+        city_id:
+          type: integer
+        zip:
+          type: string
+        phone:
+          type: string
+        entity_type:
+          type: string
+        entity_id:
+          type: integer
+      type: object
     LocationResource:
       properties:
         id:
@@ -183,47 +224,6 @@ components:
           oneOf:
           - $ref: '#/components/schemas/LocationLabelResource'
           description: Present only when this location is serialized in the context of an individual property; resolved from the `location_properties.label_id` pivot.
-      type: object
-    LocationUpdateRequest:
-      properties:
-        is_us_hq:
-          description: Rejected when the location is currently linked to any individual property.
-          type: boolean
-        street:
-          type: string
-        city_id:
-          type: integer
-        zip:
-          type: string
-        phone:
-          type: string
-      type: object
-    LocationStoreRequest:
-      properties:
-        is_us_hq:
-          description: Rejected when the location is being attached to an individual property.
-          type: boolean
-        street:
-          type: string
-        city_id:
-          type: integer
-        zip:
-          type: string
-        phone:
-          type: string
-        entity_type:
-          type: string
-        entity_id:
-          type: integer
-      type: object
-    LocationLabelResource:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        slug:
-          type: string
       type: object
   securitySchemes:
     bearerAuth:

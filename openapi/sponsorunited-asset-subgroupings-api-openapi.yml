@@ -194,6 +194,26 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    AssetSubgroupingResource:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        icon:
+          type: string
+        tag:
+          type: string
+        media_order:
+          type: integer
+        grouping:
+          $ref: '#/components/schemas/AssetGroupingResource'
+      type: object
+    AssetSubgroupingTagRequest:
+      properties:
+        new_tag:
+          type: string
+      type: object
     AssetSubgroupingIndexResource:
       properties:
         groupings:
@@ -204,31 +224,6 @@ components:
           - tag3
         subgroupings:
           $ref: '#/components/schemas/AssetSubgroupingResource'
-      type: object
-    AssetSubgroupingTagRequest:
-      properties:
-        new_tag:
-          type: string
-      type: object
-    AssetSubgroupingStoreRequest:
-      properties:
-        name:
-          type: string
-        asset_grouping_id:
-          type: integer
-        media_order:
-          type: numeric
-        icon:
-          type: string
-      type: object
-    AssetSubgroupingUpdateRequest:
-      properties:
-        name:
-          type: string
-        asset_grouping_id:
-          type: integer
-        icon:
-          type: string
       type: object
     AssetSubgroupingIntentResource:
       properties:
@@ -249,6 +244,15 @@ components:
         audits_count:
           type: integer
       type: object
+    AssetSubgroupingUpdateRequest:
+      properties:
+        name:
+          type: string
+        asset_grouping_id:
+          type: integer
+        icon:
+          type: string
+      type: object
     AssetGroupingResource:
       properties:
         id:
@@ -262,20 +266,16 @@ components:
         subgroupings_count:
           type: integer
       type: object
-    AssetSubgroupingResource:
+    AssetSubgroupingStoreRequest:
       properties:
-        id:
-          type: integer
         name:
           type: string
+        asset_grouping_id:
+          type: integer
+        media_order:
+          type: numeric
         icon:
           type: string
-        tag:
-          type: string
-        media_order:
-          type: integer
-        grouping:
-          $ref: '#/components/schemas/AssetGroupingResource'
       type: object
   securitySchemes:
     bearerAuth:

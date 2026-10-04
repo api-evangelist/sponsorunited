@@ -299,20 +299,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    StatsMappingsSportsRequest:
-      title: Stats Mappings Sports Request
-      description: Request schema for filtering stats perform requests by api type
-      properties:
-        api:
-          description: Filter mappings by StatsPerform API type
-          type:
-          - string
-          - 'null'
-          enum:
-          - stats_api
-          - sdapi
-          example: stats_api
-      type: object
     StatsMappingUpdateRequest:
       title: Stats Mapping Update Request
       description: Request schema for updating a stats perform mapping
@@ -323,83 +309,6 @@ components:
           description: SponsorUnited team/property ID to map to
           type: integer
           example: 456
-      type: object
-    StatsMappingDto:
-      title: Stats Mapping DTO
-      description: Data Transfer Object representing a stats perform mapping entry
-      properties:
-        id:
-          description: Unique identifier for the mapping
-          type: integer
-          example: 1
-        statsSport:
-          description: Name of the sport in Stats Perform system
-          type: string
-          example: basketball
-        statsSportId:
-          description: Numeric ID of the sport in Stats Perform system
-          type: integer
-          example: 2
-        statsLeagueAbbreviation:
-          description: League abbreviation in Stats Perform system
-          type:
-          - string
-          - 'null'
-          example: nba
-        statsLeagueName:
-          description: League name in Stats Perform system
-          type:
-          - string
-          - 'null'
-          example: National Basketball Association
-        statsTeamId:
-          description: Team identifier in Stats Perform system
-          type:
-          - string
-          - 'null'
-          example: sr:competitor:3417
-        statsTeamName:
-          description: Team name in Stats Perform system
-          type:
-          - string
-          - 'null'
-          example: Los Angeles Lakers
-        suTeamId:
-          description: SponsorUnited team/property ID
-          type:
-          - integer
-          - 'null'
-          example: 456
-        suTeamName:
-          description: SponsorUnited team/property name
-          type:
-          - string
-          - 'null'
-          example: Los Angeles Lakers
-        statsApi:
-          description: Stats Perform API source identifier
-          type: string
-          example: SDAPI
-      type: object
-    StatsMappingsLeaguesRequest:
-      title: Stats Mappings Leagues Request
-      description: Request schema for filtering stats perform leagues by sport and api type
-      properties:
-        sport:
-          description: Filter mappings by sport type
-          type:
-          - string
-          - 'null'
-          example: basketball
-        api:
-          description: Filter mappings by StatsPerform API type
-          type:
-          - string
-          - 'null'
-          enum:
-          - stats_api
-          - sdapi
-          example: stats_api
       type: object
     StatsPerformJobStatusDto:
       title: Stats Perform Job Status DTO
@@ -488,6 +397,97 @@ components:
           - string
           - 'null'
           example: Lakers
+        api:
+          description: Filter mappings by StatsPerform API type
+          type:
+          - string
+          - 'null'
+          enum:
+          - stats_api
+          - sdapi
+          example: stats_api
+      type: object
+    StatsMappingsLeaguesRequest:
+      title: Stats Mappings Leagues Request
+      description: Request schema for filtering stats perform leagues by sport and api type
+      properties:
+        sport:
+          description: Filter mappings by sport type
+          type:
+          - string
+          - 'null'
+          example: basketball
+        api:
+          description: Filter mappings by StatsPerform API type
+          type:
+          - string
+          - 'null'
+          enum:
+          - stats_api
+          - sdapi
+          example: stats_api
+      type: object
+    StatsMappingDto:
+      title: Stats Mapping DTO
+      description: Data Transfer Object representing a stats perform mapping entry
+      properties:
+        id:
+          description: Unique identifier for the mapping
+          type: integer
+          example: 1
+        statsSport:
+          description: Name of the sport in Stats Perform system
+          type: string
+          example: basketball
+        statsSportId:
+          description: Numeric ID of the sport in Stats Perform system
+          type: integer
+          example: 2
+        statsLeagueAbbreviation:
+          description: League abbreviation in Stats Perform system
+          type:
+          - string
+          - 'null'
+          example: nba
+        statsLeagueName:
+          description: League name in Stats Perform system
+          type:
+          - string
+          - 'null'
+          example: National Basketball Association
+        statsTeamId:
+          description: Team identifier in Stats Perform system
+          type:
+          - string
+          - 'null'
+          example: sr:competitor:3417
+        statsTeamName:
+          description: Team name in Stats Perform system
+          type:
+          - string
+          - 'null'
+          example: Los Angeles Lakers
+        suTeamId:
+          description: SponsorUnited team/property ID
+          type:
+          - integer
+          - 'null'
+          example: 456
+        suTeamName:
+          description: SponsorUnited team/property name
+          type:
+          - string
+          - 'null'
+          example: Los Angeles Lakers
+        statsApi:
+          description: Stats Perform API source identifier
+          type: string
+          example: SDAPI
+      type: object
+    StatsMappingsSportsRequest:
+      title: Stats Mappings Sports Request
+      description: Request schema for filtering stats perform requests by api type
+      properties:
         api:
           description: Filter mappings by StatsPerform API type
           type:

@@ -855,6 +855,38 @@ components:
           description: Source team ID for a move operation
           type: integer
       type: object
+    AuditCopyRequest:
+      required:
+      - new_brand_id
+      properties:
+        new_brand_id:
+          description: ID of the brand to copy the audit to
+          type: integer
+          example: 456
+        item_id:
+          description: Optional new item ID for the copied item value
+          type: integer
+          example: 789
+      type: object
+    AuditBulkReassignBrandRequest:
+      required:
+      - brand_id
+      properties:
+        item_value_ids:
+          description: Array of item value IDs to reassign (optional, reassigns all if not provided)
+          type: array
+          items:
+            type: integer
+        excluded_item_value_ids:
+          description: Item value IDs to exclude (used when item_value_ids is not provided)
+          type: array
+          items:
+            type: integer
+        brand_id:
+          description: Target brand ID to reassign item values to
+          type: integer
+          example: 123
+      type: object
     BulkAddAuditsRequest:
       required:
       - companies
@@ -909,60 +941,6 @@ components:
           type: boolean
           default: true
       type: object
-    SaveUserEventRequest:
-      required:
-      - item_id
-      properties:
-        item_id:
-          description: Item ID
-          type: integer
-        frequency:
-          description: Frequency value
-          type: integer
-        value:
-          description: Amount value
-          type: number
-        description:
-          description: Description/keyword
-          type: string
-        socialMediaValue:
-          description: Social media post URL
-          type: string
-        item_images:
-          type: array
-          items:
-            type: object
-        item_videos:
-          type: array
-          items:
-            type: object
-        audios:
-          type: array
-          items:
-            type: object
-        user_id:
-          description: User ID (requires edit-any-scouting-report permission)
-          type: integer
-      type: object
-    AuditBulkReassignBrandRequest:
-      required:
-      - brand_id
-      properties:
-        item_value_ids:
-          description: Array of item value IDs to reassign (optional, reassigns all if not provided)
-          type: array
-          items:
-            type: integer
-        excluded_item_value_ids:
-          description: Item value IDs to exclude (used when item_value_ids is not provided)
-          type: array
-          items:
-            type: integer
-        brand_id:
-          description: Target brand ID to reassign item values to
-          type: integer
-          example: 123
-      type: object
     ReviewMetadataResource:
       properties:
         brands:
@@ -1002,18 +980,40 @@ components:
                 type: string
             type: object
       type: object
-    AuditCopyRequest:
+    SaveUserEventRequest:
       required:
-      - new_brand_id
+      - item_id
       properties:
-        new_brand_id:
-          description: ID of the brand to copy the audit to
-          type: integer
-          example: 456
         item_id:
-          description: Optional new item ID for the copied item value
+          description: Item ID
           type: integer
-          example: 789
+        frequency:
+          description: Frequency value
+          type: integer
+        value:
+          description: Amount value
+          type: number
+        description:
+          description: Description/keyword
+          type: string
+        socialMediaValue:
+          description: Social media post URL
+          type: string
+        item_images:
+          type: array
+          items:
+            type: object
+        item_videos:
+          type: array
+          items:
+            type: object
+        audios:
+          type: array
+          items:
+            type: object
+        user_id:
+          description: User ID (requires edit-any-scouting-report permission)
+          type: integer
       type: object
   securitySchemes:
     bearerAuth:

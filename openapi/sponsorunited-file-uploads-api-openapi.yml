@@ -100,20 +100,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    FileUploadRequest:
-      description: Request schema for uploading a file
-      required:
-      - file
-      properties:
-        file:
-          description: The file to upload. Must be a PDF, PPT, PPTX, XLS, XLSX, or CSV. Max size 20MB.
-          type: string
-          format: binary
-        generate_thumbnail:
-          description: Whether to generate a thumbnail for the uploaded file.
-          type: boolean
-          example: true
-      type: object
     FileUploadResource:
       description: File upload details.
       properties:
@@ -205,6 +191,20 @@ components:
               type: integer
               example: 100
           type: object
+      type: object
+    FileUploadRequest:
+      description: Request schema for uploading a file
+      required:
+      - file
+      properties:
+        file:
+          description: The file to upload. Must be a PDF, PPT, PPTX, XLS, XLSX, or CSV. Max size 20MB.
+          type: string
+          format: binary
+        generate_thumbnail:
+          description: Whether to generate a thumbnail for the uploaded file.
+          type: boolean
+          example: true
       type: object
   securitySchemes:
     bearerAuth:
