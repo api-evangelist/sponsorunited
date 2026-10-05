@@ -1,0 +1,55 @@
+slug: sponsorunited
+provider: SponsorUnited
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 4
+edges:
+- tag: Subscription
+  spec_file: sponsorunited-subscription-api-openapi.yml
+  capability_id: BC-4240.40
+  capability_id_l1: BC-4240
+  capability_name: Subscription Modification
+  confidence: 0.8
+  evidence: '''Swap the subscription plan of a billable entity'' (SwapPlanRequest)'
+  reason: Single operation changes the plan on an active subscription for a billable entity — an in-life
+    subscription modification (upgrade/downgrade). Single-endpoint surface limits certainty on sub-capability.
+- tag: Roles & Permissions
+  spec_file: sponsorunited-roles-permissions-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.78
+  evidence: GET /api/roles 'List all roles'; POST /api/roles 'Create a new role'; GET /api/permissions/{name}
+    'Get permission by name'; schemas Permission, PermissionsGroupedByLabel, UpdateRoleRequest
+  reason: Explicit role-based access control administration — creating roles and updating named permissions
+    — which is identity and access management. Slight ambiguity remains because in a multi-tenant SaaS
+    this could equally be framed as tenant access configuration, hence 0.78 rather than higher.
+- tag: Custom Reports
+  spec_file: sponsorunited-custom-reports-api-openapi.yml
+  capability_id: BC-610.50
+  capability_id_l1: BC-610
+  capability_name: Analytics & BI Management
+  confidence: 0.7
+  evidence: '''Create a custom report''; ''Duplicate a custom report''; ''Rename a custom report''; CustomReportShareRequest'
+  reason: Lifecycle of user-built custom reports, including sharing, is self-service reporting/BI delivery.
+    Mapped to Analytics & BI Management; moderate confidence as the reports' subject matter is not described.
+- tag: User Actions
+  spec_file: sponsorunited-user-actions-api-openapi.yml
+  capability_id: BC-4280.30
+  capability_id_l1: BC-4280
+  capability_name: Product Usage Analytics
+  confidence: 0.7
+  evidence: 'openapi description: ''User activity tracking and organization statistics endpoints''; ''Get
+    organization weekly statistics'', ''Get organization user statistics'''
+  reason: Captures and reports product usage activity aggregated by organisation, user, category and time
+    period — product usage analytics on the SaaS platform. Could also serve customer-health monitoring,
+    hence not maximal confidence.
