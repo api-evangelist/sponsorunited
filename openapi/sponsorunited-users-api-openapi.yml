@@ -38,10 +38,6 @@ components:
         name:
           type: string
       type: object
-    UserSearchResource:
-      type: array
-      items:
-        $ref: '#/components/schemas/GenericEntity'
     UserSearchRequest:
       required:
       - search
@@ -55,6 +51,10 @@ components:
         with_deleted:
           type: boolean
       type: object
+    UserSearchResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/GenericEntity'
   securitySchemes:
     bearerAuth:
       type: http

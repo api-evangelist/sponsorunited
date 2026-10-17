@@ -141,12 +141,18 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    UpdateKeywordRequest:
+    KeywordShowStoreUpdateResource:
       properties:
+        id:
+          type: integer
         keyword:
           type: string
         image_id:
           type: integer
+        position:
+          type: integer
+        image:
+          $ref: '#/components/schemas/Image'
       type: object
     Image:
       properties:
@@ -196,40 +202,12 @@ components:
           type: string
           format: date-time
       type: object
-    PositionKeywordRequest:
-      required:
-      - keywords
-      properties:
-        keywords:
-          type: array
-          items:
-            properties:
-              id:
-                type: integer
-            type: object
-      type: object
-    StoreKeywordRequest:
-      required:
-      - keyword
-      - image_id
+    UpdateKeywordRequest:
       properties:
         keyword:
           type: string
         image_id:
           type: integer
-      type: object
-    KeywordShowStoreUpdateResource:
-      properties:
-        id:
-          type: integer
-        keyword:
-          type: string
-        image_id:
-          type: integer
-        position:
-          type: integer
-        image:
-          $ref: '#/components/schemas/Image'
       type: object
     KeywordIndexResource:
       type: array
@@ -246,6 +224,28 @@ components:
           image:
             $ref: '#/components/schemas/Image'
         type: object
+    StoreKeywordRequest:
+      required:
+      - keyword
+      - image_id
+      properties:
+        keyword:
+          type: string
+        image_id:
+          type: integer
+      type: object
+    PositionKeywordRequest:
+      required:
+      - keywords
+      properties:
+        keywords:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+            type: object
+      type: object
   securitySchemes:
     bearerAuth:
       type: http

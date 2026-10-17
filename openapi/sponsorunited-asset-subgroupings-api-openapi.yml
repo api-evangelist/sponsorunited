@@ -194,6 +194,28 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    AssetSubgroupingStoreRequest:
+      properties:
+        name:
+          type: string
+        asset_grouping_id:
+          type: integer
+        media_order:
+          type: numeric
+        icon:
+          type: string
+      type: object
+    AssetSubgroupingIndexResource:
+      properties:
+        groupings:
+          type: object
+          example:
+          - tag1
+          - tag2
+          - tag3
+        subgroupings:
+          $ref: '#/components/schemas/AssetSubgroupingResource'
+      type: object
     AssetSubgroupingResource:
       properties:
         id:
@@ -209,21 +231,14 @@ components:
         grouping:
           $ref: '#/components/schemas/AssetGroupingResource'
       type: object
-    AssetSubgroupingTagRequest:
+    AssetSubgroupingUpdateRequest:
       properties:
-        new_tag:
+        name:
           type: string
-      type: object
-    AssetSubgroupingIndexResource:
-      properties:
-        groupings:
-          type: object
-          example:
-          - tag1
-          - tag2
-          - tag3
-        subgroupings:
-          $ref: '#/components/schemas/AssetSubgroupingResource'
+        asset_grouping_id:
+          type: integer
+        icon:
+          type: string
       type: object
     AssetSubgroupingIntentResource:
       properties:
@@ -244,15 +259,6 @@ components:
         audits_count:
           type: integer
       type: object
-    AssetSubgroupingUpdateRequest:
-      properties:
-        name:
-          type: string
-        asset_grouping_id:
-          type: integer
-        icon:
-          type: string
-      type: object
     AssetGroupingResource:
       properties:
         id:
@@ -266,15 +272,9 @@ components:
         subgroupings_count:
           type: integer
       type: object
-    AssetSubgroupingStoreRequest:
+    AssetSubgroupingTagRequest:
       properties:
-        name:
-          type: string
-        asset_grouping_id:
-          type: integer
-        media_order:
-          type: numeric
-        icon:
+        new_tag:
           type: string
       type: object
   securitySchemes:

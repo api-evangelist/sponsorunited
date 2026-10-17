@@ -385,9 +385,7 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    SubcategoryStoreRequest:
-      required:
-      - category_id
+    SubcategoryUpdateRequest:
       properties:
         name:
           description: Name of the subcategory
@@ -395,10 +393,6 @@ components:
           - string
           - 'null'
           example: Electric Vehicles
-        category_id:
-          description: ID of the parent category
-          type: string
-          example: '1'
         synopsis:
           description: Brief description of the subcategory
           type:
@@ -426,7 +420,9 @@ components:
             type: integer
             example: 1
       type: object
-    SubcategoryUpdateRequest:
+    SubcategoryStoreRequest:
+      required:
+      - category_id
       properties:
         name:
           description: Name of the subcategory
@@ -434,6 +430,10 @@ components:
           - string
           - 'null'
           example: Electric Vehicles
+        category_id:
+          description: ID of the parent category
+          type: string
+          example: '1'
         synopsis:
           description: Brief description of the subcategory
           type:

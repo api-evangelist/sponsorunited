@@ -130,6 +130,17 @@ components:
           synonym:
             type: string
         type: object
+    BrandSynonymStoreRequest:
+      required:
+      - synonym
+      type: object
+      allOf:
+      - properties:
+          brand_id:
+            type: integer
+          synonym:
+            type: string
+        type: object
     BrandSynonymResource:
       properties:
         id:
@@ -144,17 +155,6 @@ components:
       items:
         properties:
           id:
-            type: integer
-          synonym:
-            type: string
-        type: object
-    BrandSynonymStoreRequest:
-      required:
-      - synonym
-      type: object
-      allOf:
-      - properties:
-          brand_id:
             type: integer
           synonym:
             type: string

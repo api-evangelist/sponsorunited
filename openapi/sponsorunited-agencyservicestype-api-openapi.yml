@@ -115,12 +115,6 @@ components:
           type: string
           example: Type 1
       type: object
-    AgencyServiceTypeUpdateRequest:
-      properties:
-        name:
-          type: string
-          example: Type 1
-      type: object
     AgencyServicesTypeIndexResource:
       type: array
       items:
@@ -130,6 +124,12 @@ components:
           name:
             type: string
         type: object
+    AgencyServiceTypeUpdateRequest:
+      properties:
+        name:
+          type: string
+          example: Type 1
+      type: object
     AgencyServicesTypeResource:
       properties:
         id:

@@ -181,67 +181,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    BrandSocialScrapingSessionsResource:
-      properties:
-        metadata:
-          properties:
-            total:
-              type: integer
-            currentPageNumber:
-              type: integer
-            nextPageNumber:
-              type: integer
-          type: object
-        data:
-          type: array
-          items:
-            properties:
-              session_id:
-                type: integer
-              brand_id:
-                type: integer
-              platform:
-                type: string
-              handle:
-                type: string
-              after:
-                type: string
-                format: date-time
-              before:
-                type: string
-                format: date-time
-              status:
-                type: string
-              matched_entities_count:
-                type: integer
-              posts_count:
-                type: integer
-              user:
-                type: object
-              reviewer:
-                type: object
-              brand:
-                $ref: '#/components/schemas/Company'
-              unmatched_handles:
-                type: array
-                items:
-                  properties:
-                    _id:
-                      type: integer
-                    unmatchedHandle:
-                      type: string
-                    entityName:
-                      type: string
-                  type: object
-              socialMediaValues:
-                type: array
-                items:
-                  properties:
-                    ? ''
-                    : type: string
-                  type: object
-            type: object
-      type: object
     Company:
       properties:
         id:
@@ -332,6 +271,67 @@ components:
           type: string
         error:
           type: string
+      type: object
+    BrandSocialScrapingSessionsResource:
+      properties:
+        metadata:
+          properties:
+            total:
+              type: integer
+            currentPageNumber:
+              type: integer
+            nextPageNumber:
+              type: integer
+          type: object
+        data:
+          type: array
+          items:
+            properties:
+              session_id:
+                type: integer
+              brand_id:
+                type: integer
+              platform:
+                type: string
+              handle:
+                type: string
+              after:
+                type: string
+                format: date-time
+              before:
+                type: string
+                format: date-time
+              status:
+                type: string
+              matched_entities_count:
+                type: integer
+              posts_count:
+                type: integer
+              user:
+                type: object
+              reviewer:
+                type: object
+              brand:
+                $ref: '#/components/schemas/Company'
+              unmatched_handles:
+                type: array
+                items:
+                  properties:
+                    _id:
+                      type: integer
+                    unmatchedHandle:
+                      type: string
+                    entityName:
+                      type: string
+                  type: object
+              socialMediaValues:
+                type: array
+                items:
+                  properties:
+                    ? ''
+                    : type: string
+                  type: object
+            type: object
       type: object
     BrandSocialScrapingSessionPropertiesResource:
       properties:

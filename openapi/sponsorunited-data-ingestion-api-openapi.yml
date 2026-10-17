@@ -253,6 +253,34 @@ components:
           - 'null'
           format: date-time
       type: object
+    SubmitIngestionRequest:
+      required:
+      - url
+      - tasks
+      properties:
+        url:
+          type: string
+          format: url
+          maxLength: 2048
+          example: https://example.com/article
+        tasks:
+          type: array
+          items:
+            required:
+            - type
+            properties:
+              type:
+                type: string
+                enum:
+                - content_extraction
+                - screenshot_extraction
+                - markdown_conversion
+                - contact_extraction
+                - entity_extraction
+              options:
+                type: object
+            type: object
+      type: object
     IngestionWebhookRequest:
       required:
       - request_id
@@ -336,34 +364,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IngestionTaskResource'
-      type: object
-    SubmitIngestionRequest:
-      required:
-      - url
-      - tasks
-      properties:
-        url:
-          type: string
-          format: url
-          maxLength: 2048
-          example: https://example.com/article
-        tasks:
-          type: array
-          items:
-            required:
-            - type
-            properties:
-              type:
-                type: string
-                enum:
-                - content_extraction
-                - screenshot_extraction
-                - markdown_conversion
-                - contact_extraction
-                - entity_extraction
-              options:
-                type: object
-            type: object
       type: object
   securitySchemes:
     bearerAuth:

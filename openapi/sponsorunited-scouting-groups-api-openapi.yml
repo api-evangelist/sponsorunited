@@ -65,48 +65,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    ScoutingGroupsStoreRequest:
-      required:
-      - name
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        owner_id:
-          type: integer
-        members:
-          type: string
-          example: 123,456,789
-      type: object
-    ScoutingGroupsIndex:
-      allOf:
-      - $ref: '#/components/schemas/ScoutingGroup'
-      - properties:
-          members_count:
-            type: integer
-          owner:
-            allOf:
-            - $ref: '#/components/schemas/User'
-            - $ref: '#/components/schemas/PersonProfile'
-          members:
-            type: array
-            items:
-              allOf:
-              - $ref: '#/components/schemas/User'
-              - properties:
-                  person_profile:
-                    $ref: '#/components/schemas/PersonProfile'
-                  pivot:
-                    allOf:
-                    - properties:
-                        scouting_group_id:
-                          type: integer
-                        user_id:
-                          type: integer
-                      type: object
-                type: object
-        type: object
     PersonProfile:
       properties:
         id:
@@ -163,6 +121,34 @@ components:
           type: string
           format: date-time
       type: object
+    ScoutingGroupsIndex:
+      allOf:
+      - $ref: '#/components/schemas/ScoutingGroup'
+      - properties:
+          members_count:
+            type: integer
+          owner:
+            allOf:
+            - $ref: '#/components/schemas/User'
+            - $ref: '#/components/schemas/PersonProfile'
+          members:
+            type: array
+            items:
+              allOf:
+              - $ref: '#/components/schemas/User'
+              - properties:
+                  person_profile:
+                    $ref: '#/components/schemas/PersonProfile'
+                  pivot:
+                    allOf:
+                    - properties:
+                        scouting_group_id:
+                          type: integer
+                        user_id:
+                          type: integer
+                      type: object
+                type: object
+        type: object
     ScoutingGroup:
       properties:
         id:
@@ -177,6 +163,20 @@ components:
         updated_at:
           type: string
           format: date-time
+      type: object
+    ScoutingGroupsStoreRequest:
+      required:
+      - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        owner_id:
+          type: integer
+        members:
+          type: string
+          example: 123,456,789
       type: object
     User:
       properties:

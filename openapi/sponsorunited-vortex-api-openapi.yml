@@ -198,6 +198,54 @@ components:
                 - audio
             type: object
       type: object
+    Image:
+      properties:
+        id:
+          type: integer
+        storage:
+          type: string
+        folder:
+          type: string
+        original_name:
+          type: string
+        stored_name:
+          type: string
+        needs_check:
+          type: integer
+        blurhash:
+          type: string
+        hammhash:
+          type: string
+        original_url:
+          type: string
+        image_url:
+          type: string
+        resized_image_url:
+          type: string
+        enhanced_image_url:
+          type: string
+        extension:
+          type: string
+        mime_type:
+          type: string
+        exif:
+          type: string
+        file_size:
+          type: string
+        width:
+          type: string
+        height:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+      type: object
     VortexCreateEventRequest:
       required:
       - user_id
@@ -249,54 +297,6 @@ components:
           - 'null'
           format: date-time
       type: object
-    Image:
-      properties:
-        id:
-          type: integer
-        storage:
-          type: string
-        folder:
-          type: string
-        original_name:
-          type: string
-        stored_name:
-          type: string
-        needs_check:
-          type: integer
-        blurhash:
-          type: string
-        hammhash:
-          type: string
-        original_url:
-          type: string
-        image_url:
-          type: string
-        resized_image_url:
-          type: string
-        enhanced_image_url:
-          type: string
-        extension:
-          type: string
-        mime_type:
-          type: string
-        exif:
-          type: string
-        file_size:
-          type: string
-        width:
-          type: string
-        height:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
-          format: date-time
-      type: object
     UploadImageFromUrlRequest:
       title: Upload Image From URL Request
       description: Request schema for uploading an image from a URL to S3
@@ -314,34 +314,6 @@ components:
           - string
           - 'null'
           example: generic
-      type: object
-    VortexUserEventNotesStoreRequest:
-      required:
-      - user_id
-      - event_id
-      - property_id
-      - notes
-      properties:
-        user_id:
-          description: ID of the scout the notes belong to
-          type: integer
-        event_id:
-          description: Event ID (must pre-exist)
-          type: integer
-        property_id:
-          description: Property / team ID being scouted
-          type: integer
-        notes:
-          description: Notes to attach to the user event
-          type: array
-          items:
-            required:
-            - content
-            properties:
-              content:
-                description: Note body
-                type: string
-            type: object
       type: object
     VortexBulkAddRequest:
       required:
@@ -440,6 +412,34 @@ components:
                 - number
                 - 'null'
                 format: float
+            type: object
+      type: object
+    VortexUserEventNotesStoreRequest:
+      required:
+      - user_id
+      - event_id
+      - property_id
+      - notes
+      properties:
+        user_id:
+          description: ID of the scout the notes belong to
+          type: integer
+        event_id:
+          description: Event ID (must pre-exist)
+          type: integer
+        property_id:
+          description: Property / team ID being scouted
+          type: integer
+        notes:
+          description: Notes to attach to the user event
+          type: array
+          items:
+            required:
+            - content
+            properties:
+              content:
+                description: Note body
+                type: string
             type: object
       type: object
   securitySchemes:

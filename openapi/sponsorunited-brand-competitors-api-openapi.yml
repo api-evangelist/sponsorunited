@@ -307,25 +307,14 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    RejectBrandCompetitorReviewItemRequest:
+    ApproveBrandCompetitorReviewItemRequest:
       required:
-      - rejection_reason
+      - resolution_brand_id
       properties:
-        rejection_reason:
-          type: string
-          enum:
-          - not_a_brand
-          - not_on_platform
-          - scraper_noise
-          - other
-          example: scraper_noise
-        note:
-          description: Free-form rationale. Required when rejection_reason=other.
-          type:
-          - string
-          - 'null'
-          maxLength: 2048
-          example: OCR noise from synopsis HTML extraction.
+        resolution_brand_id:
+          description: ID of the existing brand (companies.id) to link as competitor.
+          type: integer
+          example: 4711
       type: object
     BrandCompetitorReviewItemResource:
       properties:
@@ -488,14 +477,25 @@ components:
           - 'null'
           example: v1
       type: object
-    ApproveBrandCompetitorReviewItemRequest:
+    RejectBrandCompetitorReviewItemRequest:
       required:
-      - resolution_brand_id
+      - rejection_reason
       properties:
-        resolution_brand_id:
-          description: ID of the existing brand (companies.id) to link as competitor.
-          type: integer
-          example: 4711
+        rejection_reason:
+          type: string
+          enum:
+          - not_a_brand
+          - not_on_platform
+          - scraper_noise
+          - other
+          example: scraper_noise
+        note:
+          description: Free-form rationale. Required when rejection_reason=other.
+          type:
+          - string
+          - 'null'
+          maxLength: 2048
+          example: OCR noise from synopsis HTML extraction.
       type: object
   securitySchemes:
     bearerAuth:

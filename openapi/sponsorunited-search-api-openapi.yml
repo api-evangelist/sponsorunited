@@ -208,57 +208,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    SearchEntityRequest:
-      properties:
-        name:
-          type: string
-      type: object
-    LocationForSmartSearchOnBrandsDownloadRequest:
-      properties:
-        brand:
-          type: string
-        city:
-          type: string
-        locatated_in_market:
-          type: string
-        order_by:
-          type: string
-        order_direction:
-          type: string
-      type: object
-    SearchByIdGroupedResource:
-      type: array
-      items:
-        $ref: '#/components/schemas/GenericEntity'
-    LocationForSmartSearchOnBrandsMetadataRequest:
-      required:
-      - brand
-      properties:
-        located_in_market:
-          description: Comma separated located in market ids.
-          type: string
-        market:
-          description: Comma separated market ids.
-          type: string
-        league:
-          description: Comma separated league ids.
-          type: string
-        brand:
-          description: Comma separated brand ids.
-          type: string
-        category:
-          description: Comma separated category ids.
-          type: string
-        subcategory:
-          description: Comma separated subcategory ids.
-          type: string
-        city:
-          description: Comma separated city ids.
-          type: string
-        state:
-          description: Comma separated state ids.
-          type: string
-      type: object
     LocationForSmartSearchOnBrandsShowResource:
       properties:
         company_id:
@@ -296,6 +245,13 @@ components:
         country_id:
           type: integer
       type: object
+    GenericEntity:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      type: object
     SearchEntityByIdRequest:
       required:
       - id
@@ -305,12 +261,33 @@ components:
         limit:
           type: integer
       type: object
-    GenericEntity:
+    SearchIndexedResource:
       properties:
-        id:
+        items:
+          type: array
+          items:
+            description: Shape varies by indexed entity; only the core fields are guaranteed, the rest depend on the matched model and requested relationships.
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              type:
+                description: Set only for company/team/agency/contact entities; absent for all other indexed types.
+                type:
+                - string
+                - 'null'
+              ulid:
+                type: string
+              logo:
+                type:
+                - string
+                - 'null'
+              is_primary_profile:
+                type: boolean
+            type: object
+        total:
           type: integer
-        name:
-          type: string
       type: object
     SearchIndexedRequest:
       required:
@@ -366,37 +343,31 @@ components:
         show_secondary_profiles:
           type: boolean
       type: object
+    SearchByIdGroupedResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/GenericEntity'
+    SearchEntityRequest:
+      properties:
+        name:
+          type: string
+      type: object
     SearchEntityResource:
       type: array
       items:
         $ref: '#/components/schemas/GenericEntity'
-    SearchIndexedResource:
+    LocationForSmartSearchOnBrandsDownloadRequest:
       properties:
-        items:
-          type: array
-          items:
-            description: Shape varies by indexed entity; only the core fields are guaranteed, the rest depend on the matched model and requested relationships.
-            properties:
-              id:
-                type: integer
-              name:
-                type: string
-              type:
-                description: Set only for company/team/agency/contact entities; absent for all other indexed types.
-                type:
-                - string
-                - 'null'
-              ulid:
-                type: string
-              logo:
-                type:
-                - string
-                - 'null'
-              is_primary_profile:
-                type: boolean
-            type: object
-        total:
-          type: integer
+        brand:
+          type: string
+        city:
+          type: string
+        locatated_in_market:
+          type: string
+        order_by:
+          type: string
+        order_direction:
+          type: string
       type: object
     LocationForSmartSearchOnBrandsShowRequest:
       properties:
@@ -448,6 +419,35 @@ components:
         per_page:
           description: Number of items per page.
           type: integer
+      type: object
+    LocationForSmartSearchOnBrandsMetadataRequest:
+      required:
+      - brand
+      properties:
+        located_in_market:
+          description: Comma separated located in market ids.
+          type: string
+        market:
+          description: Comma separated market ids.
+          type: string
+        league:
+          description: Comma separated league ids.
+          type: string
+        brand:
+          description: Comma separated brand ids.
+          type: string
+        category:
+          description: Comma separated category ids.
+          type: string
+        subcategory:
+          description: Comma separated subcategory ids.
+          type: string
+        city:
+          description: Comma separated city ids.
+          type: string
+        state:
+          description: Comma separated state ids.
+          type: string
       type: object
   securitySchemes:
     bearerAuth:

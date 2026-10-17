@@ -61,31 +61,6 @@ paths:
                   $ref: '#/components/schemas/AttendanceResource'
 components:
   schemas:
-    AttendanceUpdateRequest:
-      description: Request for updating attendance data
-      properties:
-        property_attendances:
-          description: Array of property attendances for update
-          type: array
-          items:
-            properties:
-              id:
-                description: Unique identifier of the attendance entry
-                type: integer
-              property_id:
-                description: The ID of the property
-                type: integer
-              season_id:
-                description: The ID of the season
-                type: integer
-              attendance_average:
-                description: The average attendance (optional)
-                type: integer
-              attendance_total:
-                description: The total attendance (optional)
-                type: integer
-            type: object
-      type: object
     AttendanceResource:
       properties:
         id:
@@ -140,6 +115,31 @@ components:
           type:
           - string
           - 'null'
+      type: object
+    AttendanceUpdateRequest:
+      description: Request for updating attendance data
+      properties:
+        property_attendances:
+          description: Array of property attendances for update
+          type: array
+          items:
+            properties:
+              id:
+                description: Unique identifier of the attendance entry
+                type: integer
+              property_id:
+                description: The ID of the property
+                type: integer
+              season_id:
+                description: The ID of the season
+                type: integer
+              attendance_average:
+                description: The average attendance (optional)
+                type: integer
+              attendance_total:
+                description: The total attendance (optional)
+                type: integer
+            type: object
       type: object
   securitySchemes:
     bearerAuth:

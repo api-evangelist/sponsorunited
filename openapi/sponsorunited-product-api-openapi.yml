@@ -109,6 +109,28 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    ProductUpdateRequest:
+      properties:
+        name:
+          type: string
+          example: Product 1
+        roles:
+          type: string
+          example: 1,2,3
+        surface_limit:
+          properties:
+            organization:
+              type:
+              - integer
+              - 'null'
+              example: 500
+            user:
+              type:
+              - integer
+              - 'null'
+              example: 100
+          type: object
+      type: object
     RoleResource:
       properties:
         id:
@@ -123,6 +145,31 @@ components:
         description:
           type: string
           example: Administrator
+      type: object
+    ProductCreateRequest:
+      properties:
+        name:
+          type: string
+          example: Product 1
+        badge:
+          type: string
+          example: su,supr,spnd
+        roles:
+          type: string
+          example: 1,2,3
+        surface_limit:
+          properties:
+            organization:
+              type:
+              - integer
+              - 'null'
+              example: 500
+            user:
+              type:
+              - integer
+              - 'null'
+              example: 100
+          type: object
       type: object
     ProductResource:
       properties:
@@ -152,53 +199,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RoleResource'
-      type: object
-    ProductCreateRequest:
-      properties:
-        name:
-          type: string
-          example: Product 1
-        badge:
-          type: string
-          example: su,supr,spnd
-        roles:
-          type: string
-          example: 1,2,3
-        surface_limit:
-          properties:
-            organization:
-              type:
-              - integer
-              - 'null'
-              example: 500
-            user:
-              type:
-              - integer
-              - 'null'
-              example: 100
-          type: object
-      type: object
-    ProductUpdateRequest:
-      properties:
-        name:
-          type: string
-          example: Product 1
-        roles:
-          type: string
-          example: 1,2,3
-        surface_limit:
-          properties:
-            organization:
-              type:
-              - integer
-              - 'null'
-              example: 500
-            user:
-              type:
-              - integer
-              - 'null'
-              example: 100
-          type: object
       type: object
   securitySchemes:
     bearerAuth:

@@ -430,6 +430,86 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    CustomReportRenameRequest:
+      required:
+      - title
+      properties:
+        title:
+          description: New report title
+          type: string
+      type: object
+    CustomReportShareRequest:
+      required:
+      - user_ids
+      properties:
+        user_ids:
+          description: Array of user IDs to share the report with
+          type: array
+          items:
+            type: integer
+          minItems: 1
+      type: object
+    CustomReportStoreRequest:
+      required:
+      - title
+      properties:
+        title:
+          description: Report title
+          type: string
+        description:
+          description: Report description
+          type:
+          - string
+          - 'null'
+        report_file_id:
+          description: Report file ID (infographic PDF)
+          type:
+          - integer
+          - 'null'
+        thumbnail_url:
+          description: Thumbnail image URL
+          type:
+          - string
+          - 'null'
+        published_at:
+          description: Publication date
+          type:
+          - string
+          - 'null'
+          format: date-time
+        tags:
+          description: Associated tags
+          type: array
+          items:
+            oneOf:
+            - description: Tag ID
+              type: integer
+            - properties:
+                name:
+                  description: Tag name
+                  type: string
+              type: object
+        brands:
+          description: Associated brand IDs (comma-separated)
+          type: string
+          example: 1,2,3
+        properties:
+          description: Associated property IDs (comma-separated)
+          type: string
+          example: 1,2,3
+        agencies:
+          description: Associated agency IDs (comma-separated)
+          type: string
+          example: 1,2,3
+        organizations:
+          description: Organization IDs (assigns to ALL users in org, comma-separated)
+          type: string
+          example: 1,2,3
+        users:
+          description: Individual user IDs (comma-separated)
+          type: string
+          example: 1,2,3
+      type: object
     FileUpload:
       properties:
         id:
@@ -480,52 +560,6 @@ components:
           type:
           - string
           - 'null'
-          format: date-time
-      type: object
-    Agency:
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        synopsis:
-          type: string
-        logo:
-          type: string
-        no_of_employees:
-          type: integer
-        corporate_phone:
-          type: string
-        website:
-          type: string
-        linkedin:
-          type: string
-        linkedin_id_url:
-          type: string
-        linkedin_employees:
-          type: string
-        facebook:
-          type: string
-        twitter:
-          type: string
-        instagram:
-          type: string
-        twitch:
-          type: string
-        tiktok:
-          type: string
-        youtube:
-          type: string
-        feed_url:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type: string
           format: date-time
       type: object
     Property:
@@ -612,25 +646,6 @@ components:
           format: date-time
         deleted_at:
           type: string
-          format: date-time
-      type: object
-    Tag:
-      properties:
-        id:
-          description: Tag Model
-          type: integer
-        name:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        deleted_at:
-          type:
-          - string
-          - 'null'
           format: date-time
       type: object
     CustomReportResource:
@@ -720,17 +735,6 @@ components:
           description: Number of recipients who have viewed the report
           type: integer
       type: object
-    CustomReportShareRequest:
-      required:
-      - user_ids
-      properties:
-        user_ids:
-          description: Array of user IDs to share the report with
-          type: array
-          items:
-            type: integer
-          minItems: 1
-      type: object
     Company:
       properties:
         id:
@@ -801,74 +805,70 @@ components:
           type: string
           format: date-time
       type: object
-    CustomReportRenameRequest:
-      required:
-      - title
+    Agency:
       properties:
-        title:
-          description: New report title
+        id:
+          type: integer
+        name:
           type: string
+        synopsis:
+          type: string
+        logo:
+          type: string
+        no_of_employees:
+          type: integer
+        corporate_phone:
+          type: string
+        website:
+          type: string
+        linkedin:
+          type: string
+        linkedin_id_url:
+          type: string
+        linkedin_employees:
+          type: string
+        facebook:
+          type: string
+        twitter:
+          type: string
+        instagram:
+          type: string
+        twitch:
+          type: string
+        tiktok:
+          type: string
+        youtube:
+          type: string
+        feed_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
       type: object
-    CustomReportStoreRequest:
-      required:
-      - title
+    Tag:
       properties:
-        title:
-          description: Report title
+        id:
+          description: Tag Model
+          type: integer
+        name:
           type: string
-        description:
-          description: Report description
-          type:
-          - string
-          - 'null'
-        report_file_id:
-          description: Report file ID (infographic PDF)
-          type:
-          - integer
-          - 'null'
-        thumbnail_url:
-          description: Thumbnail image URL
-          type:
-          - string
-          - 'null'
-        published_at:
-          description: Publication date
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
           type:
           - string
           - 'null'
           format: date-time
-        tags:
-          description: Associated tags
-          type: array
-          items:
-            oneOf:
-            - description: Tag ID
-              type: integer
-            - properties:
-                name:
-                  description: Tag name
-                  type: string
-              type: object
-        brands:
-          description: Associated brand IDs (comma-separated)
-          type: string
-          example: 1,2,3
-        properties:
-          description: Associated property IDs (comma-separated)
-          type: string
-          example: 1,2,3
-        agencies:
-          description: Associated agency IDs (comma-separated)
-          type: string
-          example: 1,2,3
-        organizations:
-          description: Organization IDs (assigns to ALL users in org, comma-separated)
-          type: string
-          example: 1,2,3
-        users:
-          description: Individual user IDs (comma-separated)
-          type: string
-          example: 1,2,3
       type: object
   securitySchemes:
     bearerAuth:

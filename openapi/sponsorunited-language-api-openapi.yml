@@ -47,8 +47,27 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    SuLanguageCollection:
+      type: array
+      items:
+        $ref: '#/components/schemas/SuLanguageResource'
     SuLanguageResource:
       properties:
+        domain:
+          type: string
+          example: spend_tracker
+        field_name:
+          type: string
+          example: deal_level_parent
+        content:
+          type: string
+          example: lorem ipsum
+      type: object
+    SuLanguage:
+      properties:
+        id:
+          type: integer
+          example: '1'
         domain:
           type: string
           example: spend_tracker
@@ -68,25 +87,6 @@ components:
           items:
             $ref: '#/components/schemas/SuLanguage'
       type: object
-    SuLanguage:
-      properties:
-        id:
-          type: integer
-          example: '1'
-        domain:
-          type: string
-          example: spend_tracker
-        field_name:
-          type: string
-          example: deal_level_parent
-        content:
-          type: string
-          example: lorem ipsum
-      type: object
-    SuLanguageCollection:
-      type: array
-      items:
-        $ref: '#/components/schemas/SuLanguageResource'
   securitySchemes:
     bearerAuth:
       type: http

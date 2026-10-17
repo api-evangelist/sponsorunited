@@ -301,30 +301,15 @@ components:
             items:
               $ref: '#/components/schemas/ItemAudio'
         type: object
-    ItemValueUpdateRequest:
-      properties:
-        item_id:
-          type: string
-        audit_id:
-          type: string
-        description:
-          type: string
-        frequency:
-          type: string
-        value:
-          type: string
-        item_images:
-          type: string
-        item_videos:
-          type: string
-      type: object
-    ItemAudio:
+    ItemImage:
       properties:
         id:
           type: integer
-        audio_id:
+        image_id:
           type: integer
         item_value_id:
+          type: integer
+        rank:
           type: integer
         created_at:
           type: string
@@ -333,15 +318,13 @@ components:
           type: string
           format: date-time
       type: object
-    ItemVideo:
+    ItemAudio:
       properties:
         id:
           type: integer
-        video_id:
+        audio_id:
           type: integer
         item_value_id:
-          type: integer
-        rank:
           type: integer
         created_at:
           type: string
@@ -381,11 +364,28 @@ components:
           type: string
           format: date-time
       type: object
-    ItemImage:
+    ItemValueUpdateRequest:
+      properties:
+        item_id:
+          type: string
+        audit_id:
+          type: string
+        description:
+          type: string
+        frequency:
+          type: string
+        value:
+          type: string
+        item_images:
+          type: string
+        item_videos:
+          type: string
+      type: object
+    ItemVideo:
       properties:
         id:
           type: integer
-        image_id:
+        video_id:
           type: integer
         item_value_id:
           type: integer

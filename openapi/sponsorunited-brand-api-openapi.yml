@@ -891,6 +891,13 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    CompanyResource:
+      description: Brand details with related data (agencies, organizations, primary/secondary profiles)
+      type: object
+    CompanyIndexResource:
+      type: array
+      items:
+        $ref: '#/components/schemas/Company'
     CompanyIndexRequest:
       properties:
         order_by:
@@ -911,19 +918,12 @@ components:
           type: string
           example: 1,2,3
       type: object
-    CompanyResource:
-      description: Brand details with related data (agencies, organizations, primary/secondary profiles)
-      type: object
     ErrorResource:
       properties:
         error:
           type: string
           example: An error occurred
       type: object
-    CompanyIndexResource:
-      type: array
-      items:
-        $ref: '#/components/schemas/Company'
     Company:
       properties:
         id:

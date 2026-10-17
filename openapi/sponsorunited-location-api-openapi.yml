@@ -162,20 +162,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    LocationUpdateRequest:
-      properties:
-        is_us_hq:
-          description: Rejected when the location is currently linked to any individual property.
-          type: boolean
-        street:
-          type: string
-        city_id:
-          type: integer
-        zip:
-          type: string
-        phone:
-          type: string
-      type: object
     LocationLabelResource:
       properties:
         id:
@@ -202,6 +188,20 @@ components:
           type: string
         entity_id:
           type: integer
+      type: object
+    LocationUpdateRequest:
+      properties:
+        is_us_hq:
+          description: Rejected when the location is currently linked to any individual property.
+          type: boolean
+        street:
+          type: string
+        city_id:
+          type: integer
+        zip:
+          type: string
+        phone:
+          type: string
       type: object
     LocationResource:
       properties:

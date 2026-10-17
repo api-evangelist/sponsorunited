@@ -1082,116 +1082,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    LeagueStoreRequest:
-      properties:
-        name:
-          description: League name.
-          type:
-          - string
-          - 'null'
-        short_name:
-          description: League short name.
-          type:
-          - string
-          - 'null'
-        currency:
-          description: ISO currency code.
-          type:
-          - string
-          - 'null'
-          maxLength: 3
-        logo_url:
-          description: URL of the league logo image.
-          type:
-          - string
-          - 'null'
-        website_url:
-          description: League website URL.
-          type:
-          - string
-          - 'null'
-        sport_id:
-          description: Associated sport ID.
-          type:
-          - integer
-          - 'null'
-        owner_id:
-          description: League owner user ID.
-          type:
-          - integer
-          - 'null'
-        scouting_priority:
-          description: Scouting priority.
-          type:
-          - integer
-          - 'null'
-        platforms_scouted:
-          description: Number of platforms scouted.
-          type:
-          - integer
-          - 'null'
-        times_scouted_per_year:
-          description: Times scouted per year.
-          type:
-          - integer
-          - 'null'
-        genre_id:
-          description: Genre ID.
-          type:
-          - integer
-          - 'null'
-        subgenre_id:
-          description: Subgenre ID.
-          type:
-          - integer
-          - 'null'
-        release_date:
-          description: Season release date (MM/DD).
-          type:
-          - string
-          - 'null'
-        start_date:
-          description: Season start date (MM/DD).
-          type:
-          - string
-          - 'null'
-        end_date:
-          description: Season end date (MM/DD).
-          type:
-          - string
-          - 'null'
-        social_start_date:
-          description: Social scraping start date (MM/DD).
-          type:
-          - string
-          - 'null'
-        social_end_date:
-          description: Social scraping end date (MM/DD).
-          type:
-          - string
-          - 'null'
-        notes:
-          description: Free-text notes.
-          type:
-          - string
-          - 'null'
-        assistants:
-          description: User IDs to assign as league assistants.
-          type: array
-          items:
-            type: integer
-        is_continuous:
-          description: Whether the league runs continuously (no fixed season window).
-          type:
-          - boolean
-          - 'null'
-        separator_text:
-          description: Separator label used in listings.
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-      type: object
     LeagueUpdateSocialScrapingSettingsRequest:
       properties:
         twitter:
@@ -1352,6 +1242,116 @@ components:
           type:
           - string
           - 'null'
+      type: object
+    LeagueStoreRequest:
+      properties:
+        name:
+          description: League name.
+          type:
+          - string
+          - 'null'
+        short_name:
+          description: League short name.
+          type:
+          - string
+          - 'null'
+        currency:
+          description: ISO currency code.
+          type:
+          - string
+          - 'null'
+          maxLength: 3
+        logo_url:
+          description: URL of the league logo image.
+          type:
+          - string
+          - 'null'
+        website_url:
+          description: League website URL.
+          type:
+          - string
+          - 'null'
+        sport_id:
+          description: Associated sport ID.
+          type:
+          - integer
+          - 'null'
+        owner_id:
+          description: League owner user ID.
+          type:
+          - integer
+          - 'null'
+        scouting_priority:
+          description: Scouting priority.
+          type:
+          - integer
+          - 'null'
+        platforms_scouted:
+          description: Number of platforms scouted.
+          type:
+          - integer
+          - 'null'
+        times_scouted_per_year:
+          description: Times scouted per year.
+          type:
+          - integer
+          - 'null'
+        genre_id:
+          description: Genre ID.
+          type:
+          - integer
+          - 'null'
+        subgenre_id:
+          description: Subgenre ID.
+          type:
+          - integer
+          - 'null'
+        release_date:
+          description: Season release date (MM/DD).
+          type:
+          - string
+          - 'null'
+        start_date:
+          description: Season start date (MM/DD).
+          type:
+          - string
+          - 'null'
+        end_date:
+          description: Season end date (MM/DD).
+          type:
+          - string
+          - 'null'
+        social_start_date:
+          description: Social scraping start date (MM/DD).
+          type:
+          - string
+          - 'null'
+        social_end_date:
+          description: Social scraping end date (MM/DD).
+          type:
+          - string
+          - 'null'
+        notes:
+          description: Free-text notes.
+          type:
+          - string
+          - 'null'
+        assistants:
+          description: User IDs to assign as league assistants.
+          type: array
+          items:
+            type: integer
+        is_continuous:
+          description: Whether the league runs continuously (no fixed season window).
+          type:
+          - boolean
+          - 'null'
+        separator_text:
+          description: Separator label used in listings.
+          type:
+          - string
+          - 'null'
+          maxLength: 255
       type: object
   securitySchemes:
     bearerAuth:
